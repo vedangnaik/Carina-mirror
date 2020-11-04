@@ -7,8 +7,11 @@ ProcessManager::ProcessManager(ProcessManagerOutputContract* icuop) {
 }
 
 void ProcessManager::transition(std::string alphabet) {
-    State* s = this->p->currentState;
-    this->p->currentState = this->p->delta[std::make_pair(s, alphabet)];
+
+}
+
+void ProcessManager::createProcess(std::vector<StateDTO> Q) {
+
 }
 
 

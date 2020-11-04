@@ -11,9 +11,19 @@ public:
 };
 
 
+struct StateDTO {
+    std::string id;
+    std::string name;
+    std::string safetyRating;
+    std::string description;
+    std::vector<std::string> actions;
+    std::string proceedState;
+    std::string abortState;
+};
 class ProcessManager {
 public:
     ProcessManager(ProcessManagerOutputContract* iucop);
+    void createProcess(std::vector<StateDTO> Q);
     void transition(std::string alphabet);
 
 private:

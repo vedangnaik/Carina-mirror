@@ -30,9 +30,6 @@ public:
 
 class State {
 public:
-    State(std::string name, std::string safetyRating,
-          std::string description, std::vector<Action*> actions);
-
     std::string name;
     std::string safetyRating;
     std::string description;
@@ -43,18 +40,8 @@ public:
 
 class Process {
 public:
-    Process(
-        std::vector<State*> Q,
-        std::map<std::pair<State*, std::string>, State*> delta,
-        State* s,
-        State* F
-    );
-
     std::vector<State*> Q;
-    std::vector<std::string> Sigma = {"proceed", "abort"};
-    std::map<std::pair<State*, std::string>, State*> delta;
     State* s;
-    State* F;
     State* currentState;
 };
 
