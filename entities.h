@@ -40,8 +40,7 @@ public:
 
 class Process {
 public:
-    std::vector<State*> Q;
-    State* s;
+    std::map<std::string, State*> Q;
     State* currentState;
 };
 
