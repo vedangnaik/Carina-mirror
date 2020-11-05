@@ -27,7 +27,6 @@ int main(int argc, char *argv[]) {
     pm->pmoc = pp;
     pp->ppoc = ui;
     pc->pmic = pm;
-//    ui->pcic = pc;
 
     ui->show();
 

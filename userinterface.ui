@@ -13,34 +13,7 @@
   <property name="windowTitle">
    <string>GSUI</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="proceedButton">
-    <property name="geometry">
-     <rect>
-      <x>616</x>
-      <y>398</y>
-      <width>83</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Proceed</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="abortButton">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>282</y>
-      <width>83</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Abort</string>
-    </property>
-   </widget>
-  </widget>
+  <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>

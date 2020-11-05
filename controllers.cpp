@@ -1,8 +1,6 @@
 #include "controllers.h"
-
-//ProcessController::ProcessController(QObject *parent) : QObject(parent) {
-
-//}
+#include "gateways.h"
+#include <iostream>
 
 void ProcessController::proceed() {
     this->pmic->transition("proceed");
@@ -12,11 +10,10 @@ void ProcessController::abort() {
     this->pmic->transition("abort");
 }
 
-//void ProcessController::openProcessFromFile_onClick() {
-//    QString fileName = QFileDialog::getOpenFileName(this,
-//        tr("Open Process File"), "/home/vedang/Desktop/");
-//    if (fileName == "") { return; }
-
-//    ProcessGateway* pg = new ProcessGateway();
-//    pg->parseProcessFile(fileName.toStdString(), NULL, this->sm);
-//}
+void ProcessController::openProcess(std::string filePath) {
+    std::cout << filePath << std::endl;
+    ProcessGateway* pg = new ProcessGateway();
+    struct ProcessData pdata = pg->parseProcessFile(filePath);
+    this->pmic->createProcess(pdata.states);
+    // Use other pdata fields to make sensors and actuators here
+}

@@ -1,16 +1,33 @@
 #include "entities.h"
 
 
-Sensor::Sensor(std::string name) {
-    this->name = name;
-    this->values = {};
+Process::Process(std::map<std::string, State*> Q, State* startState) {
+    this->Q = Q;
+    this->currentState = startState;
 }
 
-
-Actuator::Actuator(std::string name, bool status) {
-    this->name = name;
-    this->status = status;
+State* Process::getStateById(std::string id) {
+    return this->Q[id];
 }
+
+State* Process::getCurrentState() {
+    return this->currentState;
+}
+
+void Process::setCurrentState(State* s) {
+    this->currentState = s;
+}
+
+//Sensor::Sensor(std::string name) {
+//    this->name = name;
+//    this->values = {};
+//}
+
+
+//Actuator::Actuator(std::string name, bool status) {
+//    this->name = name;
+//    this->status = status;
+//}
 
 
 //State::State(std::string name, std::string safetyRating,

@@ -10,20 +10,14 @@ class PCIC : public QObject
 public:
     PCIC() {}
     virtual ~PCIC() {}
+    virtual void openProcess(std::string filePath) = 0;
     virtual void proceed() = 0;
     virtual void abort() = 0;
 };
 
-//class PCIC {
-//public:
-//    virtual void proceed() = 0;
-//    virtual void abort() = 0;
-//    virtual ~PCIC() {};
-//};
-
 class ProcessController : public PCIC {
 public:
-//    ProcessController();
+    void openProcess(std::string filePath);
     void proceed();
     void abort();
 

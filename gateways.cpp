@@ -8,48 +8,55 @@
 #include <QFileDialog>
 
 
-void ProcessGateway::parseProcessFile(std::string fileName, ProcessManager* pm, SensorsManager* sm) {
+struct ProcessData ProcessGateway::parseProcessFile(std::string fileName) {
     QFile file(QString::fromStdString(fileName));
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         std::cout << file.errorString().toStdString() << std::endl;
     }
+
+    struct ProcessData pdata;
     QString val = file.readAll();
     file.close();
     QJsonObject jsonObj = QJsonDocument::fromJson(val.toUtf8()).object();
 
-    QJsonObject sensors = jsonObj.value("sensors").toObject();
-    for (QString k: sensors.keys()) {
-        QJsonObject v = sensors.value(k).toObject();
-        std::string id = k.toStdString();
-        std::string name = v.value("name").toString().toStdString();
-        sm->createSensor(id, name);
+    QJsonObject sensorsObj = jsonObj.value("sensors").toObject();
+    std::vector<Sensor*> sensors = {};
+    for (QString k: sensorsObj.keys()) {
+        QJsonObject sensorObj = sensorsObj.value(k).toObject();
+        Sensor* s = new Sensor();
+
+        s->id = k.toStdString();
+        s->name = sensorObj.value("name").toString().toStdString();
+        s->values = {};
+        sensors.push_back(s);
     }
+    pdata.sensors = sensors;
 
+    // Same for actuators here
+    std::vector<Actuator*> actuators = {};
+    pdata.actuators = actuators;
 
-    QJsonObject states = jsonObj.value("states").toObject();
-    if (!states.contains("start")) { return; }
+    // Now for states
+    QJsonObject statesObj = jsonObj.value("states").toObject();
+    std::vector<State*> states;
+    for (QString k: statesObj.keys()) {
+        QJsonObject v = statesObj.value(k).toObject();
+        State* s = new State();
 
-    std::vector<StateDTO> Q;
-    for (QString k: states.keys()) {
-        QJsonObject v = states.value(k).toObject();
-        struct StateDTO s;
-
-        s.id = k.toStdString();
-        s.name = v.value("name").toString().toStdString();
-        s.safetyRating = v.value("safetyRating").toString().toStdString();
-        s.description = v.value("description").toString().toStdString();
-
-        std::vector<std::string> actions = {};
+        s->id = k.toStdString();
+        s->name = v.value("name").toString().toStdString();
+        s->safetyRating = v.value("safetyRating").toString().toStdString();
+        s->description = v.value("description").toString().toStdString();
         for (auto a: v.value("actions").toArray()) {
-            actions.push_back(a.toString().toStdString());
+            s->actions.push_back(a.toString().toStdString());
         }
-        s.actions = actions;
-
         QJsonObject transitions = v.value("transitions").toObject();
-        s.proceedState = transitions.value("proceed").toString().toStdString();
-        s.abortState = transitions.value("abort").toString().toStdString();
+        s->proceedState = transitions.value("proceed").toString().toStdString();
+        s->abortState = transitions.value("abort").toString().toStdString();
 
-        Q.push_back(s);
+        states.push_back(s);
     }
-    pm->createProcess(Q);
+    pdata.states = states;
+
+    return pdata;
 }

@@ -3,39 +3,30 @@
 #include <iostream>
 
 void ProcessManager::transition(std::string transition) {
-    this->p->currentState = this->p->currentState->transitions[transition];
-    this->pmoc->displayState(this->p->currentState);
-}
+    State* q = this->p->getCurrentState();
 
-void ProcessManager::createProcess(std::vector<StateDTO> Q) {
-    this->p = new Process();
-    for (StateDTO s : Q) {
-        State* state = new State();
-        state->name = s.name;
-        state->safetyRating = s.safetyRating;
-        state->description = s.description;
-        state->actions = {};
-        for (std::string actionId: s.actions) {
-            // use Sensor/ActuatorManagers here to load in the appropriate Actions
-            // state->actions.push_back(sm[actionID])
-        }
-        this->p->Q[s.id] = state;
+    State* next;
+    if (transition == "proceed") {
+        next = this->p->getStateById(q->proceedState);
+    } else if (transition == "abort") {
+        next = this->p->getStateById(q->abortState);
     }
 
-    for (StateDTO s : Q) {
-        if (s.proceedState != "") {
-            this->p->Q[s.id]->transitions["proceed"] = this->p->Q[s.proceedState];
-        }
-        if (s.abortState != "") {
-            this->p->Q[s.id]->transitions["abort"] = this->p->Q[s.abortState];
-        }
-    }
-
-    this->p->currentState = this->p->Q["start"];
+    this->p->setCurrentState(next);
+    this->pmoc->displayState(this->p->getCurrentState());
 }
 
+void ProcessManager::createProcess(std::vector<State*> states) {
+    try {
+        std::map<std::string, State*> Q;
+        for (State* s : states) {
+            Q[s->id] = s;
+        }
+        State* startState = Q.at("start");
+        this->p = new Process(Q, startState);
+    }  catch (std::out_of_range& e) {
+        // handle the error here by asking the presenter to display it.
+        std::cout << "out of range error" << std::endl;
+    }
 
-void SensorsManager::createSensor(std::string id, std::string name) {
-    Sensor* s = new Sensor(name);
-    this->listOfSensors[id] = s;
 }
