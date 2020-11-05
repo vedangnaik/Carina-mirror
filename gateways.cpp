@@ -1,14 +1,11 @@
-#include "layer3.h"
+#include "gateways.h"
 
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <iostream>
 #include <QJsonArray>
-
-void ProcessController::transition(std::string alphabet) {
-    this->ucip->transition(alphabet);
-}
+#include <QFileDialog>
 
 
 void ProcessGateway::parseProcessFile(std::string fileName, ProcessManager* pm, SensorsManager* sm) {

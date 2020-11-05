@@ -27,6 +27,19 @@
      <string>Proceed</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="abortButton">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>282</y>
+      <width>83</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Abort</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

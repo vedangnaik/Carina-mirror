@@ -1,5 +1,3 @@
-//#include "gsui.h"
-
 #include <QApplication>
 #include <QMainWindow>
 #include <string>
@@ -8,28 +6,30 @@
 #include "entities.h"
 // USE CASES
 #include "usecases.h"
+// GATEWAYS
+//#include "gateways.h"
 // CONTROLLERS
-#include "layer3.h"
-// VIEWS
+#include "controllers.h"
+// PRESENTERS
 #include "presenters.h"
+// UI
+#include "userinterface.h"
 
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
-    ProcessManager* pm;
-    SensorsManager* sm;
+    ProcessManager* pm = new ProcessManager();
+    ProcessController* pc = new ProcessController();
+    ProcessPresenter* pp = new ProcessPresenter();
+    UserInterface* ui = new UserInterface();
 
-    ProcessController* pc;
-    ProcessPresenter* pp;
+    pm->pmoc = pp;
+    pp->ppoc = ui;
+    pc->pmic = pm;
+    ui->pcic = pc;
 
-    pp = new ProcessPresenter();
-    pm = new ProcessManager(pp);
-    sm = new SensorsManager();
-    pc = new ProcessController(pm);
-    pp->pm = pm;
-    pp->sm = sm;
+    ui->show();
 
-    pp->show();
     return a.exec();
 }

@@ -1,29 +1,21 @@
-#ifndef GSUI_H
-#define GSUI_H
+#ifndef PROCESSPRESENTER_H
+#define PROCESSPRESENTER_H
 
-#include <QMainWindow>
-#include "layer3.h"
+#include "usecases.h"
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class GSUI; }
-QT_END_NAMESPACE
-
-class ProcessPresenter : public QMainWindow, public ProcessManagerOutputContract
-{
-    Q_OBJECT
-
+class PPOC {
 public:
-    ProcessPresenter(QWidget *parent = nullptr);
-    ~ProcessPresenter();
-
-    ProcessManager* pm;
-    SensorsManager* sm;
-
-private slots:
-    void proceedButton_onClick();
-    void openProcessFromFile_onClick();
-
-private:
-    Ui::GSUI *ui;
+    virtual void displayState(State* s) = 0;
+    virtual ~PPOC() {};
 };
-#endif // GSUI_H
+
+
+class ProcessPresenter : public PMOC {
+public:
+//    ProcessPresenter();
+    void displayState(State* s);
+
+    PPOC* ppoc;
+};
+
+#endif // PROCESSPRESENTER_H

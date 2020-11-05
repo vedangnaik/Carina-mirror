@@ -16,20 +16,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    controllers.cpp \
     entities.cpp \
-    layer3.cpp \
+    gateways.cpp \
     main.cpp \
     presenters.cpp \
-    usecases.cpp
+    usecases.cpp \
+    userinterface.cpp
 
 HEADERS += \
+    controllers.h \
     entities.h \
-    layer3.h \
+    gateways.h \
     presenters.h \
-    usecases.h
+    usecases.h \
+    userinterface.h
 
 FORMS += \
-    gsui.ui
+    userinterface.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -2,13 +2,9 @@
 
 #include <iostream>
 
-ProcessManager::ProcessManager(ProcessManagerOutputContract* icuop) {
-    this->icuop = icuop;
-}
-
-void ProcessManager::transition(std::string alphabet) {
-    this->p->currentState = this->p->currentState->transitions[alphabet];
-    // Call presenter here to display the new state
+void ProcessManager::transition(std::string transition) {
+    this->p->currentState = this->p->currentState->transitions[transition];
+    this->pmoc->displayState(this->p->currentState);
 }
 
 void ProcessManager::createProcess(std::vector<StateDTO> Q) {

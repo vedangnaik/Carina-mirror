@@ -4,10 +4,16 @@
 #include "entities.h"
 
 
-class ProcessManagerOutputContract {
+class PMOC {
 public:
-//    virtual void display(State* s) = 0;
-    virtual ~ProcessManagerOutputContract() {};
+    virtual void displayState(State* s) = 0;
+    virtual ~PMOC() {};
+};
+
+class PMIC {
+public:
+    virtual void transition(std::string transition) = 0;
+    virtual ~PMIC() {};
 };
 
 
@@ -20,15 +26,14 @@ struct StateDTO {
     std::string proceedState;
     std::string abortState;
 };
-class ProcessManager {
+class ProcessManager : public PMIC {
 public:
-    ProcessManager(ProcessManagerOutputContract* iucop);
+//    ProcessManager();
     void createProcess(std::vector<StateDTO> Q);
-    void transition(std::string alphabet);
+    void transition(std::string transition);
 
-private:
     Process* p = NULL;
-    ProcessManagerOutputContract* icuop;
+    PMOC* pmoc;
 };
 
 
