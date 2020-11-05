@@ -29,7 +29,7 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
-      <widget class="QLabel" name="currentStateNameLabel">
+      <widget class="QLabel" name="nameLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -56,7 +56,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="currentStateAbortsToLabel">
+      <widget class="QLabel" name="abortsToLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -83,7 +83,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="currentStateTextLabel">
+      <widget class="QLabel" name="descriptionLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -143,7 +143,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QWidget" name="currentStateActionsWidget" native="true">
+        <widget class="QWidget" name="actionsWidget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -185,28 +185,6 @@
         </size>
        </property>
       </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="proceedButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="focusPolicy">
-        <enum>Qt::NoFocus</enum>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: white;
-    font-size: 20px;
-    font-weight: bold;
-    background-color: rgb(138, 226, 52);</string>
-       </property>
-       <property name="text">
-        <string>PROCEED</string>
-       </property>
-      </widget>
      </item>
     </layout>
    </item>
