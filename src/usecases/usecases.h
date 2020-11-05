@@ -7,6 +7,7 @@
 
 class PMOC {
 public:
+    virtual void displayProcessSummary(std::vector<std::string> processSummary) = 0;;
     virtual void displayState(State* s) = 0;
     virtual ~PMOC() {};
 };
@@ -14,6 +15,7 @@ public:
 class PMIC {
 public:
     virtual void createProcess(std::vector<State*> states) = 0;
+    virtual void startProcess() = 0;
     virtual void transition(std::string transition) = 0;
     virtual ~PMIC() {};
 };
@@ -21,6 +23,7 @@ public:
 class ProcessManager : public PMIC {
 public:
     void createProcess(std::vector<State*> Q);
+    void startProcess();
     void transition(std::string transition);
     void setOutputContract(PMOC* pmoc);
 private:

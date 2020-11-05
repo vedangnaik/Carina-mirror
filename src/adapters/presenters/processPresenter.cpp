@@ -19,3 +19,7 @@ void ProcessPresenter::displayState(State* s) {
 
     this->ppoc->displayState(s);
 }
+
+void ProcessPresenter::displayProcessSummary(std::vector<std::string> processSummary) {
+    this->ppoc->displayProcessSummary(processSummary);
+}

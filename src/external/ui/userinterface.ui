@@ -54,20 +54,21 @@ font: 63 40pt &quot;Source Code Pro Semibold&quot;;</string>
               </widget>
              </item>
              <item>
-              <spacer name="verticalSpacer">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
+              <widget class="QScrollArea" name="currentProcessScrollArea">
+               <property name="widgetResizable">
+                <bool>true</bool>
                </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Minimum</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
+               <widget class="QWidget" name="scrollAreaWidgetContents">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>887</width>
+                  <height>402</height>
+                 </rect>
+                </property>
+               </widget>
+              </widget>
              </item>
              <item>
               <widget class="QPushButton" name="proceedButton">

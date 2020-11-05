@@ -48,6 +48,20 @@ void UserInterface::displayState(State* s) {
     ui->currentStateLayout->addWidget(stateFrame);
 }
 
+void UserInterface::displayProcessSummary(std::vector<std::string> processSummary) {
+    QVBoxLayout* vl = new QVBoxLayout();
+    for (std::string summary : processSummary) {
+        QGroupBox* summaryBox = new QGroupBox("", ui->currentProcessScrollArea);
+        QLabel* summaryLabel = new QLabel(QString::fromStdString(summary), ui->currentProcessScrollArea);
+        summaryLabel->setWordWrap(true);
+        QHBoxLayout* h = new QHBoxLayout();
+        h->addWidget(summaryLabel);
+        summaryBox->setLayout(h);
+        vl->addWidget(summaryBox);
+    }
+    ui->currentProcessScrollArea->setLayout(vl);
+}
+
 void UserInterface::toggleProceed(bool yes) {
     if (yes) {
         connect(ui->proceedButton, &QPushButton::clicked, this->pcic, &PCIC::proceed);

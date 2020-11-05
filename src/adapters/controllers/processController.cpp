@@ -23,4 +23,5 @@ void ProcessController::openProcess(std::string filePath) {
     this->smic->addSensors(pdata.sensors);
     this->amic->addActuators(pdata.actuators);
     this->pmic->createProcess(pdata.states);
+    this->pmic->startProcess();
 }

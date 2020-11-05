@@ -16,6 +16,7 @@ class UserInterface : public QMainWindow, public PPOC {
 public:
     UserInterface(PCIC* pcic, QWidget *parent = nullptr);
     ~UserInterface();
+    void displayProcessSummary(std::vector<std::string> processSummary);
     void displayState(State* s);
     void toggleProceed(bool yes);
     void toggleAbort(bool yes);
