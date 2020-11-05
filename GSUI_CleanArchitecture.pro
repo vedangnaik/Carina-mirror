@@ -1,4 +1,5 @@
-QT       += core gui
+QT += core gui
+QT += uitools
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -33,6 +34,7 @@ HEADERS += \
     userinterface.h
 
 FORMS += \
+    currentState.ui \
     userinterface.ui
 
 # Default rules for deployment.

@@ -2,6 +2,8 @@
 #include "ui_userinterface.h"
 
 #include <QFileDialog>
+#include <QtUiTools>
+#include <QHBoxLayout>
 
 UserInterface::UserInterface(PCIC* pcic, QWidget *parent) : QMainWindow(parent) , ui(new Ui::GSUI) {
     ui->setupUi(this);
@@ -21,5 +23,11 @@ UserInterface::~UserInterface() {
 }
 
 void UserInterface::displayState(State* s) {
-    // actually make widgets and whatnot and write to this.ui directly.
+    QFile file("currentState.ui");
+    file.open(QIODevice::ReadOnly);
+    QUiLoader loader;
+
+    QWidget* currentStateWidget = loader.load(&file, this);
+    delete ui->currentStateLayout->widget();
+    ui->currentStateLayout->addWidget(currentStateWidget);
 }

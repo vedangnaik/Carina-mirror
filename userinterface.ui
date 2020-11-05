@@ -6,20 +6,55 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>797</width>
-    <height>588</height>
+    <width>947</width>
+    <height>652</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>GSUI</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QWidget" name="widget_2" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <widget class="QSplitter" name="splitter">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <widget class="QWidget" name="horizontalLayoutWidget">
+            <layout class="QHBoxLayout" name="currentProcessLayout"/>
+           </widget>
+           <widget class="QWidget" name="horizontalLayoutWidget_2">
+            <layout class="QHBoxLayout" name="currentStateLayout"/>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="widget" native="true"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>797</width>
+     <width>947</width>
      <height>22</height>
     </rect>
    </property>

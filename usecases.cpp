@@ -24,9 +24,9 @@ void ProcessManager::createProcess(std::vector<State*> states) {
         }
         State* startState = Q.at("start");
         this->p = new Process(Q, startState);
+        this->pmoc->displayState(startState);
     }  catch (std::out_of_range& e) {
         // handle the error here by asking the presenter to display it.
         std::cout << "out of range error" << std::endl;
     }
-
 }
