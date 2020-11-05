@@ -1,7 +1,7 @@
 #ifndef CONTROLLERS_H
 #define CONTROLLERS_H
 
-#include "usecases.h"
+#include "src/usecases/usecases.h"
 
 
 struct ProcessData {

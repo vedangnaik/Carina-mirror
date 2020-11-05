@@ -45,10 +45,11 @@
                 <enum>Qt::NoFocus</enum>
                </property>
                <property name="styleSheet">
-                <string notr="true">background-color: rgb(170, 0, 0);</string>
+                <string notr="true">background-color: rgb(170, 0, 0);
+font: 63 40pt &quot;Source Code Pro Semibold&quot;;</string>
                </property>
                <property name="text">
-                <string>Abort</string>
+                <string>ABORT</string>
                </property>
               </widget>
              </item>
@@ -80,7 +81,8 @@
                 <enum>Qt::NoFocus</enum>
                </property>
                <property name="styleSheet">
-                <string notr="true">background-color: rgb(0, 85, 0);</string>
+                <string notr="true">background-color: rgb(0, 85, 0);
+font: 63 40pt &quot;Source Code Pro Semibold&quot;;</string>
                </property>
                <property name="text">
                 <string>Proceed</string>

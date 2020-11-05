@@ -47,3 +47,20 @@ void UserInterface::displayState(State* s) {
 
     ui->currentStateLayout->addWidget(stateFrame);
 }
+
+void UserInterface::toggleProceed(bool yes) {
+    if (yes) {
+        connect(ui->proceedButton, &QPushButton::clicked, this->pcic, &PCIC::proceed);
+//        ui->proceedButton->setStyleSheet("background-color: rgb(70, 70, 70);");
+    } else{
+        disconnect(ui->proceedButton, &QPushButton::clicked, this->pcic, &PCIC::proceed);
+    }
+}
+
+void UserInterface::toggleAbort(bool yes) {
+    if (yes) {
+//        connect(ui->abortButton, &QPushButton::clicked, this->pcic, &PCIC::proceed);
+    } else{
+//        disconnect(ui->abortButton, &QPushButton::clicked, this->pcic, &PCIC::proceed);
+    }
+}

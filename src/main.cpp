@@ -3,17 +3,17 @@
 #include <string>
 
 // ENTITIES
-#include "entities.h"
+#include "src/entities/entities.h"
 // USE CASES
-#include "usecases.h"
+#include "src/usecases/usecases.h"
 // GATEWAYS
 //#include "gateways.h"
 // CONTROLLERS
-#include "controllers.h"
+#include "src/adapters/controllers/controllers.h"
 // PRESENTERS
-#include "presenters.h"
+#include "src/adapters/presenters/presenters.h"
 // UI
-#include "userinterface.h"
+#include "src/external/ui/userinterface.h"
 
 
 int main(int argc, char *argv[]) {

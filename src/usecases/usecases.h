@@ -1,7 +1,7 @@
 #ifndef USECASES_H
 #define USECASES_H
 
-#include "entities.h"
+#include "src/entities/entities.h"
 
 
 class PMOC {

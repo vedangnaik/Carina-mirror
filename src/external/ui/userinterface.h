@@ -2,9 +2,9 @@
 #define GSUI_H
 
 #include <QMainWindow>
-#include "gateways.h"
-#include "controllers.h"
-#include "presenters.h"
+#include "src/adapters/gateways/gateways.h"
+#include "src/adapters/controllers/controllers.h"
+#include "src/adapters/presenters/presenters.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class GSUI; }
@@ -17,6 +17,8 @@ public:
     UserInterface(PCIC* pcic, QWidget *parent = nullptr);
     ~UserInterface();
     void displayState(State* s);
+    void toggleProceed(bool yes);
+    void toggleAbort(bool yes);
 
     PCIC* pcic;
 private:

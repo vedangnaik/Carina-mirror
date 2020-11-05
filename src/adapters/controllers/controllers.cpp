@@ -1,5 +1,5 @@
-#include "controllers.h"
-#include "gateways.h"
+#include "src/adapters/controllers/controllers.h"
+#include "src/adapters/gateways/gateways.h"
 #include <iostream>
 
 void ProcessController::proceed() {

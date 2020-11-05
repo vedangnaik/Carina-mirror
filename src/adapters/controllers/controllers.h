@@ -2,7 +2,7 @@
 #define PROCESSCONTROLLER_H
 
 #include <QObject>
-#include <usecases.h>
+#include "src/usecases/usecases.h"
 
 class PCIC : public QObject
 {

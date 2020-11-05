@@ -1,11 +1,13 @@
 #ifndef PROCESSPRESENTER_H
 #define PROCESSPRESENTER_H
 
-#include "usecases.h"
+#include "src/usecases/usecases.h"
 
 class PPOC {
 public:
     virtual void displayState(State* s) = 0;
+    virtual void toggleProceed(bool yes) = 0;
+    virtual void toggleAbort(bool yes) = 0;
     virtual ~PPOC() {};
 };
 

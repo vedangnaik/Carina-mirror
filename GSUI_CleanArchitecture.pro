@@ -17,25 +17,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    controllers.cpp \
-    entities.cpp \
-    gateways.cpp \
-    main.cpp \
-    presenters.cpp \
-    usecases.cpp \
-    userinterface.cpp
+    src/entities/entities.cpp \
+    src/usecases/usecases.cpp \
+    src/adapters/controllers/controllers.cpp \
+    src/adapters/presenters/presenters.cpp \
+    src/adapters/gateways/gateways.cpp \
+    src/external/ui/userinterface.cpp \
+    src/main.cpp
 
 HEADERS += \
-    controllers.h \
-    entities.h \
-    gateways.h \
-    presenters.h \
-    usecases.h \
-    userinterface.h
+    src/entities/entities.h \
+    src/usecases/usecases.h \
+    src/adapters/controllers/controllers.h \
+    src/adapters/presenters/presenters.h \
+    src/adapters/gateways/gateways.h \
+    src/external/ui/userinterface.h
 
 FORMS += \
-    currentState.ui \
-    userinterface.ui
+    src/external/ui/currentState.ui \
+    src/external/ui/userinterface.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
