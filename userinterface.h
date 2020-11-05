@@ -14,7 +14,7 @@ class UserInterface : public QMainWindow, public PPOC {
     Q_OBJECT
 
 public:
-    UserInterface(QWidget *parent = nullptr);
+    UserInterface(PCIC* pcic, QWidget *parent = nullptr);
     ~UserInterface();
     void displayState(State* s);
 

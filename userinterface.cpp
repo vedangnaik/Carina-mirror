@@ -3,10 +3,10 @@
 
 #include <QFileDialog>
 
-UserInterface::UserInterface(QWidget *parent) : QMainWindow(parent) , ui(new Ui::GSUI) {
+UserInterface::UserInterface(PCIC* pcic, QWidget *parent) : QMainWindow(parent) , ui(new Ui::GSUI) {
     ui->setupUi(this);
-//    connect(ui->proceedButton, &QPushButton::click, dynamic_cast<QObject*>(this->pcic), SLOT(this->pcic->proceed()));
-//    connect(ui->abortButton, &QPushButton::click, this->pcic, &PCIC::abort);
+    this->pcic = pcic;
+    connect(ui->proceedButton, &QPushButton::clicked, this->pcic, &PCIC::proceed);
 }
 
 UserInterface::~UserInterface() {

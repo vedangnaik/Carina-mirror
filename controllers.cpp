@@ -1,8 +1,8 @@
 #include "controllers.h"
 
-ProcessController::ProcessController(QObject *parent) : QObject(parent) {
+//ProcessController::ProcessController(QObject *parent) : QObject(parent) {
 
-}
+//}
 
 void ProcessController::proceed() {
     this->pmic->transition("proceed");

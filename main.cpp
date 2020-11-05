@@ -22,12 +22,12 @@ int main(int argc, char *argv[]) {
     ProcessManager* pm = new ProcessManager();
     ProcessController* pc = new ProcessController();
     ProcessPresenter* pp = new ProcessPresenter();
-    UserInterface* ui = new UserInterface();
+    UserInterface* ui = new UserInterface(pc);
 
     pm->pmoc = pp;
     pp->ppoc = ui;
     pc->pmic = pm;
-    ui->pcic = pc;
+//    ui->pcic = pc;
 
     ui->show();
 

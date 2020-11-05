@@ -4,19 +4,26 @@
 #include <QObject>
 #include <usecases.h>
 
-class PCIC {
-public:
-    virtual void proceed() = 0;
-    virtual void abort() = 0;
-    virtual ~PCIC() {};
-};
-
-class ProcessController : public QObject, public PCIC
+class PCIC : public QObject
 {
     Q_OBJECT
-//    Q_INTERFACES(PCIC);
 public:
-    ProcessController(QObject *parent = nullptr);
+    PCIC() {}
+    virtual ~PCIC() {}
+    virtual void proceed() = 0;
+    virtual void abort() = 0;
+};
+
+//class PCIC {
+//public:
+//    virtual void proceed() = 0;
+//    virtual void abort() = 0;
+//    virtual ~PCIC() {};
+//};
+
+class ProcessController : public PCIC {
+public:
+//    ProcessController();
     void proceed();
     void abort();
 
