@@ -1,5 +1,9 @@
 #include "presenters.h"
 
+ProcessPresenter::ProcessPresenter(PPOC* ppoc) {
+    this->ppoc = ppoc;
+}
+
 void ProcessPresenter::displayState(State* s) {
     if (s->proceedState == "") {
         this->ppoc->toggleProceed(false);

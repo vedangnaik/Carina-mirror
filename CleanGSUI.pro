@@ -23,6 +23,7 @@ SOURCES += \
     src/entities/entities.cpp \
     src/external/ui/userinterface.cpp \
     src/main.cpp \
+    src/usecases/actuatorsManager.cpp \
     src/usecases/processManager.cpp \
     src/usecases/sensorsManager.cpp
 

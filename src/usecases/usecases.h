@@ -20,10 +20,10 @@ public:
 
 class ProcessManager : public PMIC {
 public:
-//    ProcessManager();
     void createProcess(std::vector<State*> Q);
     void transition(std::string transition);
-
+    void setOutputContract(PMOC* pmoc);
+private:
     Process* p = NULL;
     PMOC* pmoc;
 };
@@ -39,12 +39,31 @@ public:
     virtual void addSensors(std::vector<Sensor*> sensors) = 0;
 };
 
-class SensorManager : public SMIC {
+class SensorsManager : public SMIC {
 public:
     void addSensors(std::vector<Sensor*> sensors);
 private:
     std::map<std::string, Sensor*> sensors;
     SMOC* smoc;
+};
+
+//====
+
+class AMOC {
+public:
+};
+
+class AMIC {
+public:
+    virtual void addActuators(std::vector<Actuator*> actuators) = 0;
+};
+
+class ActuatorsManager : public AMIC {
+public:
+    void addActuators(std::vector<Actuator*> actuators);
+private:
+    std::map<std::string, Actuator*> actuators;
+    AMOC* amoc;
 };
 
 #endif // USECASES_H

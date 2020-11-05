@@ -13,7 +13,6 @@ struct ProcessData ProcessGateway::parseProcessFile(std::string fileName) {
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         std::cout << file.errorString().toStdString() << std::endl;
     }
-
     struct ProcessData pdata;
     QString val = file.readAll();
     file.close();
@@ -32,11 +31,19 @@ struct ProcessData ProcessGateway::parseProcessFile(std::string fileName) {
     }
     pdata.sensors = sensors;
 
-    // Same for actuators here
+    QJsonObject actuatorsObj = jsonObj.value("actuators").toObject();
     std::vector<Actuator*> actuators = {};
+    for (QString k: actuatorsObj.keys()) {
+        QJsonObject actuatorObj = actuatorsObj.value(k).toObject();
+        actuators.push_back(
+            new Actuator(
+                k.toStdString(),
+                actuatorObj.value("name").toString().toStdString()
+            )
+        );
+    }
     pdata.actuators = actuators;
 
-    // Now for states
     QJsonObject statesObj = jsonObj.value("states").toObject();
     std::vector<State*> states;
     for (QString k: statesObj.keys()) {

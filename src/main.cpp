@@ -19,14 +19,13 @@
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
+    SensorsManager* sm = new SensorsManager();
+    ActuatorsManager* am = new ActuatorsManager();
     ProcessManager* pm = new ProcessManager();
-    ProcessController* pc = new ProcessController();
-    ProcessPresenter* pp = new ProcessPresenter();
+    ProcessController* pc = new ProcessController(sm, am, pm);
     UserInterface* ui = new UserInterface(pc);
-
-    pm->pmoc = pp;
-    pp->ppoc = ui;
-    pc->pmic = pm;
+    ProcessPresenter* pp = new ProcessPresenter(ui);
+    pm->setOutputContract(pp);
 
     ui->show();
 

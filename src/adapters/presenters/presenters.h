@@ -14,9 +14,9 @@ public:
 
 class ProcessPresenter : public PMOC {
 public:
-//    ProcessPresenter();
+    ProcessPresenter(PPOC* ppoc);
     void displayState(State* s);
-
+private:
     PPOC* ppoc;
 };
 

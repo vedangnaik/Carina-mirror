@@ -1,6 +1,10 @@
 #include "usecases.h"
 #include <iostream>
 
+void ProcessManager::setOutputContract(PMOC* pmoc) {
+    this->pmoc = pmoc;
+}
+
 void ProcessManager::transition(std::string transition) {
     State* q = this->p->getCurrentState();
 

@@ -17,12 +17,14 @@ public:
 
 class ProcessController : public PCIC {
 public:
+    ProcessController(SMIC* smic, AMIC* amic, PMIC* pmic);
     void openProcess(std::string filePath);
     void proceed();
     void abort();
-
+private:
     PMIC* pmic;
     SMIC* smic;
+    AMIC* amic;
 };
 
 #endif // PROCESSCONTROLLER_H
