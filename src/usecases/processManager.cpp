@@ -1,5 +1,4 @@
 #include "usecases.h"
-
 #include <iostream>
 
 void ProcessManager::transition(std::string transition) {
@@ -8,7 +7,7 @@ void ProcessManager::transition(std::string transition) {
     State* next;
     if (transition == "proceed") {
         next = this->p->getStateById(q->proceedState);
-    } else if (transition == "abort") {
+    } else {
         next = this->p->getStateById(q->abortState);
     }
 

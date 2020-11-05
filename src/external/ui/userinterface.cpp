@@ -32,7 +32,7 @@ void UserInterface::displayState(State* s) {
         delete child;
     }
 
-    QFile file("currentState.ui");
+    QFile file("src/external/ui/currentState.ui");
     file.open(QIODevice::ReadOnly);
     QUiLoader loader;
     QWidget* stateFrame = loader.load(&file, this);
@@ -51,16 +51,17 @@ void UserInterface::displayState(State* s) {
 void UserInterface::toggleProceed(bool yes) {
     if (yes) {
         connect(ui->proceedButton, &QPushButton::clicked, this->pcic, &PCIC::proceed);
-//        ui->proceedButton->setStyleSheet("background-color: rgb(70, 70, 70);");
-    } else{
+        // Change button style here
+        // ui->proceedButton->setStyleSheet("background-color: rgb(70, 70, 70);");
+    } else {
         disconnect(ui->proceedButton, &QPushButton::clicked, this->pcic, &PCIC::proceed);
     }
 }
 
 void UserInterface::toggleAbort(bool yes) {
     if (yes) {
-//        connect(ui->abortButton, &QPushButton::clicked, this->pcic, &PCIC::proceed);
-    } else{
-//        disconnect(ui->abortButton, &QPushButton::clicked, this->pcic, &PCIC::proceed);
+        connect(ui->abortButton, &QPushButton::clicked, this->pcic, &PCIC::abort);
+    } else {
+        disconnect(ui->abortButton, &QPushButton::clicked, this->pcic, &PCIC::abort);
     }
 }

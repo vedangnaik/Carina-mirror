@@ -9,7 +9,7 @@
 
 class Sensor {
 public:
-//    Sensor();
+    Sensor(std::string id, std::string name);
     std::string id;
     std::string name;
     std::vector<float> values;
@@ -18,7 +18,7 @@ public:
 
 class Actuator {
 public:
-//    Actuator();
+    Actuator(std::string id, std::string name);
     std::string id;
     std::string name;
     bool status;
@@ -32,7 +32,6 @@ public:
     std::string safetyRating;
     std::string description;
     std::vector<std::string> actions;
-
     std::string proceedState;
     std::string abortState;
 };

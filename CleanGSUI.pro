@@ -17,13 +17,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/adapters/controllers/processController.cpp \
+    src/adapters/gateways/processGateway.cpp \
+    src/adapters/presenters/processPresenter.cpp \
     src/entities/entities.cpp \
-    src/usecases/usecases.cpp \
-    src/adapters/controllers/controllers.cpp \
-    src/adapters/presenters/presenters.cpp \
-    src/adapters/gateways/gateways.cpp \
     src/external/ui/userinterface.cpp \
-    src/main.cpp
+    src/main.cpp \
+    src/usecases/processManager.cpp \
+    src/usecases/sensorsManager.cpp
 
 HEADERS += \
     src/entities/entities.h \

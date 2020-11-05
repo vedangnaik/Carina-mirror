@@ -23,12 +23,12 @@ struct ProcessData ProcessGateway::parseProcessFile(std::string fileName) {
     std::vector<Sensor*> sensors = {};
     for (QString k: sensorsObj.keys()) {
         QJsonObject sensorObj = sensorsObj.value(k).toObject();
-        Sensor* s = new Sensor();
-
-        s->id = k.toStdString();
-        s->name = sensorObj.value("name").toString().toStdString();
-        s->values = {};
-        sensors.push_back(s);
+        sensors.push_back(
+            new Sensor(
+                k.toStdString(),
+                sensorObj.value("name").toString().toStdString()
+            )
+        );
     }
     pdata.sensors = sensors;
 

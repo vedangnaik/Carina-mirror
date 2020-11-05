@@ -3,6 +3,7 @@
 
 #include "src/entities/entities.h"
 
+//====
 
 class PMOC {
 public:
@@ -27,14 +28,23 @@ public:
     PMOC* pmoc;
 };
 
-//struct StateDTO {
-//    std::string id;
-//    std::string name;
-//    std::string safetyRating;
-//    std::string description;
-//    std::vector<std::string> actions;
-//    std::string proceedState;
-//    std::string abortState;
-//};
+//====
+
+class SMOC {
+public:
+};
+
+class SMIC {
+public:
+    virtual void addSensors(std::vector<Sensor*> sensors) = 0;
+};
+
+class SensorManager : public SMIC {
+public:
+    void addSensors(std::vector<Sensor*> sensors);
+private:
+    std::map<std::string, Sensor*> sensors;
+    SMOC* smoc;
+};
 
 #endif // USECASES_H

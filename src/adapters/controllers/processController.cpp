@@ -1,4 +1,4 @@
-#include "src/adapters/controllers/controllers.h"
+#include "controllers.h"
 #include "src/adapters/gateways/gateways.h"
 #include <iostream>
 
@@ -15,5 +15,6 @@ void ProcessController::openProcess(std::string filePath) {
     ProcessGateway* pg = new ProcessGateway();
     struct ProcessData pdata = pg->parseProcessFile(filePath);
     this->pmic->createProcess(pdata.states);
-    // Use other pdata fields to make sensors and actuators here
+    this->smic->addSensors(pdata.sensors);
+    // Use other pdata fields to make actuators here
 }

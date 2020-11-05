@@ -22,6 +22,7 @@ public:
     void abort();
 
     PMIC* pmic;
+    SMIC* smic;
 };
 
 #endif // PROCESSCONTROLLER_H
