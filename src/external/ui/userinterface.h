@@ -17,7 +17,13 @@ public:
     UserInterface(PCIC* pcic, QWidget *parent = nullptr);
     ~UserInterface();
     void displayProcessSummary(std::vector<std::string> processSummary);
-    void displayState(State* s);
+    void displayState(
+            std::string name,
+            std::string description,
+            std::string abortState,
+            std::map<int, Sensor*> sensorPos,
+            std::map<int, Actuator*> actuatorPos
+        );
     void toggleProceed(bool yes);
     void toggleAbort(bool yes);
 

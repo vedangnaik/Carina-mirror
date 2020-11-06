@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
     ProcessManager* pm = new ProcessManager();
     ProcessController* pc = new ProcessController(sm, am, pm);
     UserInterface* ui = new UserInterface(pc);
-    ProcessPresenter* pp = new ProcessPresenter(ui);
+    ProcessPresenter* pp = new ProcessPresenter(sm, am, ui);
     pm->setOutputContract(pp);
 
     ui->show();

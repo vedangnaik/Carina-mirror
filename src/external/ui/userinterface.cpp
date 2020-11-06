@@ -25,7 +25,13 @@ UserInterface::~UserInterface() {
     delete ui;
 }
 
-void UserInterface::displayState(State* s) {
+void UserInterface::displayState(
+        std::string name,
+        std::string description,
+        std::string abortState,
+        std::map<int, Sensor*> sensorPos,
+        std::map<int, Actuator*> actuatorPos
+    ) {
     QLayoutItem* child;
     while ((child = ui->currentStateLayout->takeAt(0)) != nullptr) {
         delete child->widget();
@@ -38,12 +44,32 @@ void UserInterface::displayState(State* s) {
     QWidget* stateFrame = loader.load(&file, this);
     file.close();
 
-    QLabel* nameLabel = findChild<QLabel*>("nameLabel");
-    nameLabel->setText(QString::fromStdString(s->name));
-    QLabel* descriptionLabel = findChild<QLabel*>("descriptionLabel");
-    descriptionLabel->setText(QString::fromStdString(s->description));
-    QLabel* abortsToLabel = findChild<QLabel*>("abortsToLabel");
-    abortsToLabel->setText(QString::fromStdString(s->abortState));
+    QLabel* nameLabel = stateFrame->findChild<QLabel*>("nameLabel");
+    nameLabel->setText(QString::fromStdString(name));
+    QLabel* descriptionLabel = stateFrame->findChild<QLabel*>("descriptionLabel");
+    descriptionLabel->setText(QString::fromStdString(description));
+    QLabel* abortsToLabel = stateFrame->findChild<QLabel*>("abortsToLabel");
+    abortsToLabel->setText(QString::fromStdString(abortState));
+
+    QFormLayout* fl = new QFormLayout;
+    for (unsigned long i = 0; i < sensorPos.size() + actuatorPos.size(); i++) {
+        try {
+            Sensor* s = sensorPos[i];
+            QLabel* sValueLabel = new QLabel(stateFrame);
+            fl->addRow(QString::fromStdString(s->id), sValueLabel);
+        } catch (std::out_of_range e1) {
+            try {
+                Actuator* a = actuatorPos[i];
+                QPushButton* aButton = new QPushButton(stateFrame);
+                fl->addRow(QString::fromStdString(a->id), aButton);
+            }  catch (std::out_of_range e2) {
+                // well, definitely shouldn't be here!
+                std::cout << e1.what() << " " << e2.what() << std::endl;
+            }
+        }
+    }
+    QWidget* actionsWidget =  stateFrame->findChild<QWidget*>("actionsWidget");
+    actionsWidget->setLayout(fl);
 
     ui->currentStateLayout->addWidget(stateFrame);
 }

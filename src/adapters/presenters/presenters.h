@@ -6,7 +6,13 @@
 class PPOC {
 public:
     virtual void displayProcessSummary(std::vector<std::string> processSummary) = 0;
-    virtual void displayState(State* s) = 0;
+    virtual void displayState(
+            std::string name,
+            std::string description,
+            std::string abortState,
+            std::map<int, Sensor*> sensorPos,
+            std::map<int, Actuator*> actuatorPos
+        ) = 0;
     virtual void toggleProceed(bool yes) = 0;
     virtual void toggleAbort(bool yes) = 0;
     virtual ~PPOC() {};
@@ -15,10 +21,12 @@ public:
 
 class ProcessPresenter : public PMOC {
 public:
-    ProcessPresenter(PPOC* ppoc);
+    ProcessPresenter(SMIC* smic, AMIC* amic, PPOC* ppoc);
     virtual void displayProcessSummary(std::vector<std::string> processSummary);
     void displayState(State* s);
 private:
+    SMIC* smic;
+    AMIC* amic;
     PPOC* ppoc;
 };
 
