@@ -19,6 +19,9 @@ UserInterface::UserInterface(PCIC* pcic, QWidget *parent) : QMainWindow(parent) 
     });
 
     connect(ui->proceedButton, &QPushButton::clicked, this->pcic, &PCIC::proceed);
+    ui->proceedButton->setEnabled(false);
+    connect(ui->abortButton, &QPushButton::clicked, this->pcic, &PCIC::abort);
+    ui->abortButton->setEnabled(false);
 }
 
 UserInterface::~UserInterface() {
@@ -84,19 +87,9 @@ void UserInterface::displayProcessSummary(std::vector<std::string> processSummar
 }
 
 void UserInterface::toggleProceed(bool yes) {
-    if (yes) {
-        connect(ui->proceedButton, &QPushButton::clicked, this->pcic, &PCIC::proceed);
-        // Change button style here
-        // ui->proceedButton->setStyleSheet("background-color: rgb(70, 70, 70);");
-    } else {
-        disconnect(ui->proceedButton, &QPushButton::clicked, this->pcic, &PCIC::proceed);
-    }
+    ui->proceedButton->setEnabled(yes);
 }
 
 void UserInterface::toggleAbort(bool yes) {
-    if (yes) {
-        connect(ui->abortButton, &QPushButton::clicked, this->pcic, &PCIC::abort);
-    } else {
-        disconnect(ui->abortButton, &QPushButton::clicked, this->pcic, &PCIC::abort);
-    }
+    ui->abortButton->setEnabled(yes);
 }
