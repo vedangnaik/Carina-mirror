@@ -17,7 +17,6 @@ void ProcessController::abort() {
 }
 
 void ProcessController::openProcess(std::string filePath) {
-    std::cout << filePath << std::endl;
     ProcessGateway* pg = new ProcessGateway();
     struct ProcessData pdata = pg->parseProcessFile(filePath);
     this->smic->addSensors(pdata.sensors);

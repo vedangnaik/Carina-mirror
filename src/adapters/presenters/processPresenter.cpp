@@ -8,15 +8,15 @@ ProcessPresenter::ProcessPresenter(SMIC* smic, AMIC* amic, PPOC* ppoc) {
 
 void ProcessPresenter::displayState(State* s) {
     if (s->proceedState == "") {
-        this->ppoc->toggleProceed(false);
+        this->ppoc->allowProceed(false);
     } else {
-        this->ppoc->toggleProceed(true);
+        this->ppoc->allowProceed(true);
     }
 
     if (s->abortState == "") {
-        this->ppoc->toggleAbort(false);
+        this->ppoc->allowAbort(false);
     } else {
-        this->ppoc->toggleAbort(true);
+        this->ppoc->allowAbort(true);
     }
 
     std::map<int, Sensor*> sensorPos;

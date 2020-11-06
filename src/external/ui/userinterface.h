@@ -24,8 +24,8 @@ public:
             std::map<int, Sensor*> sensorPos,
             std::map<int, Actuator*> actuatorPos
         );
-    void toggleProceed(bool yes);
-    void toggleAbort(bool yes);
+    void allowProceed(bool permission);
+    void allowAbort(bool permission);
 
     PCIC* pcic;
 private:

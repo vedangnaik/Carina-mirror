@@ -86,10 +86,10 @@ void UserInterface::displayProcessSummary(std::vector<std::string> processSummar
     ui->currentProcessScrollArea->setLayout(vl);
 }
 
-void UserInterface::toggleProceed(bool yes) {
-    ui->proceedButton->setEnabled(yes);
+void UserInterface::allowProceed(bool permission) {
+    ui->proceedButton->setEnabled(permission);
 }
 
-void UserInterface::toggleAbort(bool yes) {
-    ui->abortButton->setEnabled(yes);
+void UserInterface::allowAbort(bool permission) {
+    ui->abortButton->setEnabled(permission);
 }

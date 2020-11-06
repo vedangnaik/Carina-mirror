@@ -13,8 +13,8 @@ public:
             std::map<int, Sensor*> sensorPos,
             std::map<int, Actuator*> actuatorPos
         ) = 0;
-    virtual void toggleProceed(bool yes) = 0;
-    virtual void toggleAbort(bool yes) = 0;
+    virtual void allowProceed(bool permission) = 0;
+    virtual void allowAbort(bool permission) = 0;
     virtual ~PPOC() {};
 };
 
