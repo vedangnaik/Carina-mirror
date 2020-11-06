@@ -54,18 +54,13 @@ void UserInterface::displayState(
     QFormLayout* fl = new QFormLayout;
     for (unsigned long i = 0; i < sensorPos.size() + actuatorPos.size(); i++) {
         try {
-            Sensor* s = sensorPos[i];
+            Sensor* s = sensorPos.at(i);
             QLabel* sValueLabel = new QLabel(stateFrame);
             fl->addRow(QString::fromStdString(s->id), sValueLabel);
-        } catch (std::out_of_range e1) {
-            try {
-                Actuator* a = actuatorPos[i];
-                QPushButton* aButton = new QPushButton(stateFrame);
-                fl->addRow(QString::fromStdString(a->id), aButton);
-            }  catch (std::out_of_range e2) {
-                // well, definitely shouldn't be here!
-                std::cout << e1.what() << " " << e2.what() << std::endl;
-            }
+        } catch (std::out_of_range& e) {
+            Actuator* a = actuatorPos.at(i);
+            QPushButton* aButton = new QPushButton(QString::fromStdString(a->id), stateFrame);
+            fl->addRow(QString::fromStdString(a->id), aButton);
         }
     }
     QWidget* actionsWidget =  stateFrame->findChild<QWidget*>("actionsWidget");
