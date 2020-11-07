@@ -1,5 +1,5 @@
-#ifndef GSUI_H
-#define GSUI_H
+#ifndef UI_H
+#define UI_H
 
 #include <QMainWindow>
 #include "src/adapters/gateways/gateways.h"
@@ -7,7 +7,9 @@
 #include "src/adapters/presenters/presenters.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class GSMainWindow; }
+namespace Ui {
+    class GSMainWindow;
+}
 QT_END_NAMESPACE
 
 class GSMainWindow : public QMainWindow, public PPOC {
@@ -30,4 +32,4 @@ public:
 private:
     Ui::GSMainWindow *ui;
 };
-#endif // GSUI_H
+#endif // UI_H
