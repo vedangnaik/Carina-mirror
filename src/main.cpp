@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     ActuatorsManager* am = new ActuatorsManager();
     ProcessManager* pm = new ProcessManager();
     ProcessController* pc = new ProcessController(sm, am, pm);
-    UserInterface* ui = new UserInterface(pc);
+    GSMainWindow* ui = new GSMainWindow(pc);
     ProcessPresenter* pp = new ProcessPresenter(sm, am, ui);
     pm->setOutputContract(pp);
 

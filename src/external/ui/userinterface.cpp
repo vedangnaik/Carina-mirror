@@ -6,7 +6,7 @@
 #include <QHBoxLayout>
 #include <iostream>
 
-UserInterface::UserInterface(PCIC* pcic, QWidget *parent) : QMainWindow(parent) , ui(new Ui::GSUI) {
+GSMainWindow::GSMainWindow(PCIC* pcic, QWidget *parent) : QMainWindow(parent) , ui(new Ui::GSMainWindow) {
     ui->setupUi(this);
     this->pcic = pcic;
 
@@ -24,11 +24,11 @@ UserInterface::UserInterface(PCIC* pcic, QWidget *parent) : QMainWindow(parent) 
     ui->abortButton->setEnabled(false);
 }
 
-UserInterface::~UserInterface() {
+GSMainWindow::~GSMainWindow() {
     delete ui;
 }
 
-void UserInterface::displayState(
+void GSMainWindow::displayState(
         std::string name,
         std::string description,
         std::string abortState,
@@ -72,7 +72,7 @@ void UserInterface::displayState(
     ui->currentStateLayout->addWidget(stateFrame);
 }
 
-void UserInterface::displayProcessSummary(std::vector<std::string> processSummary) {
+void GSMainWindow::displayProcessSummary(std::vector<std::string> processSummary) {
     QVBoxLayout* vl = new QVBoxLayout();
     for (std::string summary : processSummary) {
         QGroupBox* summaryBox = new QGroupBox("", ui->currentProcessScrollArea);
@@ -86,10 +86,10 @@ void UserInterface::displayProcessSummary(std::vector<std::string> processSummar
     ui->currentProcessScrollArea->setLayout(vl);
 }
 
-void UserInterface::allowProceed(bool permission) {
+void GSMainWindow::allowProceed(bool permission) {
     ui->proceedButton->setEnabled(permission);
 }
 
-void UserInterface::allowAbort(bool permission) {
+void GSMainWindow::allowAbort(bool permission) {
     ui->abortButton->setEnabled(permission);
 }

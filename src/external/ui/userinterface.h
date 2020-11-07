@@ -7,15 +7,14 @@
 #include "src/adapters/presenters/presenters.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class GSUI; }
+namespace Ui { class GSMainWindow; }
 QT_END_NAMESPACE
 
-class UserInterface : public QMainWindow, public PPOC {
+class GSMainWindow : public QMainWindow, public PPOC {
     Q_OBJECT
-
 public:
-    UserInterface(PCIC* pcic, QWidget *parent = nullptr);
-    ~UserInterface();
+    GSMainWindow(PCIC* pcic, QWidget *parent = nullptr);
+    ~GSMainWindow();
     void displayProcessSummary(std::vector<std::string> processSummary);
     void displayState(
             std::string name,
@@ -29,6 +28,6 @@ public:
 
     PCIC* pcic;
 private:
-    Ui::GSUI *ui;
+    Ui::GSMainWindow *ui;
 };
 #endif // GSUI_H
