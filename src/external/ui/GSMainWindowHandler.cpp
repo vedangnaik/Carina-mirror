@@ -1,5 +1,5 @@
 #include "userinterface.h"
-#include "ui_GSMainWIndow.h"
+#include "ui_GSMainWindow.h"
 
 #include <QFileDialog>
 #include <QtUiTools>

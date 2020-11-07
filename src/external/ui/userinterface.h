@@ -9,6 +9,7 @@
 QT_BEGIN_NAMESPACE
 namespace Ui {
     class GSMainWindow;
+    class GSStateDisplay;
 }
 QT_END_NAMESPACE
 
@@ -31,6 +32,17 @@ public:
     PCIC* pcic;
 private:
     QMainWindow* toHandle;
-    Ui::GSMainWindow *ui;
+    Ui::GSMainWindow* ui;
 };
+
+
+
+class GSStateDisplayHandler : public QObject, public PPOC {
+    Q_OBJECT
+public:
+    GSStateDisplayHandler();
+private:
+    Ui::GSStateDisplay* ui;
+};
+
 #endif // UI_H
