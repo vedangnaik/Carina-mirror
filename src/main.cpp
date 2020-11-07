@@ -26,7 +26,8 @@ int main(int argc, char *argv[]) {
     ProcessManager* pm = new ProcessManager();
     ProcessController* pc = new ProcessController(sm, am, pm);
     GSMainWindowHandler* gsmwh = new GSMainWindowHandler(GSMainWindow, pc);
-    ProcessPresenter* pp = new ProcessPresenter(sm, am, gsmwh);
+    ProcessUIHandler* puih = new ProcessUIHandler(gsmwh, pc);
+    ProcessPresenter* pp = new ProcessPresenter(sm, am, puih);
     pm->setOutputContract(pp);
 
     ClocksModule* cm = new ClocksModule();

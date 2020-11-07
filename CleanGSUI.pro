@@ -23,7 +23,7 @@ SOURCES += \
     src/entities/entities.cpp \
     src/external/services/clocksModule.cpp \
     src/external/ui/GSMainWindowHandler.cpp \
-    src/external/ui/GSStateDisplayHandler.cpp \
+    src/external/ui/processUIHandler.cpp \
     src/main.cpp \
     src/usecases/actuatorsManager.cpp \
     src/usecases/processManager.cpp \
@@ -40,7 +40,8 @@ HEADERS += \
 
 FORMS += \
     src/external/ui/GSMainWindow.ui \
-    src/external/ui/GSStateDisplay.ui
+    src/external/ui/currentState.ui \
+    src/external/ui/processSummary.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

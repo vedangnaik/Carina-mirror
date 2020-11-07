@@ -2,6 +2,9 @@
 #define UI_H
 
 #include <QMainWindow>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QPushButton>
 #include "src/adapters/gateways/gateways.h"
 #include "src/adapters/controllers/controllers.h"
 #include "src/adapters/presenters/presenters.h"
@@ -9,15 +12,36 @@
 QT_BEGIN_NAMESPACE
 namespace Ui {
     class GSMainWindow;
-    class GSStateDisplay;
+    class CurrentState;
+    class ProcessSummary;
 }
 QT_END_NAMESPACE
 
-class GSMainWindowHandler : public QObject, public PPOC {
+class GSMainWindowHandler : public QObject {
     Q_OBJECT
 public:
     GSMainWindowHandler(QMainWindow* toHandle, PCIC* pcic);
     ~GSMainWindowHandler();
+
+    QHBoxLayout* getAbortButtonLayout();
+    QHBoxLayout* getProcessSummaryLayout();
+    QHBoxLayout* getProceedButtonLayout();
+    QVBoxLayout* getCurrentStateLayout();
+
+    PCIC* pcic;
+private:
+    QMainWindow* toHandle;
+    Ui::GSMainWindow* mainWindowUI;
+};
+
+
+
+class ProcessUIHandler : public QWidget, public PPOC {
+    Q_OBJECT
+public:
+    ProcessUIHandler(GSMainWindowHandler* gsmwh, PCIC* pcic);
+    ~ProcessUIHandler();
+
     void displayProcessSummary(std::vector<std::string> processSummary);
     void displayState(
             std::string name,
@@ -29,20 +53,13 @@ public:
     void allowProceed(bool permission);
     void allowAbort(bool permission);
 
+private:
+    Ui::CurrentState* stateUI;
+    Ui::ProcessSummary* processSummaryUI;
+    GSMainWindowHandler* gsmwh;
+    QPushButton* abortButton;
+    QPushButton* proceedButton;
     PCIC* pcic;
-private:
-    QMainWindow* toHandle;
-    Ui::GSMainWindow* ui;
-};
-
-
-
-class GSStateDisplayHandler : public QObject, public PPOC {
-    Q_OBJECT
-public:
-    GSStateDisplayHandler();
-private:
-    Ui::GSStateDisplay* ui;
 };
 
 #endif // UI_H
