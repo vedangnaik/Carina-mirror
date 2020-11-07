@@ -6,12 +6,14 @@
 #include <QHBoxLayout>
 #include <iostream>
 
-GSMainWindow::GSMainWindow(PCIC* pcic, QWidget *parent) : QMainWindow(parent) , ui(new Ui::GSMainWindow) {
-    ui->setupUi(this);
+GSMainWindowHandler::GSMainWindowHandler(QMainWindow* toHandle, PCIC* pcic) {
+    this->toHandle = toHandle;
+    this->ui = new Ui::GSMainWindow;
+    ui->setupUi(this->toHandle);
     this->pcic = pcic;
 
     connect(ui->openProcessFromFileAction, &QAction::triggered, this, [this]() {
-        QString fileName = QFileDialog::getOpenFileName(this,
+        QString fileName = QFileDialog::getOpenFileName(this->toHandle,
             tr("Open Process File"), "/home/vedang/Desktop/");
         if (fileName != "") {
             this->pcic->openProcess(fileName.toStdString());
@@ -24,11 +26,11 @@ GSMainWindow::GSMainWindow(PCIC* pcic, QWidget *parent) : QMainWindow(parent) , 
     ui->abortButton->setEnabled(false);
 }
 
-GSMainWindow::~GSMainWindow() {
+GSMainWindowHandler::~GSMainWindowHandler() {
     delete ui;
 }
 
-void GSMainWindow::displayState(
+void GSMainWindowHandler::displayState(
         std::string name,
         std::string description,
         std::string abortState,
@@ -44,7 +46,7 @@ void GSMainWindow::displayState(
     QFile file("src/external/ui/currentState.ui");
     file.open(QIODevice::ReadOnly);
     QUiLoader loader;
-    QWidget* stateFrame = loader.load(&file, this);
+    QWidget* stateFrame = loader.load(&file, this->toHandle);
     file.close();
 
     QLabel* nameLabel = stateFrame->findChild<QLabel*>("nameLabel");
@@ -72,7 +74,7 @@ void GSMainWindow::displayState(
     ui->currentStateLayout->addWidget(stateFrame);
 }
 
-void GSMainWindow::displayProcessSummary(std::vector<std::string> processSummary) {
+void GSMainWindowHandler::displayProcessSummary(std::vector<std::string> processSummary) {
     QVBoxLayout* vl = new QVBoxLayout();
     for (std::string summary : processSummary) {
         QGroupBox* summaryBox = new QGroupBox("", ui->currentProcessScrollArea);
@@ -86,10 +88,10 @@ void GSMainWindow::displayProcessSummary(std::vector<std::string> processSummary
     ui->currentProcessScrollArea->setLayout(vl);
 }
 
-void GSMainWindow::allowProceed(bool permission) {
+void GSMainWindowHandler::allowProceed(bool permission) {
     ui->proceedButton->setEnabled(permission);
 }
 
-void GSMainWindow::allowAbort(bool permission) {
+void GSMainWindowHandler::allowAbort(bool permission) {
     ui->abortButton->setEnabled(permission);
 }

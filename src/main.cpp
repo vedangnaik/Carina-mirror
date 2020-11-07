@@ -18,18 +18,20 @@
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
+    QMainWindow* GSMainWindow = new QMainWindow();
+
 
     SensorsManager* sm = new SensorsManager();
     ActuatorsManager* am = new ActuatorsManager();
     ProcessManager* pm = new ProcessManager();
     ProcessController* pc = new ProcessController(sm, am, pm);
-    GSMainWindow* ui = new GSMainWindow(pc);
+    GSMainWindowHandler* ui = new GSMainWindowHandler(GSMainWindow, pc);
     ProcessPresenter* pp = new ProcessPresenter(sm, am, ui);
     pm->setOutputContract(pp);
 
     ClocksModule* cm = new ClocksModule();
 
-    ui->show();
+    GSMainWindow->show();
 
     return a.exec();
 }

@@ -12,11 +12,11 @@ namespace Ui {
 }
 QT_END_NAMESPACE
 
-class GSMainWindow : public QMainWindow, public PPOC {
+class GSMainWindowHandler : public QObject, public PPOC {
     Q_OBJECT
 public:
-    GSMainWindow(PCIC* pcic, QWidget *parent = nullptr);
-    ~GSMainWindow();
+    GSMainWindowHandler(QMainWindow* toHandle, PCIC* pcic);
+    ~GSMainWindowHandler();
     void displayProcessSummary(std::vector<std::string> processSummary);
     void displayState(
             std::string name,
@@ -30,6 +30,7 @@ public:
 
     PCIC* pcic;
 private:
+    QMainWindow* toHandle;
     Ui::GSMainWindow *ui;
 };
 #endif // UI_H
