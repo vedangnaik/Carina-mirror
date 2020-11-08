@@ -82,6 +82,8 @@ void ProcessUIHandler::displayState(State* s, std::map<std::string, Actuator*> a
                 case ActuatorOptions::Timed:
                     this->stateUI->actionsLayout->addWidget(this->timedActuatorHandler(aButton), row, 2);
                     break;
+                case ActuatorOptions::Auto:
+                    aButton->toggle();
                 }
             }
 

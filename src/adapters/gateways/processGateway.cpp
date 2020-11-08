@@ -65,6 +65,9 @@ struct ProcessData ProcessGateway::parseProcessFile(std::string fileName) {
             if (actuator.value("timed").toBool()) {
                 actuatorOptions.push_back(ActuatorOptions::Timed);
             }
+            if (actuator.value("auto").toBool()) {
+                actuatorOptions.push_back(ActuatorOptions::Auto);
+            }
             // Same for any new options here
 
             s->actions.push_back(std::make_pair(id, actuatorOptions));

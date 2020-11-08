@@ -24,7 +24,8 @@ public:
     bool status;
 };
 enum ActuatorOptions {
-    Timed
+    Timed,
+    Auto
 };
 
 
