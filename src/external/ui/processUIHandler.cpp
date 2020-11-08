@@ -3,14 +3,16 @@
 #include "ui_processSummary.h"
 
 #include <QGroupBox>
+#include <iostream>
 
-ProcessUIHandler::ProcessUIHandler(GSMainWindowHandler* gsmwh, PCIC* pcic) {
+ProcessUIHandler::ProcessUIHandler(GSMainWindowHandler* gsmwh, PCIC* pcic, ClocksModule* cm) {
     this->stateUI = new Ui::CurrentState;
     stateUI->setupUi(this);
     this->processSummaryUI = new Ui::ProcessSummary;
     processSummaryUI->setupUi(this);
     this->gsmwh = gsmwh;
     this->pcic = pcic;
+    this->cm = cm;
 
     this->abortButton = new QPushButton("Abort");
     this->proceedButton = new QPushButton("Proceed");
@@ -62,28 +64,48 @@ void ProcessUIHandler::displayState(State* s, std::map<std::string, Actuator*> a
     this->stateUI->abortsToLabel->setText(QString::fromStdString(s->abortState));
     this->stateUI->descriptionLabel->setText(QString::fromStdString(s->description));
 
+    unsigned int row = 0;
     for (auto action : s->actions) {
         std::string id = action.first;
         std::vector<unsigned int> options = action.second;
         try {
-            actuators.at(id);
+            Actuator* actuator = actuators.at(id);
             QPushButton* aButton = new QPushButton(QString::fromStdString(id));
-            aButton->setChecked(true);
-            // connect(aButton, &QPushButton::toggled, actuator controller, some slot);
-        }  catch (std::out_of_range& e) {
-            sensors.at(id);
-        }
-    }
+            aButton->setCheckable(true);
 
-//    for (unsigned long i = 0; i < sensorPos.size() + actuatorPos.size(); i++) {
-//        try {
-//            Sensor* s = sensorPos.at(i);
-//            QLabel* sValueLabel = new QLabel();
-//            this->stateUI->actionsLayout->addRow(QString::fromStdString(s->id), sValueLabel);
-//        } catch (std::out_of_range& e) {
-//            Actuator* a = actuatorPos.at(i);
-//            QPushButton* aButton = new QPushButton(QString::fromStdString(a->id));
-//            this->stateUI->actionsLayout->addRow(QString::fromStdString(a->id), aButton);
-//        }
-//    }
+            for (auto option: options) {
+                switch (option) {
+                case ActuatorOptions::Timed:
+                    QLabel* elapsedTimeLabel = this->timedActuatorHandler(aButton);
+                    this->stateUI->actionsLayout->addWidget(elapsedTimeLabel, row, 2);
+                    break;
+                }
+            }
+
+            this->stateUI->actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
+            this->stateUI->actionsLayout->addWidget(aButton, row, 1);
+        }  catch (std::out_of_range& e) {
+            Sensor* sensor = sensors.at(id);
+        }
+
+        row += 1;
+    }
+}
+
+QLabel* ProcessUIHandler::timedActuatorHandler(QPushButton* aButton) {
+    QLabel* elapsedTimeLabel = new QLabel("0");
+    connect(aButton, &QPushButton::toggled, elapsedTimeLabel, [=](bool checked) {
+        if (checked) {
+            std::cout << "checked" << std::endl;
+            elapsedTimeLabel->setText("1");
+            connect(this->cm->oneSTimer, &QTimer::timeout, elapsedTimeLabel, [=]() {
+                int elapsedTime = elapsedTimeLabel->text().toInt() + 1;
+                elapsedTimeLabel->setText(QString::number(elapsedTime));
+            });
+        } else {
+            std::cout << "not checked" << std::endl;
+            disconnect(elapsedTimeLabel);
+        }
+    });
+    return elapsedTimeLabel;
 }

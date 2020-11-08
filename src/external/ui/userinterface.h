@@ -5,9 +5,11 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QLabel>
 #include "src/adapters/gateways/gateways.h"
 #include "src/adapters/controllers/controllers.h"
 #include "src/adapters/presenters/presenters.h"
+#include "src/external/services/services.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -41,29 +43,26 @@ private:
 class ProcessUIHandler : public QWidget, public PPOC {
     Q_OBJECT
 public:
-    ProcessUIHandler(GSMainWindowHandler* gsmwh, PCIC* pcic);
+    ProcessUIHandler(GSMainWindowHandler* gsmwh, PCIC* pcic, ClocksModule* cm);
     ~ProcessUIHandler();
 
     void displayProcessSummary(std::vector<std::string> processSummary);
-    void displayState(
-            std::string name,
-            std::string description,
-            std::string abortState,
-            std::map<int, Sensor*> sensorPos,
-            std::map<int, Actuator*> actuatorPos
-        );
-    void timedActuatorHandler(QPushButton* aButton);
+    void displayState(State* s, std::map<std::string, Actuator*> actuators, std::map<std::string, Sensor*> sensors);
 
     void allowProceed(bool permission);
     void allowAbort(bool permission);
 
 private:
+    QLabel* timedActuatorHandler(QPushButton* aButton);
+
     Ui::CurrentState* stateUI;
     Ui::ProcessSummary* processSummaryUI;
-    GSMainWindowHandler* gsmwh;
     QPushButton* abortButton;
     QPushButton* proceedButton;
+
+    GSMainWindowHandler* gsmwh;
     PCIC* pcic;
+    ClocksModule* cm;
 };
 
 #endif // UI_H

@@ -20,17 +20,17 @@ int main(int argc, char *argv[]) {
 
     QMainWindow* GSMainWindow = new QMainWindow();
 
-
+    ClocksModule* cm = new ClocksModule();
     SensorsManager* sm = new SensorsManager();
     ActuatorsManager* am = new ActuatorsManager();
     ProcessManager* pm = new ProcessManager();
     ProcessController* pc = new ProcessController(sm, am, pm);
     GSMainWindowHandler* gsmwh = new GSMainWindowHandler(GSMainWindow, pc);
-    ProcessUIHandler* puih = new ProcessUIHandler(gsmwh, pc);
+    ProcessUIHandler* puih = new ProcessUIHandler(gsmwh, pc, cm);
     ProcessPresenter* pp = new ProcessPresenter(sm, am, puih);
     pm->setOutputContract(pp);
 
-    ClocksModule* cm = new ClocksModule();
+
 
     GSMainWindow->show();
 

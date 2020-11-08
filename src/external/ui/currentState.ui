@@ -156,7 +156,7 @@
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <layout class="QFormLayout" name="actionsLayout"/>
+            <layout class="QGridLayout" name="actionsLayout"/>
            </item>
           </layout>
          </widget>

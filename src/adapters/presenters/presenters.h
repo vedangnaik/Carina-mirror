@@ -6,13 +6,7 @@
 class PPOC {
 public:
     virtual void displayProcessSummary(std::vector<std::string> processSummary) = 0;
-    virtual void displayState(
-            std::string name,
-            std::string description,
-            std::string abortState,
-            std::map<int, Sensor*> sensorPos,
-            std::map<int, Actuator*> actuatorPos
-        ) = 0;
+    virtual void displayState(State* s, std::map<std::string, Actuator*> actuators, std::map<std::string, Sensor*> sensors) = 0;
     virtual void allowProceed(bool permission) = 0;
     virtual void allowAbort(bool permission) = 0;
     virtual ~PPOC() {};
