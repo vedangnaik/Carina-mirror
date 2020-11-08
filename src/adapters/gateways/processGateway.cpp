@@ -55,7 +55,19 @@ struct ProcessData ProcessGateway::parseProcessFile(std::string fileName) {
         s->safetyRating = v.value("safetyRating").toString().toStdString();
         s->description = v.value("description").toString().toStdString();
         for (auto a: v.value("actions").toArray()) {
-            s->actions.push_back(a.toString().toStdString());
+            QJsonObject actuator = a.toObject();
+            std::string id = actuator.value("id").toString().toStdString();
+            if (id == "") {
+                // error here
+            }
+
+            std::vector<std::string> actuatorOptions = {};
+            if (actuator.value("timed").toBool()) {
+                actuatorOptions.push_back("timed");
+            }
+            // Same for any new options here
+
+            s->actions.push_back(std::make_pair(id, actuatorOptions));
         }
         QJsonObject transitions = v.value("transitions").toObject();
         s->proceedState = transitions.value("proceed").toString().toStdString();

@@ -31,7 +31,8 @@ public:
     std::string name;
     std::string safetyRating;
     std::string description;
-    std::vector<std::string> actions;
+    std::vector<std::pair<std::string, std::vector<std::string>>> actions;
+//    std::vector<std::string> actions;
     std::string proceedState;
     std::string abortState;
 };

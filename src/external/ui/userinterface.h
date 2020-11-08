@@ -9,6 +9,7 @@
 #include "src/adapters/controllers/controllers.h"
 #include "src/adapters/presenters/presenters.h"
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
     class GSMainWindow;
@@ -16,6 +17,7 @@ namespace Ui {
     class ProcessSummary;
 }
 QT_END_NAMESPACE
+
 
 class GSMainWindowHandler : public QObject {
     Q_OBJECT

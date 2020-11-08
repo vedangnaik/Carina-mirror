@@ -22,7 +22,7 @@ void ProcessPresenter::displayState(State* s) {
     std::map<int, Sensor*> sensorPos;
     std::map<int, Actuator*> actuatorPos;
     for (unsigned long i = 0; i < s->actions.size(); i++) {
-        std::string key = s->actions[i];
+        std::string key = s->actions[i].first;
         if (this->amic->findActuator(key) != nullptr) {
             actuatorPos[i] = this->amic->findActuator(key);
         } else if (this->smic->findSensor(key) != nullptr) {
