@@ -8,7 +8,7 @@ void ActuatorsManager::addActuators(std::vector<Actuator *> actuators) {
 
 Actuator* ActuatorsManager::findActuator(std::string id) {
     try {
-        return this->actuators[id];
+        return this->actuators.at(id);
     }  catch (std::out_of_range e) {
         return nullptr;
     }

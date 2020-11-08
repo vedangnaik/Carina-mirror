@@ -19,20 +19,20 @@ void ProcessPresenter::displayState(State* s) {
         this->ppoc->allowAbort(true);
     }
 
-    std::map<int, Sensor*> sensorPos;
-    std::map<int, Actuator*> actuatorPos;
-    for (unsigned long i = 0; i < s->actions.size(); i++) {
-        std::string key = s->actions[i];
-        if (this->amic->findActuator(key) != nullptr) {
-            actuatorPos[i] = this->amic->findActuator(key);
-        } else if (this->smic->findSensor(key) != nullptr) {
-            sensorPos[i] = this->smic->findSensor(key);
+    std::map<std::string, Sensor*> sensors;
+    std::map<std::string, Actuator*> actuators;
+    for (auto a : s->actions) {
+        std::string id = a.first;
+        if (this->amic->findActuator(id) != nullptr) {
+            actuators[id] = this->amic->findActuator(id);
+        } else if (this->smic->findSensor(id) != nullptr) {
+            sensors[id] = this->smic->findSensor(id);
         } else {
             // well shit, we shouldn't really be here...
         }
     }
 
-    this->ppoc->displayState(s->name, s->description, s->abortState, sensorPos, actuatorPos);
+    this->ppoc->displayState(s, actuators, sensors);
 }
 
 void ProcessPresenter::displayProcessSummary(std::vector<std::string> processSummary) {

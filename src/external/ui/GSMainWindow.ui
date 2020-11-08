@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>GSUI</class>
- <widget class="QMainWindow" name="GSUI">
+ <class>GSMainWindow</class>
+ <widget class="QMainWindow" name="GSMainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -28,78 +28,19 @@
         <property name="lineWidth">
          <number>2</number>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
          <item>
-          <widget class="QPushButton" name="abortButton">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(170, 0, 0);
-font: 63 40pt &quot;Source Code Pro Semibold&quot;;</string>
-           </property>
-           <property name="text">
-            <string>ABORT</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QScrollArea" name="currentProcessScrollArea">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::Box</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-           <property name="lineWidth">
-            <number>2</number>
-           </property>
-           <property name="widgetResizable">
-            <bool>true</bool>
-           </property>
-           <widget class="QWidget" name="scrollAreaWidgetContents_3">
-            <property name="geometry">
-             <rect>
-              <x>0</x>
-              <y>0</y>
-              <width>275</width>
-              <height>394</height>
-             </rect>
-            </property>
-           </widget>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="proceedButton">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(0, 85, 0);
-font: 63 40pt &quot;Source Code Pro Semibold&quot;;</string>
-           </property>
-           <property name="text">
-            <string>Proceed</string>
-           </property>
-          </widget>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <layout class="QHBoxLayout" name="abortButtonLayout"/>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="processSummaryLayout"/>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="proceedButtonLayout"/>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>

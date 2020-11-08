@@ -6,28 +6,33 @@
 #include "src/entities/entities.h"
 // USE CASES
 #include "src/usecases/usecases.h"
-// GATEWAYS
-//#include "gateways.h"
-// CONTROLLERS
+// ADAPTERS
+#include "src/adapters/gateways/gateways.h"
 #include "src/adapters/controllers/controllers.h"
-// PRESENTERS
 #include "src/adapters/presenters/presenters.h"
-// UI
+// EXTERNAL
 #include "src/external/ui/userinterface.h"
+#include "src/external/services/services.h"
 
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
+    QMainWindow* GSMainWindow = new QMainWindow();
+
+    ClocksModule* cm = new ClocksModule();
     SensorsManager* sm = new SensorsManager();
     ActuatorsManager* am = new ActuatorsManager();
     ProcessManager* pm = new ProcessManager();
     ProcessController* pc = new ProcessController(sm, am, pm);
-    UserInterface* ui = new UserInterface(pc);
-    ProcessPresenter* pp = new ProcessPresenter(sm, am, ui);
+    GSMainWindowHandler* gsmwh = new GSMainWindowHandler(GSMainWindow, pc);
+    ProcessUIHandler* puih = new ProcessUIHandler(gsmwh, pc, cm);
+    ProcessPresenter* pp = new ProcessPresenter(sm, am, puih);
     pm->setOutputContract(pp);
 
-    ui->show();
+
+
+    GSMainWindow->show();
 
     return a.exec();
 }

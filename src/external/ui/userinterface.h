@@ -1,34 +1,68 @@
-#ifndef GSUI_H
-#define GSUI_H
+#ifndef UI_H
+#define UI_H
 
 #include <QMainWindow>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QLabel>
 #include "src/adapters/gateways/gateways.h"
 #include "src/adapters/controllers/controllers.h"
 #include "src/adapters/presenters/presenters.h"
+#include "src/external/services/services.h"
+
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class GSUI; }
+namespace Ui {
+    class GSMainWindow;
+    class CurrentState;
+    class ProcessSummary;
+}
 QT_END_NAMESPACE
 
-class UserInterface : public QMainWindow, public PPOC {
-    Q_OBJECT
 
+class GSMainWindowHandler : public QObject {
+    Q_OBJECT
 public:
-    UserInterface(PCIC* pcic, QWidget *parent = nullptr);
-    ~UserInterface();
-    void displayProcessSummary(std::vector<std::string> processSummary);
-    void displayState(
-            std::string name,
-            std::string description,
-            std::string abortState,
-            std::map<int, Sensor*> sensorPos,
-            std::map<int, Actuator*> actuatorPos
-        );
-    void allowProceed(bool permission);
-    void allowAbort(bool permission);
+    GSMainWindowHandler(QMainWindow* toHandle, PCIC* pcic);
+    ~GSMainWindowHandler();
+
+    QHBoxLayout* getAbortButtonLayout();
+    QHBoxLayout* getProcessSummaryLayout();
+    QHBoxLayout* getProceedButtonLayout();
+    QVBoxLayout* getCurrentStateLayout();
 
     PCIC* pcic;
 private:
-    Ui::GSUI *ui;
+    QMainWindow* toHandle;
+    Ui::GSMainWindow* mainWindowUI;
 };
-#endif // GSUI_H
+
+
+
+class ProcessUIHandler : public QWidget, public PPOC {
+    Q_OBJECT
+public:
+    ProcessUIHandler(GSMainWindowHandler* gsmwh, PCIC* pcic, ClocksModule* cm);
+    ~ProcessUIHandler();
+
+    void displayProcessSummary(std::vector<std::string> processSummary);
+    void displayState(State* s, std::map<std::string, Actuator*> actuators, std::map<std::string, Sensor*> sensors);
+
+    void allowProceed(bool permission);
+    void allowAbort(bool permission);
+
+private:
+    QLabel* timedActuatorHandler(QPushButton* aButton);
+
+    Ui::CurrentState* stateUI;
+    Ui::ProcessSummary* processSummaryUI;
+    QPushButton* abortButton;
+    QPushButton* proceedButton;
+
+    GSMainWindowHandler* gsmwh;
+    PCIC* pcic;
+    ClocksModule* cm;
+};
+
+#endif // UI_H

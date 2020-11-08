@@ -23,6 +23,9 @@ public:
     std::string name;
     bool status;
 };
+enum ActuatorOptions {
+    Timed
+};
 
 
 class State {
@@ -31,7 +34,8 @@ public:
     std::string name;
     std::string safetyRating;
     std::string description;
-    std::vector<std::string> actions;
+    std::vector<std::pair<std::string, std::vector<unsigned int>>> actions;
+//    std::vector<std::string> actions;
     std::string proceedState;
     std::string abortState;
 };

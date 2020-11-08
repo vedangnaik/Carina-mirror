@@ -21,7 +21,9 @@ SOURCES += \
     src/adapters/gateways/processGateway.cpp \
     src/adapters/presenters/processPresenter.cpp \
     src/entities/entities.cpp \
-    src/external/ui/userinterface.cpp \
+    src/external/services/clocksModule.cpp \
+    src/external/ui/GSMainWindowHandler.cpp \
+    src/external/ui/processUIHandler.cpp \
     src/main.cpp \
     src/usecases/actuatorsManager.cpp \
     src/usecases/processManager.cpp \
@@ -29,6 +31,7 @@ SOURCES += \
 
 HEADERS += \
     src/entities/entities.h \
+    src/external/services/services.h \
     src/usecases/usecases.h \
     src/adapters/controllers/controllers.h \
     src/adapters/presenters/presenters.h \
@@ -36,8 +39,9 @@ HEADERS += \
     src/external/ui/userinterface.h
 
 FORMS += \
+    src/external/ui/GSMainWindow.ui \
     src/external/ui/currentState.ui \
-    src/external/ui/userinterface.ui
+    src/external/ui/processSummary.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
