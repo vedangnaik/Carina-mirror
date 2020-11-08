@@ -61,9 +61,9 @@ struct ProcessData ProcessGateway::parseProcessFile(std::string fileName) {
                 // error here
             }
 
-            std::vector<std::string> actuatorOptions = {};
+            std::vector<unsigned int> actuatorOptions = {};
             if (actuator.value("timed").toBool()) {
-                actuatorOptions.push_back("timed");
+                actuatorOptions.push_back(ActuatorOptions::Timed);
             }
             // Same for any new options here
 

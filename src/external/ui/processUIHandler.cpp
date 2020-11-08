@@ -50,26 +50,40 @@ void ProcessUIHandler::displayProcessSummary(std::vector<std::string> processSum
     }
 }
 
-void ProcessUIHandler::displayState(std::string name, std::string description, std::string abortState, std::map<int, Sensor*> sensorPos, std::map<int, Actuator*> actuatorPos) {
+/*void ProcessUIHandler::displayState(std::string name, std::string description, std::string abortState, std::map<int, Sensor*> sensorPos, std::map<int, Actuator*> actuatorPos)*/
+void ProcessUIHandler::displayState(State* s, std::map<std::string, Actuator*> actuators, std::map<std::string, Sensor*> sensors) {
     QLayoutItem* child;
     while ((child = this->stateUI->actionsLayout->takeAt(0)) != nullptr) {
         delete child->widget();
         delete child;
     }
 
-    this->stateUI->nameLabel->setText(QString::fromStdString(name));
-    this->stateUI->abortsToLabel->setText(QString::fromStdString(abortState));
-    this->stateUI->descriptionLabel->setText(QString::fromStdString(description));
+    this->stateUI->nameLabel->setText(QString::fromStdString(s->name));
+    this->stateUI->abortsToLabel->setText(QString::fromStdString(s->abortState));
+    this->stateUI->descriptionLabel->setText(QString::fromStdString(s->description));
 
-    for (unsigned long i = 0; i < sensorPos.size() + actuatorPos.size(); i++) {
+    for (auto action : s->actions) {
+        std::string id = action.first;
+        std::vector<unsigned int> options = action.second;
         try {
-            Sensor* s = sensorPos.at(i);
-            QLabel* sValueLabel = new QLabel();
-            this->stateUI->actionsLayout->addRow(QString::fromStdString(s->id), sValueLabel);
-        } catch (std::out_of_range& e) {
-            Actuator* a = actuatorPos.at(i);
-            QPushButton* aButton = new QPushButton(QString::fromStdString(a->id));
-            this->stateUI->actionsLayout->addRow(QString::fromStdString(a->id), aButton);
+            actuators.at(id);
+            QPushButton* aButton = new QPushButton(QString::fromStdString(id));
+            aButton->setChecked(true);
+            // connect(aButton, &QPushButton::toggled, actuator controller, some slot);
+        }  catch (std::out_of_range& e) {
+            sensors.at(id);
         }
     }
+
+//    for (unsigned long i = 0; i < sensorPos.size() + actuatorPos.size(); i++) {
+//        try {
+//            Sensor* s = sensorPos.at(i);
+//            QLabel* sValueLabel = new QLabel();
+//            this->stateUI->actionsLayout->addRow(QString::fromStdString(s->id), sValueLabel);
+//        } catch (std::out_of_range& e) {
+//            Actuator* a = actuatorPos.at(i);
+//            QPushButton* aButton = new QPushButton(QString::fromStdString(a->id));
+//            this->stateUI->actionsLayout->addRow(QString::fromStdString(a->id), aButton);
+//        }
+//    }
 }

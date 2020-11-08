@@ -52,6 +52,8 @@ public:
             std::map<int, Sensor*> sensorPos,
             std::map<int, Actuator*> actuatorPos
         );
+    void timedActuatorHandler(QPushButton* aButton);
+
     void allowProceed(bool permission);
     void allowAbort(bool permission);
 
