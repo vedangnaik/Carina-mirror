@@ -5,13 +5,14 @@
 #include <QGroupBox>
 #include <iostream>
 
-ProcessUIHandler::ProcessUIHandler(GSMainWindowHandler* gsmwh, PCIC* pcic, ClocksModule* cm) {
+ProcessUIHandler::ProcessUIHandler(GSMainWindowHandler* gsmwh, PCIC* pcic, ACIC* acic, ClocksModule* cm) {
     this->stateUI = new Ui::CurrentState;
     stateUI->setupUi(this);
     this->processSummaryUI = new Ui::ProcessSummary;
     processSummaryUI->setupUi(this);
     this->gsmwh = gsmwh;
     this->pcic = pcic;
+    this->acic = acic;
     this->cm = cm;
 
     this->abortButton = new QPushButton("Abort");
@@ -52,7 +53,7 @@ void ProcessUIHandler::displayProcessSummary(std::vector<std::string> processSum
     }
 }
 
-/*void ProcessUIHandler::displayState(std::string name, std::string description, std::string abortState, std::map<int, Sensor*> sensorPos, std::map<int, Actuator*> actuatorPos)*/
+
 void ProcessUIHandler::displayState(State* s, std::map<std::string, Actuator*> actuators, std::map<std::string, Sensor*> sensors) {
     QLayoutItem* child;
     while ((child = this->stateUI->actionsLayout->takeAt(0)) != nullptr) {
@@ -72,12 +73,14 @@ void ProcessUIHandler::displayState(State* s, std::map<std::string, Actuator*> a
             Actuator* actuator = actuators.at(id);
             QPushButton* aButton = new QPushButton(QString::fromStdString(id));
             aButton->setCheckable(true);
+            connect(aButton, &QPushButton::toggled, this->acic, [this, id]() {
+                this->acic->actuate(id);
+            });
 
             for (auto option: options) {
                 switch (option) {
                 case ActuatorOptions::Timed:
-                    QLabel* elapsedTimeLabel = this->timedActuatorHandler(aButton);
-                    this->stateUI->actionsLayout->addWidget(elapsedTimeLabel, row, 2);
+                    this->stateUI->actionsLayout->addWidget(this->timedActuatorHandler(aButton), row, 2);
                     break;
                 }
             }

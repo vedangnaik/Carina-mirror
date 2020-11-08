@@ -25,8 +25,9 @@ int main(int argc, char *argv[]) {
     ActuatorsManager* am = new ActuatorsManager();
     ProcessManager* pm = new ProcessManager();
     ProcessController* pc = new ProcessController(sm, am, pm);
+    ActuatorsController* ac = new ActuatorsController(am);
     GSMainWindowHandler* gsmwh = new GSMainWindowHandler(GSMainWindow, pc);
-    ProcessUIHandler* puih = new ProcessUIHandler(gsmwh, pc, cm);
+    ProcessUIHandler* puih = new ProcessUIHandler(gsmwh, pc, ac, cm);
     ProcessPresenter* pp = new ProcessPresenter(sm, am, puih);
     pm->setOutputContract(pp);
 

@@ -43,7 +43,7 @@ private:
 class ProcessUIHandler : public QWidget, public PPOC {
     Q_OBJECT
 public:
-    ProcessUIHandler(GSMainWindowHandler* gsmwh, PCIC* pcic, ClocksModule* cm);
+    ProcessUIHandler(GSMainWindowHandler* gsmwh, PCIC* pcic, ACIC* acic, ClocksModule* cm);
     ~ProcessUIHandler();
 
     void displayProcessSummary(std::vector<std::string> processSummary);
@@ -62,6 +62,7 @@ private:
 
     GSMainWindowHandler* gsmwh;
     PCIC* pcic;
+    ACIC* acic;
     ClocksModule* cm;
 };
 

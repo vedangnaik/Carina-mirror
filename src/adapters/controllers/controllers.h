@@ -8,8 +8,6 @@ class PCIC : public QObject
 {
     Q_OBJECT
 public:
-    PCIC() {}
-    virtual ~PCIC() {}
     virtual void openProcess(std::string filePath) = 0;
     virtual void proceed() = 0;
     virtual void abort() = 0;
@@ -25,6 +23,22 @@ private:
     PMIC* pmic;
     SMIC* smic;
     AMIC* amic;
+};
+
+//====
+
+class ACIC : public QObject {
+    Q_OBJECT
+public:
+    virtual void actuate(std::string id) = 0;
+};
+
+class ActuatorsController : public ACIC {
+public:
+    ActuatorsController(AMIC* amic);
+    void actuate(std::string id);
+private:
+   AMIC* amic;
 };
 
 #endif // PROCESSCONTROLLER_H
