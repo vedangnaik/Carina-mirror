@@ -93,18 +93,16 @@ void ProcessUIHandler::displayState(State* s, std::map<std::string, Actuator*> a
 }
 
 QLabel* ProcessUIHandler::timedActuatorHandler(QPushButton* aButton) {
-    QLabel* elapsedTimeLabel = new QLabel("0");
+    QLabel* elapsedTimeLabel = new QLabel();
     connect(aButton, &QPushButton::toggled, elapsedTimeLabel, [=](bool checked) {
         if (checked) {
-            std::cout << "checked" << std::endl;
-            elapsedTimeLabel->setText("1");
             connect(this->cm->oneSTimer, &QTimer::timeout, elapsedTimeLabel, [=]() {
                 int elapsedTime = elapsedTimeLabel->text().toInt() + 1;
                 elapsedTimeLabel->setText(QString::number(elapsedTime));
             });
         } else {
-            std::cout << "not checked" << std::endl;
-            disconnect(elapsedTimeLabel);
+            disconnect(this->cm->oneSTimer, &QTimer::timeout, elapsedTimeLabel, nullptr);
+            elapsedTimeLabel->setText("");
         }
     });
     return elapsedTimeLabel;
