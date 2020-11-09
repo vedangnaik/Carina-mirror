@@ -55,24 +55,24 @@ struct ProcessData ProcessGateway::parseProcessFile(std::string fileName) {
         s->safetyRating = v.value("safetyRating").toString().toStdString();
         s->description = v.value("description").toString().toStdString();
         for (auto a: v.value("actions").toArray()) {
-            QJsonObject actuator = a.toObject();
-            std::string id = actuator.value("id").toString().toStdString();
+            QJsonObject action = a.toObject();
+            std::string id = action.value("id").toString().toStdString();
             if (id == "") {
                 // error here
             }
 
-            std::vector<unsigned int> actuatorOptions = {};
-            bool timed = actuator.value("timed").toBool();
-            bool automatic = actuator.value("auto").toBool();
-            QString check_position = actuator.value("check_position").toString();
+            std::vector<unsigned int> actionOptions = {};
+            bool timed = action.value("timed").toBool();
+            bool automatic = action.value("automatic").toBool();
+            QString check_position = action.value("check_position").toString();
 
-            if (timed) actuatorOptions.push_back(ActuatorOptions::Timed);
-            if (automatic) actuatorOptions.push_back(ActuatorOptions::Automatic);
-            if (check_position == "open") actuatorOptions.push_back(ActuatorOptions::CheckOpen);
-            else if (check_position == "close") actuatorOptions.push_back(ActuatorOptions::CheckClose);
+            if (timed) actionOptions.push_back(ActuatorOptions::Timed);
+            if (automatic) actionOptions.push_back(ActuatorOptions::Automatic);
+            if (check_position == "open") actionOptions.push_back(ActuatorOptions::CheckOpen);
+            else if (check_position == "close") actionOptions.push_back(ActuatorOptions::CheckClose);
             // Same for any new options here
 
-            s->actions.push_back(std::make_pair(id, actuatorOptions));
+            s->actions.push_back(std::make_pair(id, actionOptions));
         }
         QJsonObject transitions = v.value("transitions").toObject();
         s->proceedState = transitions.value("proceed").toString().toStdString();

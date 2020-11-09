@@ -32,7 +32,7 @@ void StateUIHandler::displayState(State *s, std::map<std::string, Actuator *> ac
             Actuator* actuator = actuators.at(id);
             QPushButton* aButton = new QPushButton(QString::fromStdString(id));
             aButton->setCheckable(true);
-            connect(aButton, &QPushButton::toggled, this->acic, [this, id]() {
+            connect(aButton, &QPushButton::toggled, this->acic, [=]() {
                 this->acic->actuate(id);
             });
 
