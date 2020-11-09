@@ -1,60 +1,19 @@
 #include "userinterface.h"
-#include "ui_currentState.h"
-#include "ui_processSummary.h"
+#include "ui_state.h"
 
-#include <QGroupBox>
-#include <iostream>
-
-ProcessUIHandler::ProcessUIHandler(GSMainWindowHandler* gsmwh, PCIC* pcic, ACIC* acic, ClocksModule* cm) {
-    this->stateUI = new Ui::CurrentState;
+StateUIHandler::StateUIHandler(GSMainWindowHandler* gsmwh, ACIC* acic, ClocksModule* cm) {
+    this->stateUI = new Ui::State;
     stateUI->setupUi(this);
-    this->processSummaryUI = new Ui::ProcessSummary;
-    processSummaryUI->setupUi(this);
-    this->gsmwh = gsmwh;
-    this->pcic = pcic;
+    gsmwh->getCurrentStateLayout()->addWidget(this->stateUI->csFrame);
     this->acic = acic;
     this->cm = cm;
-
-    this->abortButton = new QPushButton("Abort");
-    this->proceedButton = new QPushButton("Proceed");
-    this->gsmwh->getAbortButtonLayout()->addWidget(this->abortButton);
-    this->gsmwh->getProceedButtonLayout()->addWidget(this->proceedButton);
-    this->gsmwh->getProcessSummaryLayout()->addWidget(this->processSummaryUI->psFrame);
-    this->gsmwh->getCurrentStateLayout()->addWidget(this->stateUI->csFrame);
-
-    connect(this->proceedButton, &QPushButton::clicked, this->pcic, &PCIC::proceed);
-    this->proceedButton->setEnabled(false);
-    connect(this->abortButton, &QPushButton::clicked, this->pcic, &PCIC::abort);
-    this->abortButton->setEnabled(false);
 }
 
-ProcessUIHandler::~ProcessUIHandler() {
+StateUIHandler::~StateUIHandler() {
     delete this->stateUI;
-    delete this->processSummaryUI;
 }
 
-void ProcessUIHandler::allowProceed(bool permission) {
-    this->proceedButton->setEnabled(permission);
-}
-
-void ProcessUIHandler::allowAbort(bool permission) {
-    this->abortButton->setEnabled(permission);
-}
-
-void ProcessUIHandler::displayProcessSummary(std::vector<std::string> processSummary) {
-    for (std::string summary : processSummary) {
-        QGroupBox* summaryBox = new QGroupBox("", this->processSummaryUI->psFrame);
-        QLabel* summaryLabel = new QLabel(QString::fromStdString(summary), this->processSummaryUI->psFrame);
-        summaryLabel->setWordWrap(true);
-        QHBoxLayout* h = new QHBoxLayout();
-        h->addWidget(summaryLabel);
-        summaryBox->setLayout(h);
-        this->processSummaryUI->psLayout->addWidget(summaryBox);
-    }
-}
-
-
-void ProcessUIHandler::displayState(State* s, std::map<std::string, Actuator*> actuators, std::map<std::string, Sensor*> sensors) {
+void StateUIHandler::displayState(State *s, std::map<std::string, Actuator *> actuators, std::map<std::string, Sensor *> sensors) {
     QLayoutItem* child;
     while ((child = this->stateUI->actionsLayout->takeAt(0)) != nullptr) {
         delete child->widget();
@@ -100,7 +59,8 @@ void ProcessUIHandler::displayState(State* s, std::map<std::string, Actuator*> a
     }
 }
 
-QLabel* ProcessUIHandler::timedActuatorHandler(QPushButton* aButton) {
+
+QLabel* StateUIHandler::timedActuatorHandler(QPushButton* aButton) {
     QLabel* elapsedTimeLabel = new QLabel();
     connect(aButton, &QPushButton::toggled, elapsedTimeLabel, [=](bool checked) {
         if (checked) {

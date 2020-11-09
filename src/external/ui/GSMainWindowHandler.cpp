@@ -1,5 +1,5 @@
 #include "userinterface.h"
-#include "ui_GSMainWindow.h"
+#include "ui_gsmainwindow.h"
 
 #include <QFileDialog>
 #include <QtUiTools>
@@ -10,13 +10,12 @@ GSMainWindowHandler::GSMainWindowHandler(QMainWindow* toHandle, PCIC* pcic) {
     this->toHandle = toHandle;
     this->mainWindowUI = new Ui::GSMainWindow;
     mainWindowUI->setupUi(this->toHandle);
-    this->pcic = pcic;
 
-    connect(mainWindowUI->openProcessFromFileAction, &QAction::triggered, this, [this]() {
+    connect(mainWindowUI->openProcessFromFileAction, &QAction::triggered, this, [=]() {
         QString fileName = QFileDialog::getOpenFileName(this->toHandle,
             tr("Open Process File"), "/home/vedang/Desktop/");
         if (fileName != "") {
-            this->pcic->openProcess(fileName.toStdString());
+            pcic->openProcess(fileName.toStdString());
         }
     });
 }
