@@ -44,7 +44,7 @@ public:
     StateUIHandler(GSMainWindowHandler* gsmwh, ACIC* acic, ClocksModule* cm);
     ~StateUIHandler();
 
-    void displayState(State* s, std::map<std::string, Actuator*> actuators, std::map<std::string, Sensor*> sensors);
+    void displayState(StateDisplayInfo sdi);
     QLabel* timedActuatorHandler(QPushButton* aButton);
 private:
     Ui::State* stateUI;
@@ -62,7 +62,7 @@ public:
     ~ProcessUIHandler();
 
     void displayProcessSummary(std::vector<std::string> processSummary);
-    void displayState(State* s, std::map<std::string, Actuator*> actuators, std::map<std::string, Sensor*> sensors);
+    void displayState(StateDisplayInfo sdi);
 
     void allowProceed(bool permission);
     void allowAbort(bool permission);

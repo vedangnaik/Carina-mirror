@@ -47,6 +47,6 @@ void ProcessUIHandler::displayProcessSummary(std::vector<std::string> processSum
 }
 
 
-void ProcessUIHandler::displayState(State* s, std::map<std::string, Actuator*> actuators, std::map<std::string, Sensor*> sensors) {
-    this->suih->displayState(s, actuators, sensors);
+void ProcessUIHandler::displayState(StateDisplayInfo sdi) {
+    this->suih->displayState(sdi);
 }

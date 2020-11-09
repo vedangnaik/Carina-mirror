@@ -7,6 +7,14 @@ ProcessPresenter::ProcessPresenter(SMIC* smic, AMIC* amic, PPOC* ppoc) {
 }
 
 void ProcessPresenter::displayState(State* s) {
+    StateDisplayInfo sdi;
+    sdi.id = s->id;
+    sdi.name = s->name;
+    sdi.safetyRating = s->safetyRating;
+    sdi.description = s->description;
+    sdi.actions = s->actions;
+    sdi.abortState = s->abortState;
+
     if (s->proceedState == "") {
         this->ppoc->allowProceed(false);
     } else {
@@ -19,20 +27,20 @@ void ProcessPresenter::displayState(State* s) {
         this->ppoc->allowAbort(true);
     }
 
-    std::map<std::string, Sensor*> sensors;
-    std::map<std::string, Actuator*> actuators;
+    std::map<std::string, std::string> whatIsActions = {};
     for (auto a : s->actions) {
         std::string id = a.first;
         if (this->amic->findActuator(id) != nullptr) {
-            actuators[id] = this->amic->findActuator(id);
+            whatIsActions[id] = "actuator";
         } else if (this->smic->findSensor(id) != nullptr) {
-            sensors[id] = this->smic->findSensor(id);
+            whatIsActions[id] = "sensor";
         } else {
             // well shit, we shouldn't really be here...
         }
     }
+    sdi.whatIsActions = whatIsActions;
 
-    this->ppoc->displayState(s, actuators, sensors);
+    this->ppoc->displayState(sdi);
 }
 
 void ProcessPresenter::displayProcessSummary(std::vector<std::string> processSummary) {

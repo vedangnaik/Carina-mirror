@@ -13,23 +13,23 @@ StateUIHandler::~StateUIHandler() {
     delete this->stateUI;
 }
 
-void StateUIHandler::displayState(State *s, std::map<std::string, Actuator *> actuators, std::map<std::string, Sensor *> sensors) {
+void StateUIHandler::displayState(StateDisplayInfo sdi) {
     QLayoutItem* child;
     while ((child = this->stateUI->actionsLayout->takeAt(0)) != nullptr) {
         delete child->widget();
         delete child;
     }
 
-    this->stateUI->nameLabel->setText(QString::fromStdString(s->name));
-    this->stateUI->abortsToLabel->setText(QString::fromStdString(s->abortState));
-    this->stateUI->descriptionLabel->setText(QString::fromStdString(s->description));
+    this->stateUI->nameLabel->setText(QString::fromStdString(sdi.name));
+    this->stateUI->abortsToLabel->setText(QString::fromStdString(sdi.abortState));
+    this->stateUI->descriptionLabel->setText(QString::fromStdString(sdi.description));
 
     unsigned int row = 0;
-    for (auto action : s->actions) {
+    for (auto action : sdi.actions) {
         std::string id = action.first;
         std::vector<unsigned int> options = action.second;
-        try {
-            Actuator* actuator = actuators.at(id);
+
+        if (sdi.whatIsActions[id] == "actuator") {
             QPushButton* aButton = new QPushButton(QString::fromStdString(id));
             aButton->setCheckable(true);
             connect(aButton, &QPushButton::toggled, this->acic, [=]() {
@@ -51,8 +51,10 @@ void StateUIHandler::displayState(State *s, std::map<std::string, Actuator *> ac
 
             this->stateUI->actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
             this->stateUI->actionsLayout->addWidget(aButton, row, 1);
-        }  catch (std::out_of_range& e) {
-            Sensor* sensor = sensors.at(id);
+        } else if (sdi.whatIsActions[id] == "sensor") {
+
+        } else {
+            // shit
         }
 
         row += 1;
