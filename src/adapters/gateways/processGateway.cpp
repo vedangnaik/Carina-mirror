@@ -62,12 +62,14 @@ struct ProcessData ProcessGateway::parseProcessFile(std::string fileName) {
             }
 
             std::vector<unsigned int> actuatorOptions = {};
-            if (actuator.value("timed").toBool()) {
-                actuatorOptions.push_back(ActuatorOptions::Timed);
-            }
-            if (actuator.value("auto").toBool()) {
-                actuatorOptions.push_back(ActuatorOptions::Auto);
-            }
+            bool timed = actuator.value("timed").toBool();
+            bool automatic = actuator.value("auto").toBool();
+            QString check_position = actuator.value("check_position").toString();
+
+            if (timed) actuatorOptions.push_back(ActuatorOptions::Timed);
+            if (automatic) actuatorOptions.push_back(ActuatorOptions::Automatic);
+            if (check_position == "open") actuatorOptions.push_back(ActuatorOptions::CheckOpen);
+            else if (check_position == "close") actuatorOptions.push_back(ActuatorOptions::CheckClose);
             // Same for any new options here
 
             s->actions.push_back(std::make_pair(id, actuatorOptions));

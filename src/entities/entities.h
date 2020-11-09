@@ -25,7 +25,9 @@ public:
 };
 enum ActuatorOptions {
     Timed,
-    Auto
+    Automatic,
+    CheckOpen,
+    CheckClose
 };
 
 
