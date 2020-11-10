@@ -36,8 +36,8 @@ void ProcessManager::startProcess() {
 
     State* curr = this->p->getCurrentState();
     processSummary.push_back(curr->description);
-    while (curr->proceedState != "") {
-        curr = this->p->getStateById(curr->proceedState);
+    while (curr->transitions[Transition::Proceed] != "") {
+        curr = this->p->getStateById(curr->transitions[Transition::Proceed]);
         processSummary.push_back(curr->description);
     }
     this->pmoc->displayProcessSummary(processSummary);

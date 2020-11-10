@@ -13,15 +13,15 @@ void ProcessPresenter::displayState(State* s) {
     sdi.safetyRating = s->safetyRating;
     sdi.description = s->description;
     sdi.actions = s->actionOptions;
-    sdi.abortState = s->abortState;
+    sdi.abortState = s->transitions[Transition::Abort];
 
-    if (s->proceedState == "") {
+    if (s->transitions[Transition::Proceed] == "") {
         this->ppoc->allowProceed(false);
     } else {
         this->ppoc->allowProceed(true);
     }
 
-    if (s->abortState == "") {
+    if (s->transitions[Transition::Abort] == "") {
         this->ppoc->allowAbort(false);
     } else {
         this->ppoc->allowAbort(true);
