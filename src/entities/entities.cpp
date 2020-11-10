@@ -34,12 +34,3 @@ Actuator::Actuator(std::string id, std::string name) {
     this->name = name;
     this->status = false;
 }
-
-
-//State::State(std::string name, std::string safetyRating,
-//      std::string description, std::vector<Action*> actions) {
-//    this->name = name;
-//    this->safetyRating = safetyRating;
-//    this->description = description;
-//    this->actions = actions;
-//}

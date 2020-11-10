@@ -33,6 +33,10 @@ enum ActuatorCheck {
 };
 
 
+enum Transition {
+    Proceed,
+    Abort
+};
 class State {
 public:
     std::string id;
@@ -40,13 +44,10 @@ public:
     std::string safetyRating;
     std::string description;
     std::vector<std::pair<std::string, std::vector<unsigned int>>> actionOptions;
-    std::map<unsigned int, std::pair<std::string, std::vector<unsigned int>>> actionChecks;
-    std::map<unsigned int, std::string> transitions;
+    std::map<Transition, std::map<std::string, std::vector<unsigned int>>> actionChecks;
+    std::map<Transition, std::string> transitions;
 };
-enum Transition {
-    Proceed,
-    Abort
-};
+
 
 
 class Process {
