@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 
     SensorsManager* sm = new SensorsManager();
     ActuatorsManager* am = new ActuatorsManager();
-    ProcessManager* pm = new ProcessManager();
+    ProcessManager* pm = new ProcessManager(am, sm);
 
     ProcessController* pc = new ProcessController(sm, am, pm);
     ActuatorsController* ac = new ActuatorsController(am);

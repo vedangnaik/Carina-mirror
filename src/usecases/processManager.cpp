@@ -1,6 +1,11 @@
 #include "usecases.h"
 #include <iostream>
 
+ProcessManager::ProcessManager(AMIC* amic, SMIC* smic) {
+    this->amic = amic;
+    this->smic = smic;
+}
+
 void ProcessManager::setOutputContract(PMOC* pmoc) {
     this->pmoc = pmoc;
 }
@@ -9,6 +14,25 @@ void ProcessManager::transition(Transition t) {
     State* q = this->p->getCurrentState();
 
     try {
+        for (auto k : q->actionsChecks[t]) {
+            std::string id = k.first;
+            Actuator* a = this->amic->findActuator(id);
+            Sensor* s = this->smic->findSensor(id);
+            if (a != nullptr) {
+                switch (k.second[0]) {
+                case ActuatorCheck::Open:
+                    if (!a->status) { return; }
+                    break;
+                case ActuatorCheck::Close:
+                    if (a->status) { return; }
+                    break;
+                }
+            } else if (s != nullptr) {
+
+            } else {
+                // shit
+            }
+        }
         State* next = this->p->getStateById(q->transitions.at(t));
         this->p->setCurrentState(next);
         this->pmoc->displayState(this->p->getCurrentState());

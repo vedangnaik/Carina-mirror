@@ -28,8 +28,8 @@ enum ActuatorOption {
     Automatic
 };
 enum ActuatorCheck {
-    Open,
-    Close
+    Close = 0,
+    Open = 1
 };
 
 
