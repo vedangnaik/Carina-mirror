@@ -16,7 +16,7 @@ class PMIC {
 public:
     virtual void createProcess(std::vector<State*> states) = 0;
     virtual void startProcess() = 0;
-    virtual void transition(std::string transition) = 0;
+    virtual void transition(Transition t) = 0;
     virtual ~PMIC() {};
 };
 
@@ -24,7 +24,7 @@ class ProcessManager : public PMIC {
 public:
     void createProcess(std::vector<State*> Q);
     void startProcess();
-    void transition(std::string transition);
+    void transition(Transition t);
     void setOutputContract(PMOC* pmoc);
 private:
     Process* p = NULL;

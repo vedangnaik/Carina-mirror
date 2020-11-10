@@ -5,18 +5,16 @@ void ProcessManager::setOutputContract(PMOC* pmoc) {
     this->pmoc = pmoc;
 }
 
-void ProcessManager::transition(std::string transition) {
+void ProcessManager::transition(Transition t) {
     State* q = this->p->getCurrentState();
 
-    State* next;
-    if (transition == "proceed") {
-        next = this->p->getStateById(q->proceedState);
-    } else {
-        next = this->p->getStateById(q->abortState);
+    try {
+        State* next = this->p->getStateById(q->transitions.at(t));
+        this->p->setCurrentState(next);
+        this->pmoc->displayState(this->p->getCurrentState());
+    }  catch (std::out_of_range& e) {
+        // shit
     }
-
-    this->p->setCurrentState(next);
-    this->pmoc->displayState(this->p->getCurrentState());
 }
 
 void ProcessManager::createProcess(std::vector<State*> states) {

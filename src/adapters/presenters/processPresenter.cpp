@@ -12,7 +12,7 @@ void ProcessPresenter::displayState(State* s) {
     sdi.name = s->name;
     sdi.safetyRating = s->safetyRating;
     sdi.description = s->description;
-    sdi.actions = s->actions;
+    sdi.actions = s->actionOptions;
     sdi.abortState = s->abortState;
 
     if (s->proceedState == "") {
@@ -28,7 +28,7 @@ void ProcessPresenter::displayState(State* s) {
     }
 
     std::map<std::string, std::string> whatIsActions = {};
-    for (auto a : s->actions) {
+    for (auto a : s->actionOptions) {
         std::string id = a.first;
         if (this->amic->findActuator(id) != nullptr) {
             whatIsActions[id] = "actuator";

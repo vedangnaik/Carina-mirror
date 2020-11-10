@@ -66,17 +66,15 @@ struct ProcessData ProcessGateway::parseProcessFile(std::string fileName) {
             bool automatic = action.value("automatic").toBool();
             QString check_position = action.value("check_position").toString();
 
-            if (timed) actionOptions.push_back(ActuatorOptions::Timed);
-            if (automatic) actionOptions.push_back(ActuatorOptions::Automatic);
-            if (check_position == "open") actionOptions.push_back(ActuatorOptions::CheckOpen);
-            else if (check_position == "close") actionOptions.push_back(ActuatorOptions::CheckClose);
+            if (timed) actionOptions.push_back(ActuatorOption::Timed);
+            if (automatic) actionOptions.push_back(ActuatorOption::Automatic);
             // Same for any new options here
 
-            s->actions.push_back(std::make_pair(id, actionOptions));
+            s->actionOptions.push_back(std::make_pair(id, actionOptions));
         }
         QJsonObject transitions = v.value("transitions").toObject();
-        s->proceedState = transitions.value("proceed").toString().toStdString();
-        s->abortState = transitions.value("abort").toString().toStdString();
+        s->transitions[Transition::Proceed] = transitions.value("proceed").toString().toStdString();
+        s->transitions[Transition::Abort] = transitions.value("abort").toString().toStdString();
 
         states.push_back(s);
     }

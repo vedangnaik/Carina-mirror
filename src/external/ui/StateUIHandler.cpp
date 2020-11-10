@@ -38,13 +38,11 @@ void StateUIHandler::displayState(StateDisplayInfo sdi) {
 
             for (auto option: options) {
                 switch (option) {
-                case ActuatorOptions::Timed:
+                case ActuatorOption::Timed:
                     this->stateUI->actionsLayout->addWidget(this->timedActuatorHandler(aButton), row, 2);
                     break;
-                case ActuatorOptions::Automatic:
+                case ActuatorOption::Automatic:
                     aButton->toggle();
-                    break;
-                case ActuatorOptions::CheckOpen:
                     break;
                 }
             }

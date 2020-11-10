@@ -23,11 +23,13 @@ public:
     std::string name;
     bool status;
 };
-enum ActuatorOptions {
+enum ActuatorOption {
     Timed,
-    Automatic,
-    CheckOpen,
-    CheckClose
+    Automatic
+};
+enum ActuatorCheck {
+    Open,
+    Close
 };
 
 
@@ -37,9 +39,15 @@ public:
     std::string name;
     std::string safetyRating;
     std::string description;
-    std::vector<std::pair<std::string, std::vector<unsigned int>>> actions;
+    std::vector<std::pair<std::string, std::vector<unsigned int>>> actionOptions;
+    std::map<unsigned int, std::pair<std::string, std::vector<unsigned int>>> actionChecks;
+    std::map<unsigned int, std::string> transitions;
     std::string proceedState;
     std::string abortState;
+};
+enum Transition {
+    Proceed,
+    Abort
 };
 
 
