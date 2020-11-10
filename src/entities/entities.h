@@ -44,7 +44,7 @@ public:
     std::string safetyRating;
     std::string description;
     std::vector<std::pair<std::string, std::vector<unsigned int>>> actionOptions;
-    std::map<Transition, std::map<std::string, std::vector<unsigned int>>> actionChecks;
+    std::map<Transition, std::map<std::string, std::vector<unsigned int>>> actionsChecks;
     std::map<Transition, std::string> transitions;
 };
 

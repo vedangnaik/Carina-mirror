@@ -16,8 +16,9 @@ public:
     struct ProcessData parseProcessFile(std::string fileName);
 private:
     std::vector<Sensor*> parseSensors(QJsonObject sensorsObj);
-    std::vector<Actuator*> parseActuator(QJsonObject actuatorsObj);
-    std::vector<State*> parseState(QJsonObject statesObj);
+    std::vector<Actuator*> parseActuators(QJsonObject actuatorsObj);
+    std::vector<State*> parseStates(QJsonObject statesObj);
+    std::map<std::string, std::vector<unsigned int>> parseStateChecks(QJsonObject checksObj);
 };
 
 #endif // CONTROLLERS_H
