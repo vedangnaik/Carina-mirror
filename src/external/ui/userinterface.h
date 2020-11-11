@@ -15,7 +15,7 @@
 QT_BEGIN_NAMESPACE
 namespace Ui {
     class GSMainWindow;
-    class CurrentState;
+    class State;
     class ProcessSummary;
 }
 QT_END_NAMESPACE
@@ -31,39 +31,49 @@ public:
     QHBoxLayout* getProcessSummaryLayout();
     QHBoxLayout* getProceedButtonLayout();
     QVBoxLayout* getCurrentStateLayout();
-
-    PCIC* pcic;
 private:
     QMainWindow* toHandle;
     Ui::GSMainWindow* mainWindowUI;
 };
 
+//====
 
+class StateUIHandler : public QWidget {
+    Q_OBJECT
+public:
+    StateUIHandler(GSMainWindowHandler* gsmwh, ACIC* acic, ClocksModule* cm);
+    ~StateUIHandler();
+
+    void displayState(StateDisplayInfo sdi);
+    QLabel* timedActuatorHandler(QPushButton* aButton);
+private:
+    Ui::State* stateUI;
+
+    ACIC* acic;
+    ClocksModule* cm;
+};
+
+//====
 
 class ProcessUIHandler : public QWidget, public PPOC {
     Q_OBJECT
 public:
-    ProcessUIHandler(GSMainWindowHandler* gsmwh, PCIC* pcic, ACIC* acic, ClocksModule* cm);
+    ProcessUIHandler(GSMainWindowHandler* gsmwh, StateUIHandler* suih, PCIC* pcic);
     ~ProcessUIHandler();
 
     void displayProcessSummary(std::vector<std::string> processSummary);
-    void displayState(State* s, std::map<std::string, Actuator*> actuators, std::map<std::string, Sensor*> sensors);
+    void displayState(StateDisplayInfo sdi);
 
     void allowProceed(bool permission);
     void allowAbort(bool permission);
 
 private:
-    QLabel* timedActuatorHandler(QPushButton* aButton);
-
-    Ui::CurrentState* stateUI;
     Ui::ProcessSummary* processSummaryUI;
     QPushButton* abortButton;
     QPushButton* proceedButton;
 
-    GSMainWindowHandler* gsmwh;
+    StateUIHandler* suih;
     PCIC* pcic;
-    ACIC* acic;
-    ClocksModule* cm;
 };
 
 #endif // UI_H

@@ -1,22 +1,44 @@
 #include "usecases.h"
 #include <iostream>
 
+ProcessManager::ProcessManager(AMIC* amic, SMIC* smic) {
+    this->amic = amic;
+    this->smic = smic;
+}
+
 void ProcessManager::setOutputContract(PMOC* pmoc) {
     this->pmoc = pmoc;
 }
 
-void ProcessManager::transition(std::string transition) {
+void ProcessManager::transition(Transition t) {
     State* q = this->p->getCurrentState();
 
-    State* next;
-    if (transition == "proceed") {
-        next = this->p->getStateById(q->proceedState);
-    } else {
-        next = this->p->getStateById(q->abortState);
-    }
+    try {
+        for (auto k : q->actionsChecks[t]) {
+            std::string id = k.first;
+            Actuator* a = this->amic->findActuator(id);
+            Sensor* s = this->smic->findSensor(id);
+            if (a != nullptr) {
+                switch (k.second[0]) {
+                case ActuatorCheck::Open:
+                    if (!a->status) { return; }
+                    break;
+                case ActuatorCheck::Close:
+                    if (a->status) { return; }
+                    break;
+                }
+            } else if (s != nullptr) {
 
-    this->p->setCurrentState(next);
-    this->pmoc->displayState(this->p->getCurrentState());
+            } else {
+                // shit
+            }
+        }
+        State* next = this->p->getStateById(q->transitions.at(t));
+        this->p->setCurrentState(next);
+        this->pmoc->displayState(this->p->getCurrentState());
+    }  catch (std::out_of_range& e) {
+        // shit
+    }
 }
 
 void ProcessManager::createProcess(std::vector<State*> states) {
@@ -38,8 +60,8 @@ void ProcessManager::startProcess() {
 
     State* curr = this->p->getCurrentState();
     processSummary.push_back(curr->description);
-    while (curr->proceedState != "") {
-        curr = this->p->getStateById(curr->proceedState);
+    while (curr->transitions[Transition::Proceed] != "") {
+        curr = this->p->getStateById(curr->transitions[Transition::Proceed]);
         processSummary.push_back(curr->description);
     }
     this->pmoc->displayProcessSummary(processSummary);

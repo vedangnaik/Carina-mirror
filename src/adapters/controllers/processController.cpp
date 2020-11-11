@@ -9,11 +9,11 @@ ProcessController::ProcessController(SMIC* smic, AMIC* amic, PMIC* pmic) {
 }
 
 void ProcessController::proceed() {
-    this->pmic->transition("proceed");
+    this->pmic->transition(Transition::Proceed);
 }
 
 void ProcessController::abort() {
-    this->pmic->transition("abort");
+    this->pmic->transition(Transition::Abort);
 }
 
 void ProcessController::openProcess(std::string filePath) {

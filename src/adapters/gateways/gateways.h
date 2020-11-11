@@ -3,6 +3,7 @@
 
 #include "src/usecases/usecases.h"
 
+#include <QJsonObject>
 
 struct ProcessData {
     std::vector<Sensor*> sensors;
@@ -13,6 +14,11 @@ struct ProcessData {
 class ProcessGateway {
 public:  
     struct ProcessData parseProcessFile(std::string fileName);
+private:
+    std::vector<Sensor*> parseSensors(QJsonObject sensorsObj);
+    std::vector<Actuator*> parseActuators(QJsonObject actuatorsObj);
+    std::vector<State*> parseStates(QJsonObject statesObj);
+    std::map<std::string, std::vector<unsigned int>> parseStateChecks(QJsonObject checksObj);
 };
 
 #endif // CONTROLLERS_H

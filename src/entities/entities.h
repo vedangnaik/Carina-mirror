@@ -23,23 +23,31 @@ public:
     std::string name;
     bool status;
 };
-enum ActuatorOptions {
+enum ActuatorOption {
     Timed,
-    Auto
+    Automatic
+};
+enum ActuatorCheck {
+    Close = 0,
+    Open = 1
 };
 
 
+enum Transition {
+    Proceed,
+    Abort
+};
 class State {
 public:
     std::string id;
     std::string name;
     std::string safetyRating;
     std::string description;
-    std::vector<std::pair<std::string, std::vector<unsigned int>>> actions;
-//    std::vector<std::string> actions;
-    std::string proceedState;
-    std::string abortState;
+    std::vector<std::pair<std::string, std::vector<unsigned int>>> actionOptions;
+    std::map<Transition, std::map<std::string, std::vector<unsigned int>>> actionsChecks;
+    std::map<Transition, std::string> transitions;
 };
+
 
 
 class Process {
