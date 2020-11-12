@@ -2,9 +2,7 @@
 #include "src/adapters/gateways/ProcessGateway.h"
 #include <iostream>
 
-ProcessController::ProcessController(SMIC* smic, AMIC* amic, PMIC* pmic) {
-    this->smic = smic;
-    this->amic = amic;
+ProcessController::ProcessController(PMIC* pmic) {
     this->pmic = pmic;
 }
 
@@ -19,8 +17,6 @@ void ProcessController::abort() {
 void ProcessController::openProcess(std::string filePath) {
     ProcessGateway* pg = new ProcessGateway();
     struct ProcessData pdata = pg->parseProcessFile(filePath);
-    this->smic->addSensors(pdata.sensors);
-    this->amic->addActuators(pdata.actuators);
-    this->pmic->createProcess(pdata.states);
+    this->pmic->createProcess(pdata.sensors, pdata.actuators, pdata.states);
     this->pmic->startProcess();
 }

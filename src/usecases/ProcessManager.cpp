@@ -6,9 +6,11 @@ ProcessManager::ProcessManager(AMIC* amic, SMIC* smic) {
     this->smic = smic;
 }
 
+
 void ProcessManager::setOutputContract(PMOC* pmoc) {
     this->pmoc = pmoc;
 }
+
 
 void ProcessManager::transition(Transition t) {
     State* q = this->p->getCurrentState();
@@ -32,14 +34,17 @@ void ProcessManager::transition(Transition t) {
     this->pmoc->displayState(this->p->getCurrentState());
 }
 
-void ProcessManager::createProcess(std::map<std::string, State*> states) {
+
+void ProcessManager::createProcess(std::map<std::string, Sensor*> sensors, std::map<std::string, Actuator*> actuators, std::map<std::string, State*> states) {
     try {
+        this->smic->addSensors(sensors);
+        this->amic->addActuators(actuators);
         this->p = new Process(states, states.at("start"));
     }  catch (std::out_of_range& e) {
         // handle the error here by asking the presenter to display it.
-        std::cout << "out of range error" << std::endl;
     }
 }
+
 
 void ProcessManager::startProcess() {
     std::vector<std::string> processSummary = {};
