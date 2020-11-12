@@ -1,17 +1,11 @@
 #include "ActuatorsManager.h"
 
-void ActuatorsManager::addActuators(std::vector<Actuator *> actuators) {
-    for (Actuator* a : actuators) {
-        this->actuators[a->id] = a;
-    }
+void ActuatorsManager::addActuators(std::map<std::string, Actuator*> actuators) {
+    this->actuators = actuators;
 }
 
-Actuator* ActuatorsManager::findActuator(std::string id) {
-    try {
-        return this->actuators.at(id);
-    }  catch (std::out_of_range& e) {
-        return nullptr;
-    }
+bool ActuatorsManager::getActuatorStatus(std::string id) {
+    return this->actuators[id]->status;
 }
 
 void ActuatorsManager::actuate(std::string id) {

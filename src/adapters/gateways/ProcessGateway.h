@@ -8,19 +8,19 @@
 #include <QJsonObject>
 
 struct ProcessData {
-    std::vector<Sensor*> sensors;
-    std::vector<Actuator*> actuators;
-    std::vector<State*> states;
+    std::map<std::string, Sensor*> sensors;
+    std::map<std::string, Actuator*> actuators;
+    std::map<std::string, State*> states;
 };
 
 class ProcessGateway {
 public:  
     struct ProcessData parseProcessFile(std::string fileName);
 private:
-    std::vector<Sensor*> parseSensors(QJsonObject sensorsObj);
-    std::vector<Actuator*> parseActuators(QJsonObject actuatorsObj);
-    std::vector<State*> parseStates(QJsonObject statesObj);
-    std::map<std::string, std::vector<unsigned int>> parseStateChecks(QJsonObject checksObj);
+    std::map<std::string, Sensor*> parseSensors(QJsonObject sensorsObj);
+    std::map<std::string, Actuator*> parseActuators(QJsonObject actuatorsObj);
+    std::map<std::string, State*> parseStates(QJsonObject statesObj, std::map<std::string, Sensor*> sensors, std::map<std::string, Actuator*> actuators);
+    void parseStateChecks(QJsonValue checks, std::map<std::string, Sensor*> sensors, std::map<std::string, Actuator*> actuators, State* s, Transition t);
 };
 
 #endif // CONTROLLERS_H

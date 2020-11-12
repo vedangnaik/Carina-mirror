@@ -13,42 +13,27 @@ void ProcessManager::setOutputContract(PMOC* pmoc) {
 void ProcessManager::transition(Transition t) {
     State* q = this->p->getCurrentState();
 
-    try {
-        for (auto k : q->actionsChecks[t]) {
-            std::string id = k.first;
-            Actuator* a = this->amic->findActuator(id);
-            Sensor* s = this->smic->findSensor(id);
-            if (a != nullptr) {
-                switch (k.second[0]) {
-                case ActuatorCheck::Open:
-                    if (!a->status) { return; }
-                    break;
-                case ActuatorCheck::Close:
-                    if (a->status) { return; }
-                    break;
-                }
-            } else if (s != nullptr) {
-
-            } else {
-                // shit
-            }
+    for (auto p : q->sensorChecks[t]) {
+        float value = this->smic->getSensorValue(p.first);
+        if (std::abs(p.second.a - p.second.b) < std::abs(p.second.a - value)) {
+            return; // tell presenter what the error here is
         }
-        State* next = this->p->getStateById(q->transitions.at(t));
-        this->p->setCurrentState(next);
-        this->pmoc->displayState(this->p->getCurrentState());
-    }  catch (std::out_of_range& e) {
-        // shit
     }
+
+    for (auto p : q->actuatorChecks[t]) {
+        if (this->amic->getActuatorStatus(p.first) != p.second.status) {
+            return; // tell presenter what the error here is
+        }
+    }
+
+    State* next = this->p->getStateById(q->transitions[t]);
+    this->p->setCurrentState(next);
+    this->pmoc->displayState(this->p->getCurrentState());
 }
 
-void ProcessManager::createProcess(std::vector<State*> states) {
+void ProcessManager::createProcess(std::map<std::string, State*> states) {
     try {
-        std::map<std::string, State*> Q;
-        for (State* s : states) {
-            Q[s->id] = s;
-        }
-        State* startState = Q.at("start");
-        this->p = new Process(Q, startState);
+        this->p = new Process(states, states.at("start"));
     }  catch (std::out_of_range& e) {
         // handle the error here by asking the presenter to display it.
         std::cout << "out of range error" << std::endl;

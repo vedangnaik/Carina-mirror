@@ -1,15 +1,10 @@
 #include "SensorsManager.h"
 
-void SensorsManager::addSensors(std::vector<Sensor *> sensors) {
-    for (Sensor* s : sensors) {
-        this->sensors[s->id] = s;
-    }
+void SensorsManager::addSensors(std::map<std::string, Sensor*> sensors) {
+    this->sensors = sensors;
 }
 
-Sensor* SensorsManager::findSensor(std::string id) {
-    try {
-        return this->sensors[id];
-    }  catch (std::out_of_range& e) {
-        return nullptr;
-    }
+float SensorsManager::getSensorValue(std::string id) {
+    auto v = this->sensors[id]->values;
+    return v[v.size() - 1];
 }

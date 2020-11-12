@@ -4,6 +4,15 @@
 #include <string>
 #include <vector>
 
+enum class SensorOption {
+    None
+};
+
+struct SensorCheck {
+    int a;
+    int b;
+};
+
 class Sensor {
 public:
     Sensor(std::string id, std::string name);

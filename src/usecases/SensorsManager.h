@@ -11,14 +11,14 @@ public:
 
 class SMIC {
 public:
-    virtual void addSensors(std::vector<Sensor*> sensors) = 0;
-    virtual Sensor* findSensor(std::string id) = 0;
+    virtual void addSensors(std::map<std::string, Sensor*> sensors) = 0;
+    virtual float getSensorValue(std::string id) = 0;
 };
 
 class SensorsManager : public SMIC {
 public:
-    void addSensors(std::vector<Sensor*> sensors);
-    Sensor* findSensor(std::string id);
+    void addSensors(std::map<std::string, Sensor*> sensors);
+    float getSensorValue(std::string id);
 private:
     std::map<std::string, Sensor*> sensors;
     SMOC* smoc;

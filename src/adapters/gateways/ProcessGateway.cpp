@@ -17,44 +17,38 @@ struct ProcessData ProcessGateway::parseProcessFile(std::string fileName) {
     file.close();
 
     QJsonObject jsonObj = QJsonDocument::fromJson(val.toUtf8()).object();
+    std::map<std::string, Sensor*> sensors = this->parseSensors(jsonObj["sensors"].toObject());
+    std::map<std::string, Actuator*> actuators = this->parseActuators(jsonObj["actuators"].toObject());
     return ProcessData {
-        this->parseSensors(jsonObj["sensors"].toObject()),
-        this->parseActuators(jsonObj["actuators"].toObject()),
-        this->parseStates(jsonObj["states"].toObject())
+        sensors,
+        actuators,
+        this->parseStates(jsonObj["states"].toObject(), sensors, actuators)
     };
 }
 
 
-std::vector<Sensor*> ProcessGateway::parseSensors(QJsonObject sensorsObj) {
-    std::vector<Sensor*> sensors = {};
+std::map<std::string, Sensor*> ProcessGateway::parseSensors(QJsonObject sensorsObj) {
+    std::map<std::string, Sensor*> sensors = {};
     for (QString k: sensorsObj.keys()) {
-        sensors.push_back(
-            new Sensor(
-                k.toStdString(),
-                sensorsObj[k].toObject()["name"].toString().toStdString()
-            )
-        );
+        sensors[k.toStdString()] = new Sensor(k.toStdString(),
+                    sensorsObj[k].toObject()["name"].toString().toStdString());
     }
     return sensors;
 }
 
 
-std::vector<Actuator*> ProcessGateway::parseActuators(QJsonObject actuatorsObj) {
-    std::vector<Actuator*> actuators = {};
+std::map<std::string, Actuator*> ProcessGateway::parseActuators(QJsonObject actuatorsObj) {
+    std::map<std::string, Actuator*> actuators;
     for (QString k: actuatorsObj.keys()) {
-        actuators.push_back(
-            new Actuator(
-                k.toStdString(),
-                actuatorsObj[k].toObject()["name"].toString().toStdString()
-            )
-        );
+        actuators[k.toStdString()] = new Actuator(k.toStdString(),
+                    actuatorsObj[k].toObject()["name"].toString().toStdString());
     }
     return actuators;
 }
 
 
-std::vector<State*> ProcessGateway::parseStates(QJsonObject statesObj) {
-    std::vector<State*> states;
+std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj, std::map<std::string, Sensor*> sensors, std::map<std::string, Actuator*> actuators) {
+    std::map<std::string, State*> states;
     for (QString k: statesObj.keys()) {
         QJsonValue v = statesObj[k];
         State* s = new State();
@@ -69,49 +63,70 @@ std::vector<State*> ProcessGateway::parseStates(QJsonObject statesObj) {
                 // error here
             }
 
-            std::vector<unsigned int> actionOptions = {};
-            bool timed = action["timed"].toBool();
-            bool automatic = action["automatic"].toBool();
-            QString check_position = action["check_position"].toString();
+            if (sensors.find(id) != sensors.end()) {
+                bool noOp = true;
+                // set this flag false if any options are added in the future
+                if (noOp) {
+                    s->sensorOptions[id] = { SensorOption::None };
+                }
+            } else if (actuators.find(id) != actuators.end()) {
+                bool noOp = true;
+                if (action["timed"].toBool()) {
+                    noOp = false;
+                    s->actuatorOptions[id].push_back(ActuatorOption::Timed);
+                }
+                if (action["automatic"].toBool()) {
+                    noOp = false;
+                    s->actuatorOptions[id].push_back(ActuatorOption::Automatic);
+                }
+                if (noOp) {
+                    s->actuatorOptions[id].push_back(ActuatorOption::None);
+                }
+            } else {
+                // error here
+            }
+        }
 
-            if (timed) actionOptions.push_back(ActuatorOption::Timed);
-            if (automatic) actionOptions.push_back(ActuatorOption::Automatic);
-            // Same for any new options here
-
-            s->actionOptions.push_back(std::make_pair(id, actionOptions));
+        if (v["checks"]["proceed"].isObject()) {
+            this->parseStateChecks(v["checks"]["proceed"], sensors, actuators, s, Transition::Proceed);
+        } else if (v["checks"]["abort"].isObject()) {
+            this->parseStateChecks(v["checks"]["abort"], sensors, actuators, s, Transition::Abort);
         }
 
         s->transitions[Transition::Proceed] = v["transitions"]["proceed"].toString().toStdString();
         s->transitions[Transition::Abort] = v["transitions"]["abort"].toString().toStdString();
 
-        s->actionsChecks[Transition::Proceed] = this->parseStateChecks(v["checks"]["proceed"].toObject());
-        s->actionsChecks[Transition::Abort] = this->parseStateChecks(v["checks"]["proceed"].toObject());
-
-        states.push_back(s);
+        states[s->id] = s;
     }
+
     return states;
 }
 
 
-std::map<std::string, std::vector<unsigned int>> ProcessGateway::parseStateChecks(QJsonObject checksObj) {
-    std::map<std::string, std::vector<unsigned int>> actionsChecks;
-    for (QString id: checksObj.keys()) {
-        QJsonValue check = checksObj[id];
-        std::vector<unsigned int> checks = {};
-
-        if (check.isString()) {
-            if (check.toString() == "open") {
-                checks.push_back(ActuatorCheck::Open);
-            } else if (check.toString() == "close") {
-                checks.push_back(ActuatorCheck::Close);
+void ProcessGateway::parseStateChecks(QJsonValue checks, std::map<std::string, Sensor*> sensors, std::map<std::string, Actuator*> actuators, State* s, Transition t) {
+    for (QString k : checks.toObject().keys()) {
+        std::string id = k.toStdString();
+        if (sensors.find(id) != sensors.end()) {
+            QJsonValue range = checks[k];
+            if (range.isArray()) {
+                s->sensorChecks[t][id] = SensorCheck {
+                    range.toArray()[0].toInt(),
+                    range.toArray()[1].toInt()
+                };
             } else {
-                // error handling here
+                // not array error here
             }
-        } else if (check.isArray()) {
-            // sensor range check here
+        } else if (actuators.find(id) != actuators.end()) {
+            QString check = checks[k].toString();
+            if (check == "close") {
+                s->actuatorChecks[t][id] = ActuatorCheck { false };
+            } else if (check == "open") {
+                s->actuatorChecks[t][id] = ActuatorCheck { true };
+            } else {
+                // invalid check error here
+            }
+        } else {
+            // invalid key error here
         }
-
-        actionsChecks[id.toStdString()] = checks;
     }
-    return actionsChecks;
 }

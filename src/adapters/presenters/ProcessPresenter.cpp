@@ -30,9 +30,9 @@ void ProcessPresenter::displayState(State* s) {
     std::map<std::string, std::string> whatIsActions = {};
     for (auto a : s->actionOptions) {
         std::string id = a.first;
-        if (this->amic->findActuator(id) != nullptr) {
+        if (this->amic->getActuatorStatus(id) != nullptr) {
             whatIsActions[id] = "actuator";
-        } else if (this->smic->findSensor(id) != nullptr) {
+        } else if (this->smic->getSensorValue(id) != nullptr) {
             whatIsActions[id] = "sensor";
         } else {
             // well shit, we shouldn't really be here...

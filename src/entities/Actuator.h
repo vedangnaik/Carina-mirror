@@ -3,14 +3,14 @@
 
 #include <string>
 
-enum ActuatorOption {
+enum class ActuatorOption {
+    None,
     Timed,
     Automatic
 };
 
-enum ActuatorCheck {
-    Close = 0,
-    Open = 1
+struct ActuatorCheck {
+    bool status;
 };
 
 class Actuator {
