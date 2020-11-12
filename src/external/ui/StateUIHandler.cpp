@@ -22,33 +22,40 @@ void StateUIHandler::displayState(StateDisplayInfo sdi) {
     this->stateUI->nameLabel->setText(QString::fromStdString(sdi.name));
     this->stateUI->abortsToLabel->setText(QString::fromStdString(sdi.abortState));
     this->stateUI->descriptionLabel->setText(QString::fromStdString(sdi.description));
+    // change colour for state saftey colour here
 
     unsigned int row = 0;
-    for (auto action : sdi.actions) {
-        std::string id = action.first;
-        std::vector<unsigned int> options = action.second;
-
-        if (sdi.whatIsActions[id] == "actuator") {
+    for (std::string id : sdi.actionsOrder) {
+        if (sdi.actuatorOptions.find(id) != sdi.actuatorOptions.end()) {
             QPushButton* aButton = new QPushButton(QString::fromStdString(id));
             aButton->setCheckable(true);
             connect(aButton, &QPushButton::toggled, this->acic, [=]() {
                 this->acic->actuate(id);
             });
 
-            for (auto option: options) {
-                switch (option) {
+            for (ActuatorOption o: sdi.actuatorOptions[id]) {
+                switch (o) {
                 case ActuatorOption::Timed:
                     this->stateUI->actionsLayout->addWidget(this->timedActuatorHandler(aButton), row, 2);
                     break;
                 case ActuatorOption::Automatic:
                     aButton->toggle();
                     break;
+                case ActuatorOption::None:
+                    break;
                 }
             }
 
             this->stateUI->actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
             this->stateUI->actionsLayout->addWidget(aButton, row, 1);
-        } else if (sdi.whatIsActions[id] == "sensor") {
+        } else if (sdi.sensorOptions.find(id) != sdi.sensorOptions.end()) {
+            // make a label and connect to timer to display i guess
+            for (SensorOption o: sdi.sensorOptions[id]) {
+                switch (o) {
+                case SensorOption::None:
+                    break;
+                }
+            }
 
         } else {
             // shit

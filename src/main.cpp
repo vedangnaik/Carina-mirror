@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
     ActuatorsManager* am = new ActuatorsManager();
     ProcessManager* pm = new ProcessManager(am, sm);
 
-    ProcessController* pc = new ProcessController(sm, am, pm);
+    ProcessController* pc = new ProcessController(pm);
     ActuatorsController* ac = new ActuatorsController(am);
 
     QMainWindow* GSMainWindow = new QMainWindow();
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     StateUIHandler* suih = new StateUIHandler(gsmwh, ac, cm);
     ProcessUIHandler* puih = new ProcessUIHandler(gsmwh, suih, pc);
 
-    ProcessPresenter* pp = new ProcessPresenter(sm, am, puih);
+    ProcessPresenter* pp = new ProcessPresenter(puih);
 
     pm->setOutputContract(pp);
 

@@ -1,8 +1,6 @@
 #include "ProcessPresenter.h"
 
-ProcessPresenter::ProcessPresenter(SMIC* smic, AMIC* amic, PPOC* ppoc) {
-    this->smic = smic;
-    this->amic = amic;
+ProcessPresenter::ProcessPresenter(PPOC* ppoc) {
     this->ppoc = ppoc;
 }
 
@@ -12,33 +10,36 @@ void ProcessPresenter::displayState(State* s) {
     sdi.name = s->name;
     sdi.safetyRating = s->safetyRating;
     sdi.description = s->description;
-    sdi.actions = s->actionOptions;
+    sdi.actionsOrder = s->actionsOrder;
+    sdi.sensorOptions = s->sensorOptions;
+    sdi.actuatorOptions = s->actuatorOptions;
+    sdi.proceedState = s->transitions[Transition::Proceed];
     sdi.abortState = s->transitions[Transition::Abort];
 
-    if (s->transitions[Transition::Proceed] == "") {
+    if (sdi.proceedState == "") {
         this->ppoc->allowProceed(false);
     } else {
         this->ppoc->allowProceed(true);
     }
 
-    if (s->transitions[Transition::Abort] == "") {
+    if (sdi.abortState == "") {
         this->ppoc->allowAbort(false);
     } else {
         this->ppoc->allowAbort(true);
     }
 
-    std::map<std::string, std::string> whatIsActions = {};
-    for (auto a : s->actionOptions) {
-        std::string id = a.first;
-        if (this->amic->getActuatorStatus(id) != nullptr) {
-            whatIsActions[id] = "actuator";
-        } else if (this->smic->getSensorValue(id) != nullptr) {
-            whatIsActions[id] = "sensor";
-        } else {
-            // well shit, we shouldn't really be here...
-        }
-    }
-    sdi.whatIsActions = whatIsActions;
+//    std::map<std::string, std::string> whatIsActions = {};
+//    for (auto a : s->actionOptions) {
+//        std::string id = a.first;
+//        if (this->amic->getActuatorStatus(id) != nullptr) {
+//            whatIsActions[id] = "actuator";
+//        } else if (this->smic->getSensorValue(id) != nullptr) {
+//            whatIsActions[id] = "sensor";
+//        } else {
+//            // well shit, we shouldn't really be here...
+//        }
+//    }
+//    sdi.whatIsActions = whatIsActions;
 
     this->ppoc->displayState(sdi);
 }

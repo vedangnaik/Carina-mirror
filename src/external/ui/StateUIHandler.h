@@ -21,12 +21,11 @@ class StateUIHandler : public QWidget {
 public:
     StateUIHandler(GSMainWindowHandler* gsmwh, ACIC* acic, ClocksModule* cm);
     ~StateUIHandler();
-
     void displayState(StateDisplayInfo sdi);
-    QLabel* timedActuatorHandler(QPushButton* aButton);
 private:
-    Ui::State* stateUI;
+    QLabel* timedActuatorHandler(QPushButton* aButton);
 
+    Ui::State* stateUI;
     ACIC* acic;
     ClocksModule* cm;
 };

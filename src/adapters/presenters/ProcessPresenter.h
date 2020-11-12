@@ -11,8 +11,12 @@ struct StateDisplayInfo {
     std::string name;
     std::string safetyRating;
     std::string description;
-    std::vector<std::pair<std::string, std::vector<unsigned int>>> actions;
-    std::map<std::string, std::string> whatIsActions;
+
+    std::vector<std::string> actionsOrder;
+    std::map<std::string, std::vector<SensorOption>> sensorOptions;
+    std::map<std::string, std::vector<ActuatorOption>> actuatorOptions;
+
+    std::string proceedState;
     std::string abortState;
 };
 
@@ -27,12 +31,10 @@ public:
 
 class ProcessPresenter : public PMOC {
 public:
-    ProcessPresenter(SMIC* smic, AMIC* amic, PPOC* ppoc);
+    ProcessPresenter(PPOC* ppoc);
     virtual void displayProcessSummary(std::vector<std::string> processSummary);
     void displayState(State* s);
 private:
-    SMIC* smic;
-    AMIC* amic;
     PPOC* ppoc;
 };
 

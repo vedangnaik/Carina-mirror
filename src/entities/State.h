@@ -19,7 +19,7 @@ public:
     std::string safetyRating;
     std::string description;
 
-    std::vector<std::string> actionOrder;
+    std::vector<std::string> actionsOrder;
     std::map<std::string, std::vector<SensorOption>> sensorOptions;
     std::map<std::string, std::vector<ActuatorOption>> actuatorOptions;
     std::map<Transition, std::map<std::string, SensorCheck>> sensorChecks;
