@@ -15,7 +15,8 @@ void ProcessManager::transition(Transition t) {
 
     for (auto p : q->sensorChecks[t]) {
         float value = this->smic->getSensorValue(p.first);
-        if (std::abs(p.second.a - p.second.b) < std::abs(p.second.a - value)) {
+        SensorCheck sc = p.second;
+        if (std::abs(sc.a - value) + std::abs(sc.b - value) != std::abs(sc.a - sc.b)) {
             return; // tell presenter what the error here is
         }
     }
