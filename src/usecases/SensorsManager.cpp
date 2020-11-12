@@ -1,4 +1,4 @@
-#include "usecases.h"
+#include "SensorsManager.h"
 
 void SensorsManager::addSensors(std::vector<Sensor *> sensors) {
     for (Sensor* s : sensors) {
@@ -9,7 +9,7 @@ void SensorsManager::addSensors(std::vector<Sensor *> sensors) {
 Sensor* SensorsManager::findSensor(std::string id) {
     try {
         return this->sensors[id];
-    }  catch (std::out_of_range e) {
+    }  catch (std::out_of_range& e) {
         return nullptr;
     }
 }

@@ -2,7 +2,9 @@
 #define PROCESSCONTROLLER_H
 
 #include <QObject>
-#include "src/usecases/usecases.h"
+#include "src/usecases/ActuatorsManager.h"
+#include "src/usecases/SensorsManager.h"
+#include "src/usecases/ProcessManager.h"
 
 class PCIC : public QObject
 {
@@ -23,22 +25,6 @@ private:
     PMIC* pmic;
     SMIC* smic;
     AMIC* amic;
-};
-
-//====
-
-class ACIC : public QObject {
-    Q_OBJECT
-public:
-    virtual void actuate(std::string id) = 0;
-};
-
-class ActuatorsController : public ACIC {
-public:
-    ActuatorsController(AMIC* amic);
-    void actuate(std::string id);
-private:
-   AMIC* amic;
 };
 
 #endif // PROCESSCONTROLLER_H

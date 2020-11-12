@@ -3,16 +3,21 @@
 #include <string>
 
 // ENTITIES
-#include "src/entities/entities.h"
+
 // USE CASES
-#include "src/usecases/usecases.h"
+#include "src/usecases/SensorsManager.h"
+#include "src/usecases/ActuatorsManager.h"
+#include "src/usecases/ProcessManager.h"
 // ADAPTERS
-#include "src/adapters/gateways/gateways.h"
-#include "src/adapters/controllers/controllers.h"
-#include "src/adapters/presenters/presenters.h"
+#include "src/adapters/controllers/ActuatorController.h"
+#include "src/adapters/controllers/ProcessController.h"
+#include "src/adapters/gateways/ProcessGateway.h"
+#include "src/adapters/presenters/ProcessPresenter.h"
 // EXTERNAL
-#include "src/external/ui/userinterface.h"
-#include "src/external/services/services.h"
+#include "src/external/ui/GSMainWindowHandler.h"
+#include "src/external/ui/ProcessUIHandler.h"
+#include "src/external/ui/StateUIHandler.h"
+#include "src/external/services/ClocksModule.h"
 
 
 int main(int argc, char *argv[]) {

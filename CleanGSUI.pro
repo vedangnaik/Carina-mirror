@@ -17,28 +17,38 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    src/adapters/controllers/actuatorsController.cpp \
-    src/adapters/controllers/processController.cpp \
-    src/adapters/gateways/processGateway.cpp \
-    src/adapters/presenters/processPresenter.cpp \
-    src/entities/entities.cpp \
-    src/external/services/clocksModule.cpp \
+    src/adapters/controllers/ActuatorsController.cpp \
+    src/adapters/controllers/ProcessController.cpp \
+    src/adapters/gateways/ProcessGateway.cpp \
+    src/adapters/presenters/ProcessPresenter.cpp \
+    src/entities/Actuator.cpp \
+    src/entities/Process.cpp \
+    src/entities/Sensor.cpp \
+    src/external/services/ClocksModule.cpp \
     src/external/ui/GSMainWindowHandler.cpp \
     src/external/ui/ProcessUIHandler.cpp \
     src/external/ui/StateUIHandler.cpp \
     src/main.cpp \
-    src/usecases/actuatorsManager.cpp \
-    src/usecases/processManager.cpp \
-    src/usecases/sensorsManager.cpp
+    src/usecases/ActuatorsManager.cpp \
+    src/usecases/ProcessManager.cpp \
+    src/usecases/SensorsManager.cpp
 
 HEADERS += \
-    src/entities/entities.h \
-    src/external/services/services.h \
-    src/usecases/usecases.h \
-    src/adapters/controllers/controllers.h \
-    src/adapters/presenters/presenters.h \
-    src/adapters/gateways/gateways.h \
-    src/external/ui/userinterface.h
+    src/adapters/controllers/ActuatorController.h \
+    src/adapters/controllers/ProcessController.h \
+    src/adapters/gateways/ProcessGateway.h \
+    src/adapters/presenters/ProcessPresenter.h \
+    src/entities/Actuator.h \
+    src/entities/Process.h \
+    src/entities/Sensor.h \
+    src/entities/State.h \
+    src/external/services/ClocksModule.h \
+    src/external/ui/GSMainWindowHandler.h \
+    src/external/ui/ProcessUIHandler.h \
+    src/external/ui/StateUIHandler.h \
+    src/usecases/ActuatorsManager.h \
+    src/usecases/ProcessManager.h \
+    src/usecases/SensorsManager.h
 
 FORMS += \
     src/external/ui/gsmainwindow.ui \

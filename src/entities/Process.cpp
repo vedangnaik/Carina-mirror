@@ -1,6 +1,4 @@
-#include "entities.h"
-
-//====
+#include "Process.h"
 
 Process::Process(std::map<std::string, State*> Q, State* startState) {
     this->Q = Q;
@@ -17,20 +15,4 @@ State* Process::getCurrentState() {
 
 void Process::setCurrentState(State* s) {
     this->currentState = s;
-}
-
-//====
-
-Sensor::Sensor(std::string id, std::string name) {
-    this->id = id;
-    this->name = name;
-    this->values = {};
-}
-
-//====
-
-Actuator::Actuator(std::string id, std::string name) {
-    this->id = id;
-    this->name = name;
-    this->status = false;
 }

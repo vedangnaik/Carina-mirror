@@ -1,7 +1,9 @@
 #ifndef CONTROLLERS_H
 #define CONTROLLERS_H
 
-#include "src/usecases/usecases.h"
+#include "src/entities/Actuator.h"
+#include "src/entities/State.h"
+#include "src/entities/Sensor.h"
 
 #include <QJsonObject>
 

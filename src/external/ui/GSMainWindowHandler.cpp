@@ -1,4 +1,4 @@
-#include "userinterface.h"
+#include "ProcessUIHandler.h"
 #include "ui_gsmainwindow.h"
 
 #include <QFileDialog>

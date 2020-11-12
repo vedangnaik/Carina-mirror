@@ -1,5 +1,4 @@
-#include "userinterface.h"
-#include "ui_state.h"
+#include "StateUIHandler.h"
 
 StateUIHandler::StateUIHandler(GSMainWindowHandler* gsmwh, ACIC* acic, ClocksModule* cm) {
     this->stateUI = new Ui::State;

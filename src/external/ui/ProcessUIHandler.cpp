@@ -1,4 +1,4 @@
-#include "userinterface.h"
+#include "ProcessUIHandler.h"
 #include "ui_processsummary.h"
 
 #include <QGroupBox>

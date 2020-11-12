@@ -1,4 +1,4 @@
-#include "gateways.h"
+#include "ProcessGateway.h"
 
 #include <QFile>
 #include <QJsonDocument>

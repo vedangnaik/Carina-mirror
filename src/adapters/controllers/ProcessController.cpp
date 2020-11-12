@@ -1,5 +1,5 @@
-#include "controllers.h"
-#include "src/adapters/gateways/gateways.h"
+#include "ProcessController.h"
+#include "src/adapters/gateways/ProcessGateway.h"
 #include <iostream>
 
 ProcessController::ProcessController(SMIC* smic, AMIC* amic, PMIC* pmic) {

@@ -1,4 +1,4 @@
-#include "usecases.h"
+#include "ProcessManager.h"
 #include <iostream>
 
 ProcessManager::ProcessManager(AMIC* amic, SMIC* smic) {
