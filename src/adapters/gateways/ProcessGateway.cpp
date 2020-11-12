@@ -63,6 +63,7 @@ std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj,
                 // error here
             }
 
+            s->actionsOrder.push_back(id);
             if (sensors.find(id) != sensors.end()) {
                 bool noOp = true;
                 // set this flag false if any options are added in the future
