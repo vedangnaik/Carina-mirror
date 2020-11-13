@@ -5,7 +5,7 @@
 #include <QMainWindow>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include "src/adapters/controllers/ProcessController.h"
+#include "src/L3/controllers/ProcessController.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

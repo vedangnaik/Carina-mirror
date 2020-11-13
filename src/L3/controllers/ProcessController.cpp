@@ -1,6 +1,4 @@
 #include "ProcessController.h"
-#include "src/adapters/gateways/ProcessGateway.h"
-#include <iostream>
 
 ProcessController::ProcessController(PMIC* pmic) {
     this->pmic = pmic;

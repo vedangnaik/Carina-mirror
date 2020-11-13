@@ -2,9 +2,11 @@
 #define PROCESSCONTROLLER_H
 
 #include <QObject>
-#include "src/usecases/ActuatorsManager.h"
-#include "src/usecases/SensorsManager.h"
-#include "src/usecases/ProcessManager.h"
+#include "src/L2/usecases/ActuatorsManager.h"
+#include "src/L2/usecases/SensorsManager.h"
+#include "src/L2/usecases/ProcessManager.h"
+#include "src/L3/gateways/ProcessGateway.h"
+#include <iostream>
 
 class PCIC : public QObject
 {

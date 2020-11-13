@@ -1,8 +1,8 @@
 #ifndef DAQPLACEHOLDER_H
 #define DAQPLACEHOLDER_H
 
-#include "src/external/services/ClocksModule.h"
-#include "src/adapters/gateways/SensorValuesGateway.h"
+#include "src/L2/services/ClocksModule.h"
+#include "src/L3/gateways/SensorValuesGateway.h"
 
 class DAQPlaceholder : public QObject {
     Q_OBJECT

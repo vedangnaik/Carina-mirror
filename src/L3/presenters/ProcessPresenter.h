@@ -1,10 +1,8 @@
 #ifndef PROCESSPRESENTER_H
 #define PROCESSPRESENTER_H
 
-#include "src/usecases/SensorsManager.h"
-#include "src/usecases/ActuatorsManager.h"
-#include "src/entities/State.h"
-#include "src/usecases/ProcessManager.h"
+#include "src/L2/usecases/ProcessManager.h"
+#include "src/L1/entities/State.h"
 
 struct StateDisplayInfo {
     std::string id;

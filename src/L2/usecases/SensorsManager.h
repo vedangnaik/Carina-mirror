@@ -1,7 +1,7 @@
 #ifndef SENSORMANAGER_H
 #define SENSORMANAGER_H
 
-#include "src/entities/Sensor.h"
+#include "src/L1/entities/Sensor.h"
 #include <map>
 #include <stdexcept>
 

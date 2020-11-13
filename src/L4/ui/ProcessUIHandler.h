@@ -7,8 +7,8 @@
 #include <QPushButton>
 #include "StateUIHandler.h"
 #include "GSMainWindowHandler.h"
-#include "src/adapters/controllers/ProcessController.h"
-#include "src/adapters/presenters/ProcessPresenter.h"
+#include "src/L3/controllers/ProcessController.h"
+#include "src/L3/presenters/ProcessPresenter.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

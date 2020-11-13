@@ -6,9 +6,9 @@
 #include <QPushButton>
 #include "ui_state.h"
 #include "GSMainWindowHandler.h"
-#include "src/external/services/ClocksModule.h"
-#include "src/adapters/controllers/ActuatorsController.h"
-#include "src/adapters/presenters/ProcessPresenter.h"
+#include "src/L2/services/ClocksModule.h"
+#include "src/L3/controllers/ActuatorsController.h"
+#include "src/L3/presenters/ProcessPresenter.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

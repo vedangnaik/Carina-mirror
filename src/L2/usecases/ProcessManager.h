@@ -1,10 +1,11 @@
 #ifndef PROCESSMANAGER_H
 #define PROCESSMANAGER_H
 
-#include "src/entities/State.h"
-#include "src/entities/Process.h"
+#include "src/L1/entities/State.h"
+#include "src/L1/entities/Process.h"
 #include "ActuatorsManager.h"
 #include "SensorsManager.h"
+#include "src/L2/services/ClocksModule.h"
 
 class PMOC {
 public:
@@ -23,7 +24,7 @@ public:
 
 class ProcessManager : public PMIC {
 public:
-    ProcessManager(AMIC* amic, SMIC* smic);
+    ProcessManager(AMIC* amic, SMIC* smic, ClocksModule* cm);
     void createProcess(std::map<std::string, Sensor*> sensors, std::map<std::string, Actuator*> actuators, std::map<std::string, State*> states);
     void startProcess();
     void transition(Transition t);
@@ -33,6 +34,7 @@ private:
     PMOC* pmoc;
     AMIC* amic;
     SMIC* smic;
+    ClocksModule* cm;
 };
 
 #endif // PROCESSMANAGER_H

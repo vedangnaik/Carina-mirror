@@ -1,33 +1,32 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <string>
-// ENTITIES
-// USE CASES
-#include "src/usecases/SensorsManager.h"
-#include "src/usecases/ActuatorsManager.h"
-#include "src/usecases/ProcessManager.h"
-// ADAPTERS
-#include "src/adapters/controllers/ActuatorsController.h"
-#include "src/adapters/controllers/ProcessController.h"
-#include "src/adapters/gateways/ProcessGateway.h"
-#include "src/adapters/gateways/SensorValuesGateway.h"
-#include "src/adapters/presenters/ProcessPresenter.h"
-// EXTERNAL
-#include "src/external/daq/DAQPlaceHolder.h"
-#include "src/external/ui/GSMainWindowHandler.h"
-#include "src/external/ui/ProcessUIHandler.h"
-#include "src/external/ui/StateUIHandler.h"
-#include "src/external/services/ClocksModule.h"
+// L1
+// L2
+#include "src/L2/usecases/SensorsManager.h"
+#include "src/L2/usecases/ActuatorsManager.h"
+#include "src/L2/usecases/ProcessManager.h"
+#include "src/L2/services/ClocksModule.h"
+// L3
+#include "src/L3/controllers/ActuatorsController.h"
+#include "src/L3/controllers/ProcessController.h"
+#include "src/L3/gateways/ProcessGateway.h"
+#include "src/L3/gateways/SensorValuesGateway.h"
+#include "src/L3/presenters/ProcessPresenter.h"
+// L4
+#include "src/L4/daq/DAQPlaceHolder.h"
+#include "src/L4/ui/GSMainWindowHandler.h"
+#include "src/L4/ui/ProcessUIHandler.h"
+#include "src/L4/ui/StateUIHandler.h"
 
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
     ClocksModule* cm = new ClocksModule();
-
     SensorsManager* sm = new SensorsManager();
     ActuatorsManager* am = new ActuatorsManager();
-    ProcessManager* pm = new ProcessManager(am, sm);
+    ProcessManager* pm = new ProcessManager(am, sm, cm);
 
     ProcessController* pc = new ProcessController(pm);
     ActuatorsController* ac = new ActuatorsController(am);

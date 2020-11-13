@@ -17,49 +17,49 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    src/adapters/controllers/ActuatorsController.cpp \
-    src/adapters/controllers/ProcessController.cpp \
-    src/adapters/gateways/ActuatorStatusGateway.cpp \
-    src/adapters/gateways/ProcessGateway.cpp \
-    src/adapters/gateways/SensorValuesGateway.cpp \
-    src/adapters/presenters/ProcessPresenter.cpp \
-    src/entities/Actuator.cpp \
-    src/entities/Process.cpp \
-    src/entities/Sensor.cpp \
-    src/external/daq/DAQPlaceHolder.cpp \
-    src/external/services/ClocksModule.cpp \
-    src/external/ui/GSMainWindowHandler.cpp \
-    src/external/ui/ProcessUIHandler.cpp \
-    src/external/ui/StateUIHandler.cpp \
+    src/L3/controllers/ActuatorsController.cpp \
+    src/L3/controllers/ProcessController.cpp \
+    src/L3/gateways/ActuatorStatusGateway.cpp \
+    src/L3/gateways/ProcessGateway.cpp \
+    src/L3/gateways/SensorValuesGateway.cpp \
+    src/L3/presenters/ProcessPresenter.cpp \
+    src/L1/entities/Actuator.cpp \
+    src/L1/entities/Process.cpp \
+    src/L1/entities/Sensor.cpp \
+    src/L4/daq/DAQPlaceHolder.cpp \
+    src/L4/ui/GSMainWindowHandler.cpp \
+    src/L4/ui/ProcessUIHandler.cpp \
+    src/L4/ui/StateUIHandler.cpp \
     src/main.cpp \
-    src/usecases/ActuatorsManager.cpp \
-    src/usecases/ProcessManager.cpp \
-    src/usecases/SensorsManager.cpp
+    src/L2/usecases/ActuatorsManager.cpp \
+    src/L2/usecases/ProcessManager.cpp \
+    src/L2/usecases/SensorsManager.cpp \
+    src/L2/services/ClocksModule.cpp
 
 HEADERS += \
-    src/adapters/controllers/ActuatorsController.h \
-    src/adapters/controllers/ProcessController.h \
-    src/adapters/gateways/ActuatorStatusGateway.h \
-    src/adapters/gateways/ProcessGateway.h \
-    src/adapters/gateways/SensorValuesGateway.h \
-    src/adapters/presenters/ProcessPresenter.h \
-    src/entities/Actuator.h \
-    src/entities/Process.h \
-    src/entities/Sensor.h \
-    src/entities/State.h \
-    src/external/daq/DAQPlaceHolder.h \
-    src/external/services/ClocksModule.h \
-    src/external/ui/GSMainWindowHandler.h \
-    src/external/ui/ProcessUIHandler.h \
-    src/external/ui/StateUIHandler.h \
-    src/usecases/ActuatorsManager.h \
-    src/usecases/ProcessManager.h \
-    src/usecases/SensorsManager.h
+    src/L3/controllers/ActuatorsController.h \
+    src/L3/controllers/ProcessController.h \
+    src/L3/gateways/ActuatorStatusGateway.h \
+    src/L3/gateways/ProcessGateway.h \
+    src/L3/gateways/SensorValuesGateway.h \
+    src/L3/presenters/ProcessPresenter.h \
+    src/L1/entities/Actuator.h \
+    src/L1/entities/Process.h \
+    src/L1/entities/Sensor.h \
+    src/L1/entities/State.h \
+    src/L4/daq/DAQPlaceHolder.h \
+    src/L4/ui/GSMainWindowHandler.h \
+    src/L4/ui/ProcessUIHandler.h \
+    src/L4/ui/StateUIHandler.h \
+    src/L2/usecases/ActuatorsManager.h \
+    src/L2/usecases/ProcessManager.h \
+    src/L2/usecases/SensorsManager.h \
+    src/L2/services/ClocksModule.h
 
 FORMS += \
-    src/external/ui/gsmainwindow.ui \
-    src/external/ui/processsummary.ui \
-    src/external/ui/state.ui
+    src/L4/ui/gsmainwindow.ui \
+    src/L4/ui/processsummary.ui \
+    src/L4/ui/state.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -1,9 +1,10 @@
 #include "ProcessManager.h"
 #include <iostream>
 
-ProcessManager::ProcessManager(AMIC* amic, SMIC* smic) {
+ProcessManager::ProcessManager(AMIC* amic, SMIC* smic, ClocksModule* cm) {
     this->amic = amic;
     this->smic = smic;
+    this->cm = cm;
 }
 
 
@@ -57,5 +58,6 @@ void ProcessManager::startProcess() {
     }
     this->pmoc->displayProcessSummary(processSummary);
 
+    this->cm->start();
     this->pmoc->displayState(this->p->getCurrentState());
 }
