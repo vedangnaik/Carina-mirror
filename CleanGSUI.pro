@@ -19,6 +19,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     src/adapters/controllers/ActuatorsController.cpp \
     src/adapters/controllers/ProcessController.cpp \
+    src/adapters/controllers/SensorsController.cpp \
     src/adapters/gateways/ProcessGateway.cpp \
     src/adapters/presenters/ProcessPresenter.cpp \
     src/entities/Actuator.cpp \
@@ -34,8 +35,9 @@ SOURCES += \
     src/usecases/SensorsManager.cpp
 
 HEADERS += \
-    src/adapters/controllers/ActuatorController.h \
+    src/adapters/controllers/ActuatorsController.h \
     src/adapters/controllers/ProcessController.h \
+    src/adapters/controllers/SensorsController.h \
     src/adapters/gateways/ProcessGateway.h \
     src/adapters/presenters/ProcessPresenter.h \
     src/entities/Actuator.h \

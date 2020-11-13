@@ -1,15 +1,13 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <string>
-
 // ENTITIES
-
 // USE CASES
 #include "src/usecases/SensorsManager.h"
 #include "src/usecases/ActuatorsManager.h"
 #include "src/usecases/ProcessManager.h"
 // ADAPTERS
-#include "src/adapters/controllers/ActuatorController.h"
+#include "src/adapters/controllers/ActuatorsController.h"
 #include "src/adapters/controllers/ProcessController.h"
 #include "src/adapters/gateways/ProcessGateway.h"
 #include "src/adapters/presenters/ProcessPresenter.h"

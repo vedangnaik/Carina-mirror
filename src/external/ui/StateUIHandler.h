@@ -7,7 +7,7 @@
 #include "ui_state.h"
 #include "GSMainWindowHandler.h"
 #include "src/external/services/ClocksModule.h"
-#include "src/adapters/controllers/ActuatorController.h"
+#include "src/adapters/controllers/ActuatorsController.h"
 #include "src/adapters/presenters/ProcessPresenter.h"
 
 QT_BEGIN_NAMESPACE

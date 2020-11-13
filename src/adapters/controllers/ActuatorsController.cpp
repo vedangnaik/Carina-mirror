@@ -1,4 +1,4 @@
-#include "ActuatorController.h"
+#include "ActuatorsController.h"
 
 ActuatorsController::ActuatorsController(AMIC* amic) {
     this->amic = amic;
