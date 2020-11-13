@@ -33,6 +33,9 @@ void StateUIHandler::displayState(StateDisplayInfo sdi) {
                 this->acic->actuate(id);
             });
 
+            this->stateUI->actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
+            this->stateUI->actionsLayout->addWidget(aButton, row, 1);
+
             for (ActuatorOption o: sdi.actuatorOptions[id]) {
                 switch (o) {
                 case ActuatorOption::Timed:
@@ -44,11 +47,14 @@ void StateUIHandler::displayState(StateDisplayInfo sdi) {
                 case ActuatorOption::None:
                     break;
                 }
-            }
+            }           
+        } else if (sdi.sensorOptions.find(id) != sdi.sensorOptions.end()) {
+            QLabel* sensorValueLabel = new QLabel();
+            // connect it to sensorpresenter here I guess
 
             this->stateUI->actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
-            this->stateUI->actionsLayout->addWidget(aButton, row, 1);
-        } else if (sdi.sensorOptions.find(id) != sdi.sensorOptions.end()) {
+            this->stateUI->actionsLayout->addWidget(sensorValueLabel, row, 1);
+
             // make a label and connect to timer to display i guess
             for (SensorOption o: sdi.sensorOptions[id]) {
                 switch (o) {
@@ -56,7 +62,6 @@ void StateUIHandler::displayState(StateDisplayInfo sdi) {
                     break;
                 }
             }
-
         } else {
             // shit
         }

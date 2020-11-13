@@ -26,6 +26,7 @@ SOURCES += \
     src/entities/Actuator.cpp \
     src/entities/Process.cpp \
     src/entities/Sensor.cpp \
+    src/external/daq/DAQPlaceHolder.cpp \
     src/external/services/ClocksModule.cpp \
     src/external/ui/GSMainWindowHandler.cpp \
     src/external/ui/ProcessUIHandler.cpp \
@@ -46,6 +47,7 @@ HEADERS += \
     src/entities/Process.h \
     src/entities/Sensor.h \
     src/entities/State.h \
+    src/external/daq/DAQPlaceHolder.h \
     src/external/services/ClocksModule.h \
     src/external/ui/GSMainWindowHandler.h \
     src/external/ui/ProcessUIHandler.h \
