@@ -2,16 +2,16 @@
 #define DAQPLACEHOLDER_H
 
 #include "src/external/services/ClocksModule.h"
-#include "src/adapters/controllers/SensorsController.h"
+#include "src/adapters/gateways/SensorValuesGateway.h"
 
-class DAQPlaceholder
-{
+class DAQPlaceholder : public QObject {
+    Q_OBJECT
 public:
-    DAQPlaceholder(ClocksModule* cm, SCIC* scic);
+    DAQPlaceholder(ClocksModule* cm, SVGIC* svgic);
     void startAcquisition();
 private:
     ClocksModule* cm;
-    SCIC* scic;
+    SVGIC* svgic;
 };
 
 #endif // DAQPLACEHOLDER_H

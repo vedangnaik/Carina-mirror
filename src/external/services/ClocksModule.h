@@ -8,7 +8,7 @@ class ClocksModule
 public:
     ClocksModule();
     QTimer* oneSTimer;
-    QTimer* tenMsTimer;
+    QTimer* HundredMsTimer;
 };
 
 #endif // SERVICES_H

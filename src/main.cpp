@@ -10,8 +10,10 @@
 #include "src/adapters/controllers/ActuatorsController.h"
 #include "src/adapters/controllers/ProcessController.h"
 #include "src/adapters/gateways/ProcessGateway.h"
+#include "src/adapters/gateways/SensorValuesGateway.h"
 #include "src/adapters/presenters/ProcessPresenter.h"
 // EXTERNAL
+#include "src/external/daq/DAQPlaceHolder.h"
 #include "src/external/ui/GSMainWindowHandler.h"
 #include "src/external/ui/ProcessUIHandler.h"
 #include "src/external/ui/StateUIHandler.h"
@@ -21,15 +23,16 @@
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
-    ClocksModule* cm = new ClocksModule();
-
     SensorsManager* sm = new SensorsManager();
     ActuatorsManager* am = new ActuatorsManager();
     ProcessManager* pm = new ProcessManager(am, sm);
 
     ProcessController* pc = new ProcessController(pm);
     ActuatorsController* ac = new ActuatorsController(am);
+    SensorValuesGateway* svg = new SensorValuesGateway(sm);
 
+    ClocksModule* cm = new ClocksModule();
+    DAQPlaceholder* daqp = new DAQPlaceholder(cm, svg);
     QMainWindow* GSMainWindow = new QMainWindow();
     GSMainWindowHandler* gsmwh = new GSMainWindowHandler(GSMainWindow, pc);
     StateUIHandler* suih = new StateUIHandler(gsmwh, ac, cm);
@@ -39,9 +42,7 @@ int main(int argc, char *argv[]) {
 
     pm->setOutputContract(pp);
 
-
+    daqp->startAcquisition();
     GSMainWindow->show();
-
-
     return a.exec();
 }
