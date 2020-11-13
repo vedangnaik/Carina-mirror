@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "src/usecases/ActuatorsManager.h"
+#include "src/adapters/gateways/ActuatorStatusGateway.h"
 
 class ACIC : public QObject {
     Q_OBJECT
