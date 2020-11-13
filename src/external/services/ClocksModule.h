@@ -7,6 +7,7 @@ class ClocksModule
 {
 public:
     ClocksModule();
+    void start();
     QTimer* oneSTimer;
     QTimer* HundredMsTimer;
 };

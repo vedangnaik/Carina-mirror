@@ -23,6 +23,8 @@
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
+    ClocksModule* cm = new ClocksModule();
+
     SensorsManager* sm = new SensorsManager();
     ActuatorsManager* am = new ActuatorsManager();
     ProcessManager* pm = new ProcessManager(am, sm);
@@ -31,7 +33,6 @@ int main(int argc, char *argv[]) {
     ActuatorsController* ac = new ActuatorsController(am);
     SensorValuesGateway* svg = new SensorValuesGateway(sm);
 
-    ClocksModule* cm = new ClocksModule();
     DAQPlaceholder* daqp = new DAQPlaceholder(cm, svg);
     QMainWindow* GSMainWindow = new QMainWindow();
     GSMainWindowHandler* gsmwh = new GSMainWindowHandler(GSMainWindow, pc);
