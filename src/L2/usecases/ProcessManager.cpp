@@ -58,6 +58,6 @@ void ProcessManager::startProcess() {
     }
     this->pmoc->displayProcessSummary(processSummary);
 
-    this->cm->start();
     this->pmoc->displayState(this->p->getCurrentState());
+    this->cm->start();
 }

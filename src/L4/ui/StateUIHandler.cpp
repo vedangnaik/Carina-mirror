@@ -1,10 +1,11 @@
 #include "StateUIHandler.h"
 
-StateUIHandler::StateUIHandler(GSMainWindowHandler* gsmwh, ACIC* acic, ClocksModule* cm) {
+StateUIHandler::StateUIHandler(GSMainWindowHandler* gsmwh, ACIC* acic, SMIC* smic, ClocksModule* cm) {
     this->stateUI = new Ui::State;
     stateUI->setupUi(this);
     gsmwh->getCurrentStateLayout()->addWidget(this->stateUI->csFrame);
     this->acic = acic;
+    this->smic = smic;
     this->cm = cm;
 }
 
@@ -50,12 +51,13 @@ void StateUIHandler::displayState(StateDisplayInfo sdi) {
             }           
         } else if (sdi.sensorOptions.find(id) != sdi.sensorOptions.end()) {
             QLabel* sensorValueLabel = new QLabel();
-            // connect it to sensorpresenter here I guess
+            // not strictly best practice to know the manager directly, but hey
+            connect(this->cm->HundredMsTimer, &QTimer::timeout, this, [=]() {
+                sensorValueLabel->setText(QString::number(this->smic->getSensorValue(id)));
+            });
 
             this->stateUI->actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
             this->stateUI->actionsLayout->addWidget(sensorValueLabel, row, 1);
-
-            // make a label and connect to timer to display i guess
             for (SensorOption o: sdi.sensorOptions[id]) {
                 switch (o) {
                 case SensorOption::None:

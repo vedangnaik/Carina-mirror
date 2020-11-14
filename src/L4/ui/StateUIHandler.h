@@ -19,7 +19,7 @@ QT_END_NAMESPACE
 class StateUIHandler : public QWidget {
     Q_OBJECT
 public:
-    StateUIHandler(GSMainWindowHandler* gsmwh, ACIC* acic, ClocksModule* cm);
+    StateUIHandler(GSMainWindowHandler* gsmwh, ACIC* acic, SMIC* smic, ClocksModule* cm);
     ~StateUIHandler();
     void displayState(StateDisplayInfo sdi);
 private:
@@ -27,6 +27,7 @@ private:
 
     Ui::State* stateUI;
     ACIC* acic;
+    SMIC* smic;
     ClocksModule* cm;
 };
 

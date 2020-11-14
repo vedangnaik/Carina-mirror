@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     DAQPlaceholder* daqp = new DAQPlaceholder(cm, svg);
     QMainWindow* GSMainWindow = new QMainWindow();
     GSMainWindowHandler* gsmwh = new GSMainWindowHandler(GSMainWindow, pc);
-    StateUIHandler* suih = new StateUIHandler(gsmwh, ac, cm);
+    StateUIHandler* suih = new StateUIHandler(gsmwh, ac, sm, cm);
     ProcessUIHandler* puih = new ProcessUIHandler(gsmwh, suih, pc);
 
     ProcessPresenter* pp = new ProcessPresenter(puih);
