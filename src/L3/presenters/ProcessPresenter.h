@@ -24,7 +24,6 @@ public:
     virtual void displayState(StateDisplayInfo sdi) = 0;
     virtual void allowProceed(bool permission) = 0;
     virtual void allowAbort(bool permission) = 0;
-    virtual ~PPOC() {};
 };
 
 class ProcessPresenter : public PMOC {

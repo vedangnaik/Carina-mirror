@@ -8,8 +8,7 @@
 #include "src/L3/gateways/ProcessGateway.h"
 #include <iostream>
 
-class PCIC : public QObject
-{
+class PCIC : public QObject {
     Q_OBJECT
 public:
     virtual void openProcess(std::string filePath) = 0;

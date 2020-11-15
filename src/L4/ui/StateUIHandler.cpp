@@ -52,7 +52,7 @@ void StateUIHandler::displayState(StateDisplayInfo sdi) {
         } else if (sdi.sensorOptions.find(id) != sdi.sensorOptions.end()) {
             QLabel* sensorValueLabel = new QLabel();
             // not strictly best practice to know the manager directly, but hey
-            connect(this->cm->HundredMsTimer, &QTimer::timeout, this, [=]() {
+            connect(this->cm->HundredMsTimer, &QTimer::timeout, sensorValueLabel, [=]() {
                 sensorValueLabel->setText(QString::number(this->smic->getSensorValue(id)));
             });
 

@@ -11,7 +11,6 @@ class PMOC {
 public:
     virtual void displayProcessSummary(std::vector<std::string> processSummary) = 0;;
     virtual void displayState(State* s) = 0;
-    virtual ~PMOC() {};
 };
 
 class PMIC {
@@ -19,7 +18,6 @@ public:
     virtual void createProcess(std::map<std::string, Sensor*> sensors, std::map<std::string, Actuator*> actuators, std::map<std::string, State*> states) = 0;
     virtual void startProcess() = 0;
     virtual void transition(Transition t) = 0;
-    virtual ~PMIC() {};
 };
 
 class ProcessManager : public PMIC {
