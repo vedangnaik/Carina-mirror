@@ -24,7 +24,7 @@ void StateUIHandler::displayState(StateDisplayInfo sdi) {
     this->stateUI->abortLabel->setText(QString::fromStdString(sdi.abortState));
     this->stateUI->nextLabel->setText(QString::fromStdString(sdi.proceedState));
     this->stateUI->descriptionLabel->setText(QString::fromStdString(sdi.description));
-    // change colour for state saftey colour here
+    this->stateUI->csFrame->setStyleSheet("#csFrame {border: 4px solid " + QString::fromStdString(sdi.safetyRating) + "}");
 
     unsigned int row = 0;
     for (std::string id : sdi.actionsOrder) {
