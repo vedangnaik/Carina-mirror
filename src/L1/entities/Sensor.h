@@ -5,7 +5,7 @@
 #include <vector>
 
 enum class SensorOption {
-    None
+
 };
 
 struct SensorCheck {

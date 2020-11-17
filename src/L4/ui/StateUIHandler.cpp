@@ -41,12 +41,10 @@ void StateUIHandler::displayState(const State& s) {
             for (ActuatorOption o: s.actuatorOptions.at(id)) {
                 switch (o) {
                 case ActuatorOption::Timed:
-                    this->stateUI->actionsLayout->addWidget(this->timedActuatorHandler(aButton), row, 2);
+                    this->stateUI->actionsLayout->addWidget(this->timedActuatorHandler(aButton), row, 4);
                     break;
                 case ActuatorOption::Automatic:
                     aButton->toggle();
-                    break;
-                case ActuatorOption::None:
                     break;
                 }
             }
@@ -61,12 +59,27 @@ void StateUIHandler::displayState(const State& s) {
             this->stateUI->actionsLayout->addWidget(sensorValueLabel, row, 1);
             for (SensorOption o: s.sensorOptions.at(id)) {
                 switch (o) {
-                case SensorOption::None:
-                    break;
+                    // switch for sensor options here
                 }
             }
         } else {
             // shit
+        }
+
+
+        if (s.actuatorChecks.find(Transition::Proceed) != s.actuatorChecks.end()) {
+            const auto& proceedActuatorChecks = s.actuatorChecks.at(Transition::Proceed);
+            if (proceedActuatorChecks.find(id) != proceedActuatorChecks.end()) {
+                const ActuatorCheck& ac = proceedActuatorChecks.at(id);
+                this->stateUI->actionsLayout->addWidget(new QLabel(QVariant(ac.status).toString()), row, 2);
+            }
+        }
+        if (s.actuatorChecks.find(Transition::Abort) != s.actuatorChecks.end()) {
+            const auto& abortActuatorChecks = s.actuatorChecks.at(Transition::Abort);
+            if (abortActuatorChecks.find(id) != abortActuatorChecks.end()) {
+                const ActuatorCheck& ac = abortActuatorChecks.at(id);
+                this->stateUI->actionsLayout->addWidget(new QLabel(QVariant(ac.status).toString()), row, 3);
+            }
         }
 
         row += 1;

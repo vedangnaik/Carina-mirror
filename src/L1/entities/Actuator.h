@@ -4,7 +4,6 @@
 #include <string>
 
 enum class ActuatorOption {
-    None,
     Timed,
     Automatic
 };

@@ -65,23 +65,13 @@ std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj,
 
             s->actionsOrder.push_back(id);
             if (sensors.find(id) != sensors.end()) {
-                bool noOp = true;
-                // set this flag false if any options are added in the future
-                if (noOp) {
-                    s->sensorOptions[id] = { SensorOption::None };
-                }
+                // add sensor options here
             } else if (actuators.find(id) != actuators.end()) {
-                bool noOp = true;
                 if (action["timed"].toBool()) {
-                    noOp = false;
                     s->actuatorOptions[id].push_back(ActuatorOption::Timed);
                 }
                 if (action["automatic"].toBool()) {
-                    noOp = false;
                     s->actuatorOptions[id].push_back(ActuatorOption::Automatic);
-                }
-                if (noOp) {
-                    s->actuatorOptions[id].push_back(ActuatorOption::None);
                 }
             } else {
                 // error here
@@ -90,7 +80,7 @@ std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj,
 
         if (v["checks"]["proceed"].isObject()) {
             this->parseStateChecks(v["checks"]["proceed"], sensors, actuators, s, Transition::Proceed);
-        } else if (v["checks"]["abort"].isObject()) {
+        } if (v["checks"]["abort"].isObject()) {
             this->parseStateChecks(v["checks"]["abort"], sensors, actuators, s, Transition::Abort);
         }
 
