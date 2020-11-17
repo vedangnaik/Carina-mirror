@@ -65,8 +65,10 @@ std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj,
 
             s->actionsOrder.push_back(id);
             if (sensors.find(id) != sensors.end()) {
+                s->sensorOptions[id] = {};
                 // add sensor options here
             } else if (actuators.find(id) != actuators.end()) {
+                s->actuatorOptions[id] = {};
                 if (action["timed"].toBool()) {
                     s->actuatorOptions[id].push_back(ActuatorOption::Timed);
                 }

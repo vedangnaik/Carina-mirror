@@ -26,7 +26,13 @@ void StateUIHandler::displayState(const State& s) {
     this->stateUI->descriptionLabel->setText(QString::fromStdString(s.description));
     this->stateUI->csFrame->setStyleSheet("#csFrame {border: 4px solid " + QString::fromStdString(s.safetyRating) + "}");
 
-    unsigned int row = 0;
+    this->stateUI->actionsLayout->addWidget(new QLabel("Label"), 0, 0);
+    this->stateUI->actionsLayout->addWidget(new QLabel("Action"), 0, 1);
+    this->stateUI->actionsLayout->addWidget(new QLabel("Proceed Check"), 0, 2);
+    this->stateUI->actionsLayout->addWidget(new QLabel("Abort Check"), 0, 3);
+    this->stateUI->actionsLayout->addWidget(new QLabel("Actuation Timer"), 0, 4);
+
+    unsigned int row = 1;
     for (std::string id : s.actionsOrder) {
         if (s.actuatorOptions.find(id) != s.actuatorOptions.end()) {
             QPushButton* aButton = new QPushButton(QString::fromStdString(id));
@@ -79,6 +85,21 @@ void StateUIHandler::displayState(const State& s) {
             if (abortActuatorChecks.find(id) != abortActuatorChecks.end()) {
                 const ActuatorCheck& ac = abortActuatorChecks.at(id);
                 this->stateUI->actionsLayout->addWidget(new QLabel(QVariant(ac.status).toString()), row, 3);
+            }
+        }
+
+        if (s.sensorChecks.find(Transition::Proceed) != s.sensorChecks.end()) {
+            const auto& proceedSensorChecks = s.sensorChecks.at(Transition::Proceed);
+            if (proceedSensorChecks.find(id) != proceedSensorChecks.end()) {
+                const SensorCheck& sc = proceedSensorChecks.at(id);
+                this->stateUI->actionsLayout->addWidget(new QLabel("[" + QString::number(sc.a) + ", " + QString::number(sc.b) + "]"), row, 2);
+            }
+        }
+        if (s.sensorChecks.find(Transition::Abort) != s.sensorChecks.end()) {
+            const auto& proceedSensorChecks = s.sensorChecks.at(Transition::Abort);
+            if (proceedSensorChecks.find(id) != proceedSensorChecks.end()) {
+                const SensorCheck& sc = proceedSensorChecks.at(id);
+                this->stateUI->actionsLayout->addWidget(new QLabel("[" + QString::number(sc.a) + ", " + QString::number(sc.b) + "]"), row, 3);
             }
         }
 
