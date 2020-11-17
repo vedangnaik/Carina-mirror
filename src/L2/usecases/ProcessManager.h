@@ -9,8 +9,8 @@
 
 class PMOC {
 public:
-    virtual void displayProcessSummary(std::vector<std::string> processSummary) = 0;;
-    virtual void displayState(State* s) = 0;
+    virtual void displayProcessSummary(std::vector<std::string> processSummary) = 0;
+    virtual void displayState(const State& s) = 0;
 };
 
 class PMIC {

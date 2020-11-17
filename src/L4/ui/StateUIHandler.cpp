@@ -21,7 +21,8 @@ void StateUIHandler::displayState(StateDisplayInfo sdi) {
     }
 
     this->stateUI->nameLabel->setText(QString::fromStdString(sdi.name));
-    this->stateUI->abortsToLabel->setText(QString::fromStdString(sdi.abortState));
+    this->stateUI->abortLabel->setText(QString::fromStdString(sdi.abortState));
+    this->stateUI->nextLabel->setText(QString::fromStdString(sdi.proceedState));
     this->stateUI->descriptionLabel->setText(QString::fromStdString(sdi.description));
     // change colour for state saftey colour here
 

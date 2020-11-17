@@ -32,7 +32,7 @@ void ProcessManager::transition(Transition t) {
 
     State* next = this->p->getStateById(q->transitions[t]);
     this->p->setCurrentState(next);
-    this->pmoc->displayState(this->p->getCurrentState());
+    this->pmoc->displayState(*this->p->getCurrentState());
 }
 
 
@@ -58,6 +58,6 @@ void ProcessManager::startProcess() {
     }
     this->pmoc->displayProcessSummary(processSummary);
 
-    this->pmoc->displayState(this->p->getCurrentState());
+    this->pmoc->displayState(*this->p->getCurrentState());
     this->cm->start();
 }

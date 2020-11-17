@@ -30,7 +30,7 @@ class ProcessPresenter : public PMOC {
 public:
     ProcessPresenter(PPOC* ppoc);
     virtual void displayProcessSummary(std::vector<std::string> processSummary);
-    void displayState(State* s);
+    void displayState(const State& s);
 private:
     PPOC* ppoc;
 };
