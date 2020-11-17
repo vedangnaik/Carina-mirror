@@ -24,7 +24,7 @@ public:
     ~ProcessUIHandler();
 
     void displayProcessSummary(std::vector<std::string> processSummary);
-    void displayState(StateDisplayInfo sdi);
+    void displayState(const State& s);
 
     void allowProceed(bool permission);
     void allowAbort(bool permission);

@@ -13,22 +13,22 @@ StateUIHandler::~StateUIHandler() {
     delete this->stateUI;
 }
 
-void StateUIHandler::displayState(StateDisplayInfo sdi) {
+void StateUIHandler::displayState(const State& s) {
     QLayoutItem* child;
     while ((child = this->stateUI->actionsLayout->takeAt(0)) != nullptr) {
         delete child->widget();
         delete child;
     }
 
-    this->stateUI->nameLabel->setText(QString::fromStdString(sdi.name));
-    this->stateUI->abortLabel->setText(QString::fromStdString(sdi.abortState));
-    this->stateUI->nextLabel->setText(QString::fromStdString(sdi.proceedState));
-    this->stateUI->descriptionLabel->setText(QString::fromStdString(sdi.description));
-    this->stateUI->csFrame->setStyleSheet("#csFrame {border: 4px solid " + QString::fromStdString(sdi.safetyRating) + "}");
+    this->stateUI->nameLabel->setText(QString::fromStdString(s.name));
+    this->stateUI->abortLabel->setText(QString::fromStdString(s.transitions.at(Transition::Abort)));
+    this->stateUI->nextLabel->setText(QString::fromStdString(s.transitions.at(Transition::Proceed)));
+    this->stateUI->descriptionLabel->setText(QString::fromStdString(s.description));
+    this->stateUI->csFrame->setStyleSheet("#csFrame {border: 4px solid " + QString::fromStdString(s.safetyRating) + "}");
 
     unsigned int row = 0;
-    for (std::string id : sdi.actionsOrder) {
-        if (sdi.actuatorOptions.find(id) != sdi.actuatorOptions.end()) {
+    for (std::string id : s.actionsOrder) {
+        if (s.actuatorOptions.find(id) != s.actuatorOptions.end()) {
             QPushButton* aButton = new QPushButton(QString::fromStdString(id));
             aButton->setCheckable(true);
             connect(aButton, &QPushButton::toggled, this->acic, [=]() {
@@ -38,7 +38,7 @@ void StateUIHandler::displayState(StateDisplayInfo sdi) {
             this->stateUI->actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
             this->stateUI->actionsLayout->addWidget(aButton, row, 1);
 
-            for (ActuatorOption o: sdi.actuatorOptions[id]) {
+            for (ActuatorOption o: s.actuatorOptions.at(id)) {
                 switch (o) {
                 case ActuatorOption::Timed:
                     this->stateUI->actionsLayout->addWidget(this->timedActuatorHandler(aButton), row, 2);
@@ -49,8 +49,8 @@ void StateUIHandler::displayState(StateDisplayInfo sdi) {
                 case ActuatorOption::None:
                     break;
                 }
-            }           
-        } else if (sdi.sensorOptions.find(id) != sdi.sensorOptions.end()) {
+            }
+        } else if (s.sensorOptions.find(id) != s.sensorOptions.end()) {
             QLabel* sensorValueLabel = new QLabel();
             // not strictly best practice to know the manager directly, but hey
             connect(this->cm->HundredMsTimer, &QTimer::timeout, sensorValueLabel, [=]() {
@@ -59,7 +59,7 @@ void StateUIHandler::displayState(StateDisplayInfo sdi) {
 
             this->stateUI->actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
             this->stateUI->actionsLayout->addWidget(sensorValueLabel, row, 1);
-            for (SensorOption o: sdi.sensorOptions[id]) {
+            for (SensorOption o: s.sensorOptions.at(id)) {
                 switch (o) {
                 case SensorOption::None:
                     break;

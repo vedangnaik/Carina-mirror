@@ -47,6 +47,6 @@ void ProcessUIHandler::displayProcessSummary(std::vector<std::string> processSum
 }
 
 
-void ProcessUIHandler::displayState(StateDisplayInfo sdi) {
-    this->suih->displayState(sdi);
+void ProcessUIHandler::displayState(const State& s) {
+    this->suih->displayState(s);
 }

@@ -28,8 +28,5 @@ public:
     std::map<Transition, std::string> transitions;
 };
 
-//    std::vector<std::pair<std::string, std::vector<unsigned int>>> actionOptions;
-//    std::map<Transition, std::map<std::string, std::vector<unsigned int>>> actionsChecks;
-
 
 #endif // STATE_H
