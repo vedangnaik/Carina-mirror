@@ -14,9 +14,9 @@ struct ActuatorCheck {
 
 class Actuator {
 public:
-    Actuator(std::string id, std::string name);
-    std::string id;
-    std::string name;
+    Actuator(std::string id, std::string name) : id(id), name(name), status(false) {};
+    const std::string id;
+    const std::string name;
     bool status;
 };
 

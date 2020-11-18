@@ -15,9 +15,9 @@ struct SensorCheck {
 
 class Sensor {
 public:
-    Sensor(std::string id, std::string name);
-    std::string id;
-    std::string name;
+    Sensor(std::string id, std::string name) : id(id), name(name), values({}) {};
+    const std::string id;
+    const std::string name;
     std::vector<float> values;
 };
 

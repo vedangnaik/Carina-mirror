@@ -23,9 +23,6 @@ SOURCES += \
     src/L3/gateways/ProcessGateway.cpp \
     src/L3/gateways/SensorValuesGateway.cpp \
     src/L3/presenters/ProcessPresenter.cpp \
-    src/L1/entities/Actuator.cpp \
-    src/L1/entities/Process.cpp \
-    src/L1/entities/Sensor.cpp \
     src/L4/daq/DAQPlaceHolder.cpp \
     src/L4/ui/GSMainWindowHandler.cpp \
     src/L4/ui/ProcessUIHandler.cpp \

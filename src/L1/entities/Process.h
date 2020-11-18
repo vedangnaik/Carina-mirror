@@ -8,12 +8,18 @@
 
 class Process {
 public:
-    Process(std::map<std::string, State*> Q, State* startState);
-    State* getStateById(std::string id);
-    State* getCurrentState();
-    void setCurrentState(State* s);
+    Process(std::map<std::string, State*> states, State* startState): states(states), currentState(startState) {};
+    State* getStateById(std::string id) {
+        return this->states[id];
+    }
+    State* getCurrentState() {
+        return this->currentState;
+    }
+    void setCurrentState(State* s) {
+        this->currentState = s;
+    };
 private:
-    std::map<std::string, State*> Q;
+    std::map<std::string, State*> states;
     State* currentState;
 };
 
