@@ -1,19 +1,19 @@
-#include "ProcessManager.h"
+#include "StatesManager.h"
 #include <iostream>
 
-ProcessManager::ProcessManager(AMIC* amic, SMIC* smic, ClocksModule* cm) {
+StatesManager::StatesManager(AMIC* amic, SMIC* smic, ClocksModule* cm) {
     this->amic = amic;
     this->smic = smic;
     this->cm = cm;
 }
 
 
-void ProcessManager::setOutputContract(PMOC* pmoc) {
+void StatesManager::setOutputContract(StMOC* pmoc) {
     this->pmoc = pmoc;
 }
 
 
-void ProcessManager::transition(Transition t) {
+void StatesManager::transition(Transition t) {
     State* q = this->currentState;
 
     for (auto p : q->sensorChecks[t]) {
@@ -36,7 +36,7 @@ void ProcessManager::transition(Transition t) {
 }
 
 
-void ProcessManager::createProcess(std::map<std::string, Sensor*> sensors, std::map<std::string, Actuator*> actuators, std::map<std::string, State*> states) {
+void StatesManager::createProcess(std::map<std::string, Sensor*> sensors, std::map<std::string, Actuator*> actuators, std::map<std::string, State*> states) {
     try {
         this->smic->addSensors(sensors);
         this->amic->addActuators(actuators);
@@ -48,7 +48,7 @@ void ProcessManager::createProcess(std::map<std::string, Sensor*> sensors, std::
 }
 
 
-void ProcessManager::startProcess() {
+void StatesManager::startProcess() {
     std::vector<std::string> processSummary = {};
 
     State* curr = this->currentState;
@@ -57,7 +57,7 @@ void ProcessManager::startProcess() {
         curr = this->states.at(curr->transitions[Transition::Proceed]);
         processSummary.push_back(curr->description);
     }
-    this->pmoc->displayProcessSummary(processSummary);
+    this->pmoc->displayStatesSummary(processSummary);
 
     this->pmoc->displayState(*this->currentState);
     this->cm->start();

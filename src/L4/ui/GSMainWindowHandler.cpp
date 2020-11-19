@@ -6,13 +6,12 @@
 #include <QHBoxLayout>
 #include <iostream>
 
-GSMainWindowHandler::GSMainWindowHandler(QMainWindow* toHandle, PCIC* pcic) {
-    this->toHandle = toHandle;
+GSMainWindowHandler::GSMainWindowHandler(PCIC* pcic) {
     this->mainWindowUI = new Ui::GSMainWindow;
-    mainWindowUI->setupUi(this->toHandle);
+    mainWindowUI->setupUi(this);
 
     connect(mainWindowUI->openProcessFromFileAction, &QAction::triggered, this, [=]() {
-        QString fileName = QFileDialog::getOpenFileName(this->toHandle,
+        QString fileName = QFileDialog::getOpenFileName(this,
             tr("Open Process File"), "/home/vedang/Desktop/");
         if (fileName != "") {
             pcic->openProcess(fileName.toStdString());

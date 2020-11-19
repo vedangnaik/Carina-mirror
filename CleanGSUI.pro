@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/L2/usecases/StatesManager.cpp \
     src/L3/controllers/ActuatorsController.cpp \
     src/L3/controllers/ProcessController.cpp \
     src/L3/gateways/ActuatorStatusGateway.cpp \
@@ -29,11 +30,11 @@ SOURCES += \
     src/L4/ui/StateUIHandler.cpp \
     src/main.cpp \
     src/L2/usecases/ActuatorsManager.cpp \
-    src/L2/usecases/ProcessManager.cpp \
     src/L2/usecases/SensorsManager.cpp \
     src/L2/services/ClocksModule.cpp
 
 HEADERS += \
+    src/L2/usecases/StatesManager.h \
     src/L3/controllers/ActuatorsController.h \
     src/L3/controllers/ProcessController.h \
     src/L3/gateways/ActuatorStatusGateway.h \
@@ -48,7 +49,6 @@ HEADERS += \
     src/L4/ui/ProcessUIHandler.h \
     src/L4/ui/StateUIHandler.h \
     src/L2/usecases/ActuatorsManager.h \
-    src/L2/usecases/ProcessManager.h \
     src/L2/usecases/SensorsManager.h \
     src/L2/services/ClocksModule.h
 

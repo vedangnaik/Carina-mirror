@@ -1,20 +1,14 @@
 #include "ProcessController.h"
 
-ProcessController::ProcessController(PMIC* pmic) {
-    this->pmic = pmic;
-}
-
-void ProcessController::proceed() {
-    this->pmic->transition(Transition::Proceed);
-}
-
-void ProcessController::abort() {
-    this->pmic->transition(Transition::Abort);
-}
-
-void ProcessController::openProcess(std::string filePath) {
+struct ProcessData ProcessController::openProcess(std::string filePath) {
     ProcessGateway* pg = new ProcessGateway();
-    struct ProcessData pdata = pg->parseProcessFile(filePath);
-    this->pmic->createProcess(pdata.sensors, pdata.actuators, pdata.states);
-    this->pmic->startProcess();
+    return pg->parseProcessFile(filePath);
+}
+
+void ProcessController::startProcess() {
+
+}
+
+void ProcessController::closeProcess() {
+
 }

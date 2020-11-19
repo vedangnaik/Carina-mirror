@@ -13,10 +13,10 @@ namespace Ui {
 }
 QT_END_NAMESPACE
 
-class GSMainWindowHandler : public QObject {
+class GSMainWindowHandler : public QMainWindow {
     Q_OBJECT
 public:
-    GSMainWindowHandler(QMainWindow* toHandle, PCIC* pcic);
+    GSMainWindowHandler(PCIC* pcic);
     ~GSMainWindowHandler();
 
     QHBoxLayout* getAbortButtonLayout();
@@ -24,7 +24,6 @@ public:
     QHBoxLayout* getProceedButtonLayout();
     QVBoxLayout* getCurrentStateLayout();
 private:
-    QMainWindow* toHandle;
     Ui::GSMainWindow* mainWindowUI;
 };
 
