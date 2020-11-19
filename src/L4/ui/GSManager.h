@@ -45,17 +45,19 @@ public:
 private:
     Ui::GSMainWindow* mainWindowUI;
     Ui::State* stateUI;
-
+    // L2
     ClocksModule* cm;
     SensorsManager* sm;
     ActuatorsManager* am;
     StatesManager* stm;
-
+    // L3
     SensorValuesGateway* svg;
     ActuatorsController* ac;
     StatesController* stc;
-
+    StatesPresenter* sp;
+    // L4
     StateUIHandler* suih;
+    DAQPlaceholder* daqp;
 };
 
 #endif // GSMAINWINDOWHANDLER_H

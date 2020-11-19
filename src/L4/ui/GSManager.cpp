@@ -38,10 +38,13 @@ void GSManager::createProcess(std::string filepath) {
     this->stc = new StatesController(this->stm);
 
     this->suih = new StateUIHandler(this->stateUI, *this->ac, *this->stc, *this->cm);
-    StatesPresenter* sp = new StatesPresenter(this->suih);
-    this->stm->setOutputContract(sp);
+    this->sp = new StatesPresenter(this->suih);
+    this->stm->setOutputContract(this->sp);
+
+    this->daqp = new DAQPlaceholder(this->cm, this->svg);
 
     this->stm->startProcess();
+    this->daqp->startAcquisition();
     this->cm->start();
 }
 
