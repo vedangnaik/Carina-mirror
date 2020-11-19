@@ -4,7 +4,7 @@
 #include "src/L2/usecases/StatesManager.h"
 #include "src/L1/entities/State.h"
 
-class PPOC {
+class SPOC {
 public:
     virtual void displayProcessSummary(std::vector<std::string> processSummary) = 0;
     virtual void displayState(const State& s) = 0;
@@ -12,13 +12,13 @@ public:
     virtual void allowAbort(bool permission) = 0;
 };
 
-class ProcessPresenter : public StMOC {
+class StatesPresenter : public StMOC {
 public:
-    ProcessPresenter(PPOC* ppoc);
+    StatesPresenter(SPOC* spoc);
     virtual void displayStatesSummary(std::vector<std::string> processSummary);
     void displayState(const State& s);
 private:
-    PPOC* ppoc;
+    SPOC* spoc;
 };
 
 #endif // PROCESSPRESENTER_H

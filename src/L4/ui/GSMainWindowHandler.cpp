@@ -1,22 +1,18 @@
-#include "ProcessUIHandler.h"
+#include "GSMainWindowHandler.h"
 #include "ui_gsmainwindow.h"
 
-#include <QFileDialog>
-#include <QtUiTools>
-#include <QHBoxLayout>
-#include <iostream>
 
-GSMainWindowHandler::GSMainWindowHandler(PCIC* pcic) {
+GSMainWindowHandler::GSMainWindowHandler(PMIC& pmic) {
     this->mainWindowUI = new Ui::GSMainWindow;
     mainWindowUI->setupUi(this);
 
-    connect(mainWindowUI->openProcessFromFileAction, &QAction::triggered, this, [=]() {
-        QString fileName = QFileDialog::getOpenFileName(this,
-            tr("Open Process File"), "/home/vedang/Desktop/");
-        if (fileName != "") {
-            pcic->openProcess(fileName.toStdString());
-        }
-    });
+//    connect(mainWindowUI->openProcessFromFileAction, &QAction::triggered, this, [=]() {
+//        QString fileName = QFileDialog::getOpenFileName(this,
+//            tr("Open Process File"), "/home/vedang/Desktop/");
+//        if (fileName != "") {
+//            pmic->openProcess(fileName.toStdString());
+//        }
+//    });
 }
 
 GSMainWindowHandler::~GSMainWindowHandler() {

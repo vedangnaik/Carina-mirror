@@ -14,13 +14,17 @@ struct ProcessData {
 };
 
 class ProcessGateway {
-public:  
-    struct ProcessData parseProcessFile(std::string fileName);
+public:
+    ProcessGateway(const std::string filepath) : filepath(filepath) {};
+    struct ProcessData parseProcessFile();
 private:
     std::map<std::string, Sensor*> parseSensors(QJsonObject sensorsObj);
     std::map<std::string, Actuator*> parseActuators(QJsonObject actuatorsObj);
     std::map<std::string, State*> parseStates(QJsonObject statesObj, std::map<std::string, Sensor*> sensors, std::map<std::string, Actuator*> actuators);
-    void parseStateChecks(QJsonValue checks, std::map<std::string, Sensor*> sensors, std::map<std::string, Actuator*> actuators, State* s, Transition t);
+    std::map<std::string, ActuatorCheck> parseActuatorChecks(QJsonValue checks, std::map<std::string, Actuator*> actuators);
+    std::map<std::string, SensorCheck> parseSensorChecks(QJsonValue checks, std::map<std::string, Sensor*> sensors);
+
+    const std::string filepath;
 };
 
 #endif // CONTROLLERS_H

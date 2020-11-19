@@ -8,7 +8,7 @@
 #include "GSMainWindowHandler.h"
 #include "src/L2/services/ClocksModule.h"
 #include "src/L3/controllers/ActuatorsController.h"
-#include "src/L3/presenters/ProcessPresenter.h"
+#include "src/L3/presenters/StatesPresenter.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

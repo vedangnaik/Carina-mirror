@@ -8,7 +8,7 @@
 #include "StateUIHandler.h"
 #include "GSMainWindowHandler.h"
 #include "src/L3/controllers/ProcessController.h"
-#include "src/L3/presenters/ProcessPresenter.h"
+#include "src/L3/presenters/StatesPresenter.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,7 +17,7 @@ namespace Ui {
 QT_END_NAMESPACE
 
 
-class ProcessUIHandler : public QWidget, public PPOC {
+class ProcessUIHandler : public QWidget, public SPOC {
     Q_OBJECT
 public:
     ProcessUIHandler(GSMainWindowHandler* gsmwh, StateUIHandler* suih, PCIC* pcic);

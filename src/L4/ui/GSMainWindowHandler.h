@@ -5,7 +5,11 @@
 #include <QMainWindow>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include "src/L3/controllers/ProcessController.h"
+#include <QFileDialog>
+#include <QtUiTools>
+#include <QHBoxLayout>
+#include <iostream>
+#include "src/ProcessManager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -16,7 +20,7 @@ QT_END_NAMESPACE
 class GSMainWindowHandler : public QMainWindow {
     Q_OBJECT
 public:
-    GSMainWindowHandler(PCIC* pcic);
+    GSMainWindowHandler(PMIC& pmic);
     ~GSMainWindowHandler();
 
     QHBoxLayout* getAbortButtonLayout();

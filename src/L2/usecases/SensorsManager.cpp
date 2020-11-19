@@ -1,11 +1,7 @@
 #include "SensorsManager.h"
 
-void SensorsManager::addSensors(std::map<std::string, Sensor*> sensors) {
-    this->sensors = sensors;
-}
-
 float SensorsManager::getSensorValue(std::string id) {
-    auto v = this->sensors[id]->values;
+    auto v = this->sensors.at(id)->values;
     if (v.size() > 0) {
         return v[v.size() - 1];
     } else {
@@ -14,7 +10,7 @@ float SensorsManager::getSensorValue(std::string id) {
 }
 
 void SensorsManager::setSensorValue(std::string id, float value) {
-    this->sensors[id]->values.push_back(value);
+    this->sensors.at(id)->values.push_back(value);
 }
 
 std::vector<std::string> SensorsManager::getSensorIDs() {
