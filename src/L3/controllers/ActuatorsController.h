@@ -13,10 +13,10 @@ public:
 
 class ActuatorsController : public ACIC {
 public:
-    ActuatorsController(AMIC* amic);
+    ActuatorsController(AMIC& amic) : amic(amic) {};
     void actuate(std::string id);
 private:
-   AMIC* amic;
+   AMIC& amic;
 };
 
 #endif // ACTUATORCONTROLLER_H

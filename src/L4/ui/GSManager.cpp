@@ -33,12 +33,12 @@ void GSManager::createProcess(std::string filepath) {
     // check for invalid start state here
     this->stm = new StatesManager(pgdata.states, *this->sm, *this->am, *this->cm);
 
-    this->svg = new SensorValuesGateway(this->sm);
-    this->ac = new ActuatorsController(this->am);
-    this->stc = new StatesController(this->stm);
+    this->svg = new SensorValuesGateway(*this->sm);
+    this->ac = new ActuatorsController(*this->am);
+    this->stc = new StatesController(*this->stm);
 
     this->suih = new StateUIHandler(this->stateUI, *this->ac, *this->stc, *this->cm);
-    this->sp = new StatesPresenter(this->suih);
+    this->sp = new StatesPresenter(*this->suih);
     this->stm->setOutputContract(this->sp);
 
     this->daqp = new DAQPlaceholder(this->cm, this->svg);

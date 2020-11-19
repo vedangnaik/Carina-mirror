@@ -13,11 +13,11 @@ public:
 
 class StatesController : public StCIC {
 public:
-    StatesController(StMIC* stmic) : stmic(stmic) {};
+    StatesController(StMIC& stmic) : stmic(stmic) {};
     void proceed();
     void abort();
 private:
-    StMIC* stmic;
+    StMIC& stmic;
 };
 
 #endif // STATESCONTROLLER_H

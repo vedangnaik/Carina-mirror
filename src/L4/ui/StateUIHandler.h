@@ -23,7 +23,7 @@ public:
     StateUIHandler(Ui::State* stateUI, ACIC& acic, StCIC& stcic, ClocksModule& cm);
     ~StateUIHandler();
 
-    void displayProcessSummary(std::vector<std::string> processSummary);
+    void displayProcessSummary(const std::vector<std::string> processSummary);
     void displayState(const State& s);
     void allowProceed(bool permission);
     void allowAbort(bool permission);

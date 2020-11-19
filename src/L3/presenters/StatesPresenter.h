@@ -6,7 +6,7 @@
 
 class StPOC {
 public:
-    virtual void displayProcessSummary(std::vector<std::string> processSummary) = 0;
+    virtual void displayProcessSummary(const std::vector<std::string> processSummary) = 0;
     virtual void displayState(const State& s) = 0;
     virtual void allowProceed(bool permission) = 0;
     virtual void allowAbort(bool permission) = 0;
@@ -14,11 +14,11 @@ public:
 
 class StatesPresenter : public StMOC {
 public:
-    StatesPresenter(StPOC* spoc);
-    virtual void displayStatesSummary(std::vector<std::string> processSummary);
+    StatesPresenter(StPOC& stpoc) : stpoc(stpoc){};
+    virtual void displayStatesSummary(const std::vector<std::string> processSummary);
     void displayState(const State& s);
 private:
-    StPOC* spoc;
+    StPOC& stpoc;
 };
 
 #endif // STATESPRESENTER_H

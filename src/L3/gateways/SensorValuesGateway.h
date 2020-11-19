@@ -14,11 +14,11 @@ public:
 
 class SensorValuesGateway : public SVGIC {
 public:
-    SensorValuesGateway(SMIC* smic);
+    SensorValuesGateway(SMIC& smic) : smic(smic) {};
     void updateValue(std::string id, float value);
     std::vector<std::string> getSensorIDs();
 private:
-    SMIC* smic;
+    SMIC& smic;
 };
 
 #endif // SENSORVALUESGATEWAY_H

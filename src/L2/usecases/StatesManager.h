@@ -8,7 +8,7 @@
 
 class StMOC {
 public:
-    virtual void displayStatesSummary(std::vector<std::string> processSummary) = 0;
+    virtual void displayStatesSummary(const std::vector<std::string> processSummary) = 0;
     virtual void displayState(const State& s) = 0;
 };
 
