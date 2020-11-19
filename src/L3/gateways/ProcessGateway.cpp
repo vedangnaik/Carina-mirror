@@ -56,9 +56,9 @@ std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj,
         std::string safetyRating = v["safetyRating"].toString().toStdString();
         std::string description = v["description"].toString().toStdString();
 
-        std::vector<std::string> actionsOrder;
-        std::map<std::string, std::vector<SensorOption>> sensorOptions;
-        std::map<std::string, std::vector<ActuatorOption>> actuatorOptions;
+        std::vector<std::string> actionsOrder = {};
+        std::map<std::string, std::vector<SensorOption>> sensorOptions = {};
+        std::map<std::string, std::vector<ActuatorOption>> actuatorOptions = {};
         for (QJsonValue action: v["actions"].toArray()) {
             std::string id = action["id"].toString().toStdString();
             if (id == "") {
@@ -82,14 +82,20 @@ std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj,
             }
         }
 
-        std::map<Transition, std::map<std::string, SensorCheck>> sensorChecks;
-        std::map<Transition, std::map<std::string, ActuatorCheck>> actuatorChecks;
+        std::map<Transition, std::map<std::string, SensorCheck>> sensorChecks = {
+            {Transition::Proceed, {}},
+            {Transition::Abort, {}}
+        };
+        std::map<Transition, std::map<std::string, ActuatorCheck>> actuatorChecks = {
+            {Transition::Proceed, {}},
+            {Transition::Abort, {}}
+        };
         if (v["checks"]["proceed"].isObject()) {
             sensorChecks[Transition::Proceed] = parseSensorChecks(v["checks"]["proceed"], sensors);
             actuatorChecks[Transition::Proceed] = parseActuatorChecks(v["checks"]["proceed"], actuators);
         } if (v["checks"]["abort"].isObject()) {
-            sensorChecks[Transition::Abort] = parseSensorChecks(v["checks"]["proceed"], sensors);
-            actuatorChecks[Transition::Abort] = parseActuatorChecks(v["checks"]["proceed"], actuators);
+            sensorChecks[Transition::Abort] = parseSensorChecks(v["checks"]["abort"], sensors);
+            actuatorChecks[Transition::Abort] = parseActuatorChecks(v["checks"]["abort"], actuators);
         }
 
         std::map<Transition, std::string> transitions = {
@@ -139,7 +145,7 @@ std::map<std::string, ActuatorCheck> ProcessGateway::parseActuatorChecks(QJsonVa
                 // invalid check error here
             }
         } else {
-            // invalid key error here
+            // ignore, not an actuator
         }
     }
     return actuatorChecks;

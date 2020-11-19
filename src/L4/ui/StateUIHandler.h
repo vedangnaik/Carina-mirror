@@ -28,7 +28,9 @@ public:
     void allowProceed(bool permission);
     void allowAbort(bool permission);
 private:
-    QLabel* timedActuatorHandler(QPushButton* aButton);
+    QLabel* displayTimedActuator(QPushButton* aButton);
+    QLabel* displaySensorCheck(const SensorCheck& sc);
+    QLabel* displayActuatorCheck(const ActuatorCheck& ac);
 
     Ui::State* stateUI;
     ACIC& acic;

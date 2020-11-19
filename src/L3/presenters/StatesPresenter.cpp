@@ -16,6 +16,6 @@ void StatesPresenter::displayState(const State& s) {
     this->stpoc.displayState(s);
 }
 
-void StatesPresenter::displayStatesSummary(std::vector<std::string> processSummary) {
+void StatesPresenter::displayStatesSummary(const std::vector<std::string> processSummary) {
     this->stpoc.displayProcessSummary(processSummary);
 }

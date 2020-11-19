@@ -43,7 +43,7 @@ void StateUIHandler::displayState(const State& s) {
             for (ActuatorOption o: s.actuatorOptions.at(id)) {
                 switch (o) {
                 case ActuatorOption::Timed:
-                    this->stateUI->actionsLayout->addWidget(this->timedActuatorHandler(aButton), row, 4);
+                    this->stateUI->actionsLayout->addWidget(this->displayTimedActuator(aButton), row, 4);
                     break;
                 case ActuatorOption::Automatic:
                     aButton->toggle();
@@ -70,34 +70,22 @@ void StateUIHandler::displayState(const State& s) {
         }
 
 
-        if (s.actuatorChecks.find(Transition::Proceed) != s.actuatorChecks.end()) {
-            const auto& proceedActuatorChecks = s.actuatorChecks.at(Transition::Proceed);
-            if (proceedActuatorChecks.find(id) != proceedActuatorChecks.end()) {
-                const ActuatorCheck& ac = proceedActuatorChecks.at(id);
-                this->stateUI->actionsLayout->addWidget(new QLabel(QVariant(ac.status).toString()), row, 2);
-            }
+        const auto& proceedActuatorChecks = s.actuatorChecks.at(Transition::Proceed);
+        const auto& abortActuatorChecks = s.actuatorChecks.at(Transition::Abort);
+        if (proceedActuatorChecks.find(id) != proceedActuatorChecks.end()) {
+            this->stateUI->actionsLayout->addWidget(displayActuatorCheck(proceedActuatorChecks.at(id)), row, 2);
         }
-        if (s.actuatorChecks.find(Transition::Abort) != s.actuatorChecks.end()) {
-            const auto& abortActuatorChecks = s.actuatorChecks.at(Transition::Abort);
-            if (abortActuatorChecks.find(id) != abortActuatorChecks.end()) {
-                const ActuatorCheck& ac = abortActuatorChecks.at(id);
-                this->stateUI->actionsLayout->addWidget(new QLabel(QVariant(ac.status).toString()), row, 3);
-            }
+        if (abortActuatorChecks.find(id) != abortActuatorChecks.end()) {
+            this->stateUI->actionsLayout->addWidget(displayActuatorCheck(abortActuatorChecks.at(id)), row, 3);
         }
 
-        if (s.sensorChecks.find(Transition::Proceed) != s.sensorChecks.end()) {
-            const auto& proceedSensorChecks = s.sensorChecks.at(Transition::Proceed);
-            if (proceedSensorChecks.find(id) != proceedSensorChecks.end()) {
-                const SensorCheck& sc = proceedSensorChecks.at(id);
-                this->stateUI->actionsLayout->addWidget(new QLabel("[" + QString::number(sc.a) + ", " + QString::number(sc.b) + "]"), row, 2);
-            }
+        const auto& proceedSensorChecks = s.sensorChecks.at(Transition::Proceed);
+        const auto& abortSensorChecks = s.sensorChecks.at(Transition::Abort);
+        if (proceedSensorChecks.find(id) != proceedSensorChecks.end()) {
+            this->stateUI->actionsLayout->addWidget(displaySensorCheck(proceedSensorChecks.at(id)), row, 2);
         }
-        if (s.sensorChecks.find(Transition::Abort) != s.sensorChecks.end()) {
-            const auto& proceedSensorChecks = s.sensorChecks.at(Transition::Abort);
-            if (proceedSensorChecks.find(id) != proceedSensorChecks.end()) {
-                const SensorCheck& sc = proceedSensorChecks.at(id);
-                this->stateUI->actionsLayout->addWidget(new QLabel("[" + QString::number(sc.a) + ", " + QString::number(sc.b) + "]"), row, 3);
-            }
+        if (abortSensorChecks.find(id) != abortSensorChecks.end()) {
+            this->stateUI->actionsLayout->addWidget(displaySensorCheck(abortSensorChecks.at(id)), row, 3);
         }
 
         row += 1;
@@ -131,7 +119,7 @@ void StateUIHandler::allowAbort(bool permission) {
 }
 
 
-QLabel* StateUIHandler::timedActuatorHandler(QPushButton* aButton) {
+QLabel* StateUIHandler::displayTimedActuator(QPushButton* aButton) {
     QLabel* elapsedTimeLabel = new QLabel();
     connect(aButton, &QPushButton::toggled, elapsedTimeLabel, [=](bool checked) {
         if (checked) {
@@ -145,4 +133,12 @@ QLabel* StateUIHandler::timedActuatorHandler(QPushButton* aButton) {
         }
     });
     return elapsedTimeLabel;
+}
+
+QLabel* StateUIHandler::displaySensorCheck(const SensorCheck& sc) {
+    return new QLabel("[" + QString::number(sc.a) + ", " + QString::number(sc.b) + "]");
+}
+
+QLabel* StateUIHandler::displayActuatorCheck(const ActuatorCheck& ac) {
+    return new QLabel(QVariant(ac.status).toString());
 }
