@@ -25,3 +25,17 @@ void StatesManager::transition(Transition t) {
     this->currentState = next;
     this->stmoc->displayState(*this->currentState);
 }
+
+void StatesManager::startProcess() {
+    this->currentState = this->states.at("start");
+    this->stmoc->displayState(*this->currentState);
+
+    std::vector<std::string> processSummary = {};
+    State* curr = this->currentState;
+    processSummary.push_back(curr->description);
+    while (curr->transitions.at(Transition::Proceed) != "") {
+        curr = this->states.at(curr->transitions.at(Transition::Proceed));
+        processSummary.push_back(curr->description);
+    }
+    this->stmoc->displayStatesSummary(processSummary);
+}

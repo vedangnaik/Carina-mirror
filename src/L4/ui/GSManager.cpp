@@ -40,6 +40,9 @@ void GSManager::createProcess(std::string filepath) {
     this->suih = new StateUIHandler(this->stateUI, *this->ac, *this->stc, *this->cm);
     StatesPresenter* sp = new StatesPresenter(this->suih);
     this->stm->setOutputContract(sp);
+
+    this->stm->startProcess();
+    this->cm->start();
 }
 
 void GSManager::closeProcess() {

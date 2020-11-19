@@ -1,8 +1,8 @@
 #include "StateUIHandler.h"
 
 StateUIHandler::StateUIHandler(Ui::State* stateUI, ACIC& acic, StCIC& stcic, ClocksModule& cm) : stateUI(stateUI), acic(acic), stcic(stcic), cm(cm) {
-    connect(this->stateUI->proceedButton, &QPushButton::click, &this->stcic, &StCIC::proceed);
-    connect(this->stateUI->abortButton, &QPushButton::click, &this->stcic, &StCIC::abort);
+    connect(this->stateUI->proceedButton, &QPushButton::clicked, &this->stcic, &StCIC::proceed);
+    connect(this->stateUI->abortButton, &QPushButton::clicked, &this->stcic, &StCIC::abort);
 };
 
 StateUIHandler::~StateUIHandler() {

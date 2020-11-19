@@ -25,6 +25,7 @@ public:
     void setOutputContract(StMOC* stmoc) {
         this->stmoc = stmoc;
     }
+    void startProcess();
 private:
     const std::map<std::string, State*> states;
     State* currentState;
