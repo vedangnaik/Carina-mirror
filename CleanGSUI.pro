@@ -41,7 +41,6 @@ HEADERS += \
     src/L3/gateways/SensorValuesGateway.h \
     src/L3/presenters/ProcessPresenter.h \
     src/L1/entities/Actuator.h \
-    src/L1/entities/Process.h \
     src/L1/entities/Sensor.h \
     src/L1/entities/State.h \
     src/L4/daq/DAQPlaceHolder.h \

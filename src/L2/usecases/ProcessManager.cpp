@@ -14,7 +14,7 @@ void ProcessManager::setOutputContract(PMOC* pmoc) {
 
 
 void ProcessManager::transition(Transition t) {
-    State* q = this->p->getCurrentState();
+    State* q = this->currentState;
 
     for (auto p : q->sensorChecks[t]) {
         float value = this->smic->getSensorValue(p.first);
@@ -30,9 +30,9 @@ void ProcessManager::transition(Transition t) {
         }
     }
 
-    State* next = this->p->getStateById(q->transitions[t]);
-    this->p->setCurrentState(next);
-    this->pmoc->displayState(*this->p->getCurrentState());
+    State* next = this->states.at(q->transitions[t]);
+    this->currentState = next;
+    this->pmoc->displayState(*this->currentState);
 }
 
 
@@ -40,7 +40,8 @@ void ProcessManager::createProcess(std::map<std::string, Sensor*> sensors, std::
     try {
         this->smic->addSensors(sensors);
         this->amic->addActuators(actuators);
-        this->p = new Process(states, states.at("start"));
+        this->states = states;
+        this->currentState = states.at("start");
     }  catch (std::out_of_range& e) {
         // handle the error here by asking the presenter to display it.
     }
@@ -50,14 +51,14 @@ void ProcessManager::createProcess(std::map<std::string, Sensor*> sensors, std::
 void ProcessManager::startProcess() {
     std::vector<std::string> processSummary = {};
 
-    State* curr = this->p->getCurrentState();
+    State* curr = this->currentState;
     processSummary.push_back(curr->description);
     while (curr->transitions[Transition::Proceed] != "") {
-        curr = this->p->getStateById(curr->transitions[Transition::Proceed]);
+        curr = this->states.at(curr->transitions[Transition::Proceed]);
         processSummary.push_back(curr->description);
     }
     this->pmoc->displayProcessSummary(processSummary);
 
-    this->pmoc->displayState(*this->p->getCurrentState());
+    this->pmoc->displayState(*this->currentState);
     this->cm->start();
 }

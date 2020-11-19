@@ -2,7 +2,6 @@
 #define PROCESSMANAGER_H
 
 #include "src/L1/entities/State.h"
-#include "src/L1/entities/Process.h"
 #include "ActuatorsManager.h"
 #include "SensorsManager.h"
 #include "src/L2/services/ClocksModule.h"
@@ -28,7 +27,8 @@ public:
     void transition(Transition t);
     void setOutputContract(PMOC* pmoc);
 private:
-    Process* p = NULL;
+    std::map<std::string, State*> states;
+    State* currentState;
     PMOC* pmoc;
     AMIC* amic;
     SMIC* smic;

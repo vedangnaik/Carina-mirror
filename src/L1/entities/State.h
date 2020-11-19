@@ -28,5 +28,4 @@ public:
     std::map<Transition, std::string> transitions;
 };
 
-
 #endif // STATE_H
