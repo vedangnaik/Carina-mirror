@@ -9,7 +9,6 @@
 #include <QtUiTools>
 #include <QHBoxLayout>
 #include <iostream>
-
 // L1
 // L2
 #include "src/L2/usecases/SensorsManager.h"
@@ -23,13 +22,14 @@
 #include "src/L3/presenters/StatesPresenter.h"
 // L4
 #include "src/L4/daq/DAQPlaceHolder.h"
-#include "src/L4/ui/ProcessUIHandler.h"
 #include "src/L4/ui/StateUIHandler.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
     class GSMainWindow;
     class State;
+    // class SystemDiagram
 }
 QT_END_NAMESPACE
 
@@ -39,16 +39,12 @@ public:
     GSManager();
     ~GSManager();
 
-//    QHBoxLayout* getAbortButtonLayout();
-//    QHBoxLayout* getProcessSummaryLayout();
-//    QHBoxLayout* getProceedButtonLayout();
-//    QVBoxLayout* getCurrentStateLayout();
-
     void createProcess(std::string filepath);
     void startProcess();
     void closeProcess();
 private:
     Ui::GSMainWindow* mainWindowUI;
+    Ui::State* stateUI;
 
     ClocksModule* cm;
     SensorsManager* sm;

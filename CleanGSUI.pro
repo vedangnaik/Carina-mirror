@@ -25,7 +25,6 @@ SOURCES += \
     src/L3/presenters/StatesPresenter.cpp \
     src/L4/daq/DAQPlaceHolder.cpp \
     src/L4/ui/GSManager.cpp \
-    src/L4/ui/ProcessUIHandler.cpp \
     src/L4/ui/StateUIHandler.cpp \
     src/main.cpp \
     src/L2/usecases/ActuatorsManager.cpp \
@@ -44,7 +43,6 @@ HEADERS += \
     src/L3/presenters/StatesPresenter.h \
     src/L4/daq/DAQPlaceHolder.h \
     src/L4/ui/GSManager.h \
-    src/L4/ui/ProcessUIHandler.h \
     src/L4/ui/StateUIHandler.h \
     src/L2/usecases/ActuatorsManager.h \
     src/L2/usecases/SensorsManager.h \
@@ -52,7 +50,6 @@ HEADERS += \
 
 FORMS += \
     src/L4/ui/gsmainwindow.ui \
-    src/L4/ui/processsummary.ui \
     src/L4/ui/state.ui
 
 # Default rules for deployment.

@@ -5,7 +5,9 @@
 
 GSManager::GSManager() {
     this->mainWindowUI = new Ui::GSMainWindow;
-    mainWindowUI->setupUi(this);
+    this->mainWindowUI->setupUi(this);
+    this->stateUI = new Ui::State;
+    this->stateUI->setupUi(this);
 
     connect(mainWindowUI->openProcessFromFileAction, &QAction::triggered, this, [&]() {
         QString fileName = QFileDialog::getOpenFileName(this,
@@ -19,22 +21,6 @@ GSManager::GSManager() {
 GSManager::~GSManager() {
     delete mainWindowUI;
 }
-
-//QHBoxLayout* GSMainWindowHandler::getAbortButtonLayout() {
-//    return this->mainWindowUI->abortButtonLayout;
-//}
-
-//QHBoxLayout* GSMainWindowHandler::getProcessSummaryLayout() {
-//    return this->mainWindowUI->processSummaryLayout;
-//}
-
-//QHBoxLayout* GSMainWindowHandler::getProceedButtonLayout() {
-//    return this->mainWindowUI->proceedButtonLayout;
-//}
-
-//QVBoxLayout* GSMainWindowHandler::getCurrentStateLayout() {
-//    return this->mainWindowUI->currentStateLayout;
-//}
 
 void GSManager::createProcess(std::string filepath) {
     ProcessGateway pg(filepath);
@@ -50,8 +36,7 @@ void GSManager::createProcess(std::string filepath) {
     this->ac = new ActuatorsController(this->am);
     // controller for states here
 
-    this->suih = new StateUIHandler(new Ui::State, this->ac, this->sm, this->cm);
-
+    this->suih = new StateUIHandler(this->stateUI, this->ac, this->sm, this->cm);
 
 }
 

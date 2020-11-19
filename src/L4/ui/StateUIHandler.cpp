@@ -2,7 +2,6 @@
 
 StateUIHandler::StateUIHandler(Ui::State* stateUI, ACIC* acic, SMIC* smic, ClocksModule* cm) {
     this->stateUI = stateUI;
-    stateUI->setupUi(this);
     this->acic = acic;
     this->smic = smic;
     this->cm = cm;
