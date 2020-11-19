@@ -1,9 +1,8 @@
 #include "StateUIHandler.h"
 
-StateUIHandler::StateUIHandler(GSMainWindowHandler* gsmwh, ACIC* acic, SMIC* smic, ClocksModule* cm) {
-    this->stateUI = new Ui::State;
+StateUIHandler::StateUIHandler(Ui::State* stateUI, ACIC* acic, SMIC* smic, ClocksModule* cm) {
+    this->stateUI = stateUI;
     stateUI->setupUi(this);
-    gsmwh->getCurrentStateLayout()->addWidget(this->stateUI->csFrame);
     this->acic = acic;
     this->smic = smic;
     this->cm = cm;

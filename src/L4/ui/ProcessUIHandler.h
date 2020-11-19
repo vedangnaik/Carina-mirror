@@ -6,7 +6,7 @@
 #include <string>
 #include <QPushButton>
 #include "StateUIHandler.h"
-#include "GSMainWindowHandler.h"
+#include "GSManager.h"
 #include "src/L3/controllers/ProcessController.h"
 #include "src/L3/presenters/StatesPresenter.h"
 
@@ -20,7 +20,7 @@ QT_END_NAMESPACE
 class ProcessUIHandler : public QWidget, public SPOC {
     Q_OBJECT
 public:
-    ProcessUIHandler(GSMainWindowHandler* gsmwh, StateUIHandler* suih, PCIC* pcic);
+    ProcessUIHandler(GSManager* gsmwh, StateUIHandler* suih, PCIC* pcic);
     ~ProcessUIHandler();
 
     void displayProcessSummary(std::vector<std::string> processSummary);

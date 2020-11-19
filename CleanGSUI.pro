@@ -19,16 +19,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     src/L2/usecases/StatesManager.cpp \
     src/L3/controllers/ActuatorsController.cpp \
-    src/L3/controllers/ProcessController.cpp \
     src/L3/gateways/ActuatorStatusGateway.cpp \
     src/L3/gateways/ProcessGateway.cpp \
     src/L3/gateways/SensorValuesGateway.cpp \
     src/L3/presenters/StatesPresenter.cpp \
     src/L4/daq/DAQPlaceHolder.cpp \
-    src/L4/ui/GSMainWindowHandler.cpp \
+    src/L4/ui/GSManager.cpp \
     src/L4/ui/ProcessUIHandler.cpp \
     src/L4/ui/StateUIHandler.cpp \
-    src/ProcessManager.cpp \
     src/main.cpp \
     src/L2/usecases/ActuatorsManager.cpp \
     src/L2/usecases/SensorsManager.cpp \
@@ -37,7 +35,6 @@ SOURCES += \
 HEADERS += \
     src/L2/usecases/StatesManager.h \
     src/L3/controllers/ActuatorsController.h \
-    src/L3/controllers/ProcessController.h \
     src/L3/gateways/ActuatorStatusGateway.h \
     src/L3/gateways/ProcessGateway.h \
     src/L3/gateways/SensorValuesGateway.h \
@@ -46,13 +43,12 @@ HEADERS += \
     src/L1/entities/State.h \
     src/L3/presenters/StatesPresenter.h \
     src/L4/daq/DAQPlaceHolder.h \
-    src/L4/ui/GSMainWindowHandler.h \
+    src/L4/ui/GSManager.h \
     src/L4/ui/ProcessUIHandler.h \
     src/L4/ui/StateUIHandler.h \
     src/L2/usecases/ActuatorsManager.h \
     src/L2/usecases/SensorsManager.h \
-    src/L2/services/ClocksModule.h \
-    src/ProcessManager.h
+    src/L2/services/ClocksModule.h
 
 FORMS += \
     src/L4/ui/gsmainwindow.ui \

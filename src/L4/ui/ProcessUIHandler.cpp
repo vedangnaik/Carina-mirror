@@ -4,7 +4,7 @@
 #include <QGroupBox>
 #include <iostream>
 
-ProcessUIHandler::ProcessUIHandler(GSMainWindowHandler* gsmwh, StateUIHandler* suih, PCIC* pcic) {
+ProcessUIHandler::ProcessUIHandler(GSManager* gsmwh, StateUIHandler* suih, PCIC* pcic) {
     this->processSummaryUI = new Ui::ProcessSummary;
     processSummaryUI->setupUi(this);
     this->suih = suih;

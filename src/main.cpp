@@ -1,13 +1,13 @@
 #include <QApplication>
-#include "src/ProcessManager.h"
-#include "src/L4/ui/GSMainWindowHandler.h"
+//#include "src/ProcessManager.h"
+#include "src/L4/ui/GSManager.h"
 
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
-    ProcessManager pm;
-    GSMainWindowHandler gsmwh(pm);
+//    ProcessManager pm;
+//    GSMainWindowHandler gsmwh(pm);
 
 
 //    ProcessManager pm;

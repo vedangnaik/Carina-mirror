@@ -1,5 +1,5 @@
-#ifndef PROCESSPRESENTER_H
-#define PROCESSPRESENTER_H
+#ifndef STATESPRESENTER_H
+#define STATESPRESENTER_H
 
 #include "src/L2/usecases/StatesManager.h"
 #include "src/L1/entities/State.h"
@@ -21,4 +21,4 @@ private:
     SPOC* spoc;
 };
 
-#endif // PROCESSPRESENTER_H
+#endif // STATESPRESENTER_H

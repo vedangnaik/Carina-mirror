@@ -5,7 +5,6 @@
 #include <QLabel>
 #include <QPushButton>
 #include "ui_state.h"
-#include "GSMainWindowHandler.h"
 #include "src/L2/services/ClocksModule.h"
 #include "src/L3/controllers/ActuatorsController.h"
 #include "src/L3/presenters/StatesPresenter.h"
@@ -19,7 +18,7 @@ QT_END_NAMESPACE
 class StateUIHandler : public QWidget {
     Q_OBJECT
 public:
-    StateUIHandler(GSMainWindowHandler* gsmwh, ACIC* acic, SMIC* smic, ClocksModule* cm);
+    StateUIHandler(Ui::State* stateUI, ACIC* acic, SMIC* smic, ClocksModule* cm);
     ~StateUIHandler();
     void displayState(const State& s);
 private:
