@@ -2,10 +2,12 @@
 #define SENSORMANAGER_H
 
 #include "src/L1/entities/Sensor.h"
+#include "src/L2/services/ClocksModule.h"
 #include <map>
 
 class SMOC {
 public:
+    virtual void displaySensorValue(const std::string id, const float value) = 0;
 };
 
 class SMIC {
@@ -21,6 +23,9 @@ public:
     float getSensorValue(std::string id);
     void setSensorValue(std::string id, float value);
     std::vector<std::string> getSensorIDs();
+    void setOutputContract(SMOC* smoc) {
+        this->smoc = smoc;
+    }
 private:
     const std::map<std::string, Sensor*> sensors;
     SMOC* smoc;

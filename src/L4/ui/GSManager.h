@@ -20,6 +20,7 @@
 #include "src/L3/gateways/ProcessGateway.h"
 #include "src/L3/gateways/SensorValuesGateway.h"
 #include "src/L3/presenters/StatesPresenter.h"
+#include "src/L3/presenters/SensorsPresenter.h"
 // L4
 #include "src/L4/daq/DAQPlaceHolder.h"
 #include "src/L4/ui/StateUIHandler.h"
@@ -54,7 +55,8 @@ private:
     SensorValuesGateway* svg;
     ActuatorsController* ac;
     StatesController* stc;
-    StatesPresenter* sp;
+    SensorsPresenter* sp;
+    StatesPresenter* stp;
     // L4
     StateUIHandler* suih;
     DAQPlaceholder* daqp;

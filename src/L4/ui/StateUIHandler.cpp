@@ -52,11 +52,9 @@ void StateUIHandler::displayState(const State& s) {
             }
         } else if (s.sensorOptions.find(id) != s.sensorOptions.end()) {
             QLabel* sensorValueLabel = new QLabel();
-            // not strictly best practice to know the manager directly, but hey
-            // WIP: making this right
-//            connect(this->cm->HundredMsTimer, &QTimer::timeout, sensorValueLabel, [=]() {
-//                sensorValueLabel->setText(QString::number(this->smic->getSensorValue(id)));
-//            });
+            this->cm.stop();
+            this->sensorDisplays.insert(std::make_pair(id, sensorValueLabel));
+            this->cm.start();
 
             this->stateUI->actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
             this->stateUI->actionsLayout->addWidget(sensorValueLabel, row, 1);
@@ -118,6 +116,9 @@ void StateUIHandler::allowAbort(bool permission) {
     this->stateUI->abortButton->setEnabled(permission);
 }
 
+void StateUIHandler::displaySensorValue(const std::string id, const float value) {
+    this->sensorDisplays.at(id)->setText(QString::number(value));
+}
 
 QLabel* StateUIHandler::displayTimedActuator(QPushButton* aButton) {
     QLabel* elapsedTimeLabel = new QLabel();

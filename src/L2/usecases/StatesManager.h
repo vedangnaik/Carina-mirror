@@ -20,7 +20,7 @@ public:
 class StatesManager : public StMIC {
 public:
     StatesManager(std::map<std::string, State*> states, SMIC& smic,
-                  AMIC& amic, ClocksModule& cm) : states(states), smic(smic), amic(amic), cm(cm) {};
+                  AMIC& amic) : states(states), smic(smic), amic(amic) {};
     void transition(Transition t);
     void setOutputContract(StMOC* stmoc) {
         this->stmoc = stmoc;
@@ -33,7 +33,6 @@ private:
     StMOC* stmoc;
     SMIC& smic;
     AMIC& amic;
-    ClocksModule& cm;
 };
 
 #endif // STATESMANAGER_H

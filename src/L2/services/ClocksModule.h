@@ -8,6 +8,7 @@ class ClocksModule
 public:
     ClocksModule();
     void start();
+    void stop();
     QTimer* oneSTimer;
     QTimer* HundredMsTimer;
 };
