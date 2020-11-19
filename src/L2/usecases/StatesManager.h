@@ -22,11 +22,14 @@ public:
     StatesManager(std::map<std::string, State*> states, SMIC& smic,
                   AMIC& amic, ClocksModule& cm) : states(states), smic(smic), amic(amic), cm(cm) {};
     void transition(Transition t);
+    void setOutputContract(StMOC* stmoc) {
+        this->stmoc = stmoc;
+    }
 private:
     const std::map<std::string, State*> states;
     State* currentState;
-    StMOC* stmoc;
 
+    StMOC* stmoc;
     SMIC& smic;
     AMIC& amic;
     ClocksModule& cm;

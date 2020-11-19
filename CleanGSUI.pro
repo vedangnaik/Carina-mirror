@@ -19,6 +19,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     src/L2/usecases/StatesManager.cpp \
     src/L3/controllers/ActuatorsController.cpp \
+    src/L3/controllers/StatesController.cpp \
     src/L3/gateways/ActuatorStatusGateway.cpp \
     src/L3/gateways/ProcessGateway.cpp \
     src/L3/gateways/SensorValuesGateway.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
 HEADERS += \
     src/L2/usecases/StatesManager.h \
     src/L3/controllers/ActuatorsController.h \
+    src/L3/controllers/StatesController.h \
     src/L3/gateways/ActuatorStatusGateway.h \
     src/L3/gateways/ProcessGateway.h \
     src/L3/gateways/SensorValuesGateway.h \

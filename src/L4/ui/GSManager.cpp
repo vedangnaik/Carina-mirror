@@ -8,6 +8,7 @@ GSManager::GSManager() {
     this->mainWindowUI->setupUi(this);
     this->stateUI = new Ui::State;
     this->stateUI->setupUi(this);
+    this->mainWindowUI->stateLayout->addWidget(this->stateUI->StateWidget);
 
     connect(mainWindowUI->openProcessFromFileAction, &QAction::triggered, this, [&]() {
         QString fileName = QFileDialog::getOpenFileName(this,
@@ -34,10 +35,11 @@ void GSManager::createProcess(std::string filepath) {
 
     this->svg = new SensorValuesGateway(this->sm);
     this->ac = new ActuatorsController(this->am);
-    // controller for states here
+    this->stc = new StatesController(this->stm);
 
-    this->suih = new StateUIHandler(this->stateUI, this->ac, this->sm, this->cm);
-
+    this->suih = new StateUIHandler(this->stateUI, *this->ac, *this->stc, *this->cm);
+    StatesPresenter* sp = new StatesPresenter(this->suih);
+    this->stm->setOutputContract(sp);
 }
 
 void GSManager::closeProcess() {

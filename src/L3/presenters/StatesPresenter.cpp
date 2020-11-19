@@ -1,6 +1,6 @@
 #include "StatesPresenter.h"
 
-StatesPresenter::StatesPresenter(SPOC* ppoc) {
+StatesPresenter::StatesPresenter(StPOC* ppoc) {
     this->spoc = ppoc;
 }
 

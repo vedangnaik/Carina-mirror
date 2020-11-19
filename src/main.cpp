@@ -1,10 +1,12 @@
 #include <QApplication>
-//#include "src/ProcessManager.h"
 #include "src/L4/ui/GSManager.h"
 
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
+
+    GSManager gsm;
+    gsm.show();
 
 //    ProcessManager pm;
 //    GSMainWindowHandler gsmwh(pm);

@@ -47,7 +47,7 @@ public:
     std::map<Transition, std::string> getTransitions() {
         return this->transitions;
     }
-private:
+
     const std::string id;
     const std::string name;
     const std::string safetyRating;

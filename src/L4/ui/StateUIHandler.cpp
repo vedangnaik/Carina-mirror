@@ -1,11 +1,9 @@
 #include "StateUIHandler.h"
 
-StateUIHandler::StateUIHandler(Ui::State* stateUI, ACIC* acic, SMIC* smic, ClocksModule* cm) {
-    this->stateUI = stateUI;
-    this->acic = acic;
-    this->smic = smic;
-    this->cm = cm;
-}
+StateUIHandler::StateUIHandler(Ui::State* stateUI, ACIC& acic, StCIC& stcic, ClocksModule& cm) : stateUI(stateUI), acic(acic), stcic(stcic), cm(cm) {
+    connect(this->stateUI->proceedButton, &QPushButton::click, &this->stcic, &StCIC::proceed);
+    connect(this->stateUI->abortButton, &QPushButton::click, &this->stcic, &StCIC::abort);
+};
 
 StateUIHandler::~StateUIHandler() {
     delete this->stateUI;
@@ -35,8 +33,8 @@ void StateUIHandler::displayState(const State& s) {
         if (s.actuatorOptions.find(id) != s.actuatorOptions.end()) {
             QPushButton* aButton = new QPushButton(QString::fromStdString(id));
             aButton->setCheckable(true);
-            connect(aButton, &QPushButton::toggled, this->acic, [=]() {
-                this->acic->actuate(id);
+            connect(aButton, &QPushButton::toggled, &this->acic, [&]() {
+                this->acic.actuate(id);
             });
 
             this->stateUI->actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
@@ -55,9 +53,10 @@ void StateUIHandler::displayState(const State& s) {
         } else if (s.sensorOptions.find(id) != s.sensorOptions.end()) {
             QLabel* sensorValueLabel = new QLabel();
             // not strictly best practice to know the manager directly, but hey
-            connect(this->cm->HundredMsTimer, &QTimer::timeout, sensorValueLabel, [=]() {
-                sensorValueLabel->setText(QString::number(this->smic->getSensorValue(id)));
-            });
+            // WIP: making this right
+//            connect(this->cm->HundredMsTimer, &QTimer::timeout, sensorValueLabel, [=]() {
+//                sensorValueLabel->setText(QString::number(this->smic->getSensorValue(id)));
+//            });
 
             this->stateUI->actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
             this->stateUI->actionsLayout->addWidget(sensorValueLabel, row, 1);
@@ -105,17 +104,37 @@ void StateUIHandler::displayState(const State& s) {
     }
 }
 
+void StateUIHandler::displayProcessSummary(std::vector<std::string> processSummary) {
+    for (std::string summary : processSummary) {
+        QGroupBox* summaryBox = new QGroupBox("", this->stateUI->psFrame);
+        QLabel* summaryLabel = new QLabel(QString::fromStdString(summary), this->stateUI->psFrame);
+        summaryLabel->setWordWrap(true);
+        QHBoxLayout* h = new QHBoxLayout();
+        h->addWidget(summaryLabel);
+        summaryBox->setLayout(h);
+        this->stateUI->psLayout->addWidget(summaryBox);
+    }
+}
+
+void StateUIHandler::allowProceed(bool permission) {
+    this->stateUI->proceedButton->setEnabled(permission);
+}
+
+void StateUIHandler::allowAbort(bool permission) {
+    this->stateUI->abortButton->setEnabled(permission);
+}
+
 
 QLabel* StateUIHandler::timedActuatorHandler(QPushButton* aButton) {
     QLabel* elapsedTimeLabel = new QLabel();
     connect(aButton, &QPushButton::toggled, elapsedTimeLabel, [=](bool checked) {
         if (checked) {
-            connect(this->cm->oneSTimer, &QTimer::timeout, elapsedTimeLabel, [=]() {
+            connect(this->cm.oneSTimer, &QTimer::timeout, elapsedTimeLabel, [=]() {
                 int elapsedTime = elapsedTimeLabel->text().toInt() + 1;
                 elapsedTimeLabel->setText(QString::number(elapsedTime));
             });
         } else {
-            disconnect(this->cm->oneSTimer, &QTimer::timeout, elapsedTimeLabel, nullptr);
+            disconnect(this->cm.oneSTimer, &QTimer::timeout, elapsedTimeLabel, nullptr);
             elapsedTimeLabel->setText("");
         }
     });

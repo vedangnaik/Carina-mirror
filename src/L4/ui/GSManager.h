@@ -53,6 +53,8 @@ private:
 
     SensorValuesGateway* svg;
     ActuatorsController* ac;
+    StatesController* stc;
+
     StateUIHandler* suih;
 };
 
