@@ -33,7 +33,7 @@ void StateUIHandler::displayState(const State& s) {
         if (s.actuatorOptions.find(id) != s.actuatorOptions.end()) {
             QPushButton* aButton = new QPushButton(QString::fromStdString(id));
             aButton->setCheckable(true);
-            connect(aButton, &QPushButton::toggled, &this->acic, [&]() {
+            connect(aButton, &QPushButton::toggled, &this->acic, [=]() {
                 this->acic.actuate(id);
             });
 
