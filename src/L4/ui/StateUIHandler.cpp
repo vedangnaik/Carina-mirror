@@ -105,6 +105,12 @@ void StateUIHandler::displayState(const State& s) {
 }
 
 void StateUIHandler::displayProcessSummary(std::vector<std::string> processSummary) {
+    QLayoutItem* child;
+    while ((child = this->stateUI->psLayout->takeAt(0)) != nullptr) {
+        delete child->widget();
+        delete child;
+    }
+
     for (std::string summary : processSummary) {
         QGroupBox* summaryBox = new QGroupBox("", this->stateUI->psFrame);
         QLabel* summaryLabel = new QLabel(QString::fromStdString(summary), this->stateUI->psFrame);
