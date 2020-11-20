@@ -1,5 +1,10 @@
 #include "StateUIHandler.h"
 
+// forward declared helpers
+void clearLayout(QLayout* l);
+QLabel* displaySensorCheck(const SensorCheck& sc);
+QLabel* displayActuatorCheck(const ActuatorCheck& ac);
+
 StateUIHandler::StateUIHandler(Ui::State* stateUI, ACIC& acic, StCIC& stcic, ClocksModule& cm) : stateUI(stateUI), acic(acic), stcic(stcic), cm(cm) {
     connect(this->stateUI->proceedButton, &QPushButton::clicked, &this->stcic, &StCIC::proceed);
     connect(this->stateUI->abortButton, &QPushButton::clicked, &this->stcic, &StCIC::abort);
@@ -10,11 +15,7 @@ StateUIHandler::~StateUIHandler() {
 }
 
 void StateUIHandler::displayState(const State& s) {
-    QLayoutItem* child;
-    while ((child = this->stateUI->actionsLayout->takeAt(0)) != nullptr) {
-        delete child->widget();
-        delete child;
-    }
+    clearLayout(this->stateUI->actionsLayout);
 
     this->stateUI->nameLabel->setText(QString::fromStdString(s.name));
     this->stateUI->abortLabel->setText(QString::fromStdString(s.transitions.at(Transition::Abort)));
@@ -52,9 +53,7 @@ void StateUIHandler::displayState(const State& s) {
             }
         } else if (s.sensorOptions.find(id) != s.sensorOptions.end()) {
             QLabel* sensorValueLabel = new QLabel();
-            this->cm.stop();
-            this->sensorDisplays.insert(std::make_pair(id, sensorValueLabel));
-            this->cm.start();
+            this->subscribe(id, sensorValueLabel);
 
             this->stateUI->actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
             this->stateUI->actionsLayout->addWidget(sensorValueLabel, row, 1);
@@ -91,12 +90,7 @@ void StateUIHandler::displayState(const State& s) {
 }
 
 void StateUIHandler::displayProcessSummary(const std::vector<std::string> processSummary) {
-    QLayoutItem* child;
-    while ((child = this->stateUI->psLayout->takeAt(0)) != nullptr) {
-        delete child->widget();
-        delete child;
-    }
-
+    clearLayout(this->stateUI->psLayout);
     for (const std::string& summary : processSummary) {
         QGroupBox* summaryBox = new QGroupBox("", this->stateUI->psFrame);
         QLabel* summaryLabel = new QLabel(QString::fromStdString(summary), this->stateUI->psFrame);
@@ -117,7 +111,9 @@ void StateUIHandler::allowAbort(bool permission) {
 }
 
 void StateUIHandler::displaySensorValue(const std::string id, const float value) {
-    this->sensorDisplays.at(id)->setText(QString::number(value));
+    if (this->sensorDisplaySubscribers.find(id) != this->sensorDisplaySubscribers.end()) {
+        this->sensorDisplaySubscribers.at(id)->setText(QString::number(value));
+    }
 }
 
 QLabel* StateUIHandler::displayTimedActuator(QPushButton* aButton) {
@@ -136,10 +132,32 @@ QLabel* StateUIHandler::displayTimedActuator(QPushButton* aButton) {
     return elapsedTimeLabel;
 }
 
-QLabel* StateUIHandler::displaySensorCheck(const SensorCheck& sc) {
+void StateUIHandler::subscribe(std::string id, QLabel* label) {
+    this->cm.stop();
+    this->sensorDisplaySubscribers.insert(std::make_pair(id, label));
+    this->cm.start();
+    connect(label, &QLabel::destroyed, this, [=]() {
+        this->cm.stop();
+        this->sensorDisplaySubscribers.erase(id);
+        this->cm.start();
+    });
+}
+
+
+
+
+QLabel* displaySensorCheck(const SensorCheck& sc) {
     return new QLabel("[" + QString::number(sc.a) + ", " + QString::number(sc.b) + "]");
 }
 
-QLabel* StateUIHandler::displayActuatorCheck(const ActuatorCheck& ac) {
+QLabel* displayActuatorCheck(const ActuatorCheck& ac) {
     return new QLabel(QVariant(ac.status).toString());
+}
+
+void clearLayout(QLayout* l) {
+    QLayoutItem* child;
+    while ((child = l->takeAt(0)) != nullptr) {
+        delete child->widget();
+        delete child;
+    }
 }

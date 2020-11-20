@@ -33,10 +33,9 @@ public:
     void displaySensorValue(const std::string id, const float value);
 private:
     QLabel* displayTimedActuator(QPushButton* aButton);
-    QLabel* displaySensorCheck(const SensorCheck& sc);
-    QLabel* displayActuatorCheck(const ActuatorCheck& ac);
+    void subscribe(std::string id, QLabel* label);
 
-    std::map<std::string, QLabel*> sensorDisplays;
+    std::map<std::string, QLabel*> sensorDisplaySubscribers;
 
     Ui::State* stateUI;
     ACIC& acic;
