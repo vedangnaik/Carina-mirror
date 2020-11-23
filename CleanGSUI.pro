@@ -27,6 +27,7 @@ SOURCES += \
     src/L3/presenters/StatesPresenter.cpp \
     src/L4/daq/DAQPlaceHolder.cpp \
     src/L4/ui/GSManager.cpp \
+    src/L4/ui/MovableQPushButton.cpp \
     src/L4/ui/StateUIHandler.cpp \
     src/main.cpp \
     src/L2/usecases/ActuatorsManager.cpp \
@@ -47,6 +48,7 @@ HEADERS += \
     src/L3/presenters/StatesPresenter.h \
     src/L4/daq/DAQPlaceHolder.h \
     src/L4/ui/GSManager.h \
+    src/L4/ui/MovableQPushButton.h \
     src/L4/ui/StateUIHandler.h \
     src/L2/usecases/ActuatorsManager.h \
     src/L2/usecases/SensorsManager.h \
