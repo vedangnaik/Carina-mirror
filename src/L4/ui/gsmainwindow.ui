@@ -44,6 +44,9 @@
       <property name="lineWidth">
        <number>2</number>
       </property>
+      <property name="midLineWidth">
+       <number>0</number>
+      </property>
       <widget class="MovableQPushButton" name="pushButton">
        <property name="geometry">
         <rect>
@@ -59,8 +62,14 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="text">
         <string>Test</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
        </property>
       </widget>
      </widget>

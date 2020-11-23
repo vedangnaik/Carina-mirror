@@ -2,8 +2,8 @@
 #define MOVABLEQPUSHBUTTON_H
 
 #include <QPushButton>
-#include <iostream>
 #include <QMouseEvent>
+#include <QFrame>
 
 class MovableQPushButton : public QPushButton {
     using QPushButton::QPushButton;
@@ -11,7 +11,7 @@ protected:
     void mouseMoveEvent(QMouseEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
 private:
-    QPoint mouseClickStartPoint;
+    QPoint cursorPosOnMoveStart;
 };
 
 #endif // MOVABLEQPUSHBUTTON_H
