@@ -1,15 +1,11 @@
 #include "MovableQPushButton.h"
 
 void MovableQPushButton::mouseMoveEvent(QMouseEvent* event) {
-    // this static casting is bad practice cause it messes with OOP,
-    // but I can't think of any other way to do this. If it's messing
-    // with performance, it can be removed, at cost of an uglier UI.
-    QFrame* parentFrame = static_cast<QFrame*>(this->parent());
-    const QRect& frameRect = parentFrame->geometry();
+    const QRect& frameRect = this->parentFrame->geometry();
     // Usage of frameWidth is only correct if the frameStyle is Panel or Box
     // (among others). If this is changed, the calculations here must change
     // as well. A style check could be added here, but eh.
-    const int frameWidth = parentFrame->frameWidth();
+    const int frameWidth = this->parentFrame->frameWidth();
 
     QPoint cursorPosOnMoveEnd = event->localPos().toPoint();
     QPoint currentPos = this->pos();
