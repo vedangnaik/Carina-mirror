@@ -4,7 +4,6 @@
 #include <QPushButton>
 #include <QMouseEvent>
 #include <QFrame>
-#include <iostream>
 
 class MovableQPushButton : public QPushButton {
 public:

@@ -50,8 +50,8 @@
       <widget class="MovableQPushButton" name="pushButton">
        <property name="geometry">
         <rect>
-         <x>188</x>
-         <y>230</y>
+         <x>122</x>
+         <y>210</y>
          <width>83</width>
          <height>25</height>
         </rect>
@@ -70,6 +70,19 @@
        </property>
        <property name="checkable">
         <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="MovableQLabel" name="label">
+       <property name="geometry">
+        <rect>
+         <x>134</x>
+         <y>310</y>
+         <width>62</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Test label</string>
        </property>
       </widget>
      </widget>
@@ -105,6 +118,11 @@
    <class>MovableQPushButton</class>
    <extends>QPushButton</extends>
    <header>src/L4/ui/MovableQPushButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MovableQLabel</class>
+   <extends>QLabel</extends>
+   <header>src/L4/ui/MovableQLabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
