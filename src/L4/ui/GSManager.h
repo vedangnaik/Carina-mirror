@@ -24,6 +24,7 @@
 // L4
 #include "src/L4/daq/DAQPlaceHolder.h"
 #include "src/L4/ui/StateUIHandler.h"
+#include "src/L4/ui/Draggable.h"
 
 
 QT_BEGIN_NAMESPACE

@@ -10,6 +10,9 @@ GSManager::GSManager() {
     this->stateUI->setupUi(this);
     this->mainWindowUI->stateLayout->addWidget(this->stateUI->StateWidget);
 
+    Draggable<QPushButton>* dqpb = new Draggable<QPushButton>(this->mainWindowUI->frame);
+    dqpb->setText("Test");
+
     connect(mainWindowUI->openProcessFromFileAction, &QAction::triggered, this, [&]() {
         QString fileName = QFileDialog::getOpenFileName(this,
             tr("Open Process File"), "/home/vedang/Desktop/");
