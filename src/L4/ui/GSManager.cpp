@@ -33,8 +33,8 @@ void GSManager::createProcess(std::string filepath) {
     this->stc = new StatesController(*this->stm);
 
     this->suih = new StateUIHandler(this->stateUI, *this->ac, *this->stc, *this->cm);
-    this->sduih = new SystemDiagramUIHandler(this->systemDiagramUI);
-    this->sp = new SensorsPresenter({this->suih});
+    this->sduih = new SystemDiagramUIHandler(this->systemDiagramUI, *this->ac, *this->cm);
+    this->sp = new SensorsPresenter({this->suih, this->sduih});
     this->stp = new StatesPresenter(*this->suih);
 
     this->sm->setOutputContract(this->sp);

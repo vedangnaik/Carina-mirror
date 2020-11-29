@@ -4,7 +4,12 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QLabel>
-#include "Draggable.h"
+
+#include "src/L4/ui/Draggable.h"
+#include "src/L3/controllers/ActuatorsController.h"
+#include "src/L3/presenters/SensorsPresenter.h"
+#include "src/L2/services/ClocksModule.h"
+#include "ui_systemdiagram.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -12,12 +17,18 @@ namespace Ui {
 }
 QT_END_NAMESPACE
 
-class SystemDiagramUIHandler : public QWidget {
+class SystemDiagramUIHandler : public QWidget, public SPOC {
     Q_OBJECT
 public:
-    SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI);
+    SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI, ACIC& acic, ClocksModule& cm);
+    void displaySensorValue(const std::string id, const float value);
 private:
+    void subscribe(std::string id, QLabel* label);
+
+    std::map<std::string, QLabel*> sensorDisplaySubscribers;
     Ui::SystemDiagram& systemDiagramUI;
+    ACIC& acic;
+    ClocksModule& cm;
 };
 
 #endif // SYSTEMDIAGRAMUIHANDLER_H
