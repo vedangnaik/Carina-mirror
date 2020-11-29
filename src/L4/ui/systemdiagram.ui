@@ -22,11 +22,7 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2"/>
-      </item>
-     </layout>
+     <layout class="QHBoxLayout" name="horizontalLayout_3"/>
     </widget>
    </item>
   </layout>

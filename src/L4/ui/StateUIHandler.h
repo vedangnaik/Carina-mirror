@@ -22,8 +22,7 @@ QT_END_NAMESPACE
 class StateUIHandler : public QWidget, public StPOC, public SPOC {
     Q_OBJECT
 public:
-    StateUIHandler(Ui::State* stateUI, ACIC& acic, StCIC& stcic, ClocksModule& cm);
-    ~StateUIHandler();
+    StateUIHandler(Ui::State& stateUI, ACIC& acic, StCIC& stcic, ClocksModule& cm);
 
     void displayProcessSummary(const std::vector<std::string> processSummary);
     void displayState(const State& s);
@@ -37,7 +36,7 @@ private:
 
     std::map<std::string, QLabel*> sensorDisplaySubscribers;
 
-    Ui::State* stateUI;
+    Ui::State& stateUI;
     ACIC& acic;
     StCIC& stcic;
     ClocksModule& cm;

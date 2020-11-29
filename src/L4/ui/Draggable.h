@@ -4,12 +4,18 @@
 #include <QWidget>
 #include <QFrame>
 #include <QMouseEvent>
+#include <iostream>
 
 template <typename T>
 class Draggable : public T {
     static_assert(std::is_base_of<QWidget, T>::value, "T must inherit from QWidget");
 public:
-    Draggable(QFrame* parent) : T(parent), parentFrame{parent} {};
+    Draggable(QFrame* parent) : T(parent), parentFrame{parent} {
+        std::cout << "Constructed" << std::endl;
+    };
+    ~Draggable() {
+        std::cout << "Destructed" << std::endl;
+    }
 protected:
     void mouseMoveEvent(QMouseEvent* event) override {
         const QRect& frameRect = this->parentFrame->geometry();

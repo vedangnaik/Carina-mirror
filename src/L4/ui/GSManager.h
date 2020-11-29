@@ -26,6 +26,9 @@
 #include "src/L4/ui/StateUIHandler.h"
 #include "src/L4/ui/SystemDiagramUIhandler.h"
 
+#include "ui_gsmainwindow.h"
+#include "ui_state.h"
+#include "ui_systemdiagram.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -39,15 +42,15 @@ class GSManager : public QMainWindow {
     Q_OBJECT
 public:
     GSManager();
-    ~GSManager();
 
     void createProcess(std::string filepath);
     void startProcess();
     void closeProcess();
 private:
-    Ui::GSMainWindow* GSMainWindowUI;
-    Ui::State* stateUI;
-    Ui::SystemDiagram* systemDiagramUI;
+    Ui::GSMainWindow GSMainWindowUI;
+    Ui::State stateUI;
+    Ui::SystemDiagram systemDiagramUI;
+    Draggable<QPushButton>* btn;
     // L2
     ClocksModule* cm;
     SensorsManager* sm;

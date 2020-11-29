@@ -12,14 +12,12 @@ namespace Ui {
 }
 QT_END_NAMESPACE
 
-class SystemDiagramUIHandler : public QWidget
-{
+class SystemDiagramUIHandler : public QWidget {
     Q_OBJECT
 public:
-    SystemDiagramUIHandler(Ui::SystemDiagram* systemDiagramUI);
-    ~SystemDiagramUIHandler();
+    SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI);
 private:
-    Ui::SystemDiagram* systemDiagramUI;
+    Ui::SystemDiagram& systemDiagramUI;
 };
 
 #endif // SYSTEMDIAGRAMUIHANDLER_H
