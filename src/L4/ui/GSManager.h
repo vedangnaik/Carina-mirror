@@ -24,14 +24,14 @@
 // L4
 #include "src/L4/daq/DAQPlaceHolder.h"
 #include "src/L4/ui/StateUIHandler.h"
-#include "src/L4/ui/Draggable.h"
+#include "src/L4/ui/SystemDiagramUIhandler.h"
 
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
     class GSMainWindow;
     class State;
-    // class SystemDiagram
+    class SystemDiagram;
 }
 QT_END_NAMESPACE
 
@@ -45,8 +45,9 @@ public:
     void startProcess();
     void closeProcess();
 private:
-    Ui::GSMainWindow* mainWindowUI;
+    Ui::GSMainWindow* GSMainWindowUI;
     Ui::State* stateUI;
+    Ui::SystemDiagram* systemDiagramUI;
     // L2
     ClocksModule* cm;
     SensorsManager* sm;
@@ -60,6 +61,7 @@ private:
     StatesPresenter* stp;
     // L4
     StateUIHandler* suih;
+    SystemDiagramUIHandler* sduih;
     DAQPlaceholder* daqp;
 };
 

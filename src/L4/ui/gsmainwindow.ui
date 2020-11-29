@@ -49,7 +49,7 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout"/>
+        <layout class="QHBoxLayout" name="systemDiagramLayout"/>
        </item>
       </layout>
      </widget>

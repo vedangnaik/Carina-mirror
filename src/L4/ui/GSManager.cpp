@@ -1,19 +1,24 @@
 #include "GSManager.h"
 #include "ui_gsmainwindow.h"
 #include "ui_state.h"
+#include "ui_systemdiagram.h"
 
 
 GSManager::GSManager() {
-    this->mainWindowUI = new Ui::GSMainWindow;
-    this->mainWindowUI->setupUi(this);
+    this->GSMainWindowUI = new Ui::GSMainWindow;
+    this->GSMainWindowUI->setupUi(this);
     this->stateUI = new Ui::State;
     this->stateUI->setupUi(this);
-    this->mainWindowUI->stateLayout->addWidget(this->stateUI->StateWidget);
+    this->systemDiagramUI = new Ui::SystemDiagram;
+    this->systemDiagramUI->setupUi(this);
 
-    Draggable<QPushButton>* dqpb = new Draggable<QPushButton>(this->mainWindowUI->frame);
-    dqpb->setText("Test");
+    this->GSMainWindowUI->stateLayout->addWidget(this->stateUI->StateWidget);
+    this->GSMainWindowUI->systemDiagramLayout->addWidget(this->systemDiagramUI->systemDiagramFrame);
 
-    connect(mainWindowUI->openProcessFromFileAction, &QAction::triggered, this, [&]() {
+//    Draggable<QPushButton>* btn = new Draggable<QPushButton>(this->systemDiagramUI->systemDiagramFrame);
+//    btn->setText("test");
+
+    connect(GSMainWindowUI->openProcessFromFileAction, &QAction::triggered, this, [&]() {
         QString fileName = QFileDialog::getOpenFileName(this,
             tr("Open Process File"), "/home/vedang/Desktop/");
         if (fileName != "") {
@@ -23,7 +28,7 @@ GSManager::GSManager() {
 }
 
 GSManager::~GSManager() {
-    delete mainWindowUI;
+    delete GSMainWindowUI;
 }
 
 void GSManager::createProcess(std::string filepath) {
@@ -41,6 +46,7 @@ void GSManager::createProcess(std::string filepath) {
     this->stc = new StatesController(*this->stm);
 
     this->suih = new StateUIHandler(this->stateUI, *this->ac, *this->stc, *this->cm);
+    this->sduih = new SystemDiagramUIHandler(this->systemDiagramUI);
     this->sp = new SensorsPresenter({this->suih});
     this->stp = new StatesPresenter(*this->suih);
 

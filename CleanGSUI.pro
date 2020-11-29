@@ -28,6 +28,7 @@ SOURCES += \
     src/L4/daq/DAQPlaceHolder.cpp \
     src/L4/ui/GSManager.cpp \
     src/L4/ui/StateUIHandler.cpp \
+    src/L4/ui/SystemDiagramUIhandler.cpp \
     src/main.cpp \
     src/L2/usecases/ActuatorsManager.cpp \
     src/L2/usecases/SensorsManager.cpp \
@@ -51,11 +52,13 @@ HEADERS += \
     src/L4/ui/StateUIHandler.h \
     src/L2/usecases/ActuatorsManager.h \
     src/L2/usecases/SensorsManager.h \
-    src/L2/services/ClocksModule.h
+    src/L2/services/ClocksModule.h \
+    src/L4/ui/SystemDiagramUIhandler.h
 
 FORMS += \
     src/L4/ui/gsmainwindow.ui \
-    src/L4/ui/state.ui
+    src/L4/ui/state.ui \
+    src/L4/ui/systemdiagram.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
