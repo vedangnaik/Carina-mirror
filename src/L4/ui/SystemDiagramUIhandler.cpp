@@ -1,16 +1,6 @@
 #include "SystemDiagramUIhandler.h"
 
-SystemDiagramUIHandler::SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI, ACIC& acic, ClocksModule& cm) : systemDiagramUI(systemDiagramUI), acic(acic), cm(cm) {
-    Draggable<QPushButton>* btn = new Draggable<QPushButton>(this->systemDiagramUI.systemDiagramFrame);
-    btn->setText("test");
-    Draggable<QLabel>* l = new Draggable<QLabel>(this->systemDiagramUI.systemDiagramFrame);
-    this->subscribe("sens1", l);
-
-    this->systemDiagramUI.systemDiagramFrame->layout()->addWidget(btn);
-    this->systemDiagramUI.systemDiagramFrame->layout()->addWidget(l);
-
-    delete this->systemDiagramUI.systemDiagramFrame->layout();
-}
+SystemDiagramUIHandler::SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI, ACIC& acic, ClocksModule& cm) : systemDiagramUI(systemDiagramUI), acic(acic), cm(cm) {}
 
 void SystemDiagramUIHandler::subscribe(std::string id, QLabel* label) {
     this->cm.stop();
@@ -27,4 +17,23 @@ void SystemDiagramUIHandler::displaySensorValue(const std::string id, const floa
     if (this->sensorDisplaySubscribers.find(id) != this->sensorDisplaySubscribers.end()) {
         this->sensorDisplaySubscribers.at(id)->setText(QString::number(value));
     }
+}
+
+void SystemDiagramUIHandler::renderSystemDiagram(std::vector<std::string> sensorIds, std::vector<std::string> actuatorIds) {
+    for (const auto& id : sensorIds) {
+        Draggable<QLabel>* sensorValueLabel = new Draggable<QLabel>(this->systemDiagramUI.systemDiagramFrame);
+        sensorValueLabel->setText("________");
+        this->subscribe(id, sensorValueLabel);
+        this->systemDiagramUI.systemDiagramFrame->layout()->addWidget(sensorValueLabel);
+    }
+    for (const auto& id: actuatorIds) {
+        Draggable<QPushButton>* aButton = new Draggable<QPushButton>(this->systemDiagramUI.systemDiagramFrame);
+        aButton->setCheckable(true);
+        aButton->setText(QString::fromStdString(id));
+        connect(aButton, &QPushButton::toggled, &this->acic, [=]() {
+            this->acic.actuate(id);
+        });
+        this->systemDiagramUI.systemDiagramFrame->layout()->addWidget(aButton);
+    }
+    delete this->systemDiagramUI.systemDiagramFrame->layout();
 }

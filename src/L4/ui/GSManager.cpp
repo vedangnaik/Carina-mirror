@@ -42,6 +42,15 @@ void GSManager::createProcess(std::string filepath) {
 
     this->daqp = new DAQPlaceholder(this->cm, this->svg);
 
+    std::vector<std::string> sensorIds, actuatorIds;
+    for (const auto& [id, _] : pgdata.sensors) {
+        sensorIds.push_back(id);
+    }
+    for (const auto& [id, _] : pgdata.actuators) {
+        actuatorIds.push_back(id);
+    }
+
+    this->sduih->renderSystemDiagram(sensorIds, actuatorIds);
     this->stm->startProcess();
     this->daqp->startAcquisition();
     this->cm->start();
