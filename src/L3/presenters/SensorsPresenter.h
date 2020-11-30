@@ -14,7 +14,7 @@ public:
 
 class SPIC {
 public:
-    virtual void subscribe(std::string id, SPOC* svc) = 0;
+    virtual void subscribe(std::string id, SPOC* spoc) = 0;
     virtual ~SPIC() {};
 };
 

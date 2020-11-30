@@ -13,6 +13,10 @@ void SensorsPresenter::displaySensorValue(const std::string id, const float valu
 
 void SensorsPresenter::subscribe(std::string id, SPOC* spoc) {
     this->cm.stop();
-    this->subscribers.at(id).push_back(spoc);
+    if (this->subscribers.find(id) == this->subscribers.end()) {
+        this->subscribers.insert(std::make_pair(id, std::vector<SPOC*>{spoc}));
+    } else {
+        this->subscribers.at(id).push_back(spoc);
+    }
     this->cm.start();
 }
