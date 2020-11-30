@@ -9,15 +9,29 @@ GSManager::GSManager() {
     this->GSMainWindowUI.stateFrame->layout()->addWidget(this->stateUI.StateWidget);
     this->GSMainWindowUI.systemDiagramFrame->layout()->addWidget(this->systemDiagramUI.systemDiagramFrame);
 
-    connect(GSMainWindowUI.openProcessFromFileAction, &QAction::triggered, this, [&]() {
+    connect(this->GSMainWindowUI.openProcessFromFileAction, &QAction::triggered, this, [=]() {
         QString fileName = QFileDialog::getOpenFileName(this,
             tr("Open Process File"), "/home/vedang/Desktop/");
         if (fileName != "") {
             this->createProcess(fileName.toStdString());
+            this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
+            this->GSMainWindowUI.startProcessAction->setEnabled(true);
         }
     });
 
-    connect(GSMainWindowUI.openSystemDiagramAction, &QAction::triggered, this, [&]() {
+    connect(this->GSMainWindowUI.startProcessAction, &QAction::triggered, this, [=]() {
+        this->startProcess();
+        this->GSMainWindowUI.startProcessAction->setEnabled(false);
+        this->GSMainWindowUI.closeProcessAction->setEnabled(true);
+    });
+
+    connect(this->GSMainWindowUI.closeProcessAction, &QAction::triggered, this, [=]() {
+        this->closeProcess();
+        this->GSMainWindowUI.closeProcessAction->setEnabled(false);
+        this->GSMainWindowUI.openProcessFromFileAction->setEnabled(true);
+    });
+
+    connect(this->GSMainWindowUI.openSystemDiagramAction, &QAction::triggered, this, [=]() {
         QString fileName = QFileDialog::getOpenFileName(this,
             tr("Open System Diagram Image"), "/home/vedang/Desktop/");
         if (fileName != "") {
@@ -25,7 +39,7 @@ GSManager::GSManager() {
         }
     });
 
-    connect(GSMainWindowUI.clearSystemDiagramAction, &QAction::triggered, this, [&]() {
+    connect(this->GSMainWindowUI.clearSystemDiagramAction, &QAction::triggered, this, [=]() {
         this->systemDiagramUI.systemDiagramFrame->setStyleSheet("");
     });
 }
@@ -53,25 +67,14 @@ void GSManager::createProcess(std::string filepath) {
     this->stm->setOutputContract(this->stp);
 
     this->daqp = new DAQPlaceholder(this->cm, this->svg);
+}
 
-    std::vector<std::string> sensorIds, actuatorIds;
-    for (const auto& [id, _] : pgdata.sensors) {
-        sensorIds.push_back(id);
-    }
-    for (const auto& [id, _] : pgdata.actuators) {
-        actuatorIds.push_back(id);
-    }
-
-    this->sduih->renderSystemDiagram(sensorIds, actuatorIds);
+void GSManager::startProcess() {
     this->stm->startProcess();
     this->daqp->startAcquisition();
     this->cm->start();
 }
 
 void GSManager::closeProcess() {
-
-}
-
-void GSManager::startProcess() {
 
 }

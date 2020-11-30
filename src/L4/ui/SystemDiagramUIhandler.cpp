@@ -1,7 +1,5 @@
 #include "SystemDiagramUIhandler.h"
 
-SystemDiagramUIHandler::SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI, ACIC& acic, ClocksModule& cm) : systemDiagramUI(systemDiagramUI), acic(acic), cm(cm) {}
-
 void SystemDiagramUIHandler::subscribe(std::string id, QLabel* label) {
     this->cm.stop();
     this->sensorDisplaySubscribers.insert(std::make_pair(id, label));

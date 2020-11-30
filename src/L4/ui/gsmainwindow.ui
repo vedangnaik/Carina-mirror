@@ -70,6 +70,9 @@
      <string>Process</string>
     </property>
     <addaction name="openProcessFromFileAction"/>
+    <addaction name="separator"/>
+    <addaction name="startProcessAction"/>
+    <addaction name="closeProcessAction"/>
    </widget>
    <widget class="QMenu" name="menuSystem_Diagram">
     <property name="title">
@@ -90,17 +93,33 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="openProcessFromFileAction">
    <property name="text">
-    <string>Open from file</string>
+    <string>Open Process File</string>
    </property>
   </action>
   <action name="openSystemDiagramAction">
    <property name="text">
-    <string>Open image</string>
+    <string>Open Image</string>
    </property>
   </action>
   <action name="clearSystemDiagramAction">
    <property name="text">
-    <string>Clear image</string>
+    <string>Clear Image</string>
+   </property>
+  </action>
+  <action name="startProcessAction">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Start Process</string>
+   </property>
+  </action>
+  <action name="closeProcessAction">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Close Process</string>
    </property>
   </action>
  </widget>
