@@ -9,6 +9,7 @@ class SVGIC : public QObject {
 public:
     virtual void updateValue(std::string id, float value) = 0;
     virtual std::vector<std::string> getSensorIDs() = 0;
+    virtual ~SVGIC() {};
 };
 
 

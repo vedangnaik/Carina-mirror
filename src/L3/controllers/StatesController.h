@@ -9,6 +9,7 @@ class StCIC : public QObject {
 public:
     virtual void proceed() = 0;
     virtual void abort() = 0;
+    virtual ~StCIC() {};
 };
 
 class StatesController : public StCIC {

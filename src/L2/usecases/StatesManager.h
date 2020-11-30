@@ -10,6 +10,7 @@ class StMOC {
 public:
     virtual void displayStatesSummary(const std::vector<std::string> processSummary) = 0;
     virtual void displayState(const State& s) = 0;
+    virtual ~StMOC() {};
 };
 
 class StMIC {

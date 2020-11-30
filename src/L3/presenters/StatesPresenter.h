@@ -10,6 +10,7 @@ public:
     virtual void displayState(const State& s) = 0;
     virtual void allowProceed(bool permission) = 0;
     virtual void allowAbort(bool permission) = 0;
+    virtual ~StPOC() {};
 };
 
 class StatesPresenter : public StMOC {

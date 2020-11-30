@@ -7,12 +7,14 @@
 
 class AMOC {
 public:
+    virtual ~AMOC() {};
 };
 
 class AMIC {
 public:
     virtual bool getActuatorStatus(std::string id) = 0;
     virtual void actuate(std::string id) = 0;
+    virtual ~AMIC() {};
 };
 
 class ActuatorsManager : public AMIC {

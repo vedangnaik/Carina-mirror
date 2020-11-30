@@ -6,6 +6,7 @@
 class SPOC {
 public:
     virtual void displaySensorValue(const std::string id, const float value) = 0;
+    virtual ~SPOC() {};
 };
 
 class SensorsPresenter : public SMOC {

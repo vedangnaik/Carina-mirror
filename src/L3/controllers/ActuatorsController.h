@@ -9,6 +9,7 @@ class ACIC : public QObject {
     Q_OBJECT
 public:
     virtual void actuate(std::string id) = 0;
+    virtual ~ACIC() {};
 };
 
 class ActuatorsController : public ACIC {

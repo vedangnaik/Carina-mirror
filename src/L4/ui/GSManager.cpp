@@ -8,7 +8,7 @@ GSManager::GSManager() {
         QString fileName = QFileDialog::getOpenFileName(this,
             tr("Open Process File"), "/home/vedang/Desktop/");
         if (fileName != "") {
-            this->makeProcessFromFile(fileName.toStdString());
+            this->openProcessFromFile(fileName.toStdString());
             this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
             this->GSMainWindowUI.startProcessAction->setEnabled(true);
         }
@@ -39,7 +39,7 @@ GSManager::GSManager() {
     });
 }
 
-void GSManager::makeProcessFromFile(std::string filepath) {
+void GSManager::openProcessFromFile(std::string filepath) {
     // Only use for Process Gateway
     ProcessGateway pg(filepath);
     struct ProcessData pgdata = pg.parseProcessFile();
@@ -54,11 +54,11 @@ void GSManager::makeProcessFromFile(std::string filepath) {
     this->ac = new ActuatorsController(*this->am);
     this->stc = new StatesController(*this->stm);
     // init L4 and presenters here
-    this->daqp = new DAQPlaceholder(this->cm, this->svg);
     this->suih = new StateUIHandler(this->stateUI, *this->ac, *this->stc, *this->cm);
     this->sduih = new SystemDiagramUIHandler(this->systemDiagramUI, *this->ac, *this->cm);
     this->sp = new SensorsPresenter({this->suih, this->sduih});
     this->stp = new StatesPresenter(*this->suih);
+    this->daqp = new DAQPlaceholder(this->cm, this->svg);
     // attach presenters to managers (kinda ugly, but idk another way to do it)
     this->sm->setOutputContract(this->sp);
     this->stm->setOutputContract(this->stp);
@@ -78,15 +78,32 @@ void GSManager::stopProcess() {
 
 void GSManager::closeProcess() {
     this->stopProcess();
-
+    // these deletes are in the opposite order
+    // to the constructs in openProcess().
     delete this->daqp;
+    delete this->stp;
+    delete this->sp;
+    delete this->sduih;
+    delete this->suih;
+    delete this->stc;
+    delete this->ac;
+    delete this->svg;
     delete this->stm;
+    delete this->am;
+    delete this->sm;
+    delete this->cm;
+    // rerender the UI for the next process.
+    this->rerenderUi();
 }
 
 void GSManager::renderUi() {
     this->GSMainWindowUI.setupUi(this);
-    this->stateUI.setupUi(this);
-    this->systemDiagramUI.setupUi(this);
-    this->GSMainWindowUI.stateFrame->layout()->addWidget(this->stateUI.StateWidget);
-    this->GSMainWindowUI.systemDiagramFrame->layout()->addWidget(this->systemDiagramUI.systemDiagramFrame);
+    this->stateUI.setupUi(this->GSMainWindowUI.stateFrame);
+    this->systemDiagramUI.setupUi(this->GSMainWindowUI.systemDiagramFrame);
+}
+
+// The render function also 'rerenders' the UI by overwriting the old UI. I've
+// made it its 'own' function to avoid confusion with the name.
+void GSManager::rerenderUi() {
+    this->renderUi();
 }
