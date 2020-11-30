@@ -1,6 +1,5 @@
 #include "GSManager.h"
 
-
 GSManager::GSManager() {
     this->renderUi();
 
@@ -102,8 +101,16 @@ void GSManager::renderUi() {
     this->systemDiagramUI.setupUi(this->GSMainWindowUI.systemDiagramFrame);
 }
 
-// The render function also 'rerenders' the UI by overwriting the old UI. I've
-// made it its 'own' function to avoid confusion with the name.
+// this function surgically removes only the necessary bits instead of just
+// overwriting everything using renderUi to preserve the signal slot connects
+// made in the constructor.
 void GSManager::rerenderUi() {
-    this->renderUi();
+    // clear stateFrame's layout, delete it, then remake and re-add the state UI.
+    uihelpers::clearLayout(this->GSMainWindowUI.stateFrame->layout());
+    delete this->GSMainWindowUI.stateFrame->layout();
+    this->stateUI.setupUi(this->GSMainWindowUI.stateFrame);
+    // same as above for systemDiagramFrame.
+    uihelpers::clearLayout(this->GSMainWindowUI.systemDiagramFrame->layout());
+    delete this->GSMainWindowUI.systemDiagramFrame->layout();
+    this->systemDiagramUI.setupUi(this->GSMainWindowUI.systemDiagramFrame);
 }

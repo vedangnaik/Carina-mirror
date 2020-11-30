@@ -1,7 +1,6 @@
 #include "StateUIHandler.h"
 
 // forward declared helpers
-void clearLayout(QLayout* l);
 QLabel* displaySensorCheck(const SensorCheck& sc);
 QLabel* displayActuatorCheck(const ActuatorCheck& ac);
 
@@ -11,7 +10,7 @@ StateUIHandler::StateUIHandler(Ui::State& stateUI, ACIC& acic, StCIC& stcic, Clo
 };
 
 void StateUIHandler::displayState(const State& s) {
-    clearLayout(this->stateUI.actionsLayout);
+    uihelpers::clearLayout(this->stateUI.actionsLayout);
 
     this->stateUI.nameLabel->setText(QString::fromStdString(s.name));
     this->stateUI.abortLabel->setText(QString::fromStdString(s.transitions.at(Transition::Abort)));
@@ -86,7 +85,7 @@ void StateUIHandler::displayState(const State& s) {
 }
 
 void StateUIHandler::displayProcessSummary(const std::vector<std::string> processSummary) {
-    clearLayout(this->stateUI.psLayout);
+    uihelpers::clearLayout(this->stateUI.psLayout);
     for (const std::string& summary : processSummary) {
         QGroupBox* summaryBox = new QGroupBox("", this->stateUI.psFrame);
         QLabel* summaryLabel = new QLabel(QString::fromStdString(summary), this->stateUI.psFrame);
@@ -148,12 +147,4 @@ QLabel* displaySensorCheck(const SensorCheck& sc) {
 
 QLabel* displayActuatorCheck(const ActuatorCheck& ac) {
     return new QLabel(QVariant(ac.status).toString());
-}
-
-void clearLayout(QLayout* l) {
-    QLayoutItem* child;
-    while ((child = l->takeAt(0)) != nullptr) {
-        delete child->widget();
-        delete child;
-    }
 }

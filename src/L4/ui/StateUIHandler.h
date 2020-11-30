@@ -12,6 +12,7 @@
 #include "src/L3/presenters/StatesPresenter.h"
 #include "src/L3/presenters/SensorsPresenter.h"
 #include "ui_state.h"
+#include "UIHelpers.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

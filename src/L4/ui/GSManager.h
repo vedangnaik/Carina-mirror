@@ -25,10 +25,10 @@
 #include "src/L4/daq/DAQPlaceHolder.h"
 #include "src/L4/ui/StateUIHandler.h"
 #include "src/L4/ui/SystemDiagramUIhandler.h"
-
 #include "ui_gsmainwindow.h"
 #include "ui_state.h"
 #include "ui_systemdiagram.h"
+#include "UIHelpers.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -49,7 +49,6 @@ private:
     void closeProcess();
     void renderUi();
     void rerenderUi();
-
     // Ui
     Ui::GSMainWindow GSMainWindowUI;
     Ui::State stateUI;

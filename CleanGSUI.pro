@@ -53,7 +53,8 @@ HEADERS += \
     src/L2/usecases/ActuatorsManager.h \
     src/L2/usecases/SensorsManager.h \
     src/L2/services/ClocksModule.h \
-    src/L4/ui/SystemDiagramUIhandler.h
+    src/L4/ui/SystemDiagramUIhandler.h \
+    src/L4/ui/UIHelpers.h
 
 FORMS += \
     src/L4/ui/gsmainwindow.ui \
