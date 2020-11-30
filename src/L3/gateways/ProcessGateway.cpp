@@ -19,10 +19,11 @@ struct ProcessData ProcessGateway::parseProcessFile() {
     QJsonObject jsonObj = QJsonDocument::fromJson(val.toUtf8()).object();
     std::map<std::string, Sensor*> sensors = this->parseSensors(jsonObj["sensors"].toObject());
     std::map<std::string, Actuator*> actuators = this->parseActuators(jsonObj["actuators"].toObject());
+    std::map<std::string, State*> states = this->parseStates(jsonObj["states"].toObject(), sensors, actuators);
     return ProcessData {
         sensors,
         actuators,
-        this->parseStates(jsonObj["states"].toObject(), sensors, actuators)
+        states
     };
 }
 

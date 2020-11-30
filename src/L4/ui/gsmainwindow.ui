@@ -71,12 +71,36 @@
     </property>
     <addaction name="openProcessFromFileAction"/>
    </widget>
+   <widget class="QMenu" name="menuSystem_Diagram">
+    <property name="title">
+     <string>System Diagram</string>
+    </property>
+    <addaction name="openSystemDiagramAction"/>
+    <addaction name="clearSystemDiagramAction"/>
+   </widget>
+   <widget class="QMenu" name="menuDAQ">
+    <property name="title">
+     <string>DAQ</string>
+    </property>
+   </widget>
    <addaction name="menuProcess"/>
+   <addaction name="menuSystem_Diagram"/>
+   <addaction name="menuDAQ"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="openProcessFromFileAction">
    <property name="text">
     <string>Open from file</string>
+   </property>
+  </action>
+  <action name="openSystemDiagramAction">
+   <property name="text">
+    <string>Open image</string>
+   </property>
+  </action>
+  <action name="clearSystemDiagramAction">
+   <property name="text">
+    <string>Clear image</string>
    </property>
   </action>
  </widget>

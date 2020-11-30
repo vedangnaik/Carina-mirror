@@ -16,6 +16,18 @@ GSManager::GSManager() {
             this->createProcess(fileName.toStdString());
         }
     });
+
+    connect(GSMainWindowUI.openSystemDiagramAction, &QAction::triggered, this, [&]() {
+        QString fileName = QFileDialog::getOpenFileName(this,
+            tr("Open System Diagram Image"), "/home/vedang/Desktop/");
+        if (fileName != "") {
+            this->systemDiagramUI.systemDiagramFrame->setStyleSheet("#systemDiagramFrame{ border-image: url(" + fileName + ") 0 0 0 0 }");
+        }
+    });
+
+    connect(GSMainWindowUI.clearSystemDiagramAction, &QAction::triggered, this, [&]() {
+        this->systemDiagramUI.systemDiagramFrame->setStyleSheet("");
+    });
 }
 
 void GSManager::createProcess(std::string filepath) {

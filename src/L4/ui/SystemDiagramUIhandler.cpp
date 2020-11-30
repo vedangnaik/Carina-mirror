@@ -22,6 +22,7 @@ void SystemDiagramUIHandler::displaySensorValue(const std::string id, const floa
 void SystemDiagramUIHandler::renderSystemDiagram(std::vector<std::string> sensorIds, std::vector<std::string> actuatorIds) {
     for (const auto& id : sensorIds) {
         Draggable<QLabel>* sensorValueLabel = new Draggable<QLabel>(this->systemDiagramUI.systemDiagramFrame);
+        // ugly hack, it wasn't resizing for some reason. But then, this whole function is a hack xD
         sensorValueLabel->setText("________");
         this->subscribe(id, sensorValueLabel);
         this->systemDiagramUI.systemDiagramFrame->layout()->addWidget(sensorValueLabel);
