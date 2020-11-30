@@ -15,6 +15,7 @@ public:
 class SPIC {
 public:
     virtual void subscribe(std::string id, SPOC* spoc) = 0;
+    virtual void unsubscribe(std::string id, SPOC* spoc) = 0;
     virtual ~SPIC() {};
 };
 
@@ -23,6 +24,7 @@ public:
     SensorsPresenter(ClocksModule& cm) : cm(cm) {};
     void displaySensorValue(const std::string id, const float value) override;
     void subscribe(std::string id, SPOC* spoc) override;
+    void unsubscribe(std::string id, SPOC *spoc) override;
 private:
     std::map<std::string, std::vector<SPOC*>> subscribers;
     ClocksModule& cm;

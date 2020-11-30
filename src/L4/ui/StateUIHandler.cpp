@@ -1,9 +1,5 @@
 #include "StateUIHandler.h"
 
-void SensorDisplayLabel::displaySensorValue(const float value) {
-    this->setText(QString::number(value));
-}
-
 // forward declared helpers
 QLabel* displaySensorCheck(const SensorCheck& sc);
 QLabel* displayActuatorCheck(const ActuatorCheck& ac);
@@ -53,6 +49,12 @@ void StateUIHandler::displayState(const State& s) {
         } else if (s.sensorOptions.find(id) != s.sensorOptions.end()) {
             SensorDisplayLabel* sensorValueLabel = new SensorDisplayLabel();
             this->spic.subscribe(id, sensorValueLabel);
+            connect(sensorValueLabel, &QLabel::destroyed, this, [=]() {
+                if (sensorValueLabel == nullptr) {
+                    std::cout << "null\n";
+                }
+                this->spic.unsubscribe(id, sensorValueLabel);
+            });
 
             this->stateUI.actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
             this->stateUI.actionsLayout->addWidget(sensorValueLabel, row, 1);

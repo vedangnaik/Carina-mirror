@@ -22,7 +22,9 @@ QT_END_NAMESPACE
 
 class SensorDisplayLabel : public QLabel, public SPOC {
 public:
-    void displaySensorValue(const float value) override;
+    void displaySensorValue(const float value) override {
+        this->setText(QString::number(value));
+    }
 };
 
 class StateUIHandler : public QWidget, public StPOC {
