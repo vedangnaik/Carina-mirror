@@ -42,11 +42,14 @@ class GSManager : public QMainWindow {
     Q_OBJECT
 public:
     GSManager();
-
-    void createProcess(std::string filepath);
-    void startProcess();
-    void closeProcess();
 private:
+    void renderUi();
+    void makeProcessFromFile(std::string filepath);
+    void startProcess();
+    void stopProcess();
+    void closeProcess();
+
+    // Ui
     Ui::GSMainWindow GSMainWindowUI;
     Ui::State stateUI;
     Ui::SystemDiagram systemDiagramUI;

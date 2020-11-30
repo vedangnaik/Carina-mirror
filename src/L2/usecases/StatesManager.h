@@ -15,6 +15,7 @@ public:
 class StMIC {
 public:
     virtual void transition(Transition t) = 0;
+    virtual ~StMIC() {};
 };
 
 class StatesManager : public StMIC {
