@@ -53,9 +53,9 @@ void GSManager::openProcessFromFile(std::string filepath) {
     this->ac = new ActuatorsController(*this->am);
     this->stc = new StatesController(*this->stm);
     // init L4 and presenters here
-    this->suih = new StateUIHandler(this->stateUI, *this->ac, *this->stc, *this->cm);
-    this->sduih = new SystemDiagramUIHandler(this->systemDiagramUI, *this->ac, *this->cm);
-    this->sp = new SensorsPresenter({this->suih, this->sduih});
+    this->sp = new SensorsPresenter(*this->cm);
+    this->suih = new StateUIHandler(this->stateUI, *this->sp, *this->ac, *this->stc, *this->cm);
+    // SystemDiagramUI
     this->stp = new StatesPresenter(*this->suih);
     this->daqp = new DAQPlaceholder(this->cm, this->svg);
     // attach presenters to managers (kinda ugly, but idk another way to do it)

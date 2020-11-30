@@ -1,10 +1,14 @@
 #include "StateUIHandler.h"
 
+void SensorDisplayLabel::displaySensorValue(const float value) {
+    this->setText(QString::number(value));
+}
+
 // forward declared helpers
 QLabel* displaySensorCheck(const SensorCheck& sc);
 QLabel* displayActuatorCheck(const ActuatorCheck& ac);
 
-StateUIHandler::StateUIHandler(Ui::State& stateUI, ACIC& acic, StCIC& stcic, ClocksModule& cm) : stateUI(stateUI), acic(acic), stcic(stcic), cm(cm) {
+StateUIHandler::StateUIHandler(Ui::State& stateUI, SPIC& spic, ACIC& acic, StCIC& stcic, ClocksModule& cm) : stateUI(stateUI), spic(spic), acic(acic), stcic(stcic), cm(cm) {
     connect(this->stateUI.proceedButton, &QPushButton::clicked, &this->stcic, &StCIC::proceed);
     connect(this->stateUI.abortButton, &QPushButton::clicked, &this->stcic, &StCIC::abort);
 };
@@ -47,8 +51,8 @@ void StateUIHandler::displayState(const State& s) {
                 }
             }
         } else if (s.sensorOptions.find(id) != s.sensorOptions.end()) {
-            QLabel* sensorValueLabel = new QLabel();
-            this->subscribe(id, sensorValueLabel);
+            SensorDisplayLabel* sensorValueLabel = new SensorDisplayLabel();
+            this->spic.subscribe(id, sensorValueLabel);
 
             this->stateUI.actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
             this->stateUI.actionsLayout->addWidget(sensorValueLabel, row, 1);
@@ -60,7 +64,6 @@ void StateUIHandler::displayState(const State& s) {
         } else {
             // shit
         }
-
 
         const auto& proceedActuatorChecks = s.actuatorChecks.at(Transition::Proceed);
         const auto& abortActuatorChecks = s.actuatorChecks.at(Transition::Abort);
@@ -105,12 +108,6 @@ void StateUIHandler::allowAbort(bool permission) {
     this->stateUI.abortButton->setEnabled(permission);
 }
 
-void StateUIHandler::displaySensorValue(const std::string id, const float value) {
-    if (this->sensorDisplaySubscribers.find(id) != this->sensorDisplaySubscribers.end()) {
-        this->sensorDisplaySubscribers.at(id)->setText(QString::number(value));
-    }
-}
-
 QLabel* StateUIHandler::displayTimedActuator(QPushButton* aButton) {
     QLabel* elapsedTimeLabel = new QLabel();
     connect(aButton, &QPushButton::toggled, elapsedTimeLabel, [=](bool checked) {
@@ -126,18 +123,6 @@ QLabel* StateUIHandler::displayTimedActuator(QPushButton* aButton) {
     });
     return elapsedTimeLabel;
 }
-
-void StateUIHandler::subscribe(std::string id, QLabel* label) {
-    this->cm.stop();
-    this->sensorDisplaySubscribers.insert(std::make_pair(id, label));
-    this->cm.start();
-    connect(label, &QLabel::destroyed, this, [=]() {
-        this->cm.stop();
-        this->sensorDisplaySubscribers.erase(id);
-        this->cm.start();
-    });
-}
-
 
 
 

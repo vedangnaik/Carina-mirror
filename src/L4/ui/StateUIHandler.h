@@ -20,15 +20,20 @@ namespace Ui {
 }
 QT_END_NAMESPACE
 
-class StateUIHandler : public QWidget, public StPOC, public SPOC {
+class SensorDisplayLabel : public QLabel, public SPOC {
+public:
+    void displaySensorValue(const float value) override;
+};
+
+class StateUIHandler : public QWidget, public StPOC {
     Q_OBJECT
 public:
-    StateUIHandler(Ui::State& stateUI, ACIC& acic, StCIC& stcic, ClocksModule& cm);
+    StateUIHandler(Ui::State& stateUI, SPIC& spic, ACIC& acic, StCIC& stcic, ClocksModule& cm);
 
-    void displayProcessSummary(const std::vector<std::string> processSummary);
-    void displayState(const State& s);
-    void allowProceed(bool permission);
-    void allowAbort(bool permission);
+    void displayProcessSummary(const std::vector<std::string> processSummary) override;
+    void displayState(const State& s) override ;
+    void allowProceed(bool permission) override ;
+    void allowAbort(bool permission) override ;
 
     void displaySensorValue(const std::string id, const float value);
 private:
@@ -37,6 +42,7 @@ private:
 
     std::map<std::string, QLabel*> sensorDisplaySubscribers;
     Ui::State& stateUI;
+    SPIC& spic;
     ACIC& acic;
     StCIC& stcic;
     ClocksModule& cm;

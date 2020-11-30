@@ -18,13 +18,13 @@ namespace Ui {
 }
 QT_END_NAMESPACE
 
-class SystemDiagramUIHandler : public QWidget, public SPOC {
+class SystemDiagramUIHandler : public QWidget {
     Q_OBJECT
 public:
     SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI, ACIC& acic, ClocksModule& cm) : systemDiagramUI(systemDiagramUI), acic(acic), cm(cm) {};
     void renderSystemDiagram(std::vector<std::string> sensorIds, std::vector<std::string> actuatorIds);
 
-    void displaySensorValue(const std::string id, const float value) override;
+    void displaySensorValue(const std::string id, const float value);
 private:
     void subscribe(std::string id, QLabel* label);
 

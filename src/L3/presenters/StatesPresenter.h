@@ -16,7 +16,7 @@ public:
 class StatesPresenter : public StMOC {
 public:
     StatesPresenter(StPOC& stpoc) : stpoc(stpoc){};
-    virtual void displayStatesSummary(const std::vector<std::string> processSummary);
+    void displayStatesSummary(const std::vector<std::string> processSummary);
     void displayState(const State& s);
 private:
     StPOC& stpoc;
