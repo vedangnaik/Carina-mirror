@@ -9,7 +9,9 @@ class DAQPlaceholder : public QObject {
 public:
     DAQPlaceholder(ClocksModule* cm, SVGIC* svgic);
     void startAcquisition();
+    void stopAcquisition();
 private:
+    void acquire();
     ClocksModule* cm;
     SVGIC* svgic;
 };

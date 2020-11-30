@@ -5,7 +5,6 @@ GSManager::GSManager() {
     this->GSMainWindowUI.setupUi(this);
     this->stateUI.setupUi(this);
     this->systemDiagramUI.setupUi(this);
-
     this->GSMainWindowUI.stateFrame->layout()->addWidget(this->stateUI.StateWidget);
     this->GSMainWindowUI.systemDiagramFrame->layout()->addWidget(this->systemDiagramUI.systemDiagramFrame);
 
@@ -76,5 +75,7 @@ void GSManager::startProcess() {
 }
 
 void GSManager::closeProcess() {
-
+    this->cm->stop();
+    this->daqp->stopAcquisition();
+    this->stm->stopProcess();
 }

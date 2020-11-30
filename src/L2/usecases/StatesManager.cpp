@@ -3,6 +3,8 @@
 
 
 void StatesManager::transition(Transition t) {
+    if (!this->inProgress) { return; }
+
     State* q = this->currentState;
 
     auto sensorChecks = q->getSensorChecks();
@@ -27,6 +29,8 @@ void StatesManager::transition(Transition t) {
 }
 
 void StatesManager::startProcess() {
+    this->inProgress = true;
+
     this->currentState = this->states.at("start");
     this->stmoc->displayState(*this->currentState);
 
@@ -38,4 +42,8 @@ void StatesManager::startProcess() {
         processSummary.push_back(curr->description);
     }
     this->stmoc->displayStatesSummary(processSummary);
+}
+
+void StatesManager::stopProcess() {
+    this->inProgress = false;
 }

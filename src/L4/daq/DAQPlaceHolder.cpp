@@ -6,9 +6,15 @@ DAQPlaceholder::DAQPlaceholder(ClocksModule* cm, SVGIC* svgic) {
 }
 
 void DAQPlaceholder::startAcquisition() {
-    connect(this->cm->HundredMsTimer, &QTimer::timeout, this, [=]() {
-        for (std::string id : this->svgic->getSensorIDs()) {
-            this->svgic->updateValue(id, random() % 1000);
-        }
-    });
+    connect(this->cm->HundredMsTimer, &QTimer::timeout, this, &DAQPlaceholder::acquire);
+}
+
+void DAQPlaceholder::stopAcquisition() {
+    disconnect(this->cm->HundredMsTimer, &QTimer::timeout, this, &DAQPlaceholder::acquire);
+}
+
+void DAQPlaceholder::acquire() {
+    for (std::string id : this->svgic->getSensorIDs()) {
+        this->svgic->updateValue(id, random() % 1000);
+    }
 }

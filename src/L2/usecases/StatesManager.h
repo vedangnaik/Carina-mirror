@@ -26,9 +26,11 @@ public:
         this->stmoc = stmoc;
     }
     void startProcess();
+    void stopProcess();
 private:
     const std::map<std::string, State*> states;
     State* currentState;
+    bool inProgress = false;
 
     StMOC* stmoc;
     SMIC& smic;
