@@ -47,7 +47,7 @@ void StateUIHandler::displayState(const State& s) {
                 }
             }
         } else if (s.sensorOptions.find(id) != s.sensorOptions.end()) {
-            SensorDisplayLabel* sensorValueLabel = new SensorDisplayLabel();
+            StateUI::SensorDisplayLabel* sensorValueLabel = new StateUI::SensorDisplayLabel();
             this->spic.subscribe(id, sensorValueLabel);
             connect(sensorValueLabel, &QLabel::destroyed, this, [=]() {
                 if (sensorValueLabel == nullptr) {

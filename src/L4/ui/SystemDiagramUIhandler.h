@@ -18,20 +18,23 @@ namespace Ui {
 }
 QT_END_NAMESPACE
 
+namespace SystemDiagramUI {
+class SensorDisplayLabel : public QLabel, public SPOC {
+public:
+    void displaySensorValue(const float value) override {
+        this->setText(QString::number(value));
+    }
+};
+}
+
 class SystemDiagramUIHandler : public QWidget {
     Q_OBJECT
 public:
-    SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI, ACIC& acic, ClocksModule& cm) : systemDiagramUI(systemDiagramUI), acic(acic), cm(cm) {};
-    void renderSystemDiagram(std::vector<std::string> sensorIds, std::vector<std::string> actuatorIds);
-
-    void displaySensorValue(const std::string id, const float value);
+    SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI, SPIC& spic, ACIC& acic, std::vector<std::string> sensorIds, std::vector<std::string> actuatorIds);
 private:
-    void subscribe(std::string id, QLabel* label);
-
-    std::map<std::string, QLabel*> sensorDisplaySubscribers;
     Ui::SystemDiagram& systemDiagramUI;
+    SPIC& spic;
     ACIC& acic;
-    ClocksModule& cm;
 };
 
 #endif // SYSTEMDIAGRAMUIHANDLER_H

@@ -42,6 +42,12 @@ void GSManager::openProcessFromFile(std::string filepath) {
     // Only use for Process Gateway
     ProcessGateway pg(filepath);
     struct ProcessData pgdata = pg.parseProcessFile();
+
+    // create array of sensor anda actuator ids here
+    std::vector<std::string> sensorIds, actuatorIds;
+    for (const auto& [id, _] : pgdata.sensors) { sensorIds.push_back(id); }
+    for (const auto& [id, _] : pgdata.actuators) { actuatorIds.push_back(id); }
+
     // init L2 classes here
     this->cm = new ClocksModule();
     this->sm = new SensorsManager(pgdata.sensors);
@@ -55,7 +61,7 @@ void GSManager::openProcessFromFile(std::string filepath) {
     // init L4 and presenters here
     this->sp = new SensorsPresenter(*this->cm);
     this->suih = new StateUIHandler(this->stateUI, *this->sp, *this->ac, *this->stc, *this->cm);
-    // SystemDiagramUI
+    this->sduih = new SystemDiagramUIHandler(this->systemDiagramUI, *this->sp, *this->ac, sensorIds, actuatorIds);
     this->stp = new StatesPresenter(*this->suih);
     this->daqp = new DAQPlaceholder(this->cm, this->svg);
     // attach presenters to managers (kinda ugly, but idk another way to do it)
