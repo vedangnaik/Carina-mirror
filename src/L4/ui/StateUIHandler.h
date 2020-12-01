@@ -9,8 +9,9 @@
 #include "src/L2/services/ClocksModule.h"
 #include "src/L3/controllers/ActuatorsController.h"
 #include "src/L3/controllers/StatesController.h"
-#include "src/L3/presenters/StatesPresenter.h"
 #include "src/L3/presenters/SensorsPresenter.h"
+#include "src/L3/presenters/ActuatorsPresenter.h"
+#include "src/L3/presenters/StatesPresenter.h"
 #include "ui_state.h"
 #include "UIHelpers.h"
 
@@ -23,8 +24,15 @@ QT_END_NAMESPACE
 namespace StateUI {
 class SensorDisplayLabel : public QLabel, public SPOC {
 public:
-    void displaySensorValue(const float value) override {
+    void displayValue(const float value) override {
         this->setText(QString::number(value));
+    }
+};
+
+class ActuatorButton : public QPushButton, public APOC {
+public:
+    void displayStatus(const bool status) override {
+        this->setChecked(status);
     }
 };
 }
@@ -32,7 +40,7 @@ public:
 class StateUIHandler : public QWidget, public StPOC {
     Q_OBJECT
 public:
-    StateUIHandler(Ui::State& stateUI, SPIC& spic, ACIC& acic, StCIC& stcic, ClocksModule& cm);
+    StateUIHandler(Ui::State& stateUI, SPIC& spic, APIC& apic, ACIC& acic, StCIC& stcic, ClocksModule& cm);
 
     void displayProcessSummary(const std::vector<std::string> processSummary) override;
     void displayState(const State& s) override;
@@ -43,6 +51,7 @@ private:
 
     Ui::State& stateUI;
     SPIC& spic;
+    APIC& apic;
     ACIC& acic;
     StCIC& stcic;
     ClocksModule& cm;

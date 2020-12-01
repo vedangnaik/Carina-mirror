@@ -23,6 +23,7 @@ SOURCES += \
     src/L3/gateways/ActuatorStatusGateway.cpp \
     src/L3/gateways/ProcessGateway.cpp \
     src/L3/gateways/SensorValuesGateway.cpp \
+    src/L3/presenters/ActuatorsPresenter.cpp \
     src/L3/presenters/SensorsPresenter.cpp \
     src/L3/presenters/StatesPresenter.cpp \
     src/L4/daq/DAQPlaceHolder.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     src/L1/entities/Actuator.h \
     src/L1/entities/Sensor.h \
     src/L1/entities/State.h \
+    src/L3/presenters/ActuatorsPresenter.h \
     src/L3/presenters/SensorsPresenter.h \
     src/L3/presenters/StatesPresenter.h \
     src/L4/daq/DAQPlaceHolder.h \

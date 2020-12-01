@@ -6,7 +6,7 @@ float SensorsManager::getSensorValue(std::string id) {
 
 void SensorsManager::setSensorValue(std::string id, float value) {
     this->sensors.at(id)->values.push_back(value);
-    this->smoc->displaySensorValue(id, value);
+    this->smoc->notify(id, value);
 }
 
 std::vector<std::string> SensorsManager::getSensorIDs() {

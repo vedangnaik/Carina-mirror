@@ -19,8 +19,9 @@
 #include "src/L3/controllers/ActuatorsController.h"
 #include "src/L3/gateways/ProcessGateway.h"
 #include "src/L3/gateways/SensorValuesGateway.h"
-#include "src/L3/presenters/StatesPresenter.h"
 #include "src/L3/presenters/SensorsPresenter.h"
+#include "src/L3/presenters/ActuatorsPresenter.h"
+#include "src/L3/presenters/StatesPresenter.h"
 // L4
 #include "src/L4/daq/DAQPlaceHolder.h"
 #include "src/L4/ui/StateUIHandler.h"
@@ -64,6 +65,7 @@ private:
     ActuatorsController* ac;
     StatesController* stc;
     SensorsPresenter* sp;
+    ActuatorsPresenter* ap;
     StatesPresenter* stp;
     // L4
     StateUIHandler* suih;

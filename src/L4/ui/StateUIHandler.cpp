@@ -4,7 +4,7 @@
 QLabel* displaySensorCheck(const SensorCheck& sc);
 QLabel* displayActuatorCheck(const ActuatorCheck& ac);
 
-StateUIHandler::StateUIHandler(Ui::State& stateUI, SPIC& spic, ACIC& acic, StCIC& stcic, ClocksModule& cm) : stateUI(stateUI), spic(spic), acic(acic), stcic(stcic), cm(cm) {
+StateUIHandler::StateUIHandler(Ui::State& stateUI, SPIC& spic, APIC& apic, ACIC& acic, StCIC& stcic, ClocksModule& cm) : stateUI(stateUI), spic(spic), apic(apic), acic(acic), stcic(stcic), cm(cm) {
     connect(this->stateUI.proceedButton, &QPushButton::clicked, &this->stcic, &StCIC::proceed);
     connect(this->stateUI.abortButton, &QPushButton::clicked, &this->stcic, &StCIC::abort);
 };
@@ -27,22 +27,24 @@ void StateUIHandler::displayState(const State& s) {
     unsigned int row = 1;
     for (std::string id : s.actionsOrder) {
         if (s.actuatorOptions.find(id) != s.actuatorOptions.end()) {
-            QPushButton* aButton = new QPushButton(QString::fromStdString(id));
-            aButton->setCheckable(true);
-            connect(aButton, &QPushButton::toggled, &this->acic, [=]() {
+            StateUI::ActuatorButton* a = new StateUI::ActuatorButton();
+            this->apic.subscribe(id, a);
+            a->setCheckable(true);
+            a->setText(QString::fromStdString(id));
+            connect(a, &QPushButton::toggled, &this->acic, [=]() {
                 this->acic.actuate(id);
             });
 
             this->stateUI.actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
-            this->stateUI.actionsLayout->addWidget(aButton, row, 1);
+            this->stateUI.actionsLayout->addWidget(a, row, 1);
 
             for (ActuatorOption o: s.actuatorOptions.at(id)) {
                 switch (o) {
                 case ActuatorOption::Timed:
-                    this->stateUI.actionsLayout->addWidget(this->displayTimedActuator(aButton), row, 4);
+                    this->stateUI.actionsLayout->addWidget(this->displayTimedActuator(a), row, 4);
                     break;
                 case ActuatorOption::Automatic:
-                    aButton->toggle();
+                    a->toggle();
                     break;
                 }
             }
@@ -50,9 +52,6 @@ void StateUIHandler::displayState(const State& s) {
             StateUI::SensorDisplayLabel* sensorValueLabel = new StateUI::SensorDisplayLabel();
             this->spic.subscribe(id, sensorValueLabel);
             connect(sensorValueLabel, &QLabel::destroyed, this, [=]() {
-                if (sensorValueLabel == nullptr) {
-                    std::cout << "null\n";
-                }
                 this->spic.unsubscribe(id, sensorValueLabel);
             });
 

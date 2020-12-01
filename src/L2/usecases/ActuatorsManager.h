@@ -7,6 +7,7 @@
 
 class AMOC {
 public:
+    virtual void notify(const std::string id, const bool status) = 0;
     virtual ~AMOC() {};
 };
 

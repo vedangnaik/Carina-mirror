@@ -7,7 +7,7 @@
 
 class SMOC {
 public:
-    virtual void displaySensorValue(const std::string id, const float value) = 0;
+    virtual void notify(const std::string id, const float value) = 0;
     virtual ~SMOC() {};
 };
 

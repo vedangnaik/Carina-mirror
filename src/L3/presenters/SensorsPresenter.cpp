@@ -1,9 +1,9 @@
 #include "SensorsPresenter.h"
 
-void SensorsPresenter::displaySensorValue(const std::string id, const float value) {
+void SensorsPresenter::notify(const std::string id, const float value) {
     if (this->subscribers.find(id) != this->subscribers.end()) {
         for (SPOC* spoc : this->subscribers.at(id)) {
-            spoc->displaySensorValue(value);
+            spoc->displayValue(value);
         }
     }
 }

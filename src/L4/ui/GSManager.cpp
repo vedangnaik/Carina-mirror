@@ -60,8 +60,9 @@ void GSManager::openProcessFromFile(std::string filepath) {
     this->stc = new StatesController(*this->stm);
     // init L4 and presenters here
     this->sp = new SensorsPresenter(*this->cm);
-    this->suih = new StateUIHandler(this->stateUI, *this->sp, *this->ac, *this->stc, *this->cm);
-    this->sduih = new SystemDiagramUIHandler(this->systemDiagramUI, *this->sp, *this->ac, sensorIds, actuatorIds);
+    this->ap = new ActuatorsPresenter();
+    this->suih = new StateUIHandler(this->stateUI, *this->sp, *this->ap, *this->ac, *this->stc, *this->cm);
+    this->sduih = new SystemDiagramUIHandler(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIds, actuatorIds);
     this->stp = new StatesPresenter(*this->suih);
     this->daqp = new DAQPlaceholder(this->cm, this->svg);
     // attach presenters to managers (kinda ugly, but idk another way to do it)
@@ -88,6 +89,7 @@ void GSManager::closeProcess() {
     delete this->daqp;
     delete this->stp;
     delete this->sp;
+    delete this->ap;
     delete this->sduih;
     delete this->suih;
     delete this->stc;
