@@ -20,7 +20,7 @@ void SensorsPresenter::subscribe(std::string id, SPOC* spoc) {
 
 void SensorsPresenter::unsubscribe(std::string id, SPOC* spoc) {
     this->cm.stop();
-    auto v = this->subscribers.at(id);
+    auto& v = this->subscribers.at(id);
     v.erase(std::remove(v.begin(), v.end(), spoc), v.end());
     this->cm.start();
 }
