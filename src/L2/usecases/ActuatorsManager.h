@@ -23,6 +23,9 @@ public:
     ActuatorsManager(std::map<std::string, Actuator*> actuators) : actuators(actuators) {};
     bool getActuatorStatus(std::string id);
     void actuate(std::string id);
+    void setOutputContract(AMOC* amoc) {
+        this->amoc = amoc;
+    }
 private:
     const std::map<std::string, Actuator*> actuators;
     AMOC* amoc;

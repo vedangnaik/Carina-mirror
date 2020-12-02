@@ -67,6 +67,7 @@ void GSManager::openProcessFromFile(std::string filepath) {
     this->daqp = new DAQPlaceholder(this->cm, this->svg);
     // attach presenters to managers (kinda ugly, but idk another way to do it)
     this->sm->setOutputContract(this->sp);
+    this->am->setOutputContract(this->ap);
     this->stm->setOutputContract(this->stp);
 }
 
