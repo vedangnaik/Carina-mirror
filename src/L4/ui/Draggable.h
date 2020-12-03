@@ -6,13 +6,20 @@
 #include <QMouseEvent>
 #include <iostream>
 
+class DraggableBase {
+public:
+    virtual void unlockPosition() = 0;
+    virtual void lockPosition() = 0;
+    virtual ~DraggableBase() {};
+};
+
 template <typename T>
-class Draggable : public T {
+class Draggable : public DraggableBase, public T {
     static_assert(std::is_base_of<QWidget, T>::value, "T must inherit from QWidget");
 public:
-    Draggable(QFrame* parent) : T(parent), parentFrame(parent) {};
-    void unlockPosition() { this->positionLocked = false; }
-    void lockPosition() { this->positionLocked = true; }
+    Draggable(QFrame& parent) : T(parent), parentFrame(&parent) {};
+    void unlockPosition() override { this->positionLocked = false; }
+    void lockPosition() override { this->positionLocked = true; }
 protected:
     void mouseMoveEvent(QMouseEvent* event) override {
         // If you're not allowed to move, this function terminates immediately.

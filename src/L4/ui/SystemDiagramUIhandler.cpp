@@ -5,35 +5,23 @@ SystemDiagramUIHandler::SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramU
     this->systemDiagramUI.lockPositionsCheckbox->setEnabled(true);
 
     for (const auto& id : sensorIds) {
-        SystemDiagramUI::SensorDisplayLabel* sensorDisplayer = new SystemDiagramUI::SensorDisplayLabel();
-        this->spic.subscribe(id, sensorDisplayer);
-        sensorDisplayer->setText("__ NaN __");
-
-        Draggable<QWidget>* wrp = new Draggable<QWidget>(this->systemDiagramUI.systemDiagramFrame);
-        this->draggables.push_back(wrp);
-        QHBoxLayout* hl = new QHBoxLayout(wrp);
-        hl->addWidget(new QLabel(QString::fromStdString(id) + ": "));
-        hl->addWidget(sensorDisplayer);
-        wrp->setLayout(hl);
-        this->systemDiagramUI.systemDiagramFrame->layout()->addWidget(wrp);
+        Draggable<SystemDiagramUI::SensorDisplayLabel>* s = new Draggable<SystemDiagramUI::SensorDisplayLabel>(*this->systemDiagramUI.systemDiagramFrame);
+        this->spic.subscribe(id, s);
+        s->setText("__ NaN __");
+        this->draggables.push_back(s);
+        this->systemDiagramUI.systemDiagramFrame->layout()->addWidget(s);
     }
 
     for (const auto& id : actuatorIds) {
-        SystemDiagramUI::ActuatorButton* a = new SystemDiagramUI::ActuatorButton();
+        Draggable<SystemDiagramUI::ActuatorButton>* a = new Draggable<SystemDiagramUI::ActuatorButton>(*this->systemDiagramUI.systemDiagramFrame);
         this->apic.subscribe(id, a);
         a->setCheckable(true);
         a->setText(QString::fromStdString(id));
         connect(a, &QPushButton::clicked, &this->acic, [=]() {
             this->acic.actuate(id);
         });
-
-        Draggable<QWidget>* wrp = new Draggable<QWidget>(this->systemDiagramUI.systemDiagramFrame);
-        this->draggables.push_back(wrp);
-        QHBoxLayout* hl = new QHBoxLayout(wrp);
-        hl->addWidget(new QLabel(QString::fromStdString(id) + ": "));
-        hl->addWidget(a);
-        wrp->setLayout(hl);
-        this->systemDiagramUI.systemDiagramFrame->layout()->addWidget(wrp);
+        this->draggables.push_back(a);
+        this->systemDiagramUI.systemDiagramFrame->layout()->addWidget(a);
     }
 
     delete this->systemDiagramUI.systemDiagramFrame->layout();
@@ -44,5 +32,11 @@ void SystemDiagramUIHandler::togglePositionLock(int state) {
         for (auto& d : this->draggables) { d->lockPosition(); }
     } else {
         for (auto& d : this->draggables) { d->unlockPosition(); }
+    }
+}
+
+SystemDiagramUIHandler::~SystemDiagramUIHandler() {
+    for (auto& d : this->draggables) {
+        delete d;
     }
 }
