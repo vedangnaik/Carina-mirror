@@ -11,8 +11,13 @@ class Draggable : public T {
     static_assert(std::is_base_of<QWidget, T>::value, "T must inherit from QWidget");
 public:
     Draggable(QFrame* parent) : T(parent), parentFrame(parent) {};
+    void unlockPosition() { this->positionLocked = false; }
+    void lockPosition() { this->positionLocked = true; }
 protected:
     void mouseMoveEvent(QMouseEvent* event) override {
+        // If you're not allowed to move, this function terminates immediately.
+        if (this->positionLocked) { return; }
+
         const QRect& frameRect = this->parentFrame->geometry();
         // Usage of frameWidth is only correct if the frameStyle is Panel or Box
         // (among others). If this is changed, the calculations here must change
@@ -27,12 +32,15 @@ protected:
         int boundedY = std::min(std::max(unboundNewPos.y(), frameWidth), frameRect.height() - frameWidth - this->height());
         this->move(boundedX, boundedY);
     };
-    void mousePressEvent(QMouseEvent* event) override {
+    void mousePressEvent(QMouseEvent* event) override {        
         this->cursorPosOnMoveStart = event->pos();
-        // call the parent's mouse press event to keep the clicking action
-        T::mousePressEvent(event);
+        // call the parent's mouse press event to keep the clicking action, only if
+        // the guy is not allowed to move. Otherwise, the clicking action is disabled
+        // to prevent a misclick while dragging.
+        if (this->positionLocked) { T::mousePressEvent(event); }
     };
 private:
+    bool positionLocked = false;
     QPoint cursorPosOnMoveStart;
     QFrame* parentFrame;
 };

@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QLabel>
+#include <QCheckBox>
 
 #include "src/L4/ui/Draggable.h"
 #include "src/L3/controllers/ActuatorsController.h"
@@ -37,8 +38,12 @@ class SystemDiagramUIHandler : public QWidget {
     Q_OBJECT
 public:
     SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI, SPIC& spic, APIC& apic, ACIC& acic, std::vector<std::string> sensorIds, std::vector<std::string> actuatorIds);
+private slots:
+    void togglePositionLock(int state);
 private:
     Ui::SystemDiagram& systemDiagramUI;
+    std::vector<Draggable<QWidget>*> draggables;
+
     SPIC& spic;
     APIC& apic;
     ACIC& acic;
