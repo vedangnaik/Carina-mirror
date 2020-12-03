@@ -3,7 +3,7 @@
 \[Avionics\] This repository houses the new-and-improved 'clean' code for UTAT's Ground Station User Interface.
 
 ## Usage
-To use this software, set up the [build environment](#build) and compile it for the required platform; there are no pre-compiled binaries of CleanGSUI available at the moment. Once the software running, a 'Process' JSON file can be created as described in the [process file documentation](process-file-format). Load in the file via `Process -> Open Process File` from the menu bar. Then, click `Process -> Start Process` to begin. If a system diagram is required, click `System Diagram -> Open Image` to add it to the right side of the interface. `System Diagram -> Clear Image` can be used to remove this image. Once done with the process, use `Process -> Close Process` to close the current process. A new process can be opened following the same steps as above from this point.
+To use this software, set up the [build environment](#build) and compile it for the required platform; there are no pre-compiled binaries of CleanGSUI available at the moment. Once the software running, a 'Process' JSON file can be created as described in the [process file documentation](#process-file-format). Load in the file via `Process -> Open Process File` from the menu bar. Then, click `Process -> Start Process` to begin. If a system diagram is required, click `System Diagram -> Open Image` to add it to the right side of the interface. `System Diagram -> Clear Image` can be used to remove this image. Once done with the process, use `Process -> Close Process` to close the current process. A new process can be opened following the same steps as above from this point.
 
 ## Process File Format
 This section describes the format of the 'Process' JSON file that is consumed by CleanGSUI. Note that while this information may not be up-to-date (there may be experimental features which are not described here), the features described here are guaranteed to work. 
@@ -53,9 +53,9 @@ Only actuators which have two states (open/close, etc.) are currently supported.
 * `"name"`: The name of this state.
 * `"safetyRating"`: The safety rating of this state. This is a colour value like `red`, `green`, which highlight the safe limits of approaching equipment in this state.
 * `"description"`: A longer description of this state. The sentence(s) here (from all states) will be displayed on the left-side of CleanGSUI's interface.
-* `"actions"`: The list of sensors and actuators that must be visible in this state. More information on this field is provided [here](actions).
+* `"actions"`: The list of sensors and actuators that must be visible in this state. More information on this field is provided [here](#actions).
 * `"transitions"`: An object of state ids to (currently) 'proceed' to (when the Proceed button is clicked), or 'abort' to (when the Abort button is clicked).
-* `"checks"`" An object of checks to perform on the sensors/actuators in `actions` upon transition to another state. More information on this field is provided [here](checks).
+* `"checks"`" An object of checks to perform on the sensors/actuators in `actions` upon transition to another state. More information on this field is provided [here](#checks).
 ```
 "start": {
     "name": "Start state",
