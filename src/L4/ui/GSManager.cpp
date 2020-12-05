@@ -5,7 +5,7 @@ GSManager::GSManager() {
 
     connect(this->GSMainWindowUI.openProcessFromFileAction, &QAction::triggered, this, [=]() {
         QString fileName = QFileDialog::getOpenFileName(this,
-            tr("Open Process File"), "/home/vedang/Desktop/");
+            tr("Open Process File"), "/", tr("JSON Files (*.json)"));
         if (fileName != "") {
             this->openProcessFromFile(fileName.toStdString());
             this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
@@ -27,7 +27,7 @@ GSManager::GSManager() {
 
     connect(this->GSMainWindowUI.openSystemDiagramAction, &QAction::triggered, this, [=]() {
         QString fileName = QFileDialog::getOpenFileName(this,
-            tr("Open System Diagram Image"), "/home/vedang/Desktop/");
+            tr("Open System Diagram Image"), "/", tr("Image Files (*.png *.jpg)"));
         if (fileName != "") {
             this->systemDiagramUI.systemDiagramFrame->setStyleSheet("#systemDiagramFrame{ border-image: url(" + fileName + ") 0 0 0 0 }");
         }
