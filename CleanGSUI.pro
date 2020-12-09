@@ -26,7 +26,8 @@ SOURCES += \
     src/L3/presenters/ActuatorsPresenter.cpp \
     src/L3/presenters/SensorsPresenter.cpp \
     src/L3/presenters/StatesPresenter.cpp \
-    src/L4/daq/DAQPlaceHolder.cpp \
+    src/L4/dataacquisition/DAQPlaceHolder.cpp \
+    src/L4/dataacquisition/DAQHandler.cpp \
     src/L4/ui/GSManager.cpp \
     src/L4/ui/StateUIHandler.cpp \
     src/L4/ui/SystemDiagramUIhandler.cpp \
@@ -48,7 +49,8 @@ HEADERS += \
     src/L3/presenters/ActuatorsPresenter.h \
     src/L3/presenters/SensorsPresenter.h \
     src/L3/presenters/StatesPresenter.h \
-    src/L4/daq/DAQPlaceHolder.h \
+    src/L4/dataacquisition/DAQPlaceHolder.h \
+    src/L4/dataacquisition/DAQHandler.h \
     src/L4/ui/Draggable.h \
     src/L4/ui/GSManager.h \
     src/L4/ui/StateUIHandler.h \
@@ -62,6 +64,8 @@ FORMS += \
     src/L4/ui/gsmainwindow.ui \
     src/L4/ui/state.ui \
     src/L4/ui/systemdiagram.ui
+
+unix:!macx: LIBS += -luldaq
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
