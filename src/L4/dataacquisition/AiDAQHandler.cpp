@@ -10,6 +10,10 @@ AiDAQHandler::AiDAQHandler(DaqDeviceHandle handle, unsigned int numChannels, Ran
     this->dataBuffer = std::make_unique<double[]>(this->numChannels * this->samplesPerChannel * sizeof(double));
 }
 
+AiDAQHandler::~AiDAQHandler() {
+    this->stopAcquisition();
+}
+
 void AiDAQHandler::startAcquisition() {
     UlError err = ulAInScan(this->handle, 0, this->numChannels-1, this->aiim, this->voltageRange, this->samplesPerChannel, &this->rate, this->so, this->aisf, this->dataBuffer.get());
     if (err != ERR_NO_ERROR) { /* shit */ }

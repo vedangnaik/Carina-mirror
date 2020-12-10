@@ -13,7 +13,6 @@ class DAQManager : public QObject {
     Q_OBJECT
 public:
     DAQManager(ClocksModule& cm, SVGIC& svgic);
-    ~DAQManager();
     void startAcquisition();
     void stopAcquisition();
     void getLatestData();

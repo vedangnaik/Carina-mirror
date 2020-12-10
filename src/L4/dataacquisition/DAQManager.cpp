@@ -37,17 +37,11 @@ DAQManager::DAQManager(ClocksModule& cm, SVGIC& svgic) : cm{cm}, svgic{svgic} {
             // Create DAQHandler for this DAQ
             if (aiSupported != 0) {
                 this->DAQDevices.push_back(new AiDAQHandler(handle, numChannels, (Range)voltageRange));
+            // create other DAQs here
             } else {
-                // create other DAQs here
+                // message 'not supported' or something
             }
         }
-    }
-}
-
-DAQManager::~DAQManager() {
-    this->stopAcquisition();
-    for (const auto& d : this->DAQDevices) {
-        d->~DAQDeviceHandler();
     }
 }
 
@@ -59,10 +53,10 @@ void DAQManager::startAcquisition() {
 }
 
 void DAQManager::stopAcquisition() {
+    disconnect(this->cm.HundredMsTimer, &QTimer::timeout, this, &DAQManager::getLatestData);
     for (const auto& d : this->DAQDevices) {
         d->stopAcquisition();
     }
-    disconnect(this->cm.HundredMsTimer, &QTimer::timeout, this, &DAQManager::getLatestData);
 }
 
 void DAQManager::getLatestData() {
