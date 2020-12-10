@@ -23,7 +23,7 @@
 #include "src/L3/presenters/ActuatorsPresenter.h"
 #include "src/L3/presenters/StatesPresenter.h"
 // L4
-#include "src/L4/dataacquisition/DAQPlaceHolder.h"
+#include "src/L4/dataacquisition/DAQManager.h"
 #include "src/L4/ui/StateUIHandler.h"
 #include "src/L4/ui/SystemDiagramUIhandler.h"
 #include "ui_gsmainwindow.h"
@@ -70,7 +70,7 @@ private:
     // L4
     StateUIHandler* suih;
     SystemDiagramUIHandler* sduih;
-    DAQPlaceholder* daqp;
+    DAQManager* daqm;
 };
 
 #endif // GSMAINWINDOWHANDLER_H

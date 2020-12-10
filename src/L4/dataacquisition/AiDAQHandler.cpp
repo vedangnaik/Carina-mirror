@@ -1,6 +1,6 @@
 #include "AiDAQHandler.h"
 
-AiDAQHandler::AiDAQHandler(DaqDeviceHandle handle, unsigned int numChannels, Range gain) : handle{handle}, numChannels{numChannels}, gain{gain} {
+AiDAQHandler::AiDAQHandler(DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange) : handle{handle}, numChannels{numChannels}, voltageRange{voltageRange} {
     // connect DAQ
     UlError err = ulConnectDaqDevice(handle);
     if (err != ERR_NO_ERROR) { /* shit */ }
@@ -14,12 +14,12 @@ AiDAQHandler::~AiDAQHandler() {
     free(this->dataBuffer);
 }
 
-void AiDAQHandler::startAcqusition() {
-    UlError err = ulAInScan(this->handle, 0, this->numChannels-1, this->aiim, this->gain, this->samplesPerChannel, &this->rate, this->so, this->aisf, this->dataBuffer);
+void AiDAQHandler::startAcquisition() {
+    UlError err = ulAInScan(this->handle, 0, this->numChannels-1, this->aiim, this->voltageRange, this->samplesPerChannel, &this->rate, this->so, this->aisf, this->dataBuffer);
     if (err != ERR_NO_ERROR) { /* shit */ }
 }
 
-void AiDAQHandler::stopAcqution() {
+void AiDAQHandler::stopAcquisition() {
     UlError err = ulAInScanStop(this->handle);
     if (err != ERR_NO_ERROR) { /* shit */ }
 }

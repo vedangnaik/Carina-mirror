@@ -64,7 +64,7 @@ void GSManager::openProcessFromFile(std::string filepath) {
     this->suih = new StateUIHandler(this->stateUI, *this->sp, *this->ap, *this->ac, *this->stc, *this->cm);
     this->sduih = new SystemDiagramUIHandler(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIds, actuatorIds);
     this->stp = new StatesPresenter(*this->suih);
-    this->daqp = new DAQPlaceholder(this->cm, this->svg);
+    this->daqm = new DAQManager(*this->cm, *this->svg);
     // attach presenters to managers (kinda ugly, but idk another way to do it)
     this->sm->setOutputContract(this->sp);
     this->am->setOutputContract(this->ap);
@@ -73,13 +73,13 @@ void GSManager::openProcessFromFile(std::string filepath) {
 
 void GSManager::startProcess() {
     this->stm->startProcess();
-    this->daqp->startAcquisition();
+    this->daqm->startAcquisition();
     this->cm->start();
 }
 
 void GSManager::stopProcess() {
     this->cm->stop();
-    this->daqp->stopAcquisition();
+    this->daqm->stopAcquisition();
     this->stm->stopProcess();
 }
 
@@ -87,7 +87,7 @@ void GSManager::closeProcess() {
     this->stopProcess();
     // these deletes are in the opposite order
     // to the constructs in openProcess().
-    delete this->daqp;
+    delete this->daqm;
     delete this->stp;
     delete this->sp;
     delete this->ap;

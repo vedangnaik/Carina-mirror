@@ -27,6 +27,7 @@ SOURCES += \
     src/L3/presenters/SensorsPresenter.cpp \
     src/L3/presenters/StatesPresenter.cpp \
     src/L4/dataacquisition/AiDAQHandler.cpp \
+    src/L4/dataacquisition/DAQManager.cpp \
     src/L4/dataacquisition/DAQPlaceHolder.cpp \
     src/L4/ui/GSManager.cpp \
     src/L4/ui/StateUIHandler.cpp \
@@ -50,6 +51,8 @@ HEADERS += \
     src/L3/presenters/SensorsPresenter.h \
     src/L3/presenters/StatesPresenter.h \
     src/L4/dataacquisition/AiDAQHandler.h \
+    src/L4/dataacquisition/DAQDeviceHandler.h \
+    src/L4/dataacquisition/DAQManager.h \
     src/L4/dataacquisition/DAQPlaceHolder.h \
     src/L4/ui/Draggable.h \
     src/L4/ui/GSManager.h \
