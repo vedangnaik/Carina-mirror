@@ -7,15 +7,11 @@ AiDAQHandler::AiDAQHandler(DaqDeviceHandle handle, unsigned int numChannels, Ran
     else { this->connected = true; }
 
     // allocate the temporary data buffer
-    this->dataBuffer = (double*)malloc(this->numChannels * this->samplesPerChannel * sizeof(double));
-}
-
-AiDAQHandler::~AiDAQHandler() {
-    free(this->dataBuffer);
+    this->dataBuffer = std::make_unique<double[]>(this->numChannels * this->samplesPerChannel * sizeof(double));
 }
 
 void AiDAQHandler::startAcquisition() {
-    UlError err = ulAInScan(this->handle, 0, this->numChannels-1, this->aiim, this->voltageRange, this->samplesPerChannel, &this->rate, this->so, this->aisf, this->dataBuffer);
+    UlError err = ulAInScan(this->handle, 0, this->numChannels-1, this->aiim, this->voltageRange, this->samplesPerChannel, &this->rate, this->so, this->aisf, this->dataBuffer.get());
     if (err != ERR_NO_ERROR) { /* shit */ }
 }
 

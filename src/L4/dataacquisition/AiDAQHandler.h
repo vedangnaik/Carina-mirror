@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include "DAQDeviceHandler.h"
+#include <memory>
 
 /**
  * @brief The DAQHandler class handles an analog input DAQ device
@@ -13,7 +14,6 @@
 class AiDAQHandler : public DAQDeviceHandler {
 public:
     AiDAQHandler(DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange);
-    ~AiDAQHandler();
     void startAcquisition() override;
     std::map<unsigned int, std::vector<double>> getLatestData() override;
     void stopAcquisition() override;
@@ -28,7 +28,7 @@ private:
     const ScanOption so = SO_DEFAULTIO;
     const AInScanFlag aisf = AINSCAN_FF_DEFAULT;
     // status vars
-    double* dataBuffer;
+    std::unique_ptr<double[]> dataBuffer;
     bool connected = false;
 };
 
