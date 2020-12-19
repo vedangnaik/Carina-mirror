@@ -36,20 +36,17 @@ DAQManager::DAQManager(ClocksModule& cm, SVGIC& svgic) : cm{cm}, svgic{svgic} {
             if (aiSupported < 1) { /* shit */ std::cout << "Analog input not supported: " << aiSupported << std::endl; }
 
             // get voltage range
-            long long numSERanges;
             long long voltageRange;
-            err = ulAIGetInfo(handle, AI_INFO_NUM_SE_RANGES, 0, &numSERanges);
-            if (err != ERR_NO_ERROR) { /* shit */ std::cout << "ulAIGetInfo Error: " << err << std::endl; }
-            if (numSERanges < 0) { /* shit */ std::cout << "Number of singled ended ranges negative: " << numSERanges << std::endl; }
-            err = ulAIGetInfo(handle, AI_INFO_SE_RANGE, numSERanges, &voltageRange);
+            err = ulAIGetInfo(handle, AI_INFO_SE_RANGE, 0, &voltageRange);
             if (err != ERR_NO_ERROR) { /* shit */ std::cout << "ulAIGetInfo Error: " << err << std::endl; }
 
             // Create DAQHandler for this DAQ
             if (aiSupported != 0) {
+                std::cout << "Handle: " << handle << "\nChannels: " << numChannels << "\nRange: " << voltageRange << "\n";
                 this->DAQDevices.push_back(new AiDAQHandler(handle, numChannels, (Range)voltageRange));
             // create other DAQs here
             } else {
-                // message 'not supported' or something
+                std::cout << "This aiSupported value: " << aiSupported << " is not supported right now.\n";
             }
         }
     }
