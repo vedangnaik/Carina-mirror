@@ -27,7 +27,7 @@ private:
     const Range voltageRange;
     double rate = 100; // must be non-const for uldaq.h :(
     const AiInputMode aiim = AI_SINGLE_ENDED;
-    const ScanOption so = SO_DEFAULTIO;
+    const ScanOption so = SO_CONTINUOUS;
     const AInScanFlag aisf = AINSCAN_FF_DEFAULT;
     // status vars
     std::unique_ptr<double[]> dataBuffer;
