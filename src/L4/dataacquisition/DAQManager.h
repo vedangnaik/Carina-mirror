@@ -8,6 +8,7 @@
 #include "src/L3/gateways/SensorValuesGateway.h"
 #include <uldaq.h>
 #include "AiDAQHandler.h"
+#include <iostream>
 
 class DAQManager : public QObject {
     Q_OBJECT
@@ -21,7 +22,6 @@ private:
     ClocksModule& cm;
     SVGIC& svgic;
     // device search parameters
-    const unsigned int maxDAQDevices = 100;
     const DaqDeviceInterface DAQDeviceInterfaceType = ANY_IFC;
 };
 

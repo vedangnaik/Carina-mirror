@@ -1,38 +1,48 @@
 #include "DAQManager.h"
 
 DAQManager::DAQManager(ClocksModule& cm, SVGIC& svgic) : cm{cm}, svgic{svgic} {
-    DaqDeviceDescriptor devDiscs[this->maxDAQDevices];
+    std::vector<DaqDeviceDescriptor> devDescriptors;
+
+    // Get the number of connected devices here.
     unsigned int numDAQDevicesDetected = 0;
-    UlError err = ulGetDaqDeviceInventory(this->DAQDeviceInterfaceType, devDiscs, &numDAQDevicesDetected);
-    if (err != ERR_NO_ERROR) { /* shit */ }
+    UlError err = ulGetDaqDeviceInventory(this->DAQDeviceInterfaceType, devDescriptors.data(), &numDAQDevicesDetected);
+    // This will trip, but can be ignored safely (I think)
+    if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulGetDaqDeviceInventory Error: " << err << std::endl; }
 
     if (numDAQDevicesDetected == 0) {
         // shit
+        std::cout << "No DAQ devices detected\n";
     }
     else {
+        // Get the device descriptors here
+        devDescriptors.reserve(numDAQDevicesDetected);
+        UlError err = ulGetDaqDeviceInventory(this->DAQDeviceInterfaceType, devDescriptors.data(), &numDAQDevicesDetected);
+        if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulGetDaqDeviceInventory Error: " << err << std::endl; }
+
+        // Create DAQ objects here
         for (unsigned int i = 0; i < numDAQDevicesDetected; i++) {
             // Create the DAQ object
-            DaqDeviceHandle handle = ulCreateDaqDevice(devDiscs[i]);
+            DaqDeviceHandle handle = ulCreateDaqDevice(devDescriptors[i]);
 
             // Check if it's analog input; other types can be checked for here
             long long aiSupported;
             UlError err = ulDevGetInfo(handle, DEV_INFO_HAS_AI_DEV, 0, &aiSupported);
-            if (err != ERR_NO_ERROR) { /* shit */ }
+            if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulDevGetInfo Error: " << err << std::endl; }
 
             // Get num channels
             long long numChannels;
             err = ulAIGetInfo(handle, AI_INFO_NUM_CHANS, 0, &numChannels);
-            if (err != ERR_NO_ERROR) { /* shit */ }
-            if (aiSupported < 1) { /* shit */ }
+            if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulAIGetInfo Error: " << err << std::endl; }
+            if (aiSupported < 1) { /* shit */ std::cout << "Analog input not supported: " << aiSupported << std::endl; }
 
             // get voltage range
             long long numSERanges;
             long long voltageRange;
             err = ulAIGetInfo(handle, AI_INFO_NUM_SE_RANGES, 0, &numSERanges);
-            if (err != ERR_NO_ERROR) { /* shit */ }
-            if (numSERanges < 0) { /* shit */ }
+            if (err != ERR_NO_ERROR) { /* shit */ std::cout << "ulAIGetInfo Error: " << err << std::endl; }
+            if (numSERanges < 0) { /* shit */ std::cout << "Number of singled ended ranges negative: " << numSERanges << std::endl; }
             err = ulAIGetInfo(handle, AI_INFO_SE_RANGE, numSERanges, &voltageRange);
-            if (err != ERR_NO_ERROR) { /* shit */ }
+            if (err != ERR_NO_ERROR) { /* shit */ std::cout << "ulAIGetInfo Error: " << err << std::endl; }
 
             // Create DAQHandler for this DAQ
             if (aiSupported != 0) {

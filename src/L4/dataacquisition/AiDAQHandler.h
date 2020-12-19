@@ -7,9 +7,10 @@
 #include <vector>
 #include "DAQDeviceHandler.h"
 #include <memory>
+#include <iostream>
 
 /**
- * @brief The DAQHandler class handles an analog input DAQ device
+ * @brief The AiDAQHandler class handles an analog input DAQ device
  */
 class AiDAQHandler : public DAQDeviceHandler {
 public:
