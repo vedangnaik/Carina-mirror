@@ -4,7 +4,6 @@
 #include "src/L1/entities/State.h"
 #include "src/L2/usecases/SensorsManager.h"
 #include "src/L2/usecases/ActuatorsManager.h"
-#include "src/L2/services/ClocksModule.h"
 
 class StMOC {
 public:

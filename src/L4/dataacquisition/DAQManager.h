@@ -1,7 +1,6 @@
 #ifndef DAQMANAGER_H
 #define DAQMANAGER_H
 
-#include "src/L2/services/ClocksModule.h"
 #include "src/L3/gateways/SensorValuesGateway.h"
 #include "src/L4/dataacquisition/AiDAQHandler.h"
 #include <map>

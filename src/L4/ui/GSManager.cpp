@@ -49,7 +49,6 @@ void GSManager::openProcessFromFile(std::string filepath) {
     for (const auto& [id, _] : pgdata.actuators) { actuatorIds.push_back(id); }
 
     // init L2 classes here
-    this->cm = new ClocksModule();
     this->sm = new SensorsManager(pgdata.sensors);
     this->am = new ActuatorsManager(pgdata.actuators);
     // check for invalid start state here
@@ -74,11 +73,9 @@ void GSManager::openProcessFromFile(std::string filepath) {
 void GSManager::startProcess() {
     this->stm->startProcess();
     this->daqm->startAcquisition();
-    this->cm->start();
 }
 
 void GSManager::stopProcess() {
-    this->cm->stop();
     this->daqm->stopAcquisition();
     this->stm->stopProcess();
 }
@@ -99,7 +96,6 @@ void GSManager::closeProcess() {
     delete this->stm;
     delete this->am;
     delete this->sm;
-    delete this->cm;
     // rerender the UI for the next process.
     this->rerenderUi();
 }

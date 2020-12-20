@@ -2,7 +2,6 @@
 #define SENSORMANAGER_H
 
 #include "src/L1/entities/Sensor.h"
-#include "src/L2/services/ClocksModule.h"
 #include <map>
 
 class SMOC {

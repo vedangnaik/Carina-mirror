@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <map>
 #include <mutex>
+#include <algorithm>
 
 class SPOC {
 public:

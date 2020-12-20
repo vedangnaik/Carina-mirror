@@ -5,8 +5,8 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QGroupBox>
+#include <QTimer>
 
-#include "src/L2/services/ClocksModule.h"
 #include "src/L3/controllers/ActuatorsController.h"
 #include "src/L3/controllers/StatesController.h"
 #include "src/L3/presenters/SensorsPresenter.h"

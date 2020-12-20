@@ -33,8 +33,7 @@ SOURCES += \
     src/L4/ui/SystemDiagramUIhandler.cpp \
     src/main.cpp \
     src/L2/usecases/ActuatorsManager.cpp \
-    src/L2/usecases/SensorsManager.cpp \
-    src/L2/services/ClocksModule.cpp
+    src/L2/usecases/SensorsManager.cpp
 
 HEADERS += \
     src/L2/usecases/StatesManager.h \
@@ -57,7 +56,6 @@ HEADERS += \
     src/L4/ui/StateUIHandler.h \
     src/L2/usecases/ActuatorsManager.h \
     src/L2/usecases/SensorsManager.h \
-    src/L2/services/ClocksModule.h \
     src/L4/ui/SystemDiagramUIhandler.h \
     src/L4/ui/UIHelpers.h
 

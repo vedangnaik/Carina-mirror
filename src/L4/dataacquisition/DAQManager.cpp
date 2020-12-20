@@ -54,7 +54,7 @@ DAQManager::DAQManager(SVGIC& svgic) : svgic{svgic} {
 
     // Create timer to start reading from DAQs here
     this->DAQReadTimer = new QTimer(this);
-    this->DAQReadTimer->start(10);
+    this->DAQReadTimer->start(1000);
 }
 
 void DAQManager::startAcquisition() {

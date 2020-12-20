@@ -14,7 +14,6 @@
 #include "src/L2/usecases/SensorsManager.h"
 #include "src/L2/usecases/ActuatorsManager.h"
 #include "src/L2/usecases/StatesManager.h"
-#include "src/L2/services/ClocksModule.h"
 // L3
 #include "src/L3/controllers/ActuatorsController.h"
 #include "src/L3/gateways/ProcessGateway.h"
@@ -56,7 +55,6 @@ private:
     Ui::SystemDiagram systemDiagramUI;
     Draggable<QPushButton>* btn;
     // L2
-    ClocksModule* cm;
     SensorsManager* sm;
     ActuatorsManager* am;
     StatesManager* stm;
