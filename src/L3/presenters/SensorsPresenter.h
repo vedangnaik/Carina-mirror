@@ -4,6 +4,7 @@
 #include "src/L2/usecases/SensorsManager.h"
 #include <stdexcept>
 #include <map>
+#include <mutex>
 
 class SPOC {
 public:
@@ -20,13 +21,12 @@ public:
 
 class SensorsPresenter : public SMOC, public SPIC {
 public:
-    SensorsPresenter(ClocksModule& cm) : cm(cm) {};
     void notify(const std::string id, const float value) override;
     void subscribe(std::string id, SPOC* spoc) override;
     void unsubscribe(std::string id, SPOC* spoc) override;
 private:
     std::map<std::string, std::vector<SPOC*>> subscribers;
-    ClocksModule& cm;
+    std::mutex subscribers_mutex;
 };
 
 #endif // SENSORSPRESENTER_H
