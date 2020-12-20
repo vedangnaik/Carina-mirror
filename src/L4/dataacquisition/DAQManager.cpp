@@ -1,6 +1,6 @@
 #include "DAQManager.h"
 
-DAQManager::DAQManager(ClocksModule& cm, SVGIC& svgic) : cm{cm}, svgic{svgic} {
+DAQManager::DAQManager(SVGIC& svgic) : svgic{svgic} {
     std::vector<DaqDeviceDescriptor> devDescriptors;
 
     // Get the number of connected devices here.
@@ -9,6 +9,7 @@ DAQManager::DAQManager(ClocksModule& cm, SVGIC& svgic) : cm{cm}, svgic{svgic} {
     // This will trip, but can be ignored safely (I think)
     if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulGetDaqDeviceInventory Error: " << err << std::endl; }
 
+    // Create DAQ instances
     if (numDAQDevicesDetected == 0) {
         // shit
         std::cout << "No DAQ devices detected\n";
@@ -50,17 +51,21 @@ DAQManager::DAQManager(ClocksModule& cm, SVGIC& svgic) : cm{cm}, svgic{svgic} {
             }
         }
     }
+
+    // Create timer to start reading from DAQs here
+    this->DAQReadTimer = new QTimer(this);
+    this->DAQReadTimer->start(10);
 }
 
 void DAQManager::startAcquisition() {
     for (const auto& d : this->DAQDevices) {
         d->startAcquisition();
     }
-    connect(this->cm.HundredMsTimer, &QTimer::timeout, this, &DAQManager::getLatestData);
+    connect(this->DAQReadTimer, &QTimer::timeout, this, &DAQManager::getLatestData);
 }
 
 void DAQManager::stopAcquisition() {
-    disconnect(this->cm.HundredMsTimer, &QTimer::timeout, this, &DAQManager::getLatestData);
+    disconnect(this->DAQReadTimer, &QTimer::timeout, this, &DAQManager::getLatestData);
     for (const auto& d : this->DAQDevices) {
         d->stopAcquisition();
     }

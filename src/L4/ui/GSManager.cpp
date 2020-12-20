@@ -64,7 +64,7 @@ void GSManager::openProcessFromFile(std::string filepath) {
     this->suih = new StateUIHandler(this->stateUI, *this->sp, *this->ap, *this->ac, *this->stc);
     this->sduih = new SystemDiagramUIHandler(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIds, actuatorIds);
     this->stp = new StatesPresenter(*this->suih);
-    this->daqm = new DAQManager(*this->cm, *this->svg);
+    this->daqm = new DAQManager(*this->svg);
     // attach presenters to managers (kinda ugly, but idk another way to do it)
     this->sm->setOutputContract(this->sp);
     this->am->setOutputContract(this->ap);

@@ -1,26 +1,27 @@
 #ifndef DAQMANAGER_H
 #define DAQMANAGER_H
 
+#include "src/L2/services/ClocksModule.h"
+#include "src/L3/gateways/SensorValuesGateway.h"
+#include "src/L4/dataacquisition/AiDAQHandler.h"
 #include <map>
 #include <vector>
 #include <QObject>
-#include "src/L2/services/ClocksModule.h"
-#include "src/L3/gateways/SensorValuesGateway.h"
 #include <uldaq.h>
-#include "AiDAQHandler.h"
 #include <iostream>
+#include <QTimer>
 
 class DAQManager : public QObject {
     Q_OBJECT
 public:
-    DAQManager(ClocksModule& cm, SVGIC& svgic);
+    DAQManager(SVGIC& svgic);
     void startAcquisition();
     void stopAcquisition();
     void getLatestData();
 private:
     std::vector<DAQDeviceHandler*> DAQDevices;
-    ClocksModule& cm;
     SVGIC& svgic;
+    QTimer* DAQReadTimer;
     // device search parameters
     const DaqDeviceInterface DAQDeviceInterfaceType = ANY_IFC;
 };
