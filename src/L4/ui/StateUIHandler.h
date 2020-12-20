@@ -40,7 +40,7 @@ public:
 class StateUIHandler : public QWidget, public StPOC {
     Q_OBJECT
 public:
-    StateUIHandler(Ui::State& stateUI, SPIC& spic, APIC& apic, ACIC& acic, StCIC& stcic, ClocksModule& cm);
+    StateUIHandler(Ui::State& stateUI, SPIC& spic, APIC& apic, ACIC& acic, StCIC& stcic);
 
     void displayProcessSummary(const std::vector<std::string> processSummary) override;
     void displayState(const State& s) override;
@@ -50,11 +50,11 @@ private:
     QLabel* displayTimedActuator(QPushButton* aButton);
 
     Ui::State& stateUI;
+    QTimer* actuatorButtonTimer;
     SPIC& spic;
     APIC& apic;
     ACIC& acic;
     StCIC& stcic;
-    ClocksModule& cm;
 };
 
 #endif // STATEUIHANDLER_H

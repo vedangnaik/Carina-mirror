@@ -4,7 +4,10 @@
 QLabel* displaySensorCheck(const SensorCheck& sc);
 QLabel* displayActuatorCheck(const ActuatorCheck& ac);
 
-StateUIHandler::StateUIHandler(Ui::State& stateUI, SPIC& spic, APIC& apic, ACIC& acic, StCIC& stcic, ClocksModule& cm) : stateUI(stateUI), spic(spic), apic(apic), acic(acic), stcic(stcic), cm(cm) {
+StateUIHandler::StateUIHandler(Ui::State& stateUI, SPIC& spic, APIC& apic, ACIC& acic, StCIC& stcic) : stateUI(stateUI), spic(spic), apic(apic), acic(acic), stcic(stcic) {
+    this->actuatorButtonTimer = new QTimer(this);
+    this->actuatorButtonTimer->start(1000);
+    // this->actuatorButtonTimer->stop() should happen automatically on delete.
     connect(this->stateUI.proceedButton, &QPushButton::clicked, &this->stcic, &StCIC::proceed);
     connect(this->stateUI.abortButton, &QPushButton::clicked, &this->stcic, &StCIC::abort);
 };
@@ -113,12 +116,12 @@ QLabel* StateUIHandler::displayTimedActuator(QPushButton* aButton) {
     QLabel* elapsedTimeLabel = new QLabel();
     connect(aButton, &QPushButton::toggled, elapsedTimeLabel, [=](bool checked) {
         if (checked) {
-            connect(this->cm.oneSTimer, &QTimer::timeout, elapsedTimeLabel, [=]() {
+            connect(this->actuatorButtonTimer, &QTimer::timeout, elapsedTimeLabel, [=]() {
                 int elapsedTime = elapsedTimeLabel->text().toInt() + 1;
                 elapsedTimeLabel->setText(QString::number(elapsedTime));
             });
         } else {
-            disconnect(this->cm.oneSTimer, &QTimer::timeout, elapsedTimeLabel, nullptr);
+            disconnect(this->actuatorButtonTimer, &QTimer::timeout, elapsedTimeLabel, nullptr);
             elapsedTimeLabel->setText("");
         }
     });
