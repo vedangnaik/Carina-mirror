@@ -80,6 +80,6 @@ void DAQManager::getLatestData() {
     // figure out here how to correclty hook up the channels from all DAQs into ids for defined sensors
     // output random values for now
     for (std::string id : this->svgic.getSensorIDs()) {
-        this->svgic.updateValue(id, random() % 1000);
+        this->svgic.updateValue(id, rand() % 1000);
     }
 }
