@@ -9,6 +9,7 @@
 #endif
 
 #include "src/L3/gateways/SensorValuesGateway.h"
+#include "src/L4/dataacquisition/DAQDeviceHandler.h"
 #include <map>
 #include <vector>
 #include <QObject>
