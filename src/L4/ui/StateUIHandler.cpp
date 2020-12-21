@@ -30,36 +30,39 @@ void StateUIHandler::displayState(const State& s) {
     unsigned int row = 1;
     for (std::string id : s.actionsOrder) {
         if (s.actuatorOptions.find(id) != s.actuatorOptions.end()) {
-            StateUI::ActuatorButton* a = new StateUI::ActuatorButton();
-            this->apic.subscribe(id, a);
-            a->setCheckable(true);
-            a->setText(QString::fromStdString(id));
-            connect(a, &QPushButton::clicked, &this->acic, [=]() {
+            StateUI::ActuatorButton* ab = new StateUI::ActuatorButton();
+            this->apic.subscribe(id, ab);
+            ab->setCheckable(true);
+            ab->setText(QString::fromStdString(id));
+            connect(ab, &QPushButton::clicked, &this->acic, [=]() {
                 this->acic.actuate(id);
+            });
+            connect(ab, &QPushButton::destroyed, this, [=]() {
+                this->apic.unsubscribe(id, ab);
             });
 
             this->stateUI.actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
-            this->stateUI.actionsLayout->addWidget(a, row, 1);
+            this->stateUI.actionsLayout->addWidget(ab, row, 1);
 
             for (ActuatorOption o: s.actuatorOptions.at(id)) {
                 switch (o) {
                 case ActuatorOption::Timed:
-                    this->stateUI.actionsLayout->addWidget(this->displayTimedActuator(a), row, 4);
+                    this->stateUI.actionsLayout->addWidget(this->displayTimedActuator(ab), row, 4);
                     break;
                 case ActuatorOption::Automatic:
-                    a->toggle();
+                    ab->toggle();
                     break;
                 }
             }
         } else if (s.sensorOptions.find(id) != s.sensorOptions.end()) {
-            StateUI::SensorDisplayLabel* sensorValueLabel = new StateUI::SensorDisplayLabel();
-            this->spic.subscribe(id, sensorValueLabel);
-            connect(sensorValueLabel, &QLabel::destroyed, this, [=]() {
-                this->spic.unsubscribe(id, sensorValueLabel);
+            StateUI::SensorDisplayLabel* svl = new StateUI::SensorDisplayLabel();
+            this->spic.subscribe(id, svl);
+            connect(svl, &QLabel::destroyed, this, [=]() {
+                this->spic.unsubscribe(id, svl);
             });
 
             this->stateUI.actionsLayout->addWidget(new QLabel(QString::fromStdString(id)), row, 0);
-            this->stateUI.actionsLayout->addWidget(sensorValueLabel, row, 1);
+            this->stateUI.actionsLayout->addWidget(svl, row, 1);
             for (SensorOption o: s.sensorOptions.at(id)) {
                 switch (o) {
                     // switch for sensor options here
