@@ -1,6 +1,7 @@
 #include "DAQManager.h"
 
 DAQManager::DAQManager(SVGIC& svgic) : svgic{svgic} {
+#ifdef __linux__
     std::vector<DaqDeviceDescriptor> devDescriptors;
 
     // Get the number of connected devices here.
@@ -8,6 +9,7 @@ DAQManager::DAQManager(SVGIC& svgic) : svgic{svgic} {
     UlError err = ulGetDaqDeviceInventory(this->DAQDeviceInterfaceType, devDescriptors.data(), &numDAQDevicesDetected);
     // This will trip, but can be ignored safely (I think)
     if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulGetDaqDeviceInventory Error: " << err << std::endl; }
+
 
     // Create DAQ instances
     if (numDAQDevicesDetected == 0) {
@@ -51,6 +53,9 @@ DAQManager::DAQManager(SVGIC& svgic) : svgic{svgic} {
             }
         }
     }
+#else
+    // push back dummy daq here
+#endif
 
     // Create timer to start reading from DAQs here
     this->DAQReadTimer = new QTimer(this);

@@ -1,3 +1,5 @@
+#ifdef __linux__
+
 #include "AiDAQHandler.h"
 
 AiDAQHandler::AiDAQHandler(DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange) : handle{handle}, numChannels{numChannels}, voltageRange{voltageRange} {
@@ -47,3 +49,5 @@ std::map<unsigned int, std::vector<double>> AiDAQHandler::getLatestData() {
         // shit
     }
 }
+
+#endif

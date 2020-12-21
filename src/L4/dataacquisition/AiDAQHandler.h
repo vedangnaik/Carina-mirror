@@ -1,6 +1,6 @@
-#ifndef AIDAQHANDLER_H
-#define AIDAQHANDLER_H
+#ifdef __linux__
 
+#pragma once
 #include <uldaq.h>
 #include <stdlib.h>
 #include <map>
@@ -34,4 +34,4 @@ private:
     bool connected = false;
 };
 
-#endif // AIDAQHANDLER_H
+#endif
