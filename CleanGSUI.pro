@@ -35,7 +35,8 @@ SOURCES += \
     src/L4/ui/SystemDiagramUIhandler.cpp \
     src/main.cpp \
     src/L2/usecases/ActuatorsManager.cpp \
-    src/L2/usecases/SensorsManager.cpp
+    src/L2/usecases/SensorsManager.cpp \
+    src/L2/services/easylogging++.cc
 
 HEADERS += \
     src/L2/usecases/StatesManager.h \
@@ -59,7 +60,8 @@ HEADERS += \
     src/L2/usecases/ActuatorsManager.h \
     src/L2/usecases/SensorsManager.h \
     src/L4/ui/SystemDiagramUIhandler.h \
-    src/L4/ui/UIHelpers.h
+    src/L4/ui/UIHelpers.h \
+    src/L2/services/easylogging++.h
 
 FORMS += \
     src/L4/ui/gsmainwindow.ui \
