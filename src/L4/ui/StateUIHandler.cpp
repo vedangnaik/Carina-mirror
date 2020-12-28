@@ -10,7 +10,7 @@ StateUIHandler::StateUIHandler(Ui::State& stateUI, SPIC& spic, APIC& apic, ACIC&
     // this->actuatorButtonTimer->stop() should happen automatically on delete.
     connect(this->stateUI.proceedButton, &QPushButton::clicked, &this->stcic, &StCIC::proceed);
     connect(this->stateUI.abortButton, &QPushButton::clicked, &this->stcic, &StCIC::abort);
-};
+}
 
 void StateUIHandler::displayState(const State& s) {
     uihelpers::clearLayout(this->stateUI.actionsLayout);
