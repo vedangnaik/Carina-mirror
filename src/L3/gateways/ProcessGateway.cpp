@@ -30,7 +30,7 @@ struct ProcessData ProcessGateway::parseProcessFile() {
 
 std::map<std::string, Sensor*> ProcessGateway::parseSensors(QJsonObject sensorsObj) {
     std::map<std::string, Sensor*> sensors = {};
-    for (QString k: sensorsObj.keys()) {   
+    for (QString k: sensorsObj.keys()) {
         sensors[k.toStdString()] = new Sensor(k.toStdString(), sensorsObj[k].toObject()["name"].toString().toStdString());
     }
     return sensors;
@@ -40,8 +40,7 @@ std::map<std::string, Sensor*> ProcessGateway::parseSensors(QJsonObject sensorsO
 std::map<std::string, Actuator*> ProcessGateway::parseActuators(QJsonObject actuatorsObj) {
     std::map<std::string, Actuator*> actuators;
     for (QString k: actuatorsObj.keys()) {
-        actuators[k.toStdString()] = new Actuator(k.toStdString(),
-                    actuatorsObj[k].toObject()["name"].toString().toStdString());
+        actuators[k.toStdString()] = new Actuator(k.toStdString(), actuatorsObj[k].toObject()["name"].toString().toStdString());
     }
     return actuators;
 }
