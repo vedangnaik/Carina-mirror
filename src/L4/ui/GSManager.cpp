@@ -10,18 +10,8 @@ GSManager::GSManager() {
             this->openProcessFromFile(fileName.toStdString());
         }
     });
-
-    connect(this->GSMainWindowUI.startProcessAction, &QAction::triggered, this, [=]() {
-        this->startProcess();
-        this->GSMainWindowUI.startProcessAction->setEnabled(false);
-        this->GSMainWindowUI.closeProcessAction->setEnabled(true);
-    });
-
-    connect(this->GSMainWindowUI.closeProcessAction, &QAction::triggered, this, [=]() {
-        this->closeProcess();
-        this->GSMainWindowUI.closeProcessAction->setEnabled(false);
-        this->GSMainWindowUI.openProcessFromFileAction->setEnabled(true);
-    });
+    connect(this->GSMainWindowUI.startProcessAction, &QAction::triggered, this, &GSManager::startProcess);
+    connect(this->GSMainWindowUI.closeProcessAction, &QAction::triggered, this, &GSManager::stopAndCloseProcess);
 
     connect(this->GSMainWindowUI.openSystemDiagramAction, &QAction::triggered, this, [=]() {
         QString fileName = QFileDialog::getOpenFileName(this,
@@ -30,7 +20,6 @@ GSManager::GSManager() {
             this->systemDiagramUI.systemDiagramFrame->setStyleSheet("#systemDiagramFrame{ border-image: url(" + fileName + ") 0 0 0 0 }");
         }
     });
-
     connect(this->GSMainWindowUI.clearSystemDiagramAction, &QAction::triggered, this, [=]() {
         this->systemDiagramUI.systemDiagramFrame->setStyleSheet("");
     });
@@ -47,25 +36,24 @@ void GSManager::openProcessFromFile(std::string filepath) {
          for (const auto& [id, _] : pgdata.actuators) { actuatorIds.push_back(id); }
 
          // init L2 classes here
-         this->sm = new SensorsManager(pgdata.sensors);
-         this->am = new ActuatorsManager(pgdata.actuators);
-         // check for invalid start state here
-         this->stm = new StatesManager(pgdata.states, *this->sm, *this->am);
+         this->sm = std::make_unique<SensorsManager>(pgdata.sensors);
+         this->am = std::make_unique<ActuatorsManager>(pgdata.actuators);
+         this->stm = std::make_unique<StatesManager>(pgdata.states, *this->sm, *this->am);
          // init L3 classes here
-         this->svg = new SensorValuesGateway(*this->sm);
-         this->ac = new ActuatorsController(*this->am);
-         this->stc = new StatesController(*this->stm);
+         this->svg = std::make_unique<SensorValuesGateway>(*this->sm);
+         this->ac = std::make_unique<ActuatorsController>(*this->am);
+         this->stc = std::make_unique<StatesController>(*this->stm);
          // init L4 and presenters here
-         this->sp = new SensorsPresenter();
-         this->ap = new ActuatorsPresenter();
-         this->suih = new StateUIHandler(this->stateUI, *this->sp, *this->ap, *this->ac, *this->stc);
-         this->sduih = new SystemDiagramUIHandler(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIds, actuatorIds);
-         this->stp = new StatesPresenter(*this->suih);
-         this->daqm = new DAQManager(*this->svg);
+         this->sp = std::make_unique<SensorsPresenter>();
+         this->ap = std::make_unique<ActuatorsPresenter>();
+         this->suih = std::make_unique<StateUIHandler>(this->stateUI, *this->sp, *this->ap, *this->ac, *this->stc);
+         this->sduih = std::make_unique<SystemDiagramUIHandler>(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIds, actuatorIds);
+         this->stp = std::make_unique<StatesPresenter>(*this->suih);
+         this->daqm = std::make_unique<DAQManager>(*this->svg);
          // attach presenters to managers (kinda ugly, but idk another way to do it)
-         this->sm->setOutputContract(this->sp);
-         this->am->setOutputContract(this->ap);
-         this->stm->setOutputContract(this->stp);
+         this->sm->setOutputContract(this->sp.get());
+         this->am->setOutputContract(this->ap.get());
+         this->stm->setOutputContract(this->stp.get());
 
          this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
          this->GSMainWindowUI.startProcessAction->setEnabled(true);
@@ -78,31 +66,18 @@ void GSManager::openProcessFromFile(std::string filepath) {
 void GSManager::startProcess() {
     this->stm->startProcess();
     this->daqm->startAcquisition();
+
+    this->GSMainWindowUI.startProcessAction->setEnabled(false);
+    this->GSMainWindowUI.closeProcessAction->setEnabled(true);
 }
 
-void GSManager::stopProcess() {
+void GSManager::stopAndCloseProcess() {
     this->daqm->stopAcquisition();
     this->stm->stopProcess();
-}
-
-void GSManager::closeProcess() {
-    this->stopProcess();
-    // these deletes are in the opposite order
-    // to the constructs in openProcess().
-    delete this->daqm;
-    delete this->stp;
-    delete this->sp;
-    delete this->ap;
-    delete this->sduih;
-    delete this->suih;
-    delete this->stc;
-    delete this->ac;
-    delete this->svg;
-    delete this->stm;
-    delete this->am;
-    delete this->sm;
-    // rerender the UI for the next process.
     this->rerenderUi();
+
+    this->GSMainWindowUI.closeProcessAction->setEnabled(false);
+    this->GSMainWindowUI.openProcessFromFileAction->setEnabled(true);
 }
 
 void GSManager::renderUi() {

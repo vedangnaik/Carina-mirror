@@ -47,8 +47,7 @@ public:
 private:
     void openProcessFromFile(std::string filepath);
     void startProcess();
-    void stopProcess();
-    void closeProcess();
+    void stopAndCloseProcess();
     void renderUi();
     void rerenderUi();
     // Ui
@@ -56,22 +55,21 @@ private:
     Ui::State stateUI;
     Ui::SystemDiagram systemDiagramUI;
     Ui::Error errorUI;
-    Draggable<QPushButton>* btn;
     // L2
-    SensorsManager* sm;
-    ActuatorsManager* am;
-    StatesManager* stm;
+    std::unique_ptr<SensorsManager> sm;
+    std::unique_ptr<ActuatorsManager> am;
+    std::unique_ptr<StatesManager> stm;
     // L3
-    SensorValuesGateway* svg;
-    ActuatorsController* ac;
-    StatesController* stc;
-    SensorsPresenter* sp;
-    ActuatorsPresenter* ap;
-    StatesPresenter* stp;
+    std::unique_ptr<SensorValuesGateway> svg;
+    std::unique_ptr<ActuatorsController> ac;
+    std::unique_ptr<StatesController> stc;
+    std::unique_ptr<SensorsPresenter> sp;
+    std::unique_ptr<ActuatorsPresenter> ap;
+    std::unique_ptr<StatesPresenter> stp;
     // L4
-    StateUIHandler* suih;
-    SystemDiagramUIHandler* sduih;
-    DAQManager* daqm;
+    std::unique_ptr<StateUIHandler> suih;
+    std::unique_ptr<SystemDiagramUIHandler> sduih;
+    std::unique_ptr<DAQManager> daqm;
 };
 
 #endif // GSMAINWINDOWHANDLER_H

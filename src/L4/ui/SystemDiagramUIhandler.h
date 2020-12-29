@@ -41,11 +41,11 @@ class SystemDiagramUIHandler : public QWidget {
     Q_OBJECT
 public:
     SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI, SPIC& spic, APIC& apic, ACIC& acic, std::vector<std::string> sensorIds, std::vector<std::string> actuatorIds);
-    ~SystemDiagramUIHandler();
 private slots:
     void togglePositionLock(int state);
 private:
     Ui::SystemDiagram& systemDiagramUI;
+    // these objects are children of the main UI, so no manual deletion is required.
     std::vector<DraggableBase*> draggables;
 
     SPIC& spic;

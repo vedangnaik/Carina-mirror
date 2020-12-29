@@ -34,9 +34,3 @@ void SystemDiagramUIHandler::togglePositionLock(int state) {
         for (auto& d : this->draggables) { d->unlockPosition(); }
     }
 }
-
-SystemDiagramUIHandler::~SystemDiagramUIHandler() {
-    for (auto& d : this->draggables) {
-        delete d;
-    }
-}
