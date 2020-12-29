@@ -2,7 +2,6 @@
 
 GSManager::GSManager() {
     this->renderUi();
-    euih << "Hello, World!";
 
     connect(this->GSMainWindowUI.openProcessFromFileAction, &QAction::triggered, this, [=]() {
         QString fileName = QFileDialog::getOpenFileName(this,
@@ -69,8 +68,6 @@ void GSManager::openProcessFromFile(std::string filepath) {
     this->sm->setOutputContract(this->sp);
     this->am->setOutputContract(this->ap);
     this->stm->setOutputContract(this->stp);
-
-    LOG(INFO) << "Process file opened";
 }
 
 void GSManager::startProcess() {
