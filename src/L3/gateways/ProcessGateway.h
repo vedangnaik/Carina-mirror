@@ -77,3 +77,9 @@ public:
     InvalidActuatorPositionCheckError(std::string stateID, std::string actuatorID) :
         std::runtime_error("State '" + stateID + "': '" + actuatorID + "' position check must be either 'open' or 'close'.") {}
 };
+
+class EmptyStateIDError : public std::runtime_error {
+public:
+    EmptyStateIDError() :
+        std::runtime_error("State IDs must be non-empty.") {}
+};
