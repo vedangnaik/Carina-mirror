@@ -44,12 +44,14 @@ private:
 
 class InvalidActionIDError : public std::runtime_error {
 public:
-    InvalidActionIDError(std::string stateID, std::string actionID) : std::runtime_error("State '" + stateID + "': '" + actionID + "' is neither an actuator nor a sensor.") {}
+    InvalidActionIDError(std::string stateID, std::string actionID) :
+        std::runtime_error("State '" + stateID + "': '" + actionID + "' is neither an actuator nor a sensor.") {}
 };
 
 class EmptyActionIDError: public std::runtime_error {
 public:
-    EmptyActionIDError(std::string stateID) : std::runtime_error("State '" + stateID + "': actions must have non-empty IDs.") {}
+    EmptyActionIDError(std::string stateID) :
+        std::runtime_error("State '" + stateID + "': actions must have non-empty IDs.") {}
 };
 
 // These two classes work together to display an invalid range check
@@ -60,5 +62,18 @@ public:
 };
 class InvalidSensorRangeCheckError : public std::runtime_error {
 public:
-    InvalidSensorRangeCheckError(std::string stateID, std::string sensorID) : std::runtime_error("State '" + stateID + "': '" + sensorID + "' range check must be of form [a, b]") {};
+    InvalidSensorRangeCheckError(std::string stateID, std::string sensorID) :
+        std::runtime_error("State '" + stateID + "': '" + sensorID + "' range check must be of form [a, b].") {}
+};
+
+// same for invalid actuator position check
+class InvalidActuatorPositionCheck : public std::exception {
+public:
+    InvalidActuatorPositionCheck(std::string actuatorID) : actuatorID(actuatorID) {}
+    const std::string actuatorID;
+};
+class InvalidActuatorPositionCheckError : public std::runtime_error {
+public:
+    InvalidActuatorPositionCheckError(std::string stateID, std::string actuatorID) :
+        std::runtime_error("State '" + stateID + "': '" + actuatorID + "' position check must be either 'open' or 'close'.") {}
 };

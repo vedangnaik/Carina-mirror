@@ -83,6 +83,7 @@ std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj,
             {Transition::Abort, {}}
         };
 
+        // Parse actions checks.
         try {
             if (v["checks"]["proceed"].isObject()) {
                 sensorChecks[Transition::Proceed] = parseSensorChecks(v["checks"]["proceed"], sensors);
@@ -93,8 +94,9 @@ std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj,
             }
         }  catch (InvalidSensorRangeCheck& e) {
             throw InvalidSensorRangeCheckError(stateID, e.sensorID);
+        } catch (InvalidActuatorPositionCheck& e) {
+            throw InvalidActuatorPositionCheckError(stateID, e.actuatorID);
         }
-
 
         std::map<Transition, std::string> transitions = {
             { Transition::Proceed, v["transitions"]["proceed"].toString().toStdString() },
@@ -110,16 +112,16 @@ std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj,
 std::map<std::string, SensorCheck> ProcessGateway::parseSensorChecks(QJsonValue checks, std::map<std::string, Sensor*> sensors) {
     std::map<std::string, SensorCheck> sensorChecks;
     for (QString k : checks.toObject().keys()) {
-        std::string id = k.toStdString();
-        if (sensors.find(id) != sensors.end()) {
+        std::string sensorID = k.toStdString();
+        if (sensors.find(sensorID) != sensors.end()) {
             QJsonValue range = checks[k];
             if (range.isArray()) {
-                sensorChecks[id] = SensorCheck {
+                sensorChecks[sensorID] = SensorCheck {
                     range.toArray()[0].toInt(),
                     range.toArray()[1].toInt()
                 };
             } else {
-                throw InvalidSensorRangeCheck(id);
+                throw InvalidSensorRangeCheck(sensorID);
             }
         } else {
             // ignore, not a sensor
@@ -132,15 +134,15 @@ std::map<std::string, SensorCheck> ProcessGateway::parseSensorChecks(QJsonValue 
 std::map<std::string, ActuatorCheck> ProcessGateway::parseActuatorChecks(QJsonValue checks, std::map<std::string, Actuator*> actuators) {
     std::map<std::string, ActuatorCheck> actuatorChecks;
     for (QString k : checks.toObject().keys()) {
-        std::string id = k.toStdString();
-        if (actuators.find(id) != actuators.end()) {
+        std::string actuatorID = k.toStdString();
+        if (actuators.find(actuatorID) != actuators.end()) {
             QString check = checks[k].toString();
             if (check == "close") {
-                actuatorChecks[id] = ActuatorCheck { false };
+                actuatorChecks[actuatorID] = ActuatorCheck { false };
             } else if (check == "open") {
-                actuatorChecks[id] = ActuatorCheck { true };
+                actuatorChecks[actuatorID] = ActuatorCheck { true };
             } else {
-                // invalid check error here
+                throw InvalidActuatorPositionCheck(actuatorID);
             }
         } else {
             // ignore, not an actuator
