@@ -57,8 +57,9 @@ void GSManager::openProcessFromFile(std::string filepath) {
 
          this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
          this->GSMainWindowUI.startProcessAction->setEnabled(true);
-    }  catch (std::runtime_error& e) {
+    }  catch (ProcessFileParseException& e) {
         // TODO: figure out some way to reset the thing properly here
+        LOG(ERROR) << "Process file parse error:";
         LOG(ERROR) << e.what();
     }
 }

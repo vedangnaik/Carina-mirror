@@ -42,16 +42,21 @@ private:
  * Custom exceptions
  */
 
-class InvalidActionIDError : public std::runtime_error {
+class ProcessFileParseException : public std::runtime_error {
 public:
-    InvalidActionIDError(std::string stateID, std::string actionID) :
-        std::runtime_error("State '" + stateID + "': '" + actionID + "' is neither an actuator nor a sensor.") {}
+    ProcessFileParseException(std::string message) : std::runtime_error(message) {}
 };
 
-class EmptyActionIDError: public std::runtime_error {
+class InvalidActionIDError : public ProcessFileParseException {
+public:
+    InvalidActionIDError(std::string stateID, std::string actionID) :
+        ProcessFileParseException("State '" + stateID + "': '" + actionID + "' is neither an actuator nor a sensor.") {}
+};
+
+class EmptyActionIDError: public ProcessFileParseException {
 public:
     EmptyActionIDError(std::string stateID) :
-        std::runtime_error("State '" + stateID + "': actions must have non-empty IDs.") {}
+        ProcessFileParseException("State '" + stateID + "': actions must have non-empty IDs.") {}
 };
 
 // These two classes work together to display an invalid range check
@@ -60,10 +65,10 @@ public:
     InvalidSensorRangeCheck(std::string sensorID) : sensorID(sensorID) {}
     const std::string sensorID;
 };
-class InvalidSensorRangeCheckError : public std::runtime_error {
+class InvalidSensorRangeCheckError : public ProcessFileParseException {
 public:
     InvalidSensorRangeCheckError(std::string stateID, std::string sensorID) :
-        std::runtime_error("State '" + stateID + "': '" + sensorID + "' range check must be of form [a, b].") {}
+        ProcessFileParseException("State '" + stateID + "': '" + sensorID + "' range check must be of form [a, b].") {}
 };
 
 // same for invalid actuator position check
@@ -72,14 +77,15 @@ public:
     InvalidActuatorPositionCheck(std::string actuatorID) : actuatorID(actuatorID) {}
     const std::string actuatorID;
 };
-class InvalidActuatorPositionCheckError : public std::runtime_error {
+class InvalidActuatorPositionCheckError : public ProcessFileParseException {
 public:
     InvalidActuatorPositionCheckError(std::string stateID, std::string actuatorID) :
-        std::runtime_error("State '" + stateID + "': '" + actuatorID + "' position check must be either 'open' or 'close'.") {}
+        ProcessFileParseException("State '" + stateID + "': '" + actuatorID + "' position check must be either 'open' or 'close'.") {}
 };
 
-class EmptyStateIDError : public std::runtime_error {
+// This exception handles empty IDs for the entites: sensors, actuators, states.
+class EmptyIDError : public ProcessFileParseException {
 public:
-    EmptyStateIDError() :
-        std::runtime_error("State IDs must be non-empty.") {}
+    EmptyIDError(const std::string object) :
+        ProcessFileParseException(object + " IDs must be non-empty.") {}
 };

@@ -23,6 +23,7 @@ struct ProcessData ProcessGateway::parseProcessFile() {
 std::map<std::string, Sensor*> ProcessGateway::parseSensors(QJsonObject sensorsObj) {
     std::map<std::string, Sensor*> sensors = {};
     for (QString k: sensorsObj.keys()) {
+        if (k == "") throw EmptyIDError("Sensor");
         sensors[k.toStdString()] = new Sensor(k.toStdString(), sensorsObj[k].toObject()["name"].toString().toStdString());
     }
     return sensors;
@@ -32,6 +33,7 @@ std::map<std::string, Sensor*> ProcessGateway::parseSensors(QJsonObject sensorsO
 std::map<std::string, Actuator*> ProcessGateway::parseActuators(QJsonObject actuatorsObj) {
     std::map<std::string, Actuator*> actuators;
     for (QString k: actuatorsObj.keys()) {
+        if (k == "") throw EmptyIDError("Actuator");
         actuators[k.toStdString()] = new Actuator(k.toStdString(), actuatorsObj[k].toObject()["name"].toString().toStdString());
     }
     return actuators;
@@ -44,9 +46,7 @@ std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj,
         QJsonValue v = statesObj[k];
 
         std::string stateID = k.toStdString();
-        if (stateID == "") {
-            throw EmptyStateIDError();
-        }
+        if (stateID == "") throw EmptyIDError("State");
 
         std::string name = v["name"].toString().toStdString();
         std::string safetyRating = v["safetyRating"].toString().toStdString();
