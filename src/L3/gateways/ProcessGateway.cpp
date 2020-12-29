@@ -1,13 +1,5 @@
 #include "ProcessGateway.h"
 
-#include <QFile>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <iostream>
-#include <QJsonArray>
-#include <QFileDialog>
-
-
 struct ProcessData ProcessGateway::parseProcessFile() {
     QFile file(QString::fromStdString(this->filepath));
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -51,7 +43,7 @@ std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj,
     for (QString k: statesObj.keys()) {
         QJsonValue v = statesObj[k];
 
-        std::string id = k.toStdString();
+        std::string stateID = k.toStdString();
         std::string name = v["name"].toString().toStdString();
         std::string safetyRating = v["safetyRating"].toString().toStdString();
         std::string description = v["description"].toString().toStdString();
@@ -60,25 +52,25 @@ std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj,
         std::map<std::string, std::vector<SensorOption>> sensorOptions = {};
         std::map<std::string, std::vector<ActuatorOption>> actuatorOptions = {};
         for (QJsonValue action: v["actions"].toArray()) {
-            std::string id = action["id"].toString().toStdString();
-            if (id == "") {
-                // error here
+            std::string actionID = action["id"].toString().toStdString();
+            if (actionID == "") {
+                throw EmptyActionIDError(stateID);
             }
 
-            actionsOrder.push_back(id);
-            if (sensors.find(id) != sensors.end()) {
-                sensorOptions[id] = {};
-                // add sensor options here
-            } else if (actuators.find(id) != actuators.end()) {
-                actuatorOptions[id] = {};
+            actionsOrder.push_back(actionID);
+            if (sensors.find(actionID) != sensors.end()) {
+                sensorOptions[actionID] = {};
+                // add sensor options here, if any
+            } else if (actuators.find(actionID) != actuators.end()) {
+                actuatorOptions[actionID] = {};
                 if (action["timed"].toBool()) {
-                    actuatorOptions[id].push_back(ActuatorOption::Timed);
+                    actuatorOptions[actionID].push_back(ActuatorOption::Timed);
                 }
                 if (action["automatic"].toBool()) {
-                    actuatorOptions[id].push_back(ActuatorOption::Automatic);
+                    actuatorOptions[actionID].push_back(ActuatorOption::Automatic);
                 }
             } else {
-                // error here
+                throw InvalidActionIDError(stateID, actionID);
             }
         }
 
@@ -90,20 +82,26 @@ std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj,
             {Transition::Proceed, {}},
             {Transition::Abort, {}}
         };
-        if (v["checks"]["proceed"].isObject()) {
-            sensorChecks[Transition::Proceed] = parseSensorChecks(v["checks"]["proceed"], sensors);
-            actuatorChecks[Transition::Proceed] = parseActuatorChecks(v["checks"]["proceed"], actuators);
-        } if (v["checks"]["abort"].isObject()) {
-            sensorChecks[Transition::Abort] = parseSensorChecks(v["checks"]["abort"], sensors);
-            actuatorChecks[Transition::Abort] = parseActuatorChecks(v["checks"]["abort"], actuators);
+
+        try {
+            if (v["checks"]["proceed"].isObject()) {
+                sensorChecks[Transition::Proceed] = parseSensorChecks(v["checks"]["proceed"], sensors);
+                actuatorChecks[Transition::Proceed] = parseActuatorChecks(v["checks"]["proceed"], actuators);
+            } if (v["checks"]["abort"].isObject()) {
+                sensorChecks[Transition::Abort] = parseSensorChecks(v["checks"]["abort"], sensors);
+                actuatorChecks[Transition::Abort] = parseActuatorChecks(v["checks"]["abort"], actuators);
+            }
+        }  catch (InvalidSensorRangeCheck& e) {
+            throw InvalidSensorRangeCheckError(stateID, e.sensorID);
         }
+
 
         std::map<Transition, std::string> transitions = {
             { Transition::Proceed, v["transitions"]["proceed"].toString().toStdString() },
             { Transition::Abort, v["transitions"]["abort"].toString().toStdString() }
         };
 
-        states[id] = new State(id, name, safetyRating, description, actionsOrder, sensorOptions, actuatorOptions, sensorChecks, actuatorChecks, transitions);
+        states[stateID] = new State(stateID, name, safetyRating, description, actionsOrder, sensorOptions, actuatorOptions, sensorChecks, actuatorChecks, transitions);
     }
 
     return states;
@@ -121,7 +119,7 @@ std::map<std::string, SensorCheck> ProcessGateway::parseSensorChecks(QJsonValue 
                     range.toArray()[1].toInt()
                 };
             } else {
-                // not array error here
+                throw InvalidSensorRangeCheck(id);
             }
         } else {
             // ignore, not a sensor

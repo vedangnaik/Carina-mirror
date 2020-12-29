@@ -8,8 +8,6 @@ GSManager::GSManager() {
             tr("Open Process File"), "/", tr("JSON Files (*.json)"));
         if (fileName != "") {
             this->openProcessFromFile(fileName.toStdString());
-            this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
-            this->GSMainWindowUI.startProcessAction->setEnabled(true);
         }
     });
 
@@ -41,33 +39,40 @@ GSManager::GSManager() {
 void GSManager::openProcessFromFile(std::string filepath) {
     // Only use for Process Gateway
     ProcessGateway pg(filepath);
-    struct ProcessData pgdata = pg.parseProcessFile();
+    try {
+         struct ProcessData pgdata = pg.parseProcessFile();
+         // create array of sensor and actuator ids here
+         std::vector<std::string> sensorIds, actuatorIds;
+         for (const auto& [id, _] : pgdata.sensors) { sensorIds.push_back(id); }
+         for (const auto& [id, _] : pgdata.actuators) { actuatorIds.push_back(id); }
 
-    // create array of sensor and actuator ids here
-    std::vector<std::string> sensorIds, actuatorIds;
-    for (const auto& [id, _] : pgdata.sensors) { sensorIds.push_back(id); }
-    for (const auto& [id, _] : pgdata.actuators) { actuatorIds.push_back(id); }
+         // init L2 classes here
+         this->sm = new SensorsManager(pgdata.sensors);
+         this->am = new ActuatorsManager(pgdata.actuators);
+         // check for invalid start state here
+         this->stm = new StatesManager(pgdata.states, *this->sm, *this->am);
+         // init L3 classes here
+         this->svg = new SensorValuesGateway(*this->sm);
+         this->ac = new ActuatorsController(*this->am);
+         this->stc = new StatesController(*this->stm);
+         // init L4 and presenters here
+         this->sp = new SensorsPresenter();
+         this->ap = new ActuatorsPresenter();
+         this->suih = new StateUIHandler(this->stateUI, *this->sp, *this->ap, *this->ac, *this->stc);
+         this->sduih = new SystemDiagramUIHandler(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIds, actuatorIds);
+         this->stp = new StatesPresenter(*this->suih);
+         this->daqm = new DAQManager(*this->svg);
+         // attach presenters to managers (kinda ugly, but idk another way to do it)
+         this->sm->setOutputContract(this->sp);
+         this->am->setOutputContract(this->ap);
+         this->stm->setOutputContract(this->stp);
 
-    // init L2 classes here
-    this->sm = new SensorsManager(pgdata.sensors);
-    this->am = new ActuatorsManager(pgdata.actuators);
-    // check for invalid start state here
-    this->stm = new StatesManager(pgdata.states, *this->sm, *this->am);
-    // init L3 classes here
-    this->svg = new SensorValuesGateway(*this->sm);
-    this->ac = new ActuatorsController(*this->am);
-    this->stc = new StatesController(*this->stm);
-    // init L4 and presenters here
-    this->sp = new SensorsPresenter();
-    this->ap = new ActuatorsPresenter();
-    this->suih = new StateUIHandler(this->stateUI, *this->sp, *this->ap, *this->ac, *this->stc);
-    this->sduih = new SystemDiagramUIHandler(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIds, actuatorIds);
-    this->stp = new StatesPresenter(*this->suih);
-    this->daqm = new DAQManager(*this->svg);
-    // attach presenters to managers (kinda ugly, but idk another way to do it)
-    this->sm->setOutputContract(this->sp);
-    this->am->setOutputContract(this->ap);
-    this->stm->setOutputContract(this->stp);
+         this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
+         this->GSMainWindowUI.startProcessAction->setEnabled(true);
+    }  catch (std::runtime_error& e) {
+        // TODO: figure out some way to reset the thing properly here
+        LOG(ERROR) << e.what();
+    }
 }
 
 void GSManager::startProcess() {

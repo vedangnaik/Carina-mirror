@@ -1,11 +1,20 @@
-#ifndef CONTROLLERS_H
-#define CONTROLLERS_H
+#pragma once
 
 #include "src/L1/entities/Actuator.h"
 #include "src/L1/entities/State.h"
 #include "src/L1/entities/Sensor.h"
+#include "src/L2/services/easylogging++.h"
 
 #include <QJsonObject>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <iostream>
+#include <QJsonArray>
+#include <QFileDialog>
+#include <stdexcept>
+
+
 
 struct ProcessData {
     std::map<std::string, Sensor*> sensors;
@@ -27,4 +36,29 @@ private:
     const std::string filepath;
 };
 
-#endif // CONTROLLERS_H
+
+
+/*
+ * Custom exceptions
+ */
+
+class InvalidActionIDError : public std::runtime_error {
+public:
+    InvalidActionIDError(std::string stateID, std::string actionID) : std::runtime_error("State '" + stateID + "': '" + actionID + "' is neither an actuator nor a sensor.") {}
+};
+
+class EmptyActionIDError: public std::runtime_error {
+public:
+    EmptyActionIDError(std::string stateID) : std::runtime_error("State '" + stateID + "': actions must have non-empty IDs.") {}
+};
+
+// These two classes work together to display an invalid range check
+class InvalidSensorRangeCheck : public std::exception {
+public:
+    InvalidSensorRangeCheck(std::string sensorID) : sensorID(sensorID) {}
+    const std::string sensorID;
+};
+class InvalidSensorRangeCheckError : public std::runtime_error {
+public:
+    InvalidSensorRangeCheckError(std::string stateID, std::string sensorID) : std::runtime_error("State '" + stateID + "': '" + sensorID + "' range check must be of form [a, b]") {};
+};
