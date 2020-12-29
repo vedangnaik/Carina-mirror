@@ -43,7 +43,7 @@ void GSManager::openProcessFromFile(std::string filepath) {
     ProcessGateway pg(filepath);
     struct ProcessData pgdata = pg.parseProcessFile();
 
-    // create array of sensor anda actuator ids here
+    // create array of sensor and actuator ids here
     std::vector<std::string> sensorIds, actuatorIds;
     for (const auto& [id, _] : pgdata.sensors) { sensorIds.push_back(id); }
     for (const auto& [id, _] : pgdata.actuators) { actuatorIds.push_back(id); }

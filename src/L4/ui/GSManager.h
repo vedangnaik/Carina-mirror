@@ -26,7 +26,6 @@
 #include "src/L4/dataacquisition/DAQManager.h"
 #include "src/L4/ui/StateUIHandler.h"
 #include "src/L4/ui/SystemDiagramUIhandler.h"
-#include "src/L4/ui/ErrorUIHandler.h"
 #include "src/L4/ui/UIHelpers.h"
 #include "ui_gsmainwindow.h"
 #include "ui_state.h"
