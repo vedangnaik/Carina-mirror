@@ -2,6 +2,7 @@
 
 GSManager::GSManager() {
     this->renderUi();
+    euih << "Hello, World!";
 
     connect(this->GSMainWindowUI.openProcessFromFileAction, &QAction::triggered, this, [=]() {
         QString fileName = QFileDialog::getOpenFileName(this,
@@ -104,6 +105,8 @@ void GSManager::closeProcess() {
 
 void GSManager::renderUi() {
     this->GSMainWindowUI.setupUi(this);
+    this->errorUI.setupUi(this->GSMainWindowUI.errorFrame);
+    euih.setUI(&this->errorUI);
     this->stateUI.setupUi(this->GSMainWindowUI.stateFrame);
     this->systemDiagramUI.setupUi(this->GSMainWindowUI.systemDiagramFrame);
 }

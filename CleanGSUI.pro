@@ -30,6 +30,7 @@ SOURCES += \
     src/L3/presenters/StatesPresenter.cpp \
     src/L4/dataacquisition/AiDAQHandler.cpp \
     src/L4/dataacquisition/DAQManager.cpp \
+    src/L4/ui/ErrorUIHandler.cpp \
     src/L4/ui/GSManager.cpp \
     src/L4/ui/StateUIHandler.cpp \
     src/L4/ui/SystemDiagramUIhandler.cpp \
@@ -55,6 +56,7 @@ HEADERS += \
     src/L4/dataacquisition/DAQDeviceHandler.h \
     src/L4/dataacquisition/DAQManager.h \
     src/L4/ui/Draggable.h \
+    src/L4/ui/ErrorUIHandler.h \
     src/L4/ui/GSManager.h \
     src/L4/ui/StateUIHandler.h \
     src/L2/usecases/ActuatorsManager.h \
@@ -64,6 +66,7 @@ HEADERS += \
     src/L2/services/easylogging++.h
 
 FORMS += \
+    src/L4/ui/error.ui \
     src/L4/ui/gsmainwindow.ui \
     src/L4/ui/state.ui \
     src/L4/ui/systemdiagram.ui

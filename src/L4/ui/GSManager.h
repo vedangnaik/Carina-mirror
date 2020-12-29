@@ -26,10 +26,12 @@
 #include "src/L4/dataacquisition/DAQManager.h"
 #include "src/L4/ui/StateUIHandler.h"
 #include "src/L4/ui/SystemDiagramUIhandler.h"
+#include "src/L4/ui/ErrorUIHandler.h"
+#include "src/L4/ui/UIHelpers.h"
 #include "ui_gsmainwindow.h"
 #include "ui_state.h"
 #include "ui_systemdiagram.h"
-#include "UIHelpers.h"
+#include "ui_error.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -54,6 +56,7 @@ private:
     Ui::GSMainWindow GSMainWindowUI;
     Ui::State stateUI;
     Ui::SystemDiagram systemDiagramUI;
+    Ui::Error errorUI;
     Draggable<QPushButton>* btn;
     // L2
     SensorsManager* sm;
