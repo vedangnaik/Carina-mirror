@@ -13,6 +13,7 @@
 #include <QJsonArray>
 #include <QFileDialog>
 #include <stdexcept>
+#include <filesystem>
 
 
 
@@ -24,7 +25,7 @@ struct ProcessData {
 
 class ProcessGateway {
 public:
-    ProcessGateway(const std::string filepath) : filepath(filepath) {};
+    ProcessGateway(const std::string filepath);
     struct ProcessData parseProcessFile();
 private:
     std::map<std::string, Sensor*> parseSensors(QJsonObject sensorsObj);
@@ -39,24 +40,33 @@ private:
 
 
 /*
- * Custom exceptions
+ * Exceptions that can be thrown during the parsing process.
  */
 
-class ProcessFileParseException : public std::runtime_error {
-public:
-    ProcessFileParseException(std::string message) : std::runtime_error(message) {}
+// This is the base class of all exceptions that can occur
+// when parsing the JSON process file. Subclass a new exception
+// from it if a new bug/error needs to be handled.
+class ProcessFileParseError : public std::runtime_error {
+protected:
+    ProcessFileParseError(std::string message) : std::runtime_error(message) {}
 };
 
-class InvalidActionIDError : public ProcessFileParseException {
+class FileOpenError : public ProcessFileParseError {
+public:
+    FileOpenError(const std::string fileName) :
+        ProcessFileParseError("The process file '" + fileName + "' could not be opened.") {}
+};
+
+class InvalidFileTypeError : public ProcessFileParseError {
+public:
+    InvalidFileTypeError(const std::string fileName) :
+        ProcessFileParseError("The process file '" + fileName + "' must be of type JSON.") {}
+};
+
+class InvalidActionIDError : public ProcessFileParseError {
 public:
     InvalidActionIDError(std::string stateID, std::string actionID) :
-        ProcessFileParseException("State '" + stateID + "': '" + actionID + "' is neither an actuator nor a sensor.") {}
-};
-
-class EmptyActionIDError: public ProcessFileParseException {
-public:
-    EmptyActionIDError(std::string stateID) :
-        ProcessFileParseException("State '" + stateID + "': actions must have non-empty IDs.") {}
+        ProcessFileParseError("State '" + stateID + "': '" + actionID + "' is neither an actuator nor a sensor.") {}
 };
 
 // These two classes work together to display an invalid range check
@@ -65,10 +75,10 @@ public:
     InvalidSensorRangeCheck(std::string sensorID) : sensorID(sensorID) {}
     const std::string sensorID;
 };
-class InvalidSensorRangeCheckError : public ProcessFileParseException {
+class InvalidSensorRangeCheckError : public ProcessFileParseError {
 public:
     InvalidSensorRangeCheckError(std::string stateID, std::string sensorID) :
-        ProcessFileParseException("State '" + stateID + "': '" + sensorID + "' range check must be of form [a, b].") {}
+        ProcessFileParseError("State '" + stateID + "': '" + sensorID + "' range check must be of form [a, b].") {}
 };
 
 // same for invalid actuator position check
@@ -77,15 +87,21 @@ public:
     InvalidActuatorPositionCheck(std::string actuatorID) : actuatorID(actuatorID) {}
     const std::string actuatorID;
 };
-class InvalidActuatorPositionCheckError : public ProcessFileParseException {
+class InvalidActuatorPositionCheckError : public ProcessFileParseError {
 public:
     InvalidActuatorPositionCheckError(std::string stateID, std::string actuatorID) :
-        ProcessFileParseException("State '" + stateID + "': '" + actuatorID + "' position check must be either 'open' or 'close'.") {}
+        ProcessFileParseError("State '" + stateID + "': '" + actuatorID + "' position check must be either 'open' or 'close'.") {}
 };
 
 // This exception handles empty IDs for the entites: sensors, actuators, states.
-class EmptyIDError : public ProcessFileParseException {
+class EmptyIDError : public ProcessFileParseError {
 public:
     EmptyIDError(const std::string object) :
-        ProcessFileParseException(object + " IDs must be non-empty.") {}
+        ProcessFileParseError(object + " IDs must be non-empty.") {}
+};
+
+class EmptyActionIDError: public ProcessFileParseError {
+public:
+    EmptyActionIDError(std::string stateID) :
+        ProcessFileParseError("State '" + stateID + "': actions must have non-empty IDs.") {}
 };

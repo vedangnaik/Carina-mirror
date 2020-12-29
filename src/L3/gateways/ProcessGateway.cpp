@@ -1,9 +1,16 @@
 #include "ProcessGateway.h"
 
-struct ProcessData ProcessGateway::parseProcessFile() {
+ProcessGateway::ProcessGateway(const std::string filepath) : filepath(filepath) {
+    std::filesystem::path f = this->filepath;
+    if (f.extension() != ".json") {
+        throw InvalidFileTypeError(f.filename());
+    }
+}
+
+struct ProcessData ProcessGateway::parseProcessFile() {    
     QFile file(QString::fromStdString(this->filepath));
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        // error here
+        throw FileOpenError(this->filepath);
     }
     QString val = file.readAll();
     file.close();
