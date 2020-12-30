@@ -30,11 +30,18 @@ struct ProcessData ProcessGateway::parseProcessFile() {
 
 std::map<std::string, Sensor*> ProcessGateway::parseSensors(QJsonObject sensorsObj) {
     std::map<std::string, Sensor*> sensors = {};
-    for (QString k: sensorsObj.keys()) {
-        if (k == "") {
+    for (QString sensorID: sensorsObj.keys()) {
+        if (sensorID == "") {
             throw EmptySensorIDError();
         }
-        sensors.insert({ k.toStdString(), new Sensor(k.toStdString(), sensorsObj[k].toObject()["name"].toString().toStdString()) });
+
+        // It appears the QJSONObject removes duplicate keys by itself.
+        // This isn't ideal, since it'd be better to warn the user of duplicate keys here.
+        // In case their JSON linting software hasn't already done so.
+        sensors.insert({
+            sensorID.toStdString(),
+            new Sensor(sensorID.toStdString(), sensorsObj[sensorID].toObject()["name"].toString().toStdString())
+        });
     }
     return sensors;
 }
@@ -42,11 +49,15 @@ std::map<std::string, Sensor*> ProcessGateway::parseSensors(QJsonObject sensorsO
 
 std::map<std::string, Actuator*> ProcessGateway::parseActuators(QJsonObject actuatorsObj) {
     std::map<std::string, Actuator*> actuators;
-    for (QString k: actuatorsObj.keys()) {
-        if (k == "") {
+    for (QString actuatorID: actuatorsObj.keys()) {
+        if (actuatorID == "") {
             throw EmptyActuatorIDError();
         }
-        actuators.insert({ k.toStdString(), new Actuator(k.toStdString(), actuatorsObj[k].toObject()["name"].toString().toStdString()) });
+
+        actuators.insert({
+             actuatorID.toStdString(),
+             new Actuator(actuatorID.toStdString(), actuatorsObj[actuatorID].toObject()["name"].toString().toStdString())
+        });
     }
     return actuators;
 }
