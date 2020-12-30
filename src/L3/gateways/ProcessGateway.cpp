@@ -34,7 +34,7 @@ std::map<std::string, Sensor*> ProcessGateway::parseSensors(QJsonObject sensorsO
         if (k == "") {
             throw EmptySensorIDError();
         }
-        sensors[k.toStdString()] = new Sensor(k.toStdString(), sensorsObj[k].toObject()["name"].toString().toStdString());
+        sensors.insert({ k.toStdString(), new Sensor(k.toStdString(), sensorsObj[k].toObject()["name"].toString().toStdString()) });
     }
     return sensors;
 }
@@ -46,7 +46,7 @@ std::map<std::string, Actuator*> ProcessGateway::parseActuators(QJsonObject actu
         if (k == "") {
             throw EmptyActuatorIDError();
         }
-        actuators[k.toStdString()] = new Actuator(k.toStdString(), actuatorsObj[k].toObject()["name"].toString().toStdString());
+        actuators.insert({ k.toStdString(), new Actuator(k.toStdString(), actuatorsObj[k].toObject()["name"].toString().toStdString()) });
     }
     return actuators;
 }
