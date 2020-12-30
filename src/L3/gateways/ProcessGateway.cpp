@@ -3,13 +3,14 @@
 ProcessGateway::ProcessGateway(const std::string filepath) : filepath(filepath) {
     std::filesystem::path f = this->filepath;
     if (f.extension() != ".json") {
-        throw InvalidFileTypeError(f.filename());
+        throw InvalidFileTypeError(this->filepath);
     }
 }
 
 struct ProcessData ProcessGateway::parseProcessFile() {    
     QFile file(QString::fromStdString(this->filepath));
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        file.close();
         throw FileOpenError(this->filepath);
     }
     QString val = file.readAll();
@@ -29,9 +30,18 @@ struct ProcessData ProcessGateway::parseProcessFile() {
 
 std::map<std::string, Sensor*> ProcessGateway::parseSensors(QJsonObject sensorsObj) {
     std::map<std::string, Sensor*> sensors = {};
-    for (QString k: sensorsObj.keys()) {
-        if (k == "") throw EmptyIDError("Sensor");
-        sensors[k.toStdString()] = new Sensor(k.toStdString(), sensorsObj[k].toObject()["name"].toString().toStdString());
+    for (QString sensorID: sensorsObj.keys()) {
+        if (sensorID == "") {
+            throw EmptySensorIDError();
+        }
+
+        // It appears the QJSONObject removes duplicate keys by itself.
+        // This isn't ideal, since it'd be better to warn the user of duplicate keys here.
+        // In case their JSON linting software hasn't already done so.
+        sensors.insert({
+            sensorID.toStdString(),
+            new Sensor(sensorID.toStdString(), sensorsObj[sensorID].toObject()["name"].toString().toStdString())
+        });
     }
     return sensors;
 }
@@ -39,9 +49,15 @@ std::map<std::string, Sensor*> ProcessGateway::parseSensors(QJsonObject sensorsO
 
 std::map<std::string, Actuator*> ProcessGateway::parseActuators(QJsonObject actuatorsObj) {
     std::map<std::string, Actuator*> actuators;
-    for (QString k: actuatorsObj.keys()) {
-        if (k == "") throw EmptyIDError("Actuator");
-        actuators[k.toStdString()] = new Actuator(k.toStdString(), actuatorsObj[k].toObject()["name"].toString().toStdString());
+    for (QString actuatorID: actuatorsObj.keys()) {
+        if (actuatorID == "") {
+            throw EmptyActuatorIDError();
+        }
+
+        actuators.insert({
+             actuatorID.toStdString(),
+             new Actuator(actuatorID.toStdString(), actuatorsObj[actuatorID].toObject()["name"].toString().toStdString())
+        });
     }
     return actuators;
 }
@@ -53,7 +69,9 @@ std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj,
         QJsonValue v = statesObj[k];
 
         std::string stateID = k.toStdString();
-        if (stateID == "") throw EmptyIDError("State");
+        if (stateID == "") {
+            throw EmptyStateIDError();
+        }
 
         std::string name = v["name"].toString().toStdString();
         std::string safetyRating = v["safetyRating"].toString().toStdString();

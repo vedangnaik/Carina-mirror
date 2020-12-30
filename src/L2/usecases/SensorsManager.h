@@ -1,8 +1,10 @@
-#ifndef SENSORMANAGER_H
-#define SENSORMANAGER_H
+#pragma once
 
 #include "src/L1/entities/Sensor.h"
+#include "src/L2/services/easylogging++.h"
 #include <map>
+#include <stdexcept>
+
 
 class SMOC {
 public:
@@ -32,4 +34,4 @@ private:
     SMOC* smoc;
 };
 
-#endif // SENSORMANAGER_H
+

@@ -43,30 +43,36 @@ private:
  * Exceptions that can be thrown during the parsing process.
  */
 
-// This is the base class of all exceptions that can occur
-// when parsing the JSON process file. Subclass a new exception
-// from it if a new bug/error needs to be handled.
+// This is the base class of all exceptions that can occur when parsing the JSON process file.
+// Subclass a new exception from it if a new bug/error needs to be handled.
 class ProcessFileParseError : public std::runtime_error {
 protected:
     ProcessFileParseError(std::string message) : std::runtime_error(message) {}
 };
 
+// These exceptions handle file-related problems.
 class FileOpenError : public ProcessFileParseError {
 public:
     FileOpenError(const std::string fileName) :
         ProcessFileParseError("The process file '" + fileName + "' could not be opened.") {}
 };
-
 class InvalidFileTypeError : public ProcessFileParseError {
 public:
     InvalidFileTypeError(const std::string fileName) :
         ProcessFileParseError("The process file '" + fileName + "' must be of type JSON.") {}
 };
 
+// Actions whose IDs are not recognized need their state ID to be printed as well.
 class InvalidActionIDError : public ProcessFileParseError {
 public:
     InvalidActionIDError(std::string stateID, std::string actionID) :
         ProcessFileParseError("State '" + stateID + "': '" + actionID + "' is neither an actuator nor a sensor.") {}
+};
+// Empty actions inside states need the state ID to be printed as well.
+class EmptyActionIDError: public ProcessFileParseError {
+public:
+    EmptyActionIDError(std::string stateID) :
+        ProcessFileParseError("State '" + stateID + "': actions must have non-empty IDs.") {}
 };
 
 // These two classes work together to display an invalid range check
@@ -81,7 +87,7 @@ public:
         ProcessFileParseError("State '" + stateID + "': '" + sensorID + "' range check must be of form [a, b].") {}
 };
 
-// same for invalid actuator position check
+// Same for invalid actuator position check
 class InvalidActuatorPositionCheck : public std::exception {
 public:
     InvalidActuatorPositionCheck(std::string actuatorID) : actuatorID(actuatorID) {}
@@ -93,15 +99,25 @@ public:
         ProcessFileParseError("State '" + stateID + "': '" + actuatorID + "' position check must be either 'open' or 'close'.") {}
 };
 
-// This exception handles empty IDs for the entites: sensors, actuators, states.
+// This exception is the base class for empty IDs for the entites: sensors, actuators, states.
+// It ideally will never need to be subclassed beyond these three.
 class EmptyIDError : public ProcessFileParseError {
-public:
+protected:
     EmptyIDError(const std::string object) :
         ProcessFileParseError(object + " IDs must be non-empty.") {}
 };
-
-class EmptyActionIDError: public ProcessFileParseError {
+class EmptySensorIDError : public EmptyIDError {
 public:
-    EmptyActionIDError(std::string stateID) :
-        ProcessFileParseError("State '" + stateID + "': actions must have non-empty IDs.") {}
+    EmptySensorIDError() :
+        EmptyIDError("Sensor") {}
+};
+class EmptyActuatorIDError : public EmptyIDError {
+public:
+    EmptyActuatorIDError() :
+        EmptyIDError("Actuator") {}
+};
+class EmptyStateIDError : public EmptyIDError {
+public:
+    EmptyStateIDError() :
+        EmptyIDError("State") {}
 };
