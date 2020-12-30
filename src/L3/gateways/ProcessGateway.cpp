@@ -3,7 +3,7 @@
 ProcessGateway::ProcessGateway(const std::string filepath) : filepath(filepath) {
     std::filesystem::path f = this->filepath;
     if (f.extension() != ".json") {
-        throw InvalidFileTypeError(f.filename());
+        throw InvalidFileTypeError(this->filepath);
     }
 }
 
@@ -30,7 +30,9 @@ struct ProcessData ProcessGateway::parseProcessFile() {
 std::map<std::string, Sensor*> ProcessGateway::parseSensors(QJsonObject sensorsObj) {
     std::map<std::string, Sensor*> sensors = {};
     for (QString k: sensorsObj.keys()) {
-        if (k == "") throw EmptyIDError("Sensor");
+        if (k == "") {
+            throw EmptySensorIDError();
+        }
         sensors[k.toStdString()] = new Sensor(k.toStdString(), sensorsObj[k].toObject()["name"].toString().toStdString());
     }
     return sensors;
@@ -40,7 +42,9 @@ std::map<std::string, Sensor*> ProcessGateway::parseSensors(QJsonObject sensorsO
 std::map<std::string, Actuator*> ProcessGateway::parseActuators(QJsonObject actuatorsObj) {
     std::map<std::string, Actuator*> actuators;
     for (QString k: actuatorsObj.keys()) {
-        if (k == "") throw EmptyIDError("Actuator");
+        if (k == "") {
+            throw EmptyActuatorIDError();
+        }
         actuators[k.toStdString()] = new Actuator(k.toStdString(), actuatorsObj[k].toObject()["name"].toString().toStdString());
     }
     return actuators;
@@ -53,7 +57,9 @@ std::map<std::string, State*> ProcessGateway::parseStates(QJsonObject statesObj,
         QJsonValue v = statesObj[k];
 
         std::string stateID = k.toStdString();
-        if (stateID == "") throw EmptyIDError("State");
+        if (stateID == "") {
+            throw EmptyStateIDError();
+        }
 
         std::string name = v["name"].toString().toStdString();
         std::string safetyRating = v["safetyRating"].toString().toStdString();
