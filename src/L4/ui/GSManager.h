@@ -26,6 +26,7 @@
 #include "DAQManager.h"
 #include "StateUIHandler.h"
 #include "SystemDiagramUIhandler.h"
+#include "ErrorUIHandler.h"
 #include "UIHelpers.h"
 #include "ui_gsmainwindow.h"
 #include "ui_state.h"
