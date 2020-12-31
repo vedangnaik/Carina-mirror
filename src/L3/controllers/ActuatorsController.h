@@ -2,8 +2,8 @@
 #define ACTUATORCONTROLLER_H
 
 #include <QObject>
-#include "L2/usecases/ActuatorsManager.h"
-#include "L3/gateways/ActuatorStatusGateway.h"
+#include "ActuatorsManager.h"
+#include "ActuatorStatusGateway.h"
 
 class ACIC : public QObject {
     Q_OBJECT

@@ -7,11 +7,11 @@
 #include <QGroupBox>
 #include <QTimer>
 
-#include "L3/controllers/ActuatorsController.h"
-#include "L3/controllers/StatesController.h"
-#include "L3/presenters/SensorsPresenter.h"
-#include "L3/presenters/ActuatorsPresenter.h"
-#include "L3/presenters/StatesPresenter.h"
+#include "ActuatorsController.h"
+#include "StatesController.h"
+#include "SensorsPresenter.h"
+#include "ActuatorsPresenter.h"
+#include "StatesPresenter.h"
 #include "ui_state.h"
 #include "UIHelpers.h"
 

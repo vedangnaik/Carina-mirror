@@ -59,8 +59,11 @@ void GSManager::openProcessFromFile(std::string filepath) {
 
         this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
         this->GSMainWindowUI.startProcessAction->setEnabled(true);
-    }  catch (ProcessFileParseError& e) {
+    } catch (ProcessFileParseError& e) {
         LOG(ERROR) << "Process file parse error:" << e.what();
+    } catch (SensorsManagerError& e) {
+        // TODO: better error message here.
+        LOG(ERROR) << "SensorsManager error: " << e.what();
     }
 }
 

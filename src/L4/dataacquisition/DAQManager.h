@@ -3,13 +3,13 @@
 
 #if defined(__linux__)
     #include <uldaq.h>
-    #include "L4/dataacquisition/AiDAQHandler.h"
+    #include "AiDAQHandler.h"
 #else
     // include dummy daq here
 #endif
 
-#include "L3/gateways/SensorValuesGateway.h"
-#include "L4/dataacquisition/DAQDeviceHandler.h"
+#include "SensorValuesGateway.h"
+#include "DAQDeviceHandler.h"
 #include <map>
 #include <vector>
 #include <QObject>

@@ -1,5 +1,13 @@
 #include "SensorsManager.h"
 
+SensorsManager::SensorsManager(const std::map<std::string, Sensor*> sensors) : sensors(sensors) {
+    for (const auto& [id, sensor] : sensors) {
+        if (sensor == nullptr) {
+            throw NullptrSensorError(id);
+        }
+    }
+}
+
 float SensorsManager::getSensorValue(std::string id) {
     try {
         return this->sensors.at(id)->values.back();

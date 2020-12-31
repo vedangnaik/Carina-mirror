@@ -15,7 +15,7 @@
 //
 
 // modify easylogging++ macros to use custom log display
-#include "L4/ui/ErrorUIHandler.h"
+#include "ErrorUIHandler.h"
 #define ELPP_CUSTOM_COUT euih
 #define ELPP_CUSTOM_COUT_LINE(logLine) logLine
 

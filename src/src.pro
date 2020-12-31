@@ -3,13 +3,6 @@ QT += uitools
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-#INCLUDEPATH += \
-#    ../../googletest/googletest \
-#    ../../googletest/googlemock \
-#    ../../googletest/googletest/include \
-#    ../../googletest/googlemock/include \
-
-
 CONFIG += c++17
 
 QMAKE_CXXFLAGS += -pedantic
@@ -26,6 +19,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    L2/usecases/SensorsManager.cpp \
+    L2/usecases/ActuatorsManager.cpp \
     L2/usecases/StatesManager.cpp \
     L3/controllers/ActuatorsController.cpp \
     L3/controllers/StatesController.cpp \
@@ -42,13 +37,11 @@ SOURCES += \
     L4/ui/StateUIHandler.cpp \
     L4/ui/SystemDiagramUIhandler.cpp \
     main.cpp \
-    L2/usecases/ActuatorsManager.cpp \
-    L2/usecases/SensorsManager.cpp \
     L2/services/easylogging++.cc
-#    ../../googletest/googletest/src/gtest-all.cc \
-#    ../../googletest/googlemock/src/gmock-all.cc
 
 HEADERS += \
+    L2/usecases/SensorsManager.h \
+    L2/usecases/ActuatorsManager.h \
     L2/usecases/StatesManager.h \
     L3/controllers/ActuatorsController.h \
     L3/controllers/StatesController.h \
@@ -68,8 +61,6 @@ HEADERS += \
     L4/ui/ErrorUIHandler.h \
     L4/ui/GSManager.h \
     L4/ui/StateUIHandler.h \
-    L2/usecases/ActuatorsManager.h \
-    L2/usecases/SensorsManager.h \
     L4/ui/SystemDiagramUIhandler.h \
     L4/ui/UIHelpers.h \
     L2/services/easylogging++.h
@@ -79,6 +70,16 @@ FORMS += \
     L4/ui/gsmainwindow.ui \
     L4/ui/state.ui \
     L4/ui/systemdiagram.ui
+
+INCLUDEPATH += \
+    L1/entities \
+    L2/usecases \
+    L2/services \
+    L3/controllers \
+    L3/presenters \
+    L3/gateways \
+    L4/dataacquisition \
+    L4/ui
 
 unix:!macx: LIBS += -luldaq
 

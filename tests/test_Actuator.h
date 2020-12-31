@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock-matchers.h>
-#include "../src/L1/entities/Actuator.h"
+#include "Actuator.h"
 
 TEST(ActuatorTest, BasicProperies) {
     std::string id = "act1";

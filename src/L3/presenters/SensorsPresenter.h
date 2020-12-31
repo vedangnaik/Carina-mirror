@@ -1,7 +1,7 @@
 #ifndef SENSORSPRESENTER_H
 #define SENSORSPRESENTER_H
 
-#include "L2/usecases/SensorsManager.h"
+#include "SensorsManager.h"
 #include <stdexcept>
 #include <map>
 #include <mutex>

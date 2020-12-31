@@ -1,9 +1,9 @@
 #pragma once
 
-#include "L1/entities/Actuator.h"
-#include "L1/entities/State.h"
-#include "L1/entities/Sensor.h"
-#include "L2/services/easylogging++.h"
+#include "Actuator.h"
+#include "State.h"
+#include "Sensor.h"
+#include "easylogging++.h"
 
 #include <QJsonObject>
 #include <QFile>
