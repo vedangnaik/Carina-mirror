@@ -1,7 +1,7 @@
 #pragma once
 
-#include "src/L1/entities/Sensor.h"
-#include "src/L2/services/easylogging++.h"
+#include "L1/entities/Sensor.h"
+#include "L2/services/easylogging++.h"
 #include <map>
 #include <stdexcept>
 

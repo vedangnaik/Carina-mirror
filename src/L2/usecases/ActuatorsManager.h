@@ -1,7 +1,6 @@
-#ifndef ACTUATORMANAGER_H
-#define ACTUATORMANAGER_H
+#pragma once
 
-#include "src/L1/entities/Actuator.h"
+#include "L1/entities/Actuator.h"
 #include <map>
 #include <stdexcept>
 
@@ -30,5 +29,3 @@ private:
     const std::map<std::string, Actuator*> actuators;
     AMOC* amoc;
 };
-
-#endif // ACTUATORMANAGER_H

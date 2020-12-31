@@ -7,10 +7,10 @@
 #include <QCheckBox>
 #include <variant>
 
-#include "src/L4/ui/Draggable.h"
-#include "src/L3/controllers/ActuatorsController.h"
-#include "src/L3/presenters/ActuatorsPresenter.h"
-#include "src/L3/presenters/SensorsPresenter.h"
+#include "L4/ui/Draggable.h"
+#include "L3/controllers/ActuatorsController.h"
+#include "L3/presenters/ActuatorsPresenter.h"
+#include "L3/presenters/SensorsPresenter.h"
 #include "ui_systemdiagram.h"
 
 QT_BEGIN_NAMESPACE

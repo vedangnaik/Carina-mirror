@@ -2,7 +2,7 @@
 #define STATESCONTROLLER_H
 
 #include <QObject>
-#include "src/L2/usecases/StatesManager.h"
+#include "L2/usecases/StatesManager.h"
 
 class StCIC : public QObject {
     Q_OBJECT

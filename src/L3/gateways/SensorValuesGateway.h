@@ -2,7 +2,7 @@
 #define SENSORVALUESGATEWAY_H
 
 #include <QObject>
-#include "src/L2/usecases/SensorsManager.h"
+#include "L2/usecases/SensorsManager.h"
 
 class SVGIC : public QObject {
     Q_OBJECT
