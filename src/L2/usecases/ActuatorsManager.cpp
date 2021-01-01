@@ -1,5 +1,9 @@
 #include "ActuatorsManager.h"
 
+ActuatorsManager::ActuatorsManager(std::map<std::string, Actuator*> actuators) : actuators(actuators) {
+
+}
+
 bool ActuatorsManager::getActuatorStatus(std::string id) {
     return this->actuators.at(id)->status;
 }

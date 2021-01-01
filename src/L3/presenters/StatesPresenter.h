@@ -1,8 +1,8 @@
 #ifndef STATESPRESENTER_H
 #define STATESPRESENTER_H
 
-#include "src/L2/usecases/StatesManager.h"
-#include "src/L1/entities/State.h"
+#include "State.h"
+#include "StatesManager.h"
 
 class StPOC {
 public:
