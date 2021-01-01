@@ -1,4 +1,9 @@
-s:
+name: Manually triggered build
+
+on:
+  workflow_dispatch
+
+jobs:
   build-on-linux:
     name: Build on Linux
     runs-on: ubuntu-20.04
