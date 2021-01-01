@@ -1,9 +1,9 @@
 #ifndef STATESMANAGER_H
 #define STATESMANAGER_H
 
-#include "src/L1/entities/State.h"
-#include "src/L2/usecases/SensorsManager.h"
-#include "src/L2/usecases/ActuatorsManager.h"
+#include "State.h"
+#include "SensorsManager.h"
+#include "ActuatorsManager.h"
 
 class StMOC {
 public:

@@ -1,9 +1,10 @@
 #pragma once
 
-#include "src/L1/entities/Sensor.h"
-#include "src/L2/services/easylogging++.h"
+#include "Sensor.h"
+#include "easylogging++.h"
 #include <map>
 #include <stdexcept>
+
 
 
 class SMOC {
@@ -22,7 +23,7 @@ public:
 
 class SensorsManager : public SMIC {
 public:
-    SensorsManager(const std::map<std::string, Sensor*> sensors) : sensors(sensors) {};
+    SensorsManager(const std::map<std::string, Sensor*> sensors);
     float getSensorValue(std::string id);
     void setSensorValue(std::string id, float value);
     std::vector<std::string> getSensorIDs();
@@ -34,4 +35,15 @@ private:
     SMOC* smoc;
 };
 
+
+
+class SensorsManagerError : public std::runtime_error {
+protected:
+    SensorsManagerError(std::string message) : std::runtime_error(message) {}
+};
+
+class NullptrSensorError : public SensorsManagerError {
+public:
+    NullptrSensorError(const std::string id) : SensorsManagerError("Sensor '" + id + "' is nullptr.") {}
+};
 

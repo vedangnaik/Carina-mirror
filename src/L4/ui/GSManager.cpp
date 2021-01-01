@@ -3,6 +3,8 @@
 GSManager::GSManager() {
     this->renderUi();
 
+    LOG(INFO) << "The program has started.";
+
     connect(this->GSMainWindowUI.openProcessFromFileAction, &QAction::triggered, this, [=]() {
         QString fileName = QFileDialog::getOpenFileName(this,
             tr("Open Process File"), "/", tr("JSON Files (*.json)"));
@@ -59,8 +61,11 @@ void GSManager::openProcessFromFile(std::string filepath) {
 
         this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
         this->GSMainWindowUI.startProcessAction->setEnabled(true);
-    }  catch (ProcessFileParseError& e) {
+    } catch (ProcessFileParseError& e) {
         LOG(ERROR) << "Process file parse error:" << e.what();
+    } catch (SensorsManagerError& e) {
+        // TODO: better error message here.
+        LOG(ERROR) << "SensorsManager error: " << e.what();
     }
 }
 

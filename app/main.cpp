@@ -1,6 +1,6 @@
 #include <QApplication>
-#include "src/L4/ui/GSManager.h"
-#include "src/L2/services/easylogging++.h"
+#include "GSManager.h"
+#include "easylogging++.h"
 
 INITIALIZE_EASYLOGGINGPP
 

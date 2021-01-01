@@ -14,10 +14,28 @@
 //  http://muflihun.com
 //
 
-// modify easylogging++ macros to use custom log display
-#include "src/L4/ui/ErrorUIHandler.h"
-#define ELPP_CUSTOM_COUT euih
-#define ELPP_CUSTOM_COUT_LINE(logLine) logLine
+// =============================================== START: MODIFIED SECTION =============================================== //
+/** This section has been modified by me (Vedang, https://github.com/vedangnaik).
+  * Please contact me if you have any improvements for this, or for further questions.
+  *
+  * Basically, the issue is that this library (AFAIK) doesn't support logging to custom classes *after* compilation.
+  * Since we need it to log to the custom class ErrorUIHandler (src/L4/ui/ErrorUIHandler.h), we must define the variables
+  * ELPP_CUSTOM_COUT and ELPP_CUSTOM_COUT_LINE here, before this file is compiled. However, this breaks Clean Architecture
+  * quite heavily since normally, this library'd be a L2 class, but ErrorUIHandler is L4. It introduces very heavy coupling,
+  * since almost every other class will include this header for logging various events. This makes it difficult to 'detach'
+  * it when doing unit testing. Hence, I've put in this kinda roundabout method to only conditionally include ErrorUIHandler
+  * as a custom COUT. These variables are passed to the compiler if a custom COUT is desired. Now, to 'detach' it, we can simply
+  * not define these variables, and disable the logging via ELPP_DISABLE_LOGS.
+  *
+  * I thought of making wrapping parts of the library in a separate function which accepts a arbitrary class after compilation,
+  * but that seemed like too much work xD
+  */
+#if defined (CUSTOM_COUT_HEADER) && defined(CUSTOM_COUT_GLOBAL_VAR) && defined(CUSTOM_COUT_LINE_FORMAT)
+    #include CUSTOM_COUT_HEADER
+    #define ELPP_CUSTOM_COUT CUSTOM_COUT_GLOBAL_VAR
+    #define ELPP_CUSTOM_COUT_LINE(logLine) CUSTOM_COUT_LINE_FORMAT
+#endif
+// ================================================ END: MODIFIED SECTION ================================================ //
 
 #ifndef EASYLOGGINGPP_H
 #define EASYLOGGINGPP_H

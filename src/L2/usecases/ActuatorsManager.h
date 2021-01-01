@@ -1,7 +1,6 @@
-#ifndef ACTUATORMANAGER_H
-#define ACTUATORMANAGER_H
+#pragma once
 
-#include "src/L1/entities/Actuator.h"
+#include "Actuator.h"
 #include <map>
 #include <stdexcept>
 
@@ -20,7 +19,7 @@ public:
 
 class ActuatorsManager : public AMIC {
 public:
-    ActuatorsManager(std::map<std::string, Actuator*> actuators) : actuators(actuators) {};
+    ActuatorsManager(std::map<std::string, Actuator*> actuators);
     bool getActuatorStatus(std::string id);
     void actuate(std::string id);
     void setOutputContract(AMOC* amoc) {
@@ -30,5 +29,3 @@ private:
     const std::map<std::string, Actuator*> actuators;
     AMOC* amoc;
 };
-
-#endif // ACTUATORMANAGER_H
