@@ -1,0 +1,24 @@
+s:
+  build-on-linux:
+    name: Build on Linux
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check compiler versions
+        run: |
+          g++ --version
+          gcc --version
+          
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+      
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Make build directory
+        run: mkdir build
+      - name: Build
+        run: |
+          cd build
+          $Qt5_DIR/bin/qmake $GITHUB_WORKSPACE/CleanGSUI.pro
+          make
+          ls
