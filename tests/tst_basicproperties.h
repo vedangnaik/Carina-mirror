@@ -4,6 +4,12 @@
 #include <gmock/gmock-matchers.h>
 #include "ActuatorsManager.h"
 
-TEST(ActuatorsManagerTest, BasicProperies) {
+using namespace testing;
+
+TEST(ActuatorsManager, BasicProperties)
+{
+    EXPECT_EQ(1, 1);
+    ASSERT_THAT(0, Eq(0));
     auto am = new ActuatorsManager({});
 }
+
