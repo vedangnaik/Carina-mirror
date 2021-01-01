@@ -1,9 +1,9 @@
 #include "GSManager.h"
 
 GSManager::GSManager() {
-    LOG(INFO) << "The program has started.";
-
     this->renderUi();
+
+    LOG(INFO) << "The program has started.";
 
     connect(this->GSMainWindowUI.openProcessFromFileAction, &QAction::triggered, this, [=]() {
         QString fileName = QFileDialog::getOpenFileName(this,

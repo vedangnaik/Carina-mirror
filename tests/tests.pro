@@ -2,6 +2,7 @@ include(gtest_dependency.pri)
 include(../common_settings.pri)
 include(../src/L1/L1.pri)
 include(../src/L2/L2.pri)
+include(../dependencies/dependencies.pri)
 
 TEMPLATE = app
 CONFIG += console
@@ -14,3 +15,5 @@ QT += core gui uitools widgets
 SOURCES += $$PWD/main.cpp
 
 HEADERS += $$PWD/tst_basicproperties.h
+
+DEFINES += ELPP_DISABLE_LOGS

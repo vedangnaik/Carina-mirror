@@ -1,17 +1,11 @@
 SOURCES += \
     $$PWD/usecases/SensorsManager.cpp \
     $$PWD/usecases/ActuatorsManager.cpp \
-    $$PWD/usecases/StatesManager.cpp \
-    $$PWD/services/easylogging++.cc
+    $$PWD/usecases/StatesManager.cpp
 
 HEADERS += \
     $$PWD/usecases/SensorsManager.h \
-    $$PWD/usecases/ActuatorsManager.h \
-    $$PWD/services/easylogging++.h
+    $$PWD/usecases/ActuatorsManager.h
 
 INCLUDEPATH += \
-    $$PWD/usecases \
-    $$PWD/services
-
-#DEFINES += ELPP_CUSTOM_COUT=euih
-//#define ELPP_CUSTOM_COUT_LINE(logLine) logLine
+    $$PWD/usecases

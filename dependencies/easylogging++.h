@@ -14,10 +14,11 @@
 //  http://muflihun.com
 //
 
-// modify easylogging++ macros to use custom log display
-//#include "ErrorUIHandler.h"
-//#define ELPP_CUSTOM_COUT euih
-//#define ELPP_CUSTOM_COUT_LINE(logLine) logLine
+#if defined (CUSTOM_COUT_HEADER) && defined(CUSTOM_COUT_GLOBAL_VAR) && defined(CUSTOM_COUT_LINE_FORMAT)
+    #include CUSTOM_COUT_HEADER
+    #define ELPP_CUSTOM_COUT CUSTOM_COUT_GLOBAL_VAR
+    #define ELPP_CUSTOM_COUT_LINE(logLine) CUSTOM_COUT_LINE_FORMAT
+#endif
 
 #ifndef EASYLOGGINGPP_H
 #define EASYLOGGINGPP_H
