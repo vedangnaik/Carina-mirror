@@ -1,6 +1,8 @@
 #include "GSManager.h"
 
 GSManager::GSManager() {
+    LOG(INFO) << "The program has started.";
+
     this->renderUi();
 
     connect(this->GSMainWindowUI.openProcessFromFileAction, &QAction::triggered, this, [=]() {
