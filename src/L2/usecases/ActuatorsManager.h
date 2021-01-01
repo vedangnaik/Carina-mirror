@@ -19,7 +19,7 @@ public:
 
 class ActuatorsManager : public AMIC {
 public:
-    ActuatorsManager(std::map<std::string, Actuator*> actuators) : actuators(actuators) {};
+    ActuatorsManager(std::map<std::string, Actuator*> actuators);
     bool getActuatorStatus(std::string id);
     void actuate(std::string id);
     void setOutputContract(AMOC* amoc) {
