@@ -16,3 +16,8 @@ SOURCES += $$PWD/main.cpp
 DEFINES += CUSTOM_COUT_HEADER=\\\"$$PWD/../src/L4/ui/ErrorUIHandler.h\\\"
 DEFINES += CUSTOM_COUT_GLOBAL_VAR=euih
 DEFINES += CUSTOM_COUT_LINE_FORMAT=logLine
+
+# Defines the variable which includes uldaq.h and the associated code for reading real DAQs.
+# Turn it on if you want to test real DAQs; it's off by default since uldaq.h is not included
+# by default on any Linux distros and cannot be used on Windows at all.
+#DEFINES += USE_ULDAQ
