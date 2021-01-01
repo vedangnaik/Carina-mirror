@@ -28,5 +28,8 @@ FORMS += \
     $$PWD/ui/state.ui \
     $$PWD/ui/systemdiagram.ui
 
+# Runtime loading of .ui files required the uitools module.
+QT += uitools
+
 # Link uldaq.h for DAQ classes.
 unix:!macx: LIBS += -luldaq
