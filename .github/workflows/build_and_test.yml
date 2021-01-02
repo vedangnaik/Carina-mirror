@@ -1,28 +1,32 @@
-name: automatic gtest
+name: Build and test
 
 on:
   pull_request
 
 jobs:
-  run-googletest:
-    name: Run googletest
+  build-and-test:
+    name: Build and test
     runs-on: ubuntu-20.04
     steps:
+      # Log compiler versions, just for the record.
       - name: Check compiler versions
         run: |
           g++ --version
           gcc --version
-          
+      
+      # Install Qt with this very nice community action.
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
       
+      # Checkout our code and the latest official googletest release.
       - name: Checkout our code
         uses: actions/checkout@v2
         with:
           path: "CleanGSUI/"
       - name: Checkout latest release of googletest
         run: git clone https://github.com/google/googletest.git -b release-1.10.0
-                
+      
+      # Make the build directory and build app and tests.
       - name: Make build directory
         run: |
           cd $GITHUB_WORKSPACE/CleanGSUI
@@ -34,6 +38,7 @@ jobs:
           make
           ls
       
+      # Actually run all tests with googletest.
       - name: Run tests
         run: |
           cd $GITHUB_WORKSPACE/CleanGSUI/build/tests
