@@ -1,7 +1,7 @@
 #include "DAQManager.h"
 
 DAQManager::DAQManager(SVGIC& svgic) : svgic{svgic} {
-#ifdef __linux__
+#ifdef USE_ULDAQ
     std::vector<DaqDeviceDescriptor> devDescriptors;
 
     // Get the number of connected devices here.
@@ -14,7 +14,7 @@ DAQManager::DAQManager(SVGIC& svgic) : svgic{svgic} {
     // Create DAQ instances
     if (numDAQDevicesDetected == 0) {
         // shit
-        std::cout << "No DAQ devices detected\n";
+        LOG(ERROR) << "No DAQ devices detected\n";
     }
     else {
         // Get the device descriptors here

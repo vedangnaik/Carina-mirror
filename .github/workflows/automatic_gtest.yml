@@ -1,0 +1,40 @@
+name: automatic gtest
+
+on:
+  workflow_dispatch
+
+jobs:
+  build-on-linux:
+    name: Build on Linux
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check compiler versions
+        run: |
+          g++ --version
+          gcc --version
+          
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+      
+      - name: Checkout our code
+        uses: actions/checkout@v2
+        with:
+          path: "CleanGSUI/"
+      - name: Checkout latest release of googletest
+        run: git clone https://github.com/google/googletest.git -b release-1.10.0
+                
+      - name: Make build directory
+        run: |
+          cd $GITHUB_WORKSPACE/CleanGSUI
+          mkdir $GITHUB_WORKSPACE/CleanGSUI/build
+      - name: Include googletest and build
+        run: |
+          cd $GITHUB_WORKSPACE/CleanGSUI/build
+          $Qt5_DIR/bin/qmake $GITHUB_WORKSPACE/CleanGSUI/CleanGSUI.pro GOOGLETEST_DIR+=$GITHUB_WORKSPACE/googletest
+          make
+          ls
+      
+      - name: Run tests
+        run: |
+          cd $GITHUB_WORKSPACE/CleanGSUI/build/tests
+          ./tests

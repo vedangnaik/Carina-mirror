@@ -1,4 +1,4 @@
-#ifdef __linux__
+#ifdef USE_ULDAQ
 
 #include "AiDAQHandler.h"
 
