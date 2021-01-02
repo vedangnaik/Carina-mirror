@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Actuator.h"
+#include "easylogging++.h"
 #include <map>
 #include <stdexcept>
 
@@ -27,5 +28,16 @@ public:
     }
 private:
     const std::map<std::string, Actuator*> actuators;
-    AMOC* amoc;
+    AMOC* amoc = nullptr;
+};
+
+
+class ActuatorsManagerError : public std::runtime_error {
+protected:
+    ActuatorsManagerError(std::string message) : std::runtime_error(message) {}
+};
+
+class NullptrActuatorError : public ActuatorsManagerError {
+public:
+    NullptrActuatorError(const std::string id) : ActuatorsManagerError("Actuator '" + id + "' is nullptr.") {}
 };

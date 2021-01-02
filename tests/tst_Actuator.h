@@ -16,15 +16,15 @@ protected:
     std::unique_ptr<Actuator> a;
 };
 
-TEST_F(ActuatorTest, BaseProperties) {
-    EXPECT_EQ(a->id, "act1");
+TEST_F(ActuatorTest, BasicProperties) {
+    ASSERT_EQ(a->id, "act1");
     EXPECT_EQ(a->name, "act1name");
-    EXPECT_EQ(a->status, false);
+    ASSERT_EQ(a->status, false);
 }
 
 TEST_F(ActuatorTest, ChangingStatus) {
     this->a->status = true;
-    EXPECT_EQ(this->a->status, true);
+    ASSERT_EQ(this->a->status, true);
     this->a->status = false;
-    EXPECT_EQ(this->a->status, false);
+    ASSERT_EQ(this->a->status, false);
 }
