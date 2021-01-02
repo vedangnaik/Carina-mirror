@@ -31,7 +31,6 @@ protected:
 // Assuming correct initialization, that members, etc. are in the right state.
 TEST_F(ActuatorsManagerTest, BasicProperties) {
     for (const auto& [id, _] : this->testActuators) {
-        std::cout << id << std::endl;
         // Do nothing here: if it crashes, it "failed" the test :D
         this->am->getActuatorStatus(id);
         this->am->actuate(id);
