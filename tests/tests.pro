@@ -19,7 +19,11 @@ QT += core gui widgets
 
 SOURCES += $$PWD/main.cpp
 
-HEADERS += $$PWD/tst_basicproperties.h
+# The headers appear to require the name "tst_..." to show up in Qt Creator's testing pane.
+# Best to just stick to that pattern for now.
+HEADERS += \
+    $$PWD/tst_ActuatorsManager.h \
+    tst_Actuator.h
 
 # Disable easylogging++, it's not necessary for testing.
 DEFINES += ELPP_DISABLE_LOGS
