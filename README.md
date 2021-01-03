@@ -14,7 +14,6 @@ Download the latest version from the Releases page.
 For any other platform, you will have to set up the [build environment](#build) and compile it yourself.
 
 ## Usage
-### Windows
 Once the software running, a 'Process' JSON file can be created as described in the [process file documentation](#process-file-format). Load in the file via `Process -> Open Process File` from the menu bar. Then, click `Process -> Start Process` to begin. If a system diagram is required, click `System Diagram -> Open Image` to add it to the right side of the interface. `System Diagram -> Clear Image` can be used to remove this image. Once done with the process, use `Process -> Close Process` to close the current process. A new process can be opened following the same steps as above from this point.
 
 ## Process File Format
