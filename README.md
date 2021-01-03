@@ -1,9 +1,21 @@
-# CleanGSUI
+<h1 align="center">CleanGSUI</h1>
+<p align="center">
+    <img src="https://github.com/UTATRocketry/CleanGSUI/workflows/Build%20and%20test/badge.svg">
+    <img src="https://github.com/UTATRocketry/CleanGSUI/workflows/Make%20release/badge.svg">
+</p>
 
 \[Avionics\] This repository houses the new-and-improved 'clean' code for UTAT's Ground Station User Interface.
 
+## Downloads
+### Windows
+Download the latest version from the Releases page.
+
+### Other platforms
+For any other platform, you will have to set up the [build environment](#build) and compile it yourself.
+
 ## Usage
-To use this software, set up the [build environment](#build) and compile it for the required platform; there are no pre-compiled binaries of CleanGSUI available at the moment. Once the software running, a 'Process' JSON file can be created as described in the [process file documentation](#process-file-format). Load in the file via `Process -> Open Process File` from the menu bar. Then, click `Process -> Start Process` to begin. If a system diagram is required, click `System Diagram -> Open Image` to add it to the right side of the interface. `System Diagram -> Clear Image` can be used to remove this image. Once done with the process, use `Process -> Close Process` to close the current process. A new process can be opened following the same steps as above from this point.
+### Windows
+Once the software running, a 'Process' JSON file can be created as described in the [process file documentation](#process-file-format). Load in the file via `Process -> Open Process File` from the menu bar. Then, click `Process -> Start Process` to begin. If a system diagram is required, click `System Diagram -> Open Image` to add it to the right side of the interface. `System Diagram -> Clear Image` can be used to remove this image. Once done with the process, use `Process -> Close Process` to close the current process. A new process can be opened following the same steps as above from this point.
 
 ## Process File Format
 This section describes the format of the 'Process' JSON file that is consumed by CleanGSUI. Note that while this information may not be up-to-date (there may be experimental features which are not described here), the features described here are guaranteed to work. 
