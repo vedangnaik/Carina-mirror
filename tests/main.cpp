@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
-// Test headers
 #include "easylogging++.h"
-#include "tst_basicproperties.h"
+// Test headers
+#include "tst_Actuator.h"
+#include "tst_ActuatorsManager.h"
 
 INITIALIZE_EASYLOGGINGPP
 

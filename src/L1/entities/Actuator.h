@@ -17,7 +17,7 @@ public:
     Actuator(std::string id, std::string name) : id(id), name(name), status(false) {};
     const std::string id;
     const std::string name;
-    bool status;
+    bool status = false;
 };
 
 #endif // ACTUATOR_H
