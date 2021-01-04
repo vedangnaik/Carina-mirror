@@ -27,6 +27,8 @@ private:
     std::vector<DAQDeviceHandler*> DAQDevices;
     SVGIC& svgic;
     QTimer* DAQReadTimer;
+    // The factory will populate this correctly.
+    const std::map<std::string, std::pair<DAQDeviceHandler*, unsigned int>> sensorIDToDAQMap;
 #ifdef ULDAQ_AVAILABLE
     const DaqDeviceInterface DAQDeviceInterfaceType = ANY_IFC;
 #endif

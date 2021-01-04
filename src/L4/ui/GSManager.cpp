@@ -25,6 +25,11 @@ GSManager::GSManager() {
     connect(this->GSMainWindowUI.clearSystemDiagramAction, &QAction::triggered, this, [=]() {
         this->systemDiagramUI.systemDiagramFrame->setStyleSheet("");
     });
+
+//    connect(this->GSMainWindowUI.actionConfigure_DAQs, &QAction::triggered, this, [=]() {
+//        DAQManagerFactory* a = new DAQManagerFactory();
+//        a->show();
+//    });
 }
 
 void GSManager::openProcessFromFile(std::string filepath) {
@@ -61,6 +66,8 @@ void GSManager::openProcessFromFile(std::string filepath) {
     this->suih = std::make_unique<StateUIHandler>(this->stateUI, *this->sp, *this->ap, *this->ac, *this->stc);
     this->sduih = std::make_unique<SystemDiagramUIHandler>(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIds, actuatorIds);
     this->stp = std::make_unique<StatesPresenter>(*this->suih);
+
+    // make the DAQManager here, using the GUI factory.
     this->daqm = std::make_unique<DAQManager>(*this->svg);
     // attach presenters to managers (kinda ugly, but idk another way to do it)
     this->sm->setOutputContract(this->sp.get());

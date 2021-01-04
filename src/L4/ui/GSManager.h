@@ -9,12 +9,13 @@
 #include <QtUiTools>
 #include <QHBoxLayout>
 #include <iostream>
+// dependencies
+#include "easylogging++.h"
 // L1
 // L2
 #include "SensorsManager.h"
 #include "ActuatorsManager.h"
 #include "StatesManager.h"
-#include "easylogging++.h"
 // L3
 #include "ActuatorsController.h"
 #include "ProcessGateway.h"
@@ -23,6 +24,7 @@
 #include "ActuatorsPresenter.h"
 #include "StatesPresenter.h"
 // L4
+#include "DAQManagerFactory.h"
 #include "DAQManager.h"
 #include "StateUIHandler.h"
 #include "SystemDiagramUIhandler.h"
