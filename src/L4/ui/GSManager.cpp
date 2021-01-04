@@ -26,10 +26,10 @@ GSManager::GSManager() {
         this->systemDiagramUI.systemDiagramFrame->setStyleSheet("");
     });
 
-//    connect(this->GSMainWindowUI.actionConfigure_DAQs, &QAction::triggered, this, [=]() {
-//        DAQManagerFactory* a = new DAQManagerFactory();
-//        a->show();
-//    });
+    connect(this->GSMainWindowUI.actionConfigure_DAQ_Devices, &QAction::triggered, this, [=]() {
+        DAQManagerFactory* a = new DAQManagerFactory();
+        a->show();
+    });
 }
 
 void GSManager::openProcessFromFile(std::string filepath) {
