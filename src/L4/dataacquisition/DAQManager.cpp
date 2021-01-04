@@ -1,7 +1,7 @@
 #include "DAQManager.h"
 
 DAQManager::DAQManager(SVGIC& svgic) : svgic{svgic} {
-#ifdef ULDAQ_AVAILABLE
+#ifdef ULDAQ_AVAILABLE // and user wants it (add option later somehow)
     std::vector<DaqDeviceDescriptor> devDescriptors;
 
     // Get the number of connected devices here.
@@ -54,6 +54,7 @@ DAQManager::DAQManager(SVGIC& svgic) : svgic{svgic} {
         }
     }
 #endif
+    this->DAQDevices.push_back(new ArduinoHandler("dev/ttyUSB0"));
 
     // Create timer to start reading from DAQs here
     this->DAQReadTimer = new QTimer(this);
