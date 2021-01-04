@@ -63,9 +63,9 @@ void DAQManagerFactory::scanForMCCDAQs() {
             // output information here
             std::string deviceID = "MCCDAQDevice" + std::to_string(i);
             std::string infoLine =
-                    "ID: " + deviceID + ", " +
-                    "Analog Input: " + (aiSupported ? "false" : "true") +
-                    "Number of channels: " + std::to_string(numChannels) +
+                    "ID: " + deviceID + "\n" +
+                    "Analog Input: " + (aiSupported ? "yes" : "no") + "\n" +
+                    "Number of channels: " + std::to_string(numChannels) + "\n" +
                     "Voltage range: " + std::to_string(voltageRange);
             QLabel* l = new QLabel(QString::fromStdString(infoLine), this);
 
