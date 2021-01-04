@@ -24,9 +24,18 @@ std::map<unsigned int, std::vector<double>> ArduinoHandler::getLatestData() {
         iss >> T1 >> T2;
         LOG(INFO) << "T1: " << T1 << " " << "T2: " << T2;
 
+        double t1, t2;
+        try {
+            t1 = std::stod(T1);
+            t2 = std::stod(T2);
+        } catch (std::exception& e) {
+            t1 = nanf("0");
+            t2 = nanf("0");
+        }
+
         std::map<unsigned int, std::vector<double>> values = {
-            {0, {std::stod(T1)}},
-            {1, {std::stod(T2)}}
+            {0, {t1}},
+            {1, {t2}}
         };
         return values;
     } else {

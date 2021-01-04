@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <cmath>
 
 class ArduinoHandler : public DAQDeviceHandler {
 public:
