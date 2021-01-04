@@ -1,4 +1,4 @@
-#ifdef USE_ULDAQ
+#ifdef ULDAQ_AVAILABLE
 
 #pragma once
 #include <uldaq.h>

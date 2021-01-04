@@ -1,5 +1,6 @@
 SOURCES += \
     $$PWD/dataacquisition/AiDAQHandler.cpp \
+    $$PWD/dataacquisition/ArduinoHandler.cpp \
     $$PWD/dataacquisition/DAQManager.cpp \
     $$PWD/ui/ErrorUIHandler.cpp \
     $$PWD/ui/GSManager.cpp \
@@ -8,6 +9,7 @@ SOURCES += \
 
 HEADERS += \
     $$PWD/dataacquisition/AiDAQHandler.h \
+    $$PWD/dataacquisition/ArduinoHandler.h \
     $$PWD/dataacquisition/DAQDeviceHandler.h \
     $$PWD/dataacquisition/DAQManager.h \
     $$PWD/ui/Draggable.h \
@@ -36,9 +38,9 @@ QT += uitools
 # by default on any Linux distros and cannot be used on Windows at all.
 # Note: This doesn't have to be done here, it can also be passed in as an argument to qmake.
 # It's just put here because it's the most relevant spot.
-#DEFINES += USE_ULDAQ
+#DEFINES += ULDAQ_AVAILABLE
 
 # Link uldaq.h for DAQ classes, if it's required.
-contains(DEFINES, USE_ULDAQ) {
+contains(DEFINES, ULDAQ_AVAILABLE) {
     LIBS += -luldaq
 }

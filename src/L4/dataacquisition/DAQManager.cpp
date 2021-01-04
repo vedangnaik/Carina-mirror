@@ -1,7 +1,7 @@
 #include "DAQManager.h"
 
 DAQManager::DAQManager(SVGIC& svgic) : svgic{svgic} {
-#ifdef USE_ULDAQ
+#ifdef ULDAQ_AVAILABLE
     std::vector<DaqDeviceDescriptor> devDescriptors;
 
     // Get the number of connected devices here.
@@ -53,8 +53,6 @@ DAQManager::DAQManager(SVGIC& svgic) : svgic{svgic} {
             }
         }
     }
-#else
-    // push back dummy daq here
 #endif
 
     // Create timer to start reading from DAQs here

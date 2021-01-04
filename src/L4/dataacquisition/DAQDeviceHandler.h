@@ -1,5 +1,4 @@
-#ifndef DAQDEVICEHANDLER_H
-#define DAQDEVICEHANDLER_H
+#pragma once
 
 #include <map>
 #include <vector>
@@ -11,5 +10,3 @@ public:
     virtual std::map<unsigned int, std::vector<double>> getLatestData() = 0;
     virtual ~DAQDeviceHandler() {};
 };
-
-#endif // DAQDEVICEHANDLER_H

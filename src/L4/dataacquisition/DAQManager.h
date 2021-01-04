@@ -1,11 +1,8 @@
-#ifndef DAQMANAGER_H
-#define DAQMANAGER_H
+#pragma once
 
-#if defined(USE_ULDAQ)
+#ifdef ULDAQ_AVAILABLE
     #include <uldaq.h>
     #include "AiDAQHandler.h"
-#else
-    // include dummy daq here
 #endif
 
 #include "SensorValuesGateway.h"
@@ -29,9 +26,7 @@ private:
     std::vector<DAQDeviceHandler*> DAQDevices;
     SVGIC& svgic;
     QTimer* DAQReadTimer;
-#if defined(USE_ULDAQ)
+#ifdef ULDAQ_AVAILABLE
     const DaqDeviceInterface DAQDeviceInterfaceType = ANY_IFC;
 #endif
 };
-
-#endif // DAQMANAGER_H
