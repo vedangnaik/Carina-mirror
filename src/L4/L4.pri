@@ -41,7 +41,7 @@ QT += uitools
 # by default on any Linux distros and cannot be used on Windows at all.
 # Note: This doesn't have to be done here, it can also be passed in as an argument to qmake.
 # It's just put here because it's the most relevant spot.
-DEFINES += ULDAQ_AVAILABLE
+#DEFINES += ULDAQ_AVAILABLE
 
 # Link uldaq.h for DAQ classes, if it's required.
 contains(DEFINES, ULDAQ_AVAILABLE) {
