@@ -16,6 +16,19 @@
 #include <QCheckBox>
 #include "ui_daqmanagerfactory.h"
 
+struct AiDAQInfo {
+    std::string id;
+    DaqDeviceHandle handle;
+    unsigned int numChannels;
+    Range voltageRange;
+};
+
+struct SerialPortInfo {
+    std::string id;
+    std::string serialportPath;
+    unsigned int numChannels;
+};
+
 namespace Ui {
     class DAQManagerFactory;
 }
@@ -23,18 +36,17 @@ namespace Ui {
 class DAQManagerFactory : public QDialog {
     Q_OBJECT
 public:
-    explicit DAQManagerFactory(QWidget *parent = nullptr);
-    ~DAQManagerFactory();
-
     static std::unique_ptr<DAQManager> createDAQManager();
+    ~DAQManagerFactory();
+protected:
+    std::map<std::string, AiDAQInfo> selectedAiMccdaqs;
+    std::map<std::string, SerialPortInfo> selectedSerialports;
+private:
+    explicit DAQManagerFactory(QWidget *parent = nullptr);
+    Ui::DAQManagerFactory *ui;
 private slots:
 #ifdef ULDAQ_AVAILABLE
-    void scanForMCCDAQs();
+    void scanForAiMCCDAQs();
 #endif
     void openAndTestSerialPort();
-private:
-    QSpinBox* getSerialPortChannelsSpinBox();
-    std::map<std::string, bool> detectedMccdaqs;
-    std::map<std::string, bool> detectedSerialports;
-    Ui::DAQManagerFactory *ui;
 };

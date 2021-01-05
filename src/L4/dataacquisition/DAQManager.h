@@ -8,7 +8,6 @@
 #include "SensorValuesGateway.h"
 #include "DAQDeviceHandler.h"
 #include "easylogging++.h"
-#include "ArduinoHandler.h"
 #include <map>
 #include <vector>
 #include <QObject>

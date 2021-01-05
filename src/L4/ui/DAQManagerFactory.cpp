@@ -6,7 +6,7 @@ DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QDialog(parent), ui(new 
     // connect MCCDAQ is available
 #ifdef ULDAQ_AVAILABLE
     ui->MCCDAQGroupBox->setDisabled(false);
-    connect(this->ui->MCCDAQScanButton, &QPushButton::clicked, this, &DAQManagerFactory::scanForMCCDAQs);
+    connect(this->ui->MCCDAQScanButton, &QPushButton::clicked, this, &DAQManagerFactory::scanForAiMCCDAQs);
 #else
     ui->MCCDAQGroupBox->setDisabled(true);
 #endif
@@ -22,7 +22,7 @@ DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QDialog(parent), ui(new 
 }
 
 #ifdef ULDAQ_AVAILABLE
-void DAQManagerFactory::scanForMCCDAQs() {
+void DAQManagerFactory::scanForAiMCCDAQs() {
     const DaqDeviceInterface DAQDeviceInterfaceType = ANY_IFC;
 
     // Get the number of connected devices here.
@@ -73,7 +73,6 @@ void DAQManagerFactory::scanForMCCDAQs() {
                     "Analog Input: " + std::string(aiSupported ? "yes" : "no") + "\t" +
                     "Number of channels: " + std::to_string(numChannels) + "\t" +
                     "Voltage range: " + std::to_string(voltageRange);
-            this->detectedMccdaqs.insert({ deviceID, false });
 
             QWidget* w = new QWidget(this);
             QHBoxLayout* h = new QHBoxLayout(this);
@@ -84,8 +83,13 @@ void DAQManagerFactory::scanForMCCDAQs() {
             h->addWidget(chb);
             h->addWidget(l);
 
+            struct AiDAQInfo aidi = { deviceID, handle, (unsigned int)numChannels, (Range)voltageRange };
             connect(chb, &QCheckBox::stateChanged, this, [=](int state) {
-                this->detectedMccdaqs.insert_or_assign(deviceID, (state == Qt::Checked ? true : false) );
+                if (state == Qt::Checked) {
+                    this->selectedAiMccdaqs.insert_or_assign(deviceID, aidi);
+                } else if (state == Qt::Unchecked) {
+                    this->selectedAiMccdaqs.erase(deviceID);
+                }
             });
 
             ui->MCCDAQDevicesLayout->addWidget(w);
@@ -99,7 +103,7 @@ void DAQManagerFactory::openAndTestSerialPort() {
     std::ifstream test("/dev" + serialportName);
     if (!test.is_open()) {
         this->ui->serialportOpenButton->setStyleSheet("background-color: red");
-        return;
+//        return;
     }
     this->ui->serialportOpenButton->setStyleSheet("background-color: green");
 
@@ -107,21 +111,32 @@ void DAQManagerFactory::openAndTestSerialPort() {
     std::string infoLine =
             "Path: /dev/" + serialportName + "\t" +
             "Number of 'channels': ";
-    this->detectedSerialports.insert({ deviceID, false });
 
     QWidget* w = new QWidget(this);
     QHBoxLayout* h = new QHBoxLayout(this);
     w->setLayout(h);
     QCheckBox* chb = new QCheckBox(QString::fromStdString(deviceID), this);
     QLabel* l = new QLabel(QString::fromStdString(infoLine), this);
-    QSpinBox* b = this->getSerialPortChannelsSpinBox();
+    QSpinBox* b = new QSpinBox(this);
+    b->setRange(1, 10);
     b->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     h->addWidget(chb);
     h->addWidget(l);
     h->addWidget(b);
 
+    struct SerialPortInfo spi = { deviceID, "/dev/" + serialportName, (unsigned int)b->value() };
+
+    connect(b, &QSpinBox::textChanged, this, [=](const QString& t) {
+        if (this->selectedSerialports.find(deviceID) != this->selectedSerialports.end()) {
+            this->selectedSerialports.at(deviceID).numChannels = t.toInt();
+        }
+    });
     connect(chb, &QCheckBox::stateChanged, this, [=](int state) {
-        this->detectedSerialports.insert_or_assign(deviceID, (state == Qt::Checked ? true : false) );
+        if (state == Qt::Checked) {
+            this->selectedSerialports.insert_or_assign(deviceID, spi);
+        } else if (state == Qt::Unchecked) {
+            this->selectedSerialports.erase(deviceID);
+        }
     });
 
     this->ui->SerialportDevicesLayout->addWidget(w);
@@ -131,20 +146,14 @@ DAQManagerFactory::~DAQManagerFactory() {
     delete ui;
 }
 
-QSpinBox* DAQManagerFactory::getSerialPortChannelsSpinBox() {
-    QSpinBox* b = new QSpinBox(this);
-    b->setRange(1, 10);
-    return b;
-}
-
-
-
-
 std::unique_ptr<DAQManager> DAQManagerFactory::createDAQManager() {
     DAQManagerFactory dmf;
     int r = dmf.exec();
     if (r == QDialog::Accepted) {
-        // create daq manager here.
+        std::vector<DAQDeviceHandler*> daqDevices;
+        for (const auto& [id, selected] : dmf.selectedSerialports) {
+
+        }
     }
     return nullptr;
 }

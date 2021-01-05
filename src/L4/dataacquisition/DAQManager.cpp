@@ -54,7 +54,6 @@ DAQManager::DAQManager(SVGIC& svgic) : svgic{svgic} {
         }
     }
 #endif
-    this->DAQDevices.push_back(new ArduinoHandler("dev/ttyUSB0"));
 
     // Create timer to start reading from DAQs here
     this->DAQReadTimer = new QTimer(this);
