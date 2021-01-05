@@ -18,12 +18,14 @@
 #include <QCheckBox>
 #include "ui_daqmanagerfactory.h"
 
+#ifdef ULDAQ_AVAILABLE
 struct AiDAQInfo {
     std::string id;
     DaqDeviceHandle handle;
     unsigned int numChannels;
     Range voltageRange;
 };
+#endif
 
 struct SerialPortInfo {
     std::string id;
@@ -41,7 +43,9 @@ public:
     static std::unique_ptr<DAQManager> createDAQManager();
     ~DAQManagerFactory();
 protected:
+#ifdef ULDAQ_AVAILABLE
     std::map<std::string, AiDAQInfo> selectedAiMccdaqs;
+#endif
     std::map<std::string, SerialPortInfo> selectedSerialports;
 private:
     explicit DAQManagerFactory(QWidget *parent = nullptr);

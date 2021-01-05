@@ -8,6 +8,7 @@ DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QDialog(parent), ui(new 
     ui->MCCDAQGroupBox->setDisabled(false);
     connect(this->ui->MCCDAQScanButton, &QPushButton::clicked, this, &DAQManagerFactory::scanForAiMCCDAQs);
 #else
+    ui->MCCDAQDevicesLayout->addWidget(new QLabel("MCCDAQ support is not available on this platform.", this));
     ui->MCCDAQGroupBox->setDisabled(true);
 #endif
 
@@ -151,11 +152,13 @@ std::unique_ptr<DAQManager> DAQManagerFactory::createDAQManager() {
     int r = dmf.exec();
     if (r == QDialog::Accepted) {
         std::vector<DAQDeviceHandler*> DAQDevices;
+#ifdef ULDAQ_AVAILABLE
         for (const auto& [id, devInfo]: dmf.selectedAiMccdaqs) {
             DAQDevices.push_back(
                 new AiDAQHandler(devInfo.id, devInfo.handle, devInfo.numChannels, devInfo.voltageRange)
             );
         }
+#endif
         for (const auto& [id, devInfo] : dmf.selectedSerialports) {
             DAQDevices.push_back(
                 new SerialPortHandler(devInfo.id, devInfo.serialportPath, devInfo.numChannels)
