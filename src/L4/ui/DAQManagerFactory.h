@@ -27,10 +27,12 @@ public:
 private slots:
 #ifdef ULDAQ_AVAILABLE
     void scanForMCCDAQs();
-    void openAndTestSerialPort();
 #endif
+    void openAndTestSerialPort();
+    void createDAQManager();
 private:
     QSpinBox* getSerialPortChannelsSpinBox();
-    std::map<std::string, DAQDeviceHandler*> DAQs;
+    std::map<std::string, bool> detectedMccdaqs;
+    std::map<std::string, bool> detectedSerialports;
     Ui::DAQManagerFactory *ui;
 };

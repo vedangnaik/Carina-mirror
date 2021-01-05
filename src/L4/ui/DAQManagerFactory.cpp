@@ -15,6 +15,9 @@ DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QWidget(parent), ui(new 
     QDir* d = new QDir("/dev","tty*", QDir::Name, QDir::System);
     ui->availableTTYsComboBox->addItems(d->entryList());
     connect(this->ui->serialportOpenButton, &QPushButton::clicked, this, &DAQManagerFactory::openAndTestSerialPort);
+
+    // connect save button
+    connect(this->ui->saveAndExitButton, &QPushButton::clicked, this, &DAQManagerFactory::createDAQManager);
 }
 
 #ifdef ULDAQ_AVAILABLE
@@ -66,13 +69,25 @@ void DAQManagerFactory::scanForMCCDAQs() {
             // output information here
             std::string deviceID = "mccdaq:" + std::to_string(i);
             std::string infoLine =
-                    "ID: " + deviceID + "\n" +
-                    "Analog Input: " + (aiSupported ? "yes" : "no") + "\n" +
-                    "Number of channels: " + std::to_string(numChannels) + "\n" +
+                    "Analog Input: " + std::string(aiSupported ? "yes" : "no") + "\t" +
+                    "Number of channels: " + std::to_string(numChannels) + "\t" +
                     "Voltage range: " + std::to_string(voltageRange);
-            QLabel* l = new QLabel(QString::fromStdString(infoLine), this);
+            this->detectedMccdaqs.insert({ deviceID, false });
 
-            ui->MCCDAQDevicesLayout->addWidget(l);
+            QWidget* w = new QWidget(this);
+            QHBoxLayout* h = new QHBoxLayout(this);
+            w->setLayout(h);
+            QCheckBox* chb = new QCheckBox(QString::fromStdString(deviceID), this);
+            QLabel* l = new QLabel(QString::fromStdString(infoLine), this);
+            l->setWordWrap(true);
+            h->addWidget(chb);
+            h->addWidget(l);
+
+            connect(chb, &QCheckBox::stateChanged, this, [=](int state) {
+                this->detectedMccdaqs.insert_or_assign(deviceID, (state == Qt::Checked ? true : false) );
+            });
+
+            ui->MCCDAQDevicesLayout->addWidget(w);
         }
     }
 }
@@ -83,20 +98,19 @@ void DAQManagerFactory::openAndTestSerialPort() {
     std::ifstream test("/dev" + serialportName);
     if (!test.is_open()) {
         this->ui->serialportOpenButton->setStyleSheet("background-color: red");
-//        return;
+        return;
     }
     this->ui->serialportOpenButton->setStyleSheet("background-color: green");
 
-    // The widgets to hold the serial port's info.
-    QWidget* w = new QWidget(this);
-    QHBoxLayout* h = new QHBoxLayout(this);
-    w->setLayout(h);
-    // Construct them appropriately.
     std::string deviceID = "serialport:" + serialportName;
     std::string infoLine =
             "Path: /dev/" + serialportName + "\t" +
             "Number of 'channels': ";
-    // Make the widgets
+    this->detectedSerialports.insert({ deviceID, false });
+
+    QWidget* w = new QWidget(this);
+    QHBoxLayout* h = new QHBoxLayout(this);
+    w->setLayout(h);
     QCheckBox* chb = new QCheckBox(QString::fromStdString(deviceID), this);
     QLabel* l = new QLabel(QString::fromStdString(infoLine), this);
     QSpinBox* b = this->getSerialPortChannelsSpinBox();
@@ -105,7 +119,15 @@ void DAQManagerFactory::openAndTestSerialPort() {
     h->addWidget(l);
     h->addWidget(b);
 
+    connect(chb, &QCheckBox::stateChanged, this, [=](int state) {
+        this->detectedSerialports.insert_or_assign(deviceID, (state == Qt::Checked ? true : false) );
+    });
+
     this->ui->SerialportDevicesLayout->addWidget(w);
+}
+
+void DAQManagerFactory::createDAQManager() {
+
 }
 
 DAQManagerFactory::~DAQManagerFactory() {
