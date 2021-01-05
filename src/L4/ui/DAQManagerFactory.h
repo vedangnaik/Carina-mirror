@@ -3,11 +3,16 @@
 #ifdef ULDAQ_AVAILABLE
     #include <uldaq.h>
 #endif
+#include "easylogging++.h"
 #include <QWidget>
-#include "DAQManager.h"
-#include "ui_daqmanagerfactory.h"
+#include <DAQDeviceHandler.h>
 #include <QPushButton>
 #include <QLabel>
+#include <QFileDialog>
+#include <QDir>
+#include <QComboBox>
+#include <QSpinBox>
+#include "ui_daqmanagerfactory.h"
 
 namespace Ui {
     class DAQManagerFactory;
@@ -21,9 +26,10 @@ public:
 private slots:
 #ifdef ULDAQ_AVAILABLE
     void scanForMCCDAQs();
+    void openAndTestSerialPort();
 #endif
 private:
+    QSpinBox* getSerialPortChannelsSpinBox();
     std::map<std::string, DAQDeviceHandler*> DAQs;
-    std::unique_ptr<DAQManager> getConfiguredDAQManager();
     Ui::DAQManagerFactory *ui;
 };

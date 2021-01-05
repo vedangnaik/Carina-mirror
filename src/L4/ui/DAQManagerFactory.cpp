@@ -2,16 +2,17 @@
 
 DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QWidget(parent), ui(new Ui::DAQManagerFactory) {
     ui->setupUi(this);
+    // connect MCCDAQ is available
 #ifdef ULDAQ_AVAILABLE
     ui->MCCDAQGroupBox->setDisabled(false);
     connect(this->ui->MCCDAQScanButton, &QPushButton::clicked, this, &DAQManagerFactory::scanForMCCDAQs);
 #else
     ui->MCCDAQGroupBox->setDisabled(true);
 #endif
-}
-
-std::unique_ptr<DAQManager> DAQManagerFactory::getConfiguredDAQManager() {
-    return nullptr;
+    // connect serial ports
+    QDir* d = new QDir("/dev","tty*", QDir::Name, QDir::System);
+    ui->availableTTYsComboBox->addItems(d->entryList());
+    connect(this->ui->serialportOpenButton, &QPushButton::clicked, this, &DAQManagerFactory::openAndTestSerialPort);
 }
 
 #ifdef ULDAQ_AVAILABLE
@@ -68,13 +69,41 @@ void DAQManagerFactory::scanForMCCDAQs() {
                     "Number of channels: " + std::to_string(numChannels) + "\n" +
                     "Voltage range: " + std::to_string(voltageRange);
             QLabel* l = new QLabel(QString::fromStdString(infoLine), this);
-
             ui->MCCDAQDevicesLayout->addWidget(l);
         }
     }
 }
 #endif
 
+void DAQManagerFactory::openAndTestSerialPort() {
+    std::string serialportPath = "/dev/" + ui->availableTTYsComboBox->currentText().toStdString();
+    std::ifstream test(serialportPath);
+    if (!test.is_open()) {
+        this->ui->serialportOpenButton->setStyleSheet("background-color: red");
+        return;
+    }
+    this->ui->serialportOpenButton->setStyleSheet("background-color: green");
+
+    QWidget* w = new QWidget(this);
+    QHBoxLayout* h = new QHBoxLayout(this);
+    w->setLayout(h);
+    QLabel* l = new QLabel(QString::fromStdString("Serial Port path: " + serialportPath), this);
+    l->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    QLabel* r = new QLabel("Number of 'channels'", this);
+    QSpinBox* b = this->getSerialPortChannelsSpinBox();
+    h->addWidget(l);
+    h->addWidget(r);
+    h->addWidget(b);
+
+    this->ui->SerialportDevicesLayout->addWidget(w);
+}
+
 DAQManagerFactory::~DAQManagerFactory() {
     delete ui;
+}
+
+QSpinBox* DAQManagerFactory::getSerialPortChannelsSpinBox() {
+    QSpinBox* b = new QSpinBox(this);
+    b->setRange(1, 10);
+    return b;
 }
