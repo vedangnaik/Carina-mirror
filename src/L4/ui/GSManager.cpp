@@ -29,8 +29,7 @@ GSManager::GSManager() {
     });
 
     connect(this->GSMainWindowUI.actionConfigure_DAQ_Devices, &QAction::triggered, this, [=]() {
-        DAQManagerFactory* a = new DAQManagerFactory();
-        a->show();
+        std::unique_ptr<DAQManager> a = DAQManagerFactory::createDAQManager();
     });
 }
 

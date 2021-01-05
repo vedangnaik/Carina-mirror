@@ -1,6 +1,6 @@
 #include "DAQManagerFactory.h"
 
-DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QWidget(parent), ui(new Ui::DAQManagerFactory) {
+DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QDialog(parent), ui(new Ui::DAQManagerFactory) {
     ui->setupUi(this);
 
     // connect MCCDAQ is available
@@ -16,8 +16,9 @@ DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QWidget(parent), ui(new 
     ui->availableTTYsComboBox->addItems(d->entryList());
     connect(this->ui->serialportOpenButton, &QPushButton::clicked, this, &DAQManagerFactory::openAndTestSerialPort);
 
-    // connect save button
-    connect(this->ui->saveAndExitButton, &QPushButton::clicked, this, &DAQManagerFactory::createDAQManager);
+    // connect dialog button
+    connect(this->ui->configureButton, &QPushButton::clicked, this, &DAQManagerFactory::accept);
+    connect(this->ui->closeButton, &QPushButton::clicked, this, &DAQManagerFactory::reject);
 }
 
 #ifdef ULDAQ_AVAILABLE
@@ -126,10 +127,6 @@ void DAQManagerFactory::openAndTestSerialPort() {
     this->ui->SerialportDevicesLayout->addWidget(w);
 }
 
-void DAQManagerFactory::createDAQManager() {
-
-}
-
 DAQManagerFactory::~DAQManagerFactory() {
     delete ui;
 }
@@ -138,4 +135,16 @@ QSpinBox* DAQManagerFactory::getSerialPortChannelsSpinBox() {
     QSpinBox* b = new QSpinBox(this);
     b->setRange(1, 10);
     return b;
+}
+
+
+
+
+std::unique_ptr<DAQManager> DAQManagerFactory::createDAQManager() {
+    DAQManagerFactory dmf;
+    int r = dmf.exec();
+    if (r == QDialog::Accepted) {
+        // create daq manager here.
+    }
+    return nullptr;
 }

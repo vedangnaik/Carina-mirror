@@ -4,8 +4,9 @@
     #include <uldaq.h>
 #endif
 #include "easylogging++.h"
-#include <QWidget>
-#include <DAQDeviceHandler.h>
+#include "DAQDeviceHandler.h"
+#include "DAQManager.h"
+#include <QDialog>
 #include <QPushButton>
 #include <QLabel>
 #include <QFileDialog>
@@ -19,17 +20,18 @@ namespace Ui {
     class DAQManagerFactory;
 }
 
-class DAQManagerFactory : public QWidget {
+class DAQManagerFactory : public QDialog {
     Q_OBJECT
 public:
     explicit DAQManagerFactory(QWidget *parent = nullptr);
     ~DAQManagerFactory();
+
+    static std::unique_ptr<DAQManager> createDAQManager();
 private slots:
 #ifdef ULDAQ_AVAILABLE
     void scanForMCCDAQs();
 #endif
     void openAndTestSerialPort();
-    void createDAQManager();
 private:
     QSpinBox* getSerialPortChannelsSpinBox();
     std::map<std::string, bool> detectedMccdaqs;

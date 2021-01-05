@@ -223,6 +223,13 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
+        <widget class="QPushButton" name="closeButton">
+         <property name="text">
+          <string>Close</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -239,9 +246,9 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="saveAndExitButton">
+        <widget class="QPushButton" name="configureButton">
          <property name="text">
-          <string>Save and Exit</string>
+          <string>Configure and Exit</string>
          </property>
         </widget>
        </item>
