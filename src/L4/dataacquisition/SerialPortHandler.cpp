@@ -1,6 +1,6 @@
 #include "SerialPortHandler.h"
 
-SerialPortHandler::SerialPortHandler(std::string filepath) : filepath{filepath} {
+SerialPortHandler::SerialPortHandler(std::string id, std::string filepath, unsigned int numChannels) : id{id}, serialportPath{filepath}, numChannels{numChannels} {
     std::ifstream test(filepath);
     if (!test.is_open()) {
         LOG(ERROR) << "This arduino filepath could not be opened.";
@@ -9,7 +9,7 @@ SerialPortHandler::SerialPortHandler(std::string filepath) : filepath{filepath} 
 }
 
 void SerialPortHandler::startAcquisition() {
-    this->serialport = std::ifstream(this->filepath);
+    this->serialport = std::ifstream(this->serialportPath);
 }
 
 void SerialPortHandler::stopAcquisition() {

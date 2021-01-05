@@ -29,7 +29,7 @@ GSManager::GSManager() {
     });
 
     connect(this->GSMainWindowUI.actionConfigure_DAQ_Devices, &QAction::triggered, this, [=]() {
-        std::unique_ptr<DAQManager> a = DAQManagerFactory::createDAQManager();
+        this->daqm = DAQManagerFactory::createDAQManager();
     });
 }
 
@@ -69,7 +69,11 @@ void GSManager::openProcessFromFile(std::string filepath) {
     this->stp = std::make_unique<StatesPresenter>(*this->suih);
 
     // make the DAQManager here, using the GUI factory.
-    this->daqm = std::make_unique<DAQManager>(*this->svg);
+    while (this->daqm == nullptr) {
+        LOG(ERROR) << "Please configure your data acqusition methods.";
+        this->daqm = DAQManagerFactory::createDAQManager();
+    }
+    this->daqm->setOutputContract(this->svg.get());
     // attach presenters to managers (kinda ugly, but idk another way to do it)
     this->sm->setOutputContract(this->sp.get());
     this->am->setOutputContract(this->ap.get());
@@ -77,7 +81,6 @@ void GSManager::openProcessFromFile(std::string filepath) {
 
     this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
     this->GSMainWindowUI.startProcessAction->setEnabled(true);
-
 }
 
 void GSManager::startProcess() {

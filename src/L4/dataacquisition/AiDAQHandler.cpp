@@ -2,7 +2,7 @@
 
 #include "AiDAQHandler.h"
 
-AiDAQHandler::AiDAQHandler(DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange) : handle{handle}, numChannels{numChannels}, voltageRange{voltageRange} {
+AiDAQHandler::AiDAQHandler(std::string id, DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange) : id{id}, handle{handle}, numChannels{numChannels}, voltageRange{voltageRange} {
     // connect DAQ
     UlError err = ulConnectDaqDevice(handle);
     if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulConnectDaqDevice Error: " << err << std::endl; }

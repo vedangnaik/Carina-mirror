@@ -6,6 +6,8 @@
 #include "easylogging++.h"
 #include "DAQDeviceHandler.h"
 #include "DAQManager.h"
+#include "SerialPortHandler.h"
+#include "AiDAQHandler.h"
 #include <QDialog>
 #include <QPushButton>
 #include <QLabel>

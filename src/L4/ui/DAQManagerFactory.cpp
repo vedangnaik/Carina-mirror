@@ -150,10 +150,18 @@ std::unique_ptr<DAQManager> DAQManagerFactory::createDAQManager() {
     DAQManagerFactory dmf;
     int r = dmf.exec();
     if (r == QDialog::Accepted) {
-        std::vector<DAQDeviceHandler*> daqDevices;
-        for (const auto& [id, selected] : dmf.selectedSerialports) {
-
+        std::vector<DAQDeviceHandler*> DAQDevices;
+        for (const auto& [id, devInfo]: dmf.selectedAiMccdaqs) {
+            DAQDevices.push_back(
+                new AiDAQHandler(devInfo.id, devInfo.handle, devInfo.numChannels, devInfo.voltageRange)
+            );
         }
+        for (const auto& [id, devInfo] : dmf.selectedSerialports) {
+            DAQDevices.push_back(
+                new SerialPortHandler(devInfo.id, devInfo.serialportPath, devInfo.numChannels)
+            );
+        }
+        return std::make_unique<DAQManager>(DAQDevices);
     }
     return nullptr;
 }

@@ -14,12 +14,13 @@
  */
 class AiDAQHandler : public DAQDeviceHandler {
 public:
-    AiDAQHandler(DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange);
+    AiDAQHandler(std::string id, DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange);
     ~AiDAQHandler();
     void startAcquisition() override;
     std::map<unsigned int, std::vector<double>> getLatestData() override;
     void stopAcquisition() override;
 private:
+    std::string id;
     // config vars
     const DaqDeviceHandle handle;
     const unsigned int samplesPerChannel = 100;
