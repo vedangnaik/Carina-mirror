@@ -2,6 +2,7 @@
 
 DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QWidget(parent), ui(new Ui::DAQManagerFactory) {
     ui->setupUi(this);
+
     // connect MCCDAQ is available
 #ifdef ULDAQ_AVAILABLE
     ui->MCCDAQGroupBox->setDisabled(false);
@@ -9,6 +10,7 @@ DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QWidget(parent), ui(new 
 #else
     ui->MCCDAQGroupBox->setDisabled(true);
 #endif
+
     // connect serial ports
     QDir* d = new QDir("/dev","tty*", QDir::Name, QDir::System);
     ui->availableTTYsComboBox->addItems(d->entryList());
@@ -62,13 +64,14 @@ void DAQManagerFactory::scanForMCCDAQs() {
             if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAIGetInfo Error: " << err; }
 
             // output information here
-            std::string deviceID = "MCCDAQDevice" + std::to_string(i);
+            std::string deviceID = "mccdaq:" + std::to_string(i);
             std::string infoLine =
                     "ID: " + deviceID + "\n" +
                     "Analog Input: " + (aiSupported ? "yes" : "no") + "\n" +
                     "Number of channels: " + std::to_string(numChannels) + "\n" +
                     "Voltage range: " + std::to_string(voltageRange);
             QLabel* l = new QLabel(QString::fromStdString(infoLine), this);
+
             ui->MCCDAQDevicesLayout->addWidget(l);
         }
     }
@@ -76,23 +79,30 @@ void DAQManagerFactory::scanForMCCDAQs() {
 #endif
 
 void DAQManagerFactory::openAndTestSerialPort() {
-    std::string serialportPath = "/dev/" + ui->availableTTYsComboBox->currentText().toStdString();
-    std::ifstream test(serialportPath);
+    std::string serialportName = ui->availableTTYsComboBox->currentText().toStdString();
+    std::ifstream test("/dev" + serialportName);
     if (!test.is_open()) {
         this->ui->serialportOpenButton->setStyleSheet("background-color: red");
-        return;
+//        return;
     }
     this->ui->serialportOpenButton->setStyleSheet("background-color: green");
 
+    // The widgets to hold the serial port's info.
     QWidget* w = new QWidget(this);
     QHBoxLayout* h = new QHBoxLayout(this);
     w->setLayout(h);
-    QLabel* l = new QLabel(QString::fromStdString("Serial Port path: " + serialportPath), this);
-    l->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    QLabel* r = new QLabel("Number of 'channels'", this);
+    // Construct them appropriately.
+    std::string deviceID = "serialport:" + serialportName;
+    std::string infoLine =
+            "Path: /dev/" + serialportName + "\t" +
+            "Number of 'channels': ";
+    // Make the widgets
+    QCheckBox* chb = new QCheckBox(QString::fromStdString(deviceID), this);
+    QLabel* l = new QLabel(QString::fromStdString(infoLine), this);
     QSpinBox* b = this->getSerialPortChannelsSpinBox();
+    b->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    h->addWidget(chb);
     h->addWidget(l);
-    h->addWidget(r);
     h->addWidget(b);
 
     this->ui->SerialportDevicesLayout->addWidget(w);
