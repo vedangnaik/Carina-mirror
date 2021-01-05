@@ -1,11 +1,8 @@
-#ifndef DAQMANAGER_H
-#define DAQMANAGER_H
+#pragma once
 
-#if defined(USE_ULDAQ)
+#ifdef ULDAQ_AVAILABLE
     #include <uldaq.h>
     #include "AiDAQHandler.h"
-#else
-    // include dummy daq here
 #endif
 
 #include "SensorValuesGateway.h"
@@ -21,17 +18,20 @@
 class DAQManager : public QObject {
     Q_OBJECT
 public:
-    DAQManager(SVGIC& svgic);
+    DAQManager(std::vector<DAQDeviceHandler*> DAQDevices);
     void startAcquisition();
     void stopAcquisition();
     void getLatestData();
+    void setOutputContract(SVGIC* svgic) {
+        this->svgic = svgic;
+    }
 private:
     std::vector<DAQDeviceHandler*> DAQDevices;
-    SVGIC& svgic;
+    SVGIC* svgic = nullptr;
     QTimer* DAQReadTimer;
-#if defined(USE_ULDAQ)
+    // The factory will populate this correctly.
+    const std::map<std::string, std::pair<DAQDeviceHandler*, unsigned int>> sensorIDToDAQMap;
+#ifdef ULDAQ_AVAILABLE
     const DaqDeviceInterface DAQDeviceInterfaceType = ANY_IFC;
 #endif
 };
-
-#endif // DAQMANAGER_H

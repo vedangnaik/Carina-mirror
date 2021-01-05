@@ -97,14 +97,15 @@
     <addaction name="openSystemDiagramAction"/>
     <addaction name="clearSystemDiagramAction"/>
    </widget>
-   <widget class="QMenu" name="menuDAQ">
+   <widget class="QMenu" name="menuData_Acquisition">
     <property name="title">
-     <string>DAQ</string>
+     <string>Data Acquisition</string>
     </property>
+    <addaction name="actionConfigure_DAQ_Devices"/>
    </widget>
    <addaction name="menuProcess"/>
    <addaction name="menuSystem_Diagram"/>
-   <addaction name="menuDAQ"/>
+   <addaction name="menuData_Acquisition"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="openProcessFromFileAction">
@@ -136,6 +137,16 @@
    </property>
    <property name="text">
     <string>Close Process</string>
+   </property>
+  </action>
+  <action name="actionConfigure_DAQs">
+   <property name="text">
+    <string>Configure DAQs</string>
+   </property>
+  </action>
+  <action name="actionConfigure_DAQ_Devices">
+   <property name="text">
+    <string>Configure DAQ Devices</string>
    </property>
   </action>
  </widget>

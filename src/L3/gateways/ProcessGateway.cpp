@@ -1,10 +1,10 @@
 #include "ProcessGateway.h"
 
 ProcessGateway::ProcessGateway(const std::string filepath) : filepath(filepath) {
-    std::filesystem::path f = this->filepath;
-    if (f.extension() != ".json") {
-        throw InvalidFileTypeError(this->filepath);
-    }
+//    std::filesystem::path f = this->filepath;
+//    if (f.extension() != ".json") {
+//        throw InvalidFileTypeError(this->filepath);
+//    }
 }
 
 struct ProcessData ProcessGateway::parseProcessFile() {    

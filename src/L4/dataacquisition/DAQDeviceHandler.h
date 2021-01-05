@@ -1,8 +1,8 @@
-#ifndef DAQDEVICEHANDLER_H
-#define DAQDEVICEHANDLER_H
+#pragma once
 
 #include <map>
 #include <vector>
+#include <string>
 
 class DAQDeviceHandler {
 public:
@@ -10,6 +10,5 @@ public:
     virtual void stopAcquisition() = 0;
     virtual std::map<unsigned int, std::vector<double>> getLatestData() = 0;
     virtual ~DAQDeviceHandler() {};
+    std::string deviceID;
 };
-
-#endif // DAQDEVICEHANDLER_H

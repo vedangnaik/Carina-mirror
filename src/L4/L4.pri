@@ -1,6 +1,8 @@
 SOURCES += \
     $$PWD/dataacquisition/AiDAQHandler.cpp \
+    $$PWD/dataacquisition/SerialPortHandler.cpp \
     $$PWD/dataacquisition/DAQManager.cpp \
+    $$PWD/ui/DAQManagerFactory.cpp \
     $$PWD/ui/ErrorUIHandler.cpp \
     $$PWD/ui/GSManager.cpp \
     $$PWD/ui/StateUIHandler.cpp \
@@ -8,8 +10,10 @@ SOURCES += \
 
 HEADERS += \
     $$PWD/dataacquisition/AiDAQHandler.h \
+    $$PWD/dataacquisition/SerialPortHandler.h \
     $$PWD/dataacquisition/DAQDeviceHandler.h \
     $$PWD/dataacquisition/DAQManager.h \
+    $$PWD/ui/DAQManagerFactory.h \
     $$PWD/ui/Draggable.h \
     $$PWD/ui/ErrorUIHandler.h \
     $$PWD/ui/GSManager.h \
@@ -23,6 +27,7 @@ INCLUDEPATH += \
 
 # Add .ui forms for UI classes.
 FORMS += \
+    $$PWD/ui/daqmanagerfactory.ui \
     $$PWD/ui/error.ui \
     $$PWD/ui/gsmainwindow.ui \
     $$PWD/ui/state.ui \
@@ -36,9 +41,9 @@ QT += uitools
 # by default on any Linux distros and cannot be used on Windows at all.
 # Note: This doesn't have to be done here, it can also be passed in as an argument to qmake.
 # It's just put here because it's the most relevant spot.
-#DEFINES += USE_ULDAQ
+#DEFINES += ULDAQ_AVAILABLE
 
 # Link uldaq.h for DAQ classes, if it's required.
-contains(DEFINES, USE_ULDAQ) {
+contains(DEFINES, ULDAQ_AVAILABLE) {
     LIBS += -luldaq
 }
