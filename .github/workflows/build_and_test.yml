@@ -24,24 +24,24 @@ jobs:
       - name: Checkout our code
         uses: actions/checkout@v2
         with:
-          path: "CleanGSUI/"
+          path: "Carina/"
       - name: Checkout latest release of googletest
         run: git clone https://github.com/google/googletest.git -b release-1.10.0
       
       # Make the build directory and build app and tests.
       - name: Make build directory
         run: |
-          cd $GITHUB_WORKSPACE/CleanGSUI
-          mkdir $GITHUB_WORKSPACE/CleanGSUI/build
+          cd $GITHUB_WORKSPACE/Carina
+          mkdir $GITHUB_WORKSPACE/Carina/build
       - name: Include googletest and build
         run: |
-          cd $GITHUB_WORKSPACE/CleanGSUI/build
-          $Qt5_DIR/bin/qmake $GITHUB_WORKSPACE/CleanGSUI/CleanGSUI.pro GOOGLETEST_DIR+=$GITHUB_WORKSPACE/googletest
+          cd $GITHUB_WORKSPACE/Carina/build
+          $Qt5_DIR/bin/qmake $GITHUB_WORKSPACE/Carina/Carina.pro GOOGLETEST_DIR+=$GITHUB_WORKSPACE/googletest
           make
           ls
       
       # Actually run all tests with googletest.
       - name: Run tests
         run: |
-          cd $GITHUB_WORKSPACE/CleanGSUI/build/tests
+          cd $GITHUB_WORKSPACE/Carina/build/tests
           ./tests
