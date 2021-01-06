@@ -1,10 +1,10 @@
-<h1 align="center">CleanGSUI</h1>
+<h1 align="center">Carina</h1>
 <p align="center">
-    <img src="https://github.com/UTATRocketry/CleanGSUI/workflows/Build%20and%20test/badge.svg">
-    <img src="https://github.com/UTATRocketry/CleanGSUI/workflows/Make%20release/badge.svg">
+    <img src="https://github.com/UTATRocketry/Carina/workflows/Build%20and%20test/badge.svg">
+    <img src="https://github.com/UTATRocketry/Carina/workflows/Make%20release/badge.svg">
 </p>
 
-\[Avionics\] This repository houses the new-and-improved 'clean' code for UTAT's Ground Station User Interface.
+[Avionics] Carina: The new and improved user interface and driver software for the UTAT Ground Station.
 
 ## Downloads
 ### Windows
@@ -17,7 +17,7 @@ For any other platform, you will have to set up the [build environment](#build) 
 Once the software running, a 'Process' JSON file can be created as described in the [process file documentation](#process-file-format). Load in the file via `Process -> Open Process File` from the menu bar. Then, click `Process -> Start Process` to begin. If a system diagram is required, click `System Diagram -> Open Image` to add it to the right side of the interface. `System Diagram -> Clear Image` can be used to remove this image. Once done with the process, use `Process -> Close Process` to close the current process. A new process can be opened following the same steps as above from this point.
 
 ## Process File Format
-This section describes the format of the 'Process' JSON file that is consumed by CleanGSUI. Note that while this information may not be up-to-date (there may be experimental features which are not described here), the features described here are guaranteed to work. 
+This section describes the format of the 'Process' JSON file that is consumed by Carina. Note that while this information may not be up-to-date (there may be experimental features which are not described here), the features described here are guaranteed to work. 
 
 ### Overall structure
 This file consists of three main sections: `sensors`, `actuators`, and `states`
@@ -60,10 +60,10 @@ Only actuators which have two states (open/close, etc.) are currently supported.
 ```
 
 ### States
-`State` objects are the building blocks out of which processes are built. A 'Process' in CleanGSUI is a set of `state` objects which can be progressed through in a logical, controllable manner with automatic assistance of the software. A `state` object has the following fields:
+`State` objects are the building blocks out of which processes are built. A 'Process' in Carina is a set of `state` objects which can be progressed through in a logical, controllable manner with automatic assistance of the software. A `state` object has the following fields:
 * `"name"`: The name of this state.
 * `"safetyRating"`: The safety rating of this state. This is a colour value like `red`, `green`, which highlight the safe limits of approaching equipment in this state.
-* `"description"`: A longer description of this state. The sentence(s) here (from all states) will be displayed on the left-side of CleanGSUI's interface.
+* `"description"`: A longer description of this state. The sentence(s) here (from all states) will be displayed on the left-side of Carina's interface.
 * `"actions"`: The list of sensors and actuators that must be visible in this state. More information on this field is provided [here](#actions).
 * `"transitions"`: An object of state ids to (currently) 'proceed' to (when the Proceed button is clicked), or 'abort' to (when the Abort button is clicked).
 * `"checks"`" An object of checks to perform on the sensors/actuators in `actions` upon transition to another state. More information on this field is provided [here](#checks).
@@ -152,7 +152,7 @@ Ubuntu's installer provides an option to install either a minimal install or a f
 1. Clone this repository and open the `GroundStationUI.pro` file in Qt Creator.
 
 ## Contributing
-Avionics uses the ClickUp tool for keeping track of new features to add, progress, and other relevant information. The list can be found [here](https://app.clickup.com/t/1g3n9t). CleanGSUI, as the name suggests, follows the **Clean Architecture** software design paradigm. A short introduction to this paradigm and how CleanGSUI uses it can be found [here](https://docs.google.com/document/d/1nojiR9O3od-X_OAvxXngy7_2Q1aDiMwlL0bXFLyTvfU/edit). We highly recommend you read up about Clean Architecture before contributing; otherwise, most of our decisions and flow of control will seem very mysterious.
+Avionics uses the ClickUp tool for keeping track of new features to add, progress, and other relevant information. The list can be found [here](https://app.clickup.com/t/1g3n9t). Carina follows the **Clean Architecture** software design paradigm. A short introduction to this paradigm and how Carina uses it can be found [here](https://docs.google.com/document/d/1nojiR9O3od-X_OAvxXngy7_2Q1aDiMwlL0bXFLyTvfU/edit). We highly recommend you read up about Clean Architecture before contributing; otherwise, most of our decisions and flow of control will seem very mysterious.
 
 ## Contact
 Please contact @Ammol or @Vedang on the UTAT Rocketry Slack for any help, questions, etc. 
