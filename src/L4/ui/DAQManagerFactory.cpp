@@ -104,7 +104,7 @@ void DAQManagerFactory::openAndTestSerialPort() {
     std::ifstream test("/dev" + serialportName);
     if (!test.is_open()) {
         this->ui->serialportOpenButton->setStyleSheet("background-color: red");
-//        return;
+        return;
     }
     this->ui->serialportOpenButton->setStyleSheet("background-color: green");
 
