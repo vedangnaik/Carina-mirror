@@ -4,11 +4,11 @@
 #include <vector>
 #include <string>
 
-class DAQDeviceHandler {
+class IDAQDeviceHandler {
 public:
     virtual void startAcquisition() = 0;
     virtual void stopAcquisition() = 0;
     virtual std::map<unsigned int, std::vector<double>> getLatestData() = 0;
-    virtual ~DAQDeviceHandler() {};
+    virtual ~IDAQDeviceHandler() {};
     std::string deviceID;
 };

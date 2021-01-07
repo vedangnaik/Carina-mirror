@@ -151,7 +151,7 @@ std::unique_ptr<DAQManager> DAQManagerFactory::createDAQManager() {
     DAQManagerFactory dmf;
     int r = dmf.exec();
     if (r == QDialog::Accepted) {
-        std::vector<DAQDeviceHandler*> DAQDevices;
+        std::vector<IDAQDeviceHandler*> DAQDevices;
 #ifdef ULDAQ_AVAILABLE
         for (const auto& [id, devInfo]: dmf.selectedAiMccdaqs) {
             DAQDevices.push_back(
