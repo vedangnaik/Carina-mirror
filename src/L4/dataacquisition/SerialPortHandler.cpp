@@ -16,29 +16,23 @@ void SerialPortHandler::stopAcquisition() {
     this->serialport.close();
 }
 
-std::map<unsigned int, std::vector<double>> SerialPortHandler::getLatestData() {
+std::vector<double> SerialPortHandler::getLatestData() {
+    std::vector<double> values(std::nan("NaN"), this->numChannels);
     if (this->serialport.is_open()) {
-        std::string line, T1, T2;
+        std::string line;
         std::getline(this->serialport, line);
         std::istringstream iss(line);
-        iss >> T1 >> T2;
-        LOG(INFO) << "T1: " << T1 << " " << "T2: " << T2;
-
-        double t1, t2;
-        try {
-            t1 = std::stod(T1);
-            t2 = std::stod(T2);
-        } catch (std::exception& e) {
-            t1 = nanf("0");
-            t2 = nanf("0");
+        for (unsigned int i = 0; i < this->numChannels; i++) {
+            std::string sval;
+            iss >> sval;
+            try {
+                values.assign(i, std::stod(sval));
+            } catch (std::exception& e) {
+                LOG(ERROR) << "DAQ device ID '" << this->id << "': channel value '" << i << "' could not be read. Reporting NaN.";
+            }
         }
-
-        std::map<unsigned int, std::vector<double>> values = {
-            {0, {t1}},
-            {1, {t2}}
-        };
-        return values;
     } else {
-        // shit, throw exception here
+        LOG(ERROR) << "DAQ device ID '" << this->id << "' cannot be accessed. Reporting all NaN.";
     }
+    return values;
 }

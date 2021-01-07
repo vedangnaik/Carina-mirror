@@ -11,7 +11,7 @@ class SerialPortHandler : public IDAQDeviceHandler {
 public:
     SerialPortHandler(std::string id, std::string serialportPath, unsigned int numChannels);
     void startAcquisition() override;
-    std::map<unsigned int, std::vector<double>> getLatestData() override;
+    std::vector<double> getLatestData() override;
     void stopAcquisition() override;
 private:
     std::string id;
