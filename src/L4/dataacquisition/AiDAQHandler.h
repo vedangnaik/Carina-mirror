@@ -1,23 +1,25 @@
 #ifdef ULDAQ_AVAILABLE
-
 #pragma once
+
+#include "IDAQDeviceHandler.h"
+#include "easylogging++.h"
 #include <uldaq.h>
 #include <stdlib.h>
 #include <map>
 #include <vector>
-#include "DAQDeviceHandler.h"
 #include <memory>
 #include <iostream>
+#include <cmath>
 
 /**
  * @brief The AiDAQHandler class handles an analog input DAQ device
  */
-class AiDAQHandler : public DAQDeviceHandler {
+class AiDAQHandler : public IDAQDeviceHandler {
 public:
     AiDAQHandler(std::string id, DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange);
     ~AiDAQHandler();
     void startAcquisition() override;
-    std::map<unsigned int, std::vector<double>> getLatestData() override;
+    std::vector<double> getLatestData() override;
     void stopAcquisition() override;
 private:
     std::string id;
