@@ -87,7 +87,7 @@ void DAQManagerFactory::scanForAiMCCDAQs() {
             struct AiDAQInfo aidi = { deviceID, handle, (unsigned int)numChannels, (Range)voltageRange };
             connect(chb, &QCheckBox::stateChanged, this, [=](int state) {
                 if (state == Qt::Checked) {
-                    this->selectedAiMccdaqs.insert_or_assign(deviceID, aidi);
+                    this->selectedAiMccdaqs.insert({deviceID, aidi});
                 } else if (state == Qt::Unchecked) {
                     this->selectedAiMccdaqs.erase(deviceID);
                 }
@@ -104,7 +104,7 @@ void DAQManagerFactory::openAndTestSerialPort() {
     std::ifstream test("/dev" + serialportName);
     if (!test.is_open()) {
         this->ui->serialportOpenButton->setStyleSheet("background-color: red");
-        return;
+//        return;
     }
     this->ui->serialportOpenButton->setStyleSheet("background-color: green");
 
@@ -118,23 +118,24 @@ void DAQManagerFactory::openAndTestSerialPort() {
     w->setLayout(h);
     QCheckBox* chb = new QCheckBox(QString::fromStdString(deviceID), this);
     QLabel* l = new QLabel(QString::fromStdString(infoLine), this);
-    QSpinBox* b = new QSpinBox(this);
-    b->setRange(1, 10);
-    b->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    QComboBox* cmb = new QComboBox(this);
+    cmb->addItems({"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
+
+    cmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     h->addWidget(chb);
     h->addWidget(l);
-    h->addWidget(b);
+    h->addWidget(cmb);
 
-    struct SerialPortInfo spi = { deviceID, "/dev/" + serialportName, (unsigned int)b->value() };
+    struct SerialPortInfo spi = { deviceID, "/dev/" + serialportName, static_cast<unsigned int>(cmb->currentIndex() + 1) };
 
-    connect(b, &QSpinBox::textChanged, this, [=](const QString& t) {
+    connect(cmb, &QComboBox::currentTextChanged, this, [=](const QString& t) {
         if (this->selectedSerialports.find(deviceID) != this->selectedSerialports.end()) {
-            this->selectedSerialports.at(deviceID).numChannels = t.toInt();
+            this->selectedSerialports.at(deviceID).numChannels = std::stoi(t.toStdString());
         }
     });
     connect(chb, &QCheckBox::stateChanged, this, [=](int state) {
         if (state == Qt::Checked) {
-            this->selectedSerialports.insert_or_assign(deviceID, spi);
+            this->selectedSerialports.insert({deviceID, spi});
         } else if (state == Qt::Unchecked) {
             this->selectedSerialports.erase(deviceID);
         }

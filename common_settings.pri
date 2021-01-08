@@ -2,7 +2,7 @@
 lessThan(QT_MAJOR_VERSION, 5): error("Qt verion 5 or greater needed.")
 
 # Use c++17.
-CONFIG += c++17
+CONFIG += c++14
 
 # Maximum compiler warnings.
 CONFIG += warn_on

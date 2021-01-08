@@ -14,7 +14,6 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QComboBox>
-#include <QSpinBox>
 #include <QCheckBox>
 #include "ui_daqmanagerfactory.h"
 
