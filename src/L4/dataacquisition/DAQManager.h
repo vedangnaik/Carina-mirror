@@ -6,7 +6,7 @@
 #endif
 
 #include "SensorValuesGateway.h"
-#include "DAQDeviceHandler.h"
+#include "IDAQDeviceHandler.h"
 #include "easylogging++.h"
 #include <map>
 #include <vector>
@@ -18,7 +18,7 @@
 class DAQManager : public QObject {
     Q_OBJECT
 public:
-    DAQManager(std::vector<DAQDeviceHandler*> DAQDevices);
+    DAQManager(std::vector<IDAQDeviceHandler*> DAQDevices);
     void startAcquisition();
     void stopAcquisition();
     void getLatestData();
@@ -26,11 +26,11 @@ public:
         this->svgic = svgic;
     }
 private:
-    std::vector<DAQDeviceHandler*> DAQDevices;
+    std::vector<IDAQDeviceHandler*> DAQDevices;
     SVGIC* svgic = nullptr;
     QTimer* DAQReadTimer;
     // The factory will populate this correctly.
-    const std::map<std::string, std::pair<DAQDeviceHandler*, unsigned int>> sensorIDToDAQMap;
+    const std::map<std::string, std::pair<IDAQDeviceHandler*, unsigned int>> sensorIDToDAQMap;
 #ifdef ULDAQ_AVAILABLE
     const DaqDeviceInterface DAQDeviceInterfaceType = ANY_IFC;
 #endif

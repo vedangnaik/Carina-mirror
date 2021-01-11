@@ -1,6 +1,6 @@
 #include "DAQManager.h"
 
-DAQManager::DAQManager(std::vector<DAQDeviceHandler*> DAQDevices) : DAQDevices{DAQDevices} {
+DAQManager::DAQManager(std::vector<IDAQDeviceHandler*> DAQDevices) : DAQDevices{DAQDevices} {
     // Create timer to start reading from DAQs here
     this->DAQReadTimer = new QTimer(this);
     this->DAQReadTimer->start(1000);

@@ -4,7 +4,7 @@
     #include <uldaq.h>
 #endif
 #include "easylogging++.h"
-#include "DAQDeviceHandler.h"
+#include "IDAQDeviceHandler.h"
 #include "DAQManager.h"
 #include "SerialPortHandler.h"
 #include "AiDAQHandler.h"

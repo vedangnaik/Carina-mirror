@@ -5,7 +5,7 @@
 AiDAQHandler::AiDAQHandler(std::string id, DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange) : id{id}, handle{handle}, numChannels{numChannels}, voltageRange{voltageRange} {
     // connect DAQ
     UlError err = ulConnectDaqDevice(handle);
-    if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulConnectDaqDevice Error: " << err << std::endl; }
+    if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulConnectDaqDevice Error: " << err; }
     else { this->connected = true; }
 
     // allocate the temporary data buffer
@@ -18,36 +18,34 @@ AiDAQHandler::~AiDAQHandler() {
 
 void AiDAQHandler::startAcquisition() {
     UlError err = ulAInScan(this->handle, 0, this->numChannels-1, this->aiim, this->voltageRange, this->samplesPerChannel, &this->rate, this->so, this->aisf, this->dataBuffer.get());
-    if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulAInScan Error: " << err << std::endl; }
+    if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAInScan Error: " << err; }
 }
 
 void AiDAQHandler::stopAcquisition() {
     UlError err = ulAInScanStop(this->handle);
-    if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulAInScanStop Error: " << err << std::endl; }
+    if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAInScanStop Error: " << err; }
 }
 
-std::map<unsigned int, std::vector<double>> AiDAQHandler::getLatestData() {
+std::vector<double> AiDAQHandler::getLatestData() {
     ScanStatus status;
     TransferStatus transferStatus;
     UlError err = ulAInScanStatus(this->handle, &status, &transferStatus);
-    if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulAInScanStatus Error: " << err << std::endl; }
+    if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAInScanStatus Error: " << err; }
 
     int connected = 0;
     err = ulIsDaqDeviceConnected(this->handle, &connected);
-    if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulIsDaqDeviceConnected Error: " << err << std::endl; }
+    if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulIsDaqDeviceConnected Error: " << err; }
 
+    std::vector<double> values(std::nan("NaN"), this->numChannels);
     if (status == SS_RUNNING && connected != 0) {
-        std::map<unsigned int, std::vector<double>> values;
+        // Report average of all samples seen since last run.
         for (unsigned int i = 0; i < this->numChannels; i++) {
-            values.insert(std::make_pair(i, std::vector<double>{}));
-            for (unsigned int j = 0; j < this->samplesPerChannel; j++) {
-                values.at(i).push_back(this->dataBuffer[(i * this->samplesPerChannel) + j]);
-            }
+            values.assign(i, std::accumulate(&this->dataBuffer[i], &this->dataBuffer[i] + this->samplesPerChannel, 0.0) / this->samplesPerChannel);
         }
-        return values;
     } else {
-        // shit
+        LOG(ERROR) << "DAQ device ID '" << this->id << "' cannot be accessed. Reporting all NaN.";
     }
+    return values;
 }
 
 #endif

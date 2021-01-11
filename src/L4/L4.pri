@@ -10,8 +10,8 @@ SOURCES += \
 
 HEADERS += \
     $$PWD/dataacquisition/AiDAQHandler.h \
+    $$PWD/dataacquisition/IDAQDeviceHandler.h \
     $$PWD/dataacquisition/SerialPortHandler.h \
-    $$PWD/dataacquisition/DAQDeviceHandler.h \
     $$PWD/dataacquisition/DAQManager.h \
     $$PWD/ui/DAQManagerFactory.h \
     $$PWD/ui/Draggable.h \
