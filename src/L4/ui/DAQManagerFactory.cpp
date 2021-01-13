@@ -105,7 +105,7 @@ void DAQManagerFactory::openAndTestSerialPort() {
     if (!test.is_open()) {
         this->ui->serialportOpenButton->setStyleSheet("background-color: red");
         LOG(ERROR) << "Could not open serial port: " << serialportName;
-        return;
+//        return;
     }
     this->ui->serialportOpenButton->setStyleSheet("background-color: green");
 
@@ -121,6 +121,7 @@ void DAQManagerFactory::openAndTestSerialPort() {
     QLabel* l = new QLabel(QString::fromStdString(infoLine), this);
     QComboBox* cmb = new QComboBox(this);
     cmb->addItems({"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
+    cmb->setEnabled(false);
 
     cmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     h->addWidget(chb);
@@ -130,15 +131,16 @@ void DAQManagerFactory::openAndTestSerialPort() {
     struct SerialPortInfo spi = { deviceID, "/dev/" + serialportName, static_cast<unsigned int>(cmb->currentIndex() + 1) };
 
     connect(cmb, &QComboBox::currentTextChanged, this, [=](const QString& t) {
-        if (this->selectedSerialports.find(deviceID) != this->selectedSerialports.end()) {
-            this->selectedSerialports.at(deviceID).numChannels = std::stoi(t.toStdString());
-        }
+        this->selectedSerialports.at(deviceID).numChannels = std::stoi(t.toStdString());
     });
     connect(chb, &QCheckBox::stateChanged, this, [=](int state) {
         if (state == Qt::Checked) {
             this->selectedSerialports.insert({deviceID, spi});
+            cmb->setEnabled(true);
         } else if (state == Qt::Unchecked) {
             this->selectedSerialports.erase(deviceID);
+            cmb->setEnabled(false);
+            this->selectedSerialports.at(deviceID).numChannels = std::stoi(cmb->currentText().toStdString());
         }
     });
 

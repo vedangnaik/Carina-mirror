@@ -37,8 +37,7 @@ std::map<std::string, std::pair<AbstractDAQDeviceHandler*, unsigned int>> Sensor
     SensorToDAQLinker* stdl = new SensorToDAQLinker(sensorIDs, DAQDevices);
     int r = stdl->exec();
     if (r == QDialog::Accepted) {
-        std::map<std::string, std::pair<AbstractDAQDeviceHandler*, unsigned int>> sensorToDAQLinks;
-        return sensorToDAQLinks;
+        return stdl->sensorToDAQLinks;
     } else {
         return {};
     }
