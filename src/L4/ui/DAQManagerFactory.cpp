@@ -101,9 +101,10 @@ void DAQManagerFactory::scanForAiMCCDAQs() {
 
 void DAQManagerFactory::openAndTestSerialPort() {
     std::string serialportName = ui->availableTTYsComboBox->currentText().toStdString();
-    std::ifstream test("/dev" + serialportName);
+    std::ifstream test("/dev/" + serialportName);
     if (!test.is_open()) {
         this->ui->serialportOpenButton->setStyleSheet("background-color: red");
+        LOG(ERROR) << "Could not open serial port: " << serialportName;
         return;
     }
     this->ui->serialportOpenButton->setStyleSheet("background-color: green");
