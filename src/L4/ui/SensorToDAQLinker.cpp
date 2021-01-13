@@ -1,7 +1,7 @@
 #include "SensorToDAQLinker.h"
 #include "ui_SensorToDAQLinker.h"
 
-SensorToDAQLinker::SensorToDAQLinker(std::vector<std::string> sensorIDs, std::vector<AbstractDAQDeviceHandler*> DAQDevices, QWidget *parent) {
+SensorToDAQLinker::SensorToDAQLinker(std::vector<std::string> sensorIDs, std::vector<AbstractDAQDeviceHandler*> DAQDevices, QWidget *parent) : QDialog(parent), ui(new Ui::SensorToDAQLinker) {
     ui->setupUi(this);
 
     for (const auto& id : sensorIDs) {
@@ -32,12 +32,4 @@ std::map<std::string, std::pair<AbstractDAQDeviceHandler*, unsigned int>> Sensor
     } else {
         return {};
     }
-}
-
-void SensorToDAQLinker::accept() {
-
-}
-
-void SensorToDAQLinker::reject() {
-
 }
