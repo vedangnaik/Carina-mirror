@@ -15,6 +15,8 @@ public:
     explicit SensorToDAQLinker(std::vector<std::string> sensorIDs, std::vector<AbstractDAQDeviceHandler*> DAQDevices, QWidget *parent = nullptr);
     ~SensorToDAQLinker();
     static std::map<std::string, std::pair<AbstractDAQDeviceHandler*, unsigned int>> getSensorToDAQLinks(std::vector<std::string> sensorIDs, std::vector<AbstractDAQDeviceHandler*> DAQDevices);
+protected:
+    std::map<std::string, std::pair<AbstractDAQDeviceHandler*, unsigned int>> sensorToDAQLinks;
 private:
     Ui::SensorToDAQLinker *ui;
 };
