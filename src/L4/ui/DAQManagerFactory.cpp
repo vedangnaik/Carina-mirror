@@ -104,7 +104,7 @@ void DAQManagerFactory::openAndTestSerialPort() {
     std::ifstream test("/dev" + serialportName);
     if (!test.is_open()) {
         this->ui->serialportOpenButton->setStyleSheet("background-color: red");
-//        return;
+        return;
     }
     this->ui->serialportOpenButton->setStyleSheet("background-color: green");
 
@@ -152,7 +152,7 @@ std::unique_ptr<DAQManager> DAQManagerFactory::createDAQManager() {
     DAQManagerFactory dmf;
     int r = dmf.exec();
     if (r == QDialog::Accepted) {
-        std::vector<IDAQDeviceHandler*> DAQDevices;
+        std::vector<AbstractDAQDeviceHandler*> DAQDevices;
 #ifdef ULDAQ_AVAILABLE
         for (const auto& [id, devInfo]: dmf.selectedAiMccdaqs) {
             DAQDevices.push_back(
@@ -166,6 +166,7 @@ std::unique_ptr<DAQManager> DAQManagerFactory::createDAQManager() {
             );
         }
         return std::make_unique<DAQManager>(DAQDevices);
+    } else {
+        return nullptr;
     }
-    return nullptr;
 }

@@ -10,8 +10,8 @@ SOURCES += \
     $$PWD/ui/SystemDiagramUIhandler.cpp
 
 HEADERS += \
+    $$PWD/dataacquisition/AbstractDAQDeviceHandler.h \
     $$PWD/dataacquisition/AiDAQHandler.h \
-    $$PWD/dataacquisition/IDAQDeviceHandler.h \
     $$PWD/dataacquisition/SerialPortHandler.h \
     $$PWD/dataacquisition/DAQManager.h \
     $$PWD/ui/DAQManagerFactory.h \

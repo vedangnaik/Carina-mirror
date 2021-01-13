@@ -1,8 +1,9 @@
 #pragma once
 
 #include "SensorValuesGateway.h"
-#include "IDAQDeviceHandler.h"
+#include "AbstractDAQDeviceHandler.h"
 #include "easylogging++.h"
+#include "SensorToDAQLinker.h"
 #include <map>
 #include <vector>
 #include <QObject>
@@ -13,7 +14,7 @@
 class DAQManager : public QObject {
     Q_OBJECT
 public:
-    DAQManager(std::vector<IDAQDeviceHandler*> DAQDevices);
+    DAQManager(std::vector<AbstractDAQDeviceHandler*> DAQDevices);
     void startAcquisition();
     void stopAcquisition();
     void getLatestData();
@@ -21,9 +22,9 @@ public:
         this->svgic = svgic;
     }
 private:
-    std::vector<IDAQDeviceHandler*> DAQDevices;
+    std::vector<AbstractDAQDeviceHandler*> DAQDevices;
     SVGIC* svgic = nullptr;
     QTimer* DAQReadTimer;
     // The linker will populate this correctly.
-    const std::map<std::string, std::pair<IDAQDeviceHandler*, unsigned int>> sensorIDToDAQMap;
+    std::map<std::string, std::pair<AbstractDAQDeviceHandler*, unsigned int>> sensorToDAQMap;
 };

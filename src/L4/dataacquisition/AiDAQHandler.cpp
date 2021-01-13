@@ -2,7 +2,7 @@
 
 #include "AiDAQHandler.h"
 
-AiDAQHandler::AiDAQHandler(std::string id, DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange) : id{id}, handle{handle}, numChannels{numChannels}, voltageRange{voltageRange} {
+AiDAQHandler::AiDAQHandler(std::string deviceID, DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange) : AbstractDAQDeviceHandler(deviceID, numChannels), handle{handle}, voltageRange{voltageRange} {
     // connect DAQ
     UlError err = ulConnectDaqDevice(handle);
     if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulConnectDaqDevice Error: " << err; }
@@ -43,7 +43,7 @@ std::vector<double> AiDAQHandler::getLatestData() {
             values.assign(i, std::accumulate(&this->dataBuffer[i], &this->dataBuffer[i] + this->samplesPerChannel, 0.0) / this->samplesPerChannel);
         }
     } else {
-        LOG(ERROR) << "DAQ device ID '" << this->id << "' cannot be accessed. Reporting all NaN.";
+        LOG(ERROR) << "DAQ device ID '" << this->deviceID << "' cannot be accessed. Reporting all NaN.";
     }
     return values;
 }

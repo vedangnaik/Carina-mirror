@@ -1,6 +1,6 @@
 #include "SerialPortHandler.h"
 
-SerialPortHandler::SerialPortHandler(std::string id, std::string serialportPath, unsigned int numChannels) : id{id}, serialportPath{serialportPath}, numChannels{numChannels} {
+SerialPortHandler::SerialPortHandler(std::string deviceID, std::string serialportPath, unsigned int numChannels) : AbstractDAQDeviceHandler(deviceID, numChannels), serialportPath{serialportPath} {
     std::ifstream test(serialportPath);
     if (!test.is_open()) {
         LOG(ERROR) << "This arduino filepath could not be opened.";
@@ -28,11 +28,11 @@ std::vector<double> SerialPortHandler::getLatestData() {
             try {
                 values.assign(i, std::stod(sval));
             } catch (std::exception& e) {
-                LOG(ERROR) << "DAQ device ID '" << this->id << "': channel value '" << i << "' could not be read. Reporting NaN.";
+                LOG(ERROR) << "DAQ device ID '" << this->deviceID << "': channel value '" << i << "' could not be read. Reporting NaN.";
             }
         }
     } else {
-        LOG(ERROR) << "DAQ device ID '" << this->id << "' cannot be accessed. Reporting all NaN.";
+        LOG(ERROR) << "DAQ device ID '" << this->deviceID << "' cannot be accessed. Reporting all NaN.";
     }
     return values;
 }
