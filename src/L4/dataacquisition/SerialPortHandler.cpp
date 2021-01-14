@@ -3,7 +3,7 @@
 SerialPortHandler::SerialPortHandler(std::string deviceID, std::string serialportPath, unsigned int numChannels) : AbstractDAQDeviceHandler(deviceID, numChannels), serialportPath{serialportPath} {
     std::ifstream test(serialportPath);
     if (!test.is_open()) {
-        LOG(ERROR) << "This arduino filepath could not be opened.";
+        LOG(ERROR) << "SerialPortHandler error - device id: " << this->deviceID << ", num channels: " << this->numChannels << ", serial port path: " << this->serialportPath << "; Serial port path could not be opened.";
         // throw exception here
     }
 }

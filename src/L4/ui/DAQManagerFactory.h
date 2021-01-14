@@ -15,6 +15,8 @@
 #include <QDir>
 #include <QComboBox>
 #include <QCheckBox>
+#include <QGridLayout>
+#include <QLayoutItem>
 #include "ui_daqmanagerfactory.h"
 
 #ifdef ULDAQ_AVAILABLE
@@ -39,19 +41,24 @@ namespace Ui {
 class DAQManagerFactory : public QDialog {
     Q_OBJECT
 public:
-    static std::unique_ptr<DAQManager> createDAQManager();
+    DAQManagerFactory(QWidget *parent = nullptr);
     ~DAQManagerFactory();
-protected:
+    static std::unique_ptr<DAQManager> createDAQManager();
+public slots:
+    void accept() override;
+    void reject() override;
+
 #ifdef ULDAQ_AVAILABLE
-    std::map<std::string, AiDAQInfo> selectedAiMccdaqs;
-#endif
-    std::map<std::string, SerialPortInfo> selectedSerialports;
 private:
-    explicit DAQManagerFactory(QWidget *parent = nullptr);
+    std::map<std::string, AiDAQInfo> selectedAiMccdaqs;
+private slots:
+    void openAndTestAiMCCDAQs();
+#endif
+
+private:
+    std::map<std::string, SerialPortInfo> selectedSerialports;
+    std::vector<AbstractDAQDeviceHandler*> prospectiveDAQDevices;
     Ui::DAQManagerFactory *ui;
 private slots:
-#ifdef ULDAQ_AVAILABLE
-    void scanForAiMCCDAQs();
-#endif
     void openAndTestSerialPort();
 };
