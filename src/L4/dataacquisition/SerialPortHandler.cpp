@@ -26,7 +26,7 @@ std::vector<double> SerialPortHandler::getLatestData() {
             std::string sval;
             iss >> sval;
             try {
-                values.assign(i, std::stod(sval));
+                values[i] = std::stod(sval);
             } catch (std::exception& e) {
                 LOG(ERROR) << "DAQ device ID '" << this->deviceID << "': channel value '" << i << "' could not be read. Reporting NaN.";
             }

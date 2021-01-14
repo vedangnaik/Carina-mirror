@@ -39,7 +39,7 @@ std::vector<double> AiDAQHandler::getLatestData() {
     if (status == SS_RUNNING && connected != 0) {
         // Report average of all samples seen since last run.
         for (unsigned int i = 0; i < this->numChannels; i++) {
-            values.assign(i, std::accumulate(&this->dataBuffer[i], &this->dataBuffer[i] + this->samplesPerChannel, 0.0) / this->samplesPerChannel);
+            values[i] = std::accumulate(&this->dataBuffer[i], &this->dataBuffer[i] + this->samplesPerChannel, 0.0) / this->samplesPerChannel;
         }
     } else {
         LOG(ERROR) << "DAQ device ID '" << this->deviceID << "' cannot be accessed. Reporting all NaN.";
