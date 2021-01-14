@@ -5,18 +5,20 @@ SOURCES += \
     $$PWD/ui/DAQManagerFactory.cpp \
     $$PWD/ui/ErrorUIHandler.cpp \
     $$PWD/ui/GSManager.cpp \
+    $$PWD/ui/SensorToDAQLinker.cpp \
     $$PWD/ui/StateUIHandler.cpp \
     $$PWD/ui/SystemDiagramUIhandler.cpp
 
 HEADERS += \
+    $$PWD/dataacquisition/AbstractDAQDeviceHandler.h \
     $$PWD/dataacquisition/AiDAQHandler.h \
-    $$PWD/dataacquisition/IDAQDeviceHandler.h \
     $$PWD/dataacquisition/SerialPortHandler.h \
     $$PWD/dataacquisition/DAQManager.h \
     $$PWD/ui/DAQManagerFactory.h \
     $$PWD/ui/Draggable.h \
     $$PWD/ui/ErrorUIHandler.h \
     $$PWD/ui/GSManager.h \
+    $$PWD/ui/SensorToDAQLinker.h \
     $$PWD/ui/StateUIHandler.h \
     $$PWD/ui/SystemDiagramUIhandler.h \
     $$PWD/ui/UIHelpers.h
@@ -27,6 +29,7 @@ INCLUDEPATH += \
 
 # Add .ui forms for UI classes.
 FORMS += \
+    $$PWD/ui/SensorToDAQLinker.ui \
     $$PWD/ui/daqmanagerfactory.ui \
     $$PWD/ui/error.ui \
     $$PWD/ui/gsmainwindow.ui \

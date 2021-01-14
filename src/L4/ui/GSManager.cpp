@@ -6,10 +6,8 @@ GSManager::GSManager() {
     LOG(INFO) << "The program has started.";
 
     connect(this->GSMainWindowUI.openProcessFromFileAction, &QAction::triggered, this, [=]() {
-        LOG(INFO) << "Before";
         QString fileName = QFileDialog::getOpenFileName(this,
             tr("Open Process File"), "/", tr("JSON Files (*.json)"));
-        LOG(INFO) << "After";
         if (fileName != "") {
             this->openProcessFromFile(fileName.toStdString());
         }
@@ -74,6 +72,7 @@ void GSManager::openProcessFromFile(std::string filepath) {
         this->daqm = DAQManagerFactory::createDAQManager();
     }
     this->daqm->setOutputContract(this->svg.get());
+
     // attach presenters to managers (kinda ugly, but idk another way to do it)
     this->sm->setOutputContract(this->sp.get());
     this->am->setOutputContract(this->ap.get());

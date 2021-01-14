@@ -1,7 +1,7 @@
 #ifdef ULDAQ_AVAILABLE
 #pragma once
 
-#include "IDAQDeviceHandler.h"
+#include "AbstractDAQDeviceHandler.h"
 #include "easylogging++.h"
 #include <uldaq.h>
 #include <stdlib.h>
@@ -14,7 +14,7 @@
 /**
  * @brief The AiDAQHandler class handles an analog input DAQ device
  */
-class AiDAQHandler : public IDAQDeviceHandler {
+class AiDAQHandler : public AbstractDAQDeviceHandler {
 public:
     AiDAQHandler(std::string id, DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange);
     ~AiDAQHandler();
@@ -22,11 +22,9 @@ public:
     std::vector<double> getLatestData() override;
     void stopAcquisition() override;
 private:
-    std::string id;
     // config vars
     const DaqDeviceHandle handle;
     const unsigned int samplesPerChannel = 100;
-    const unsigned int numChannels;
     const Range voltageRange;
     double rate = 100; // must be non-const for uldaq.h :(
     const AiInputMode aiim = AI_SINGLE_ENDED;
@@ -34,7 +32,6 @@ private:
     const AInScanFlag aisf = AINSCAN_FF_DEFAULT;
     // status vars
     std::unique_ptr<double[]> dataBuffer;
-    bool connected = false;
 };
 
 #endif

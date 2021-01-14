@@ -85,12 +85,15 @@
                     </property>
                     <layout class="QVBoxLayout" name="verticalLayout_6">
                      <item>
-                      <layout class="QVBoxLayout" name="MCCDAQDevicesLayout"/>
+                      <layout class="QGridLayout" name="MCCDAQDevicesLayout"/>
                      </item>
                      <item>
                       <spacer name="verticalSpacer_2">
                        <property name="orientation">
                         <enum>Qt::Vertical</enum>
+                       </property>
+                       <property name="sizeType">
+                        <enum>QSizePolicy::Ignored</enum>
                        </property>
                        <property name="sizeHint" stdset="0">
                         <size>
@@ -186,7 +189,7 @@
                     </property>
                     <layout class="QVBoxLayout" name="verticalLayout_5">
                      <item>
-                      <layout class="QVBoxLayout" name="SerialportDevicesLayout"/>
+                      <layout class="QGridLayout" name="SerialportDevicesLayout"/>
                      </item>
                      <item>
                       <spacer name="verticalSpacer">
@@ -199,7 +202,7 @@
                        <property name="sizeHint" stdset="0">
                         <size>
                          <width>20</width>
-                         <height>40</height>
+                         <height>297</height>
                         </size>
                        </property>
                       </spacer>

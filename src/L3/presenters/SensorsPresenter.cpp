@@ -9,7 +9,7 @@ void SensorsPresenter::notify(const std::string id, const float value) {
 }
 
 void SensorsPresenter::subscribe(std::string id, SPOC* spoc) {
-    std::lock_guard<std::mutex> guard(this->subscribers_mutex);
+    std::lock_guard<std::mutex> guard(this->subscribersMutex);
     if (this->subscribers.find(id) == this->subscribers.end()) {
         this->subscribers.insert(std::make_pair(id, std::vector<SPOC*>{spoc}));
     } else {
@@ -19,7 +19,7 @@ void SensorsPresenter::subscribe(std::string id, SPOC* spoc) {
 }
 
 void SensorsPresenter::unsubscribe(std::string id, SPOC* spoc) {
-    std::lock_guard<std::mutex> guard(this->subscribers_mutex);
+    std::lock_guard<std::mutex> guard(this->subscribersMutex);
     auto& v = this->subscribers.at(id);
     v.erase(std::remove(v.begin(), v.end(), spoc), v.end());
     // lock_guard goes out of scope, unlocks mutex here

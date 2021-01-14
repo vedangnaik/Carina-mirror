@@ -1,22 +1,20 @@
 #pragma once
 
-#include "IDAQDeviceHandler.h"
+#include "AbstractDAQDeviceHandler.h"
 #include "easylogging++.h"
 #include <string>
 #include <sstream>
 #include <fstream>
 #include <cmath>
 
-class SerialPortHandler : public IDAQDeviceHandler {
+class SerialPortHandler : public AbstractDAQDeviceHandler {
 public:
     SerialPortHandler(std::string id, std::string serialportPath, unsigned int numChannels);
     void startAcquisition() override;
     std::vector<double> getLatestData() override;
     void stopAcquisition() override;
 private:
-    std::string id;
-    std::string serialportPath;
-    unsigned int numChannels;
+    const std::string serialportPath;
     std::ifstream serialport;
 };
 

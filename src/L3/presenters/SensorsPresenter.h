@@ -1,5 +1,4 @@
-#ifndef SENSORSPRESENTER_H
-#define SENSORSPRESENTER_H
+#pragma once
 
 #include "SensorsManager.h"
 #include <stdexcept>
@@ -27,7 +26,5 @@ public:
     void unsubscribe(std::string id, SPOC* spoc) override;
 private:
     std::map<std::string, std::vector<SPOC*>> subscribers;
-    std::mutex subscribers_mutex;
+    std::mutex subscribersMutex;
 };
-
-#endif // SENSORSPRESENTER_H

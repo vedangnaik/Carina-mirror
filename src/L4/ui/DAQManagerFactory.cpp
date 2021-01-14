@@ -6,7 +6,7 @@ DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QDialog(parent), ui(new 
     // connect MCCDAQ is available
 #ifdef ULDAQ_AVAILABLE
     ui->MCCDAQGroupBox->setDisabled(false);
-    connect(this->ui->MCCDAQScanButton, &QPushButton::clicked, this, &DAQManagerFactory::scanForAiMCCDAQs);
+    connect(this->ui->MCCDAQScanButton, &QPushButton::clicked, this, &DAQManagerFactory::openAndTestAiMCCDAQs);
 #else
     ui->MCCDAQDevicesLayout->addWidget(new QLabel("MCCDAQ support is not available on this platform.", this));
     ui->MCCDAQGroupBox->setDisabled(true);
@@ -23,13 +23,14 @@ DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QDialog(parent), ui(new 
 }
 
 #ifdef ULDAQ_AVAILABLE
-void DAQManagerFactory::scanForAiMCCDAQs() {
+void DAQManagerFactory::openAndTestAiMCCDAQs() {
     const DaqDeviceInterface DAQDeviceInterfaceType = ANY_IFC;
+    UlError err;
 
     // Get the number of connected devices here.
     std::vector<DaqDeviceDescriptor> devDescriptors;
     unsigned int numDAQDevicesDetected = 0;
-    UlError err = ulGetDaqDeviceInventory(DAQDeviceInterfaceType, devDescriptors.data(), &numDAQDevicesDetected);
+    err = ulGetDaqDeviceInventory(DAQDeviceInterfaceType, devDescriptors.data(), &numDAQDevicesDetected);
     // This will trip, but can be ignored safely (I think)
     if (err != ERR_NO_ERROR) {
         LOG(INFO) << "This 'error' is expected to occur, don't panic.";
@@ -38,134 +39,121 @@ void DAQManagerFactory::scanForAiMCCDAQs() {
 
     // List DAQs found
     if (numDAQDevicesDetected == 0) {
-        QLabel* l = new QLabel("No MCCDAQ devices were found.", this);
-        ui->MCCDAQDevicesLayout->addWidget(l);
+        LOG(ERROR) << "No MCCDAQ devices found";
+        return;
     }
-    else {
-        // Get the device descriptors here
-        devDescriptors.reserve(numDAQDevicesDetected);
-        UlError err = ulGetDaqDeviceInventory(DAQDeviceInterfaceType, devDescriptors.data(), &numDAQDevicesDetected);
-        if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulGetDaqDeviceInventory Error: " << err; }
 
-        // Get DAQ info here
-        for (unsigned int i = 0; i < numDAQDevicesDetected; i++) {
-            // Create the DAQ object
-            DaqDeviceHandle handle = ulCreateDaqDevice(devDescriptors[i]);
+    // Get the device descriptors here
+    devDescriptors.reserve(numDAQDevicesDetected);
+    err = ulGetDaqDeviceInventory(DAQDeviceInterfaceType, devDescriptors.data(), &numDAQDevicesDetected);
+    if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulGetDaqDeviceInventory Error: " << err; }
 
-            // Check if it's analog input; other types can be checked for here
-            long long aiSupported;
-            UlError err = ulDevGetInfo(handle, DEV_INFO_HAS_AI_DEV, 0, &aiSupported);
-            if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulDevGetInfo Error: " << err; }
+    // Get DAQ info here
+    for (unsigned int i = 0; i < numDAQDevicesDetected; i++) {
+        // Create the DAQ object
+        DaqDeviceHandle handle = ulCreateDaqDevice(devDescriptors[i]);
 
-            // Get num channels
-            long long numChannels;
-            err = ulAIGetInfo(handle, AI_INFO_NUM_CHANS, 0, &numChannels);
-            if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulAIGetInfo Error: " << err << std::endl; }
-            if (aiSupported < 1) { LOG(ERROR) << "Analog input not supported: " << aiSupported; }
+        // Check if it's analog input; other types can be checked for here
+        long long aiSupported;
+        UlError err = ulDevGetInfo(handle, DEV_INFO_HAS_AI_DEV, 0, &aiSupported);
+        if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulDevGetInfo Error: " << err; }
 
-            // get voltage range
-            long long voltageRange;
-            err = ulAIGetInfo(handle, AI_INFO_SE_RANGE, 0, &voltageRange);
-            if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAIGetInfo Error: " << err; }
+        // Get num channels
+        long long numChannels;
+        err = ulAIGetInfo(handle, AI_INFO_NUM_CHANS, 0, &numChannels);
+        if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulAIGetInfo Error: " << err << std::endl; }
+        if (aiSupported < 1) { LOG(ERROR) << "Analog input not supported: " << aiSupported; }
 
-            // output information here
-            std::string deviceID = "mccdaq:" + std::to_string(i);
-            std::string infoLine =
-                    "Analog Input: " + std::string(aiSupported ? "yes" : "no") + "\t" +
-                    "Number of channels: " + std::to_string(numChannels) + "\t" +
-                    "Voltage range: " + std::to_string(voltageRange);
+        // get voltage range
+        long long voltageRange;
+        err = ulAIGetInfo(handle, AI_INFO_SE_RANGE, 0, &voltageRange);
+        if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAIGetInfo Error: " << err; }
 
-            QWidget* w = new QWidget(this);
-            QHBoxLayout* h = new QHBoxLayout(this);
-            w->setLayout(h);
-            QCheckBox* chb = new QCheckBox(QString::fromStdString(deviceID), this);
-            QLabel* l = new QLabel(QString::fromStdString(infoLine), this);
-            l->setWordWrap(true);
-            h->addWidget(chb);
-            h->addWidget(l);
+        // output information here
+        std::string deviceID = "mccdaq:" + std::to_string(i);
+        std::string infoLine =
+                "Analog Input: " + std::string(aiSupported ? "yes" : "no") + "\t" +
+                "Number of channels: " + std::to_string(numChannels) + "\t" +
+                "Voltage range: " + std::to_string(voltageRange);
 
-            struct AiDAQInfo aidi = { deviceID, handle, (unsigned int)numChannels, (Range)voltageRange };
-            connect(chb, &QCheckBox::stateChanged, this, [=](int state) {
-                if (state == Qt::Checked) {
-                    this->selectedAiMccdaqs.insert({deviceID, aidi});
-                } else if (state == Qt::Unchecked) {
-                    this->selectedAiMccdaqs.erase(deviceID);
-                }
-            });
-
-            ui->MCCDAQDevicesLayout->addWidget(w);
-        }
+        int row = this->ui->MCCDAQDevicesLayout->rowCount();
+        this->ui->MCCDAQDevicesLayout->addWidget(new QCheckBox(QString::fromStdString(deviceID), this), row, 0);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Analog Input: " + QString(aiSupported ? "yes" : "no"), this), row, 1);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Handle: ", this), row, 2);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel(QString::number(handle), this), row, 3);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Number of channels: ", this), row, 4);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel(QString::number(numChannels), this), row, 5);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Voltage range: ", this), row, 6);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel(QString::number(voltageRange), this), row, 7);
     }
 }
 #endif
 
 void DAQManagerFactory::openAndTestSerialPort() {
-    std::string serialportName = ui->availableTTYsComboBox->currentText().toStdString();
-    std::ifstream test("/dev" + serialportName);
+    std::string serialportName = this->ui->availableTTYsComboBox->currentText().toStdString();
+    std::ifstream test("/dev/" + serialportName);
     if (!test.is_open()) {
-        this->ui->serialportOpenButton->setStyleSheet("background-color: red");
+        LOG(ERROR) << "Could not open serial port: " << serialportName;
 //        return;
     }
-    this->ui->serialportOpenButton->setStyleSheet("background-color: green");
+    this->ui->availableTTYsComboBox->removeItem(this->ui->availableTTYsComboBox->currentIndex());
 
     std::string deviceID = "serialport:" + serialportName;
     std::string infoLine =
             "Path: /dev/" + serialportName + "\t" +
             "Number of 'channels': ";
 
-    QWidget* w = new QWidget(this);
-    QHBoxLayout* h = new QHBoxLayout(this);
-    w->setLayout(h);
-    QCheckBox* chb = new QCheckBox(QString::fromStdString(deviceID), this);
-    QLabel* l = new QLabel(QString::fromStdString(infoLine), this);
     QComboBox* cmb = new QComboBox(this);
     cmb->addItems({"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
-
     cmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    h->addWidget(chb);
-    h->addWidget(l);
-    h->addWidget(cmb);
 
-    struct SerialPortInfo spi = { deviceID, "/dev/" + serialportName, static_cast<unsigned int>(cmb->currentIndex() + 1) };
-
-    connect(cmb, &QComboBox::currentTextChanged, this, [=](const QString& t) {
-        if (this->selectedSerialports.find(deviceID) != this->selectedSerialports.end()) {
-            this->selectedSerialports.at(deviceID).numChannels = std::stoi(t.toStdString());
-        }
-    });
-    connect(chb, &QCheckBox::stateChanged, this, [=](int state) {
-        if (state == Qt::Checked) {
-            this->selectedSerialports.insert({deviceID, spi});
-        } else if (state == Qt::Unchecked) {
-            this->selectedSerialports.erase(deviceID);
-        }
-    });
-
-    this->ui->SerialportDevicesLayout->addWidget(w);
+    int row = this->ui->SerialportDevicesLayout->rowCount();
+    this->ui->SerialportDevicesLayout->addWidget(new QCheckBox(QString::fromStdString(deviceID), this), row, 0);
+    this->ui->SerialportDevicesLayout->addWidget(new QLabel("Path: ", this), row, 1);
+    this->ui->SerialportDevicesLayout->addWidget(new QLabel(QString::fromStdString("/dev/" + serialportName), this), row, 2);
+    this->ui->SerialportDevicesLayout->addWidget(new QLabel("\tNumber of 'channels': ", this), row, 3);
+    this->ui->SerialportDevicesLayout->addWidget(cmb, row, 4);
 }
 
 DAQManagerFactory::~DAQManagerFactory() {
     delete ui;
 }
 
+void DAQManagerFactory::accept() {
+    // Note: QGridLayout row numberings start from 1 for some reason.
+#ifdef ULDAQ_AVAILABLE
+    // if available, loop through and create MCCDAQ handlers here
+    for (int i = 1; i < this->ui->MCCDAQDevicesLayout->rowCount(); i++) {
+        QCheckBox* chb = (QCheckBox*)this->ui->MCCDAQDevicesLayout->itemAtPosition(i, 0)->widget();
+        if (chb->isChecked()) {
+            QLabel* h = (QLabel*)this->ui->MCCDAQDevicesLayout->itemAtPosition(i, 3)->widget();
+            QLabel* nc = (QLabel*)this->ui->MCCDAQDevicesLayout->itemAtPosition(i, 5)->widget();
+            QLabel* vr = (QLabel*)this->ui->MCCDAQDevicesLayout->itemAtPosition(i, 7)->widget();
+            this->prospectiveDAQDevices.push_back(
+                new AiDAQHandler(chb->text().toStdString(), h->text().toLongLong(), nc->text().toUInt(), (Range)vr->text().toLongLong())
+            );
+        }
+    }
+#endif
+    // loop through and create serial port handlers here
+    for (int i = 1; i < this->ui->SerialportDevicesLayout->rowCount(); i++) {
+        QCheckBox* chb = (QCheckBox*)this->ui->SerialportDevicesLayout->itemAtPosition(i, 0)->widget();
+        if (chb->isChecked()) {
+            QLabel* path = (QLabel*)this->ui->SerialportDevicesLayout->itemAtPosition(i, 2)->widget();
+            QComboBox* cmb = (QComboBox*)this->ui->SerialportDevicesLayout->itemAtPosition(i, 4)->widget();
+            this->prospectiveDAQDevices.push_back(
+                new SerialPortHandler(chb->text().toStdString(), path->text().toStdString(), cmb->currentText().toUInt())
+            );
+        }
+    }
+    this->done(QDialog::Accepted);
+}
+
 std::unique_ptr<DAQManager> DAQManagerFactory::createDAQManager() {
     DAQManagerFactory dmf;
-    int r = dmf.exec();
-    if (r == QDialog::Accepted) {
-        std::vector<IDAQDeviceHandler*> DAQDevices;
-#ifdef ULDAQ_AVAILABLE
-        for (const auto& [id, devInfo]: dmf.selectedAiMccdaqs) {
-            DAQDevices.push_back(
-                new AiDAQHandler(devInfo.id, devInfo.handle, devInfo.numChannels, devInfo.voltageRange)
-            );
-        }
-#endif
-        for (const auto& [id, devInfo] : dmf.selectedSerialports) {
-            DAQDevices.push_back(
-                new SerialPortHandler(devInfo.id, devInfo.serialportPath, devInfo.numChannels)
-            );
-        }
-        return std::make_unique<DAQManager>(DAQDevices);
+    if (dmf.exec() == QDialog::Accepted) {
+        return std::make_unique<DAQManager>(dmf.prospectiveDAQDevices);
+    } else {
+        return nullptr;
     }
-    return nullptr;
 }
