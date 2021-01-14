@@ -32,7 +32,6 @@ private:
     const AInScanFlag aisf = AINSCAN_FF_DEFAULT;
     // status vars
     std::unique_ptr<double[]> dataBuffer;
-    bool connected = false;
 };
 
 #endif

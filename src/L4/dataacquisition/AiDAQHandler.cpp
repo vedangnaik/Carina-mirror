@@ -6,7 +6,6 @@ AiDAQHandler::AiDAQHandler(std::string deviceID, DaqDeviceHandle handle, unsigne
     // connect DAQ
     UlError err = ulConnectDaqDevice(handle);
     if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulConnectDaqDevice Error: " << err; }
-    else { this->connected = true; }
 
     // allocate the temporary data buffer
     this->dataBuffer = std::make_unique<double[]>(this->numChannels * this->samplesPerChannel * sizeof(double));

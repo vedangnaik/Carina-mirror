@@ -85,12 +85,15 @@
                     </property>
                     <layout class="QVBoxLayout" name="verticalLayout_6">
                      <item>
-                      <layout class="QVBoxLayout" name="MCCDAQDevicesLayout"/>
+                      <layout class="QGridLayout" name="MCCDAQDevicesLayout"/>
                      </item>
                      <item>
                       <spacer name="verticalSpacer_2">
                        <property name="orientation">
                         <enum>Qt::Vertical</enum>
+                       </property>
+                       <property name="sizeType">
+                        <enum>QSizePolicy::Ignored</enum>
                        </property>
                        <property name="sizeHint" stdset="0">
                         <size>
