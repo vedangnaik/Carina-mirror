@@ -17,7 +17,7 @@ void SerialPortHandler::stopAcquisition() {
 }
 
 std::vector<double> SerialPortHandler::getLatestData() {
-    std::vector<double> values(std::nan("NaN"), this->numChannels);
+    std::vector<double> values(this->numChannels, std::nan("NaN"));
     if (this->serialport.is_open()) {
         std::string line;
         std::getline(this->serialport, line);

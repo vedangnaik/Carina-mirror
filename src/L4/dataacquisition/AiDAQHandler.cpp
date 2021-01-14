@@ -35,7 +35,7 @@ std::vector<double> AiDAQHandler::getLatestData() {
     err = ulIsDaqDeviceConnected(this->handle, &connected);
     if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulIsDaqDeviceConnected Error: " << err; }
 
-    std::vector<double> values(std::nan("NaN"), this->numChannels);
+    std::vector<double> values(this->numChannels, std::nan("NaN"));
     if (status == SS_RUNNING && connected != 0) {
         // Report average of all samples seen since last run.
         for (unsigned int i = 0; i < this->numChannels; i++) {
