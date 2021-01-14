@@ -28,7 +28,7 @@ SensorToDAQLinker::~SensorToDAQLinker() {
 }
 
 void SensorToDAQLinker::accept() {
-    for (int i = 1; i < this->ui->sensorAndDaqFormLayout->rowCount(); i++) {
+    for (int i = 0; i < this->ui->sensorAndDaqFormLayout->rowCount(); i++) {
         std::string sensorID = ((QLabel*)this->ui->sensorAndDaqFormLayout->itemAt(i, QFormLayout::ItemRole::LabelRole)->widget())->text().toStdString();
 
         QStringList parts = ((QComboBox*)this->ui->sensorAndDaqFormLayout->itemAt(i, QFormLayout::ItemRole::FieldRole)->widget())->currentText().split("-");

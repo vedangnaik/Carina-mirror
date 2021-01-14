@@ -1,7 +1,6 @@
 #include "DAQManager.h"
 
 DAQManager::DAQManager(std::vector<AbstractDAQDeviceHandler*> DAQDevices) : DAQDevices{DAQDevices} {
-    // Create timer to start reading from DAQs here
     this->DAQReadTimer = new QTimer(this);
     this->DAQReadTimer->start(1000);
 }
@@ -24,7 +23,9 @@ void DAQManager::stopAcquisition() {
 void DAQManager::getLatestData() {
     if (this->svgic == nullptr) { return; }
     for (std::string id : this->svgic->getSensorIDs()) {
-        this->svgic->updateValue(id, rand() % 1000);
+        const auto& daq = this->sensorToDAQMap.at(id).first;
+        const auto& channel = this->sensorToDAQMap.at(id).second;
+        this->svgic->updateValue(id, daq->getLatestData().at(channel));
     }
 }
 
