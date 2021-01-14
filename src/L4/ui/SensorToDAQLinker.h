@@ -12,12 +12,14 @@ namespace Ui {
 class SensorToDAQLinker : public QDialog {
     Q_OBJECT
 public:
+    static std::map<std::string, std::pair<AbstractDAQDeviceHandler*, unsigned int>>
+        getSensorToDAQLinks(std::vector<std::string> sensorIDs, std::vector<AbstractDAQDeviceHandler*> DAQDevices);
+private:
     explicit SensorToDAQLinker(std::vector<std::string> sensorIDs, std::vector<AbstractDAQDeviceHandler*> DAQDevices, QWidget *parent = nullptr);
     ~SensorToDAQLinker();
-    static std::map<std::string, std::pair<AbstractDAQDeviceHandler*, unsigned int>> getSensorToDAQLinks(std::vector<std::string> sensorIDs, std::vector<AbstractDAQDeviceHandler*> DAQDevices);
-protected:
+    void accept() override;
     std::map<std::string, std::pair<AbstractDAQDeviceHandler*, unsigned int>> sensorToDAQLinks;
-private:
     Ui::SensorToDAQLinker *ui;
+    std::vector<AbstractDAQDeviceHandler*> DAQDevices;
 };
 

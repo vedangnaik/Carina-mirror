@@ -1,7 +1,7 @@
 #include "SensorToDAQLinker.h"
 #include "ui_SensorToDAQLinker.h"
 
-SensorToDAQLinker::SensorToDAQLinker(std::vector<std::string> sensorIDs, std::vector<AbstractDAQDeviceHandler*> DAQDevices, QWidget *parent) : QDialog(parent), ui(new Ui::SensorToDAQLinker) {
+SensorToDAQLinker::SensorToDAQLinker(std::vector<std::string> sensorIDs, std::vector<AbstractDAQDeviceHandler*> DAQDevices, QWidget *parent) : QDialog(parent), ui(new Ui::SensorToDAQLinker), DAQDevices{DAQDevices} {
     ui->setupUi(this);
 
     std::map<std::string, AbstractDAQDeviceHandler*> DAQDeviceIDs;
@@ -16,12 +16,6 @@ SensorToDAQLinker::SensorToDAQLinker(std::vector<std::string> sensorIDs, std::ve
                 cmb->addItem(QString::fromStdString(d->deviceID + "-" + std::to_string(i)));
             }
         }
-
-        connect(cmb, &QComboBox::currentTextChanged, this, [=](const QString& t) {
-            QStringList parts = t.split("-");
-            this->sensorToDAQLinks.insert({ id, { DAQDeviceIDs.at(parts.at(0).toStdString()), parts.at(1).toUInt() } });
-        });
-
         this->ui->sensorAndDaqFormLayout->addRow(QString::fromStdString(id), cmb);
     }
 
@@ -33,10 +27,28 @@ SensorToDAQLinker::~SensorToDAQLinker() {
     delete ui;
 }
 
-std::map<std::string, std::pair<AbstractDAQDeviceHandler*, unsigned int>> SensorToDAQLinker::getSensorToDAQLinks(std::vector<std::string> sensorIDs, std::vector<AbstractDAQDeviceHandler*> DAQDevices) {
+void SensorToDAQLinker::accept() {
+    for (int i = 1; i < this->ui->sensorAndDaqFormLayout->rowCount(); i++) {
+        std::string sensorID = ((QLabel*)this->ui->sensorAndDaqFormLayout->itemAt(i, QFormLayout::ItemRole::LabelRole)->widget())->text().toStdString();
+
+        QStringList parts = ((QComboBox*)this->ui->sensorAndDaqFormLayout->itemAt(i, QFormLayout::ItemRole::FieldRole)->widget())->currentText().split("-");
+        std::string deviceID = parts.at(0).toStdString();
+        auto adhIt = std::find_if(this->DAQDevices.begin(), this->DAQDevices.end(), [deviceID](const auto& n) {
+            return n->deviceID == deviceID;
+        });
+        unsigned int channel = parts.at(1).toUInt();
+
+        this->sensorToDAQLinks.insert({ sensorID, { *adhIt, channel } });
+    }
+
+    this->done(QDialog::Accepted);
+}
+
+std::map<std::string, std::pair<AbstractDAQDeviceHandler*, unsigned int>>
+    SensorToDAQLinker::getSensorToDAQLinks(std::vector<std::string> sensorIDs, std::vector<AbstractDAQDeviceHandler*> DAQDevices)
+{
     SensorToDAQLinker* stdl = new SensorToDAQLinker(sensorIDs, DAQDevices);
-    int r = stdl->exec();
-    if (r == QDialog::Accepted) {
+    if (stdl->exec() == QDialog::Accepted) {
         return stdl->sensorToDAQLinks;
     } else {
         return {};

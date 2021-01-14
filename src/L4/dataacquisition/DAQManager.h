@@ -6,6 +6,7 @@
 #include "SensorToDAQLinker.h"
 #include <map>
 #include <vector>
+#include <mutex>
 #include <QObject>
 #include <iostream>
 #include <QTimer>
@@ -18,6 +19,7 @@ public:
     void startAcquisition();
     void stopAcquisition();
     void getLatestData();
+    void relinkSensors();
     void setOutputContract(SVGIC* svgic) {
         this->svgic = svgic;
     }
@@ -25,6 +27,6 @@ private:
     std::vector<AbstractDAQDeviceHandler*> DAQDevices;
     SVGIC* svgic = nullptr;
     QTimer* DAQReadTimer;
-    // The linker will populate this correctly.
     std::map<std::string, std::pair<AbstractDAQDeviceHandler*, unsigned int>> sensorToDAQMap;
+    std::mutex sensorLinksMutex;
 };

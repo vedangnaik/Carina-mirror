@@ -25,11 +25,12 @@ DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QDialog(parent), ui(new 
 #ifdef ULDAQ_AVAILABLE
 void DAQManagerFactory::openAndTestAiMCCDAQs() {
     const DaqDeviceInterface DAQDeviceInterfaceType = ANY_IFC;
+    UlError err;
 
     // Get the number of connected devices here.
     std::vector<DaqDeviceDescriptor> devDescriptors;
     unsigned int numDAQDevicesDetected = 0;
-    UlError err = ulGetDaqDeviceInventory(DAQDeviceInterfaceType, devDescriptors.data(), &numDAQDevicesDetected);
+    err = ulGetDaqDeviceInventory(DAQDeviceInterfaceType, devDescriptors.data(), &numDAQDevicesDetected);
     // This will trip, but can be ignored safely (I think)
     if (err != ERR_NO_ERROR) {
         LOG(INFO) << "This 'error' is expected to occur, don't panic.";
@@ -39,51 +40,51 @@ void DAQManagerFactory::openAndTestAiMCCDAQs() {
     // List DAQs found
     if (numDAQDevicesDetected == 0) {
         LOG(ERROR) << "No MCCDAQ devices found";
+        return;
     }
-    else {
-        // Get the device descriptors here
-        devDescriptors.reserve(numDAQDevicesDetected);
-        UlError err = ulGetDaqDeviceInventory(DAQDeviceInterfaceType, devDescriptors.data(), &numDAQDevicesDetected);
-        if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulGetDaqDeviceInventory Error: " << err; }
 
-        // Get DAQ info here
-        for (unsigned int i = 0; i < numDAQDevicesDetected; i++) {
-            // Create the DAQ object
-            DaqDeviceHandle handle = ulCreateDaqDevice(devDescriptors[i]);
+    // Get the device descriptors here
+    devDescriptors.reserve(numDAQDevicesDetected);
+    err = ulGetDaqDeviceInventory(DAQDeviceInterfaceType, devDescriptors.data(), &numDAQDevicesDetected);
+    if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulGetDaqDeviceInventory Error: " << err; }
 
-            // Check if it's analog input; other types can be checked for here
-            long long aiSupported;
-            UlError err = ulDevGetInfo(handle, DEV_INFO_HAS_AI_DEV, 0, &aiSupported);
-            if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulDevGetInfo Error: " << err; }
+    // Get DAQ info here
+    for (unsigned int i = 0; i < numDAQDevicesDetected; i++) {
+        // Create the DAQ object
+        DaqDeviceHandle handle = ulCreateDaqDevice(devDescriptors[i]);
 
-            // Get num channels
-            long long numChannels;
-            err = ulAIGetInfo(handle, AI_INFO_NUM_CHANS, 0, &numChannels);
-            if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulAIGetInfo Error: " << err << std::endl; }
-            if (aiSupported < 1) { LOG(ERROR) << "Analog input not supported: " << aiSupported; }
+        // Check if it's analog input; other types can be checked for here
+        long long aiSupported;
+        UlError err = ulDevGetInfo(handle, DEV_INFO_HAS_AI_DEV, 0, &aiSupported);
+        if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulDevGetInfo Error: " << err; }
 
-            // get voltage range
-            long long voltageRange;
-            err = ulAIGetInfo(handle, AI_INFO_SE_RANGE, 0, &voltageRange);
-            if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAIGetInfo Error: " << err; }
+        // Get num channels
+        long long numChannels;
+        err = ulAIGetInfo(handle, AI_INFO_NUM_CHANS, 0, &numChannels);
+        if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulAIGetInfo Error: " << err << std::endl; }
+        if (aiSupported < 1) { LOG(ERROR) << "Analog input not supported: " << aiSupported; }
 
-            // output information here
-            std::string deviceID = "mccdaq:" + std::to_string(i);
-            std::string infoLine =
-                    "Analog Input: " + std::string(aiSupported ? "yes" : "no") + "\t" +
-                    "Number of channels: " + std::to_string(numChannels) + "\t" +
-                    "Voltage range: " + std::to_string(voltageRange);
+        // get voltage range
+        long long voltageRange;
+        err = ulAIGetInfo(handle, AI_INFO_SE_RANGE, 0, &voltageRange);
+        if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAIGetInfo Error: " << err; }
 
-            int row = this->ui->MCCDAQDevicesLayout->rowCount();
-            this->ui->MCCDAQDevicesLayout->addWidget(new QCheckBox(QString::fromStdString(deviceID), this), row, 0);
-            this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Analog Input: " + QString(aiSupported ? "yes" : "no"), this), row, 1);
-            this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Handle: ", this), row, 2);
-            this->ui->MCCDAQDevicesLayout->addWidget(new QLabel(QString::number(handle), this), row, 3);
-            this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Number of channels: ", this), row, 4);
-            this->ui->MCCDAQDevicesLayout->addWidget(new QLabel(QString::number(numChannels), this), row, 5);
-            this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Voltage range: ", this), row, 6);
-            this->ui->MCCDAQDevicesLayout->addWidget(new QLabel(QString::number(voltageRange), this), row, 7);
-        }
+        // output information here
+        std::string deviceID = "mccdaq:" + std::to_string(i);
+        std::string infoLine =
+                "Analog Input: " + std::string(aiSupported ? "yes" : "no") + "\t" +
+                "Number of channels: " + std::to_string(numChannels) + "\t" +
+                "Voltage range: " + std::to_string(voltageRange);
+
+        int row = this->ui->MCCDAQDevicesLayout->rowCount();
+        this->ui->MCCDAQDevicesLayout->addWidget(new QCheckBox(QString::fromStdString(deviceID), this), row, 0);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Analog Input: " + QString(aiSupported ? "yes" : "no"), this), row, 1);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Handle: ", this), row, 2);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel(QString::number(handle), this), row, 3);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Number of channels: ", this), row, 4);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel(QString::number(numChannels), this), row, 5);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Voltage range: ", this), row, 6);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel(QString::number(voltageRange), this), row, 7);
     }
 }
 #endif
@@ -118,17 +119,8 @@ DAQManagerFactory::~DAQManagerFactory() {
     delete ui;
 }
 
-std::unique_ptr<DAQManager> DAQManagerFactory::createDAQManager() {
-    DAQManagerFactory dmf;
-    int r = dmf.exec();
-    if (r == QDialog::Accepted) {
-        return std::make_unique<DAQManager>(dmf.prospectiveDAQDevices);
-    } else {
-        return nullptr;
-    }
-}
-
 void DAQManagerFactory::accept() {
+    // Note: QGridLayout row numberings start from 1 for some reason.
 #ifdef ULDAQ_AVAILABLE
     // if available, loop through and create MCCDAQ handlers here
     for (int i = 1; i < this->ui->MCCDAQDevicesLayout->rowCount(); i++) {
@@ -155,4 +147,13 @@ void DAQManagerFactory::accept() {
         }
     }
     this->done(QDialog::Accepted);
+}
+
+std::unique_ptr<DAQManager> DAQManagerFactory::createDAQManager() {
+    DAQManagerFactory dmf;
+    if (dmf.exec() == QDialog::Accepted) {
+        return std::make_unique<DAQManager>(dmf.prospectiveDAQDevices);
+    } else {
+        return nullptr;
+    }
 }
