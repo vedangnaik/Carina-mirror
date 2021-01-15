@@ -17,9 +17,10 @@ public:
 private:
     explicit SensorToDAQLinker(std::vector<std::string> sensorIDs, std::vector<AbstractDAQDeviceHandler*> DAQDevices, QWidget *parent = nullptr);
     ~SensorToDAQLinker();
-    void accept() override;
     std::map<std::string, std::pair<AbstractDAQDeviceHandler*, unsigned int>> sensorToDAQLinks;
     Ui::SensorToDAQLinker *ui;
     std::vector<AbstractDAQDeviceHandler*> DAQDevices;
+private slots:
+    void accept() override;
 };
 

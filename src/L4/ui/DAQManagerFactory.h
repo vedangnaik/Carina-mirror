@@ -7,6 +7,7 @@
 #include "DAQManager.h"
 #include "SerialPortHandler.h"
 #include "AiDAQHandler.h"
+#include <tuple>
 #include <QDialog>
 #include <QLabel>
 #include <QDir>
@@ -25,12 +26,8 @@ public:
 private:
     DAQManagerFactory(QWidget *parent = nullptr);
     ~DAQManagerFactory();
-    void accept() override;
     std::vector<AbstractDAQDeviceHandler*> prospectiveDAQDevices;
     Ui::DAQManagerFactory *ui;
 private slots:
-    void openAndTestSerialPort();
-#ifdef ULDAQ_AVAILABLE
-    void openAndTestAiMCCDAQs();
-#endif
+    void accept() override;
 };
