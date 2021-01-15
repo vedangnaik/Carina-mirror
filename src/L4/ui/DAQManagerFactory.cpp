@@ -156,9 +156,9 @@ std::vector<std::tuple<std::string, std::string>> scanForOpenSerialPorts()
         std::string filename = f.toStdString();
         std::string path = "/dev/" + filename;
         std::ifstream test(path);
-//        if (test.is_open()) {
+        if (test.is_open()) {
             ports.push_back(std::make_tuple(filename, path));
-//        }
+        }
     }
     return ports;
 }
