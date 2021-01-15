@@ -15,7 +15,7 @@ DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QDialog(parent), ui(new 
 #ifdef ULDAQ_AVAILABLE
     // connect MCCDAQ is available
     for (const auto& t : scanForAiMCCDAQs()) {
-        std::string deviceID = &"mccdaq:" [ std::get<0>(t)];
+        std::string deviceID = "mccdaq:" + std::to_string(std::get<0>(t));
         int row = this->ui->MCCDAQDevicesLayout->rowCount();
         this->ui->MCCDAQDevicesLayout->addWidget(new QCheckBox(QString::fromStdString(deviceID), this), row, 0);
         this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Analog Input: " + QString(std::get<1>(t) ? "yes" : "no"), this), row, 1);
