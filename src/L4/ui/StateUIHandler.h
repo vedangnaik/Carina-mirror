@@ -12,7 +12,7 @@
 #include "SensorsPresenter.h"
 #include "ActuatorsPresenter.h"
 #include "StatesPresenter.h"
-#include "ui_state.h"
+#include "ui_State.h"
 #include "UIHelpers.h"
 
 QT_BEGIN_NAMESPACE

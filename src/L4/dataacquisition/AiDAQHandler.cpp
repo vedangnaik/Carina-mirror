@@ -39,6 +39,8 @@ std::vector<double> AiDAQHandler::getLatestData() {
     if (status == SS_RUNNING && connected != 0) {
         // Report average of all samples seen since last run.
         for (unsigned int i = 0; i < this->numChannels; i++) {
+            // I was debating whether to use operator[] or .at(). But since we are guaranteed that i will be in range,
+            // I don't think it's needed. But maybe it's better to have?
             values[i] = std::accumulate(&this->dataBuffer[i], &this->dataBuffer[i] + this->samplesPerChannel, 0.0) / this->samplesPerChannel;
         }
     } else {

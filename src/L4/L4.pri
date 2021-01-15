@@ -7,7 +7,7 @@ SOURCES += \
     $$PWD/ui/GSManager.cpp \
     $$PWD/ui/SensorToDAQLinker.cpp \
     $$PWD/ui/StateUIHandler.cpp \
-    $$PWD/ui/SystemDiagramUIhandler.cpp
+    $$PWD/ui/SystemDiagramUIHandler.cpp
 
 HEADERS += \
     $$PWD/dataacquisition/AbstractDAQDeviceHandler.h \
@@ -20,7 +20,7 @@ HEADERS += \
     $$PWD/ui/GSManager.h \
     $$PWD/ui/SensorToDAQLinker.h \
     $$PWD/ui/StateUIHandler.h \
-    $$PWD/ui/SystemDiagramUIhandler.h \
+    $$PWD/ui/SystemDiagramUIHandler.h \
     $$PWD/ui/UIHelpers.h
 
 INCLUDEPATH += \
@@ -29,12 +29,12 @@ INCLUDEPATH += \
 
 # Add .ui forms for UI classes.
 FORMS += \
+    $$PWD/ui/DAQManagerFactory.ui \
+    $$PWD/ui/Error.ui \
+    $$PWD/ui/GSMainWindow.ui \
     $$PWD/ui/SensorToDAQLinker.ui \
-    $$PWD/ui/daqmanagerfactory.ui \
-    $$PWD/ui/error.ui \
-    $$PWD/ui/gsmainwindow.ui \
-    $$PWD/ui/state.ui \
-    $$PWD/ui/systemdiagram.ui
+    $$PWD/ui/State.ui \
+    $$PWD/ui/SystemDiagram.ui
 
 # Runtime loading of .ui files required the uitools module.
 QT += uitools

@@ -12,7 +12,7 @@
 #include <QDir>
 #include <QComboBox>
 #include <QCheckBox>
-#include "ui_daqmanagerfactory.h"
+#include "ui_DAQManagerFactory.h"
 
 namespace Ui {
     class DAQManagerFactory;
