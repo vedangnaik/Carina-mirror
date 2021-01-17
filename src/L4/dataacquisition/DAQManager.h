@@ -19,9 +19,7 @@ public:
     void stopAcquisition();
     void getLatestData();
     void relinkSensors();
-    void setOutputContract(SVGIC* svgic) {
-        this->svgic = svgic;
-    }
+    void setOutputContract(SVGIC* svgic);
 private:
     std::vector<AbstractDAQ*> DAQDevices;
     SVGIC* svgic = nullptr;

@@ -36,3 +36,7 @@ void DAQManager::relinkSensors() {
     std::lock_guard<std::mutex> guard(this->sensorLinksMutex);
     this->sensorToDAQMap = SensorToDAQLinker::getSensorToDAQLinks(svgic->getSensorIDs(), this->DAQDevices);
 }
+
+void DAQManager::setOutputContract(SVGIC* svgic) {
+    this->svgic = svgic;
+}
