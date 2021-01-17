@@ -5,8 +5,8 @@
 #endif
 #include "easylogging++.h"
 #include "DAQManager.h"
-#include "SerialPortHandler.h"
-#include "AiDAQHandler.h"
+#include "SerialPortDAQ.h"
+#include "AiMCCDAQ.h"
 #include <tuple>
 #include <QDialog>
 #include <QLabel>
@@ -26,7 +26,7 @@ public:
 private:
     DAQManagerFactory(QWidget *parent = nullptr);
     ~DAQManagerFactory();
-    std::vector<AbstractDAQDeviceHandler*> prospectiveDAQDevices;
+    std::vector<AbstractDAQ*> prospectiveDAQDevices;
     Ui::DAQManagerFactory *ui;
 private slots:
     void accept() override;

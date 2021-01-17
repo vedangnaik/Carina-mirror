@@ -66,7 +66,7 @@ void DAQManagerFactory::accept() {
             QLabel* nc = (QLabel*)this->ui->MCCDAQDevicesLayout->itemAtPosition(i, 5)->widget();
             QLabel* vr = (QLabel*)this->ui->MCCDAQDevicesLayout->itemAtPosition(i, 7)->widget();
             this->prospectiveDAQDevices.push_back(
-                new AiDAQHandler(chb->text().toStdString(), h->text().toLongLong(), nc->text().toUInt(), (Range)vr->text().toLongLong())
+                new AiMCCDAQ(chb->text().toStdString(), h->text().toLongLong(), nc->text().toUInt(), (Range)vr->text().toLongLong())
             );
         }
     }
@@ -78,7 +78,7 @@ void DAQManagerFactory::accept() {
             QLabel* path = (QLabel*)this->ui->SerialportDevicesLayout->itemAtPosition(i, 2)->widget();
             QComboBox* cmb = (QComboBox*)this->ui->SerialportDevicesLayout->itemAtPosition(i, 4)->widget();
             this->prospectiveDAQDevices.push_back(
-                new SerialPortHandler(chb->text().toStdString(), path->text().toStdString(), cmb->currentText().toUInt())
+                new SerialPortDAQ(chb->text().toStdString(), path->text().toStdString(), cmb->currentText().toUInt())
             );
         }
     }

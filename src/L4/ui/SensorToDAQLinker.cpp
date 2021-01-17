@@ -1,10 +1,10 @@
 #include "SensorToDAQLinker.h"
 #include "ui_SensorToDAQLinker.h"
 
-SensorToDAQLinker::SensorToDAQLinker(std::vector<std::string> sensorIDs, std::vector<AbstractDAQDeviceHandler*> DAQDevices, QWidget *parent) : QDialog(parent), ui(new Ui::SensorToDAQLinker), DAQDevices{DAQDevices} {
+SensorToDAQLinker::SensorToDAQLinker(std::vector<std::string> sensorIDs, std::vector<AbstractDAQ*> DAQDevices, QWidget *parent) : QDialog(parent), ui(new Ui::SensorToDAQLinker), DAQDevices{DAQDevices} {
     ui->setupUi(this);
 
-    std::map<std::string, AbstractDAQDeviceHandler*> DAQDeviceIDs;
+    std::map<std::string, AbstractDAQ*> DAQDeviceIDs;
     for (const auto& d : DAQDevices) {
         DAQDeviceIDs.insert({ d->deviceID, d });
     }
@@ -44,8 +44,8 @@ void SensorToDAQLinker::accept() {
     this->done(QDialog::Accepted);
 }
 
-std::map<std::string, std::pair<AbstractDAQDeviceHandler*, unsigned int>>
-    SensorToDAQLinker::getSensorToDAQLinks(std::vector<std::string> sensorIDs, std::vector<AbstractDAQDeviceHandler*> DAQDevices)
+std::map<std::string, std::pair<AbstractDAQ*, unsigned int>>
+    SensorToDAQLinker::getSensorToDAQLinks(std::vector<std::string> sensorIDs, std::vector<AbstractDAQ*> DAQDevices)
 {
     SensorToDAQLinker* stdl = new SensorToDAQLinker(sensorIDs, DAQDevices);
     if (stdl->exec() == QDialog::Accepted) {

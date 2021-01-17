@@ -1,8 +1,8 @@
 #ifdef ULDAQ_AVAILABLE
 
-#include "AiDAQHandler.h"
+#include "AiMCCDAQ.h"
 
-AiDAQHandler::AiDAQHandler(std::string deviceID, DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange) : AbstractDAQDeviceHandler(deviceID, numChannels), handle{handle}, voltageRange{voltageRange} {
+AiMCCDAQ::AiMCCDAQ(std::string deviceID, DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange) : AbstractDAQ(deviceID, numChannels), handle{handle}, voltageRange{voltageRange} {
     // connect DAQ
     UlError err = ulConnectDaqDevice(handle);
     if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulConnectDaqDevice Error: " << err; }
@@ -11,21 +11,21 @@ AiDAQHandler::AiDAQHandler(std::string deviceID, DaqDeviceHandle handle, unsigne
     this->dataBuffer = std::make_unique<double[]>(this->numChannels * this->samplesPerChannel * sizeof(double));
 }
 
-AiDAQHandler::~AiDAQHandler() {
+AiMCCDAQ::~AiMCCDAQ() {
     this->stopAcquisition();
 }
 
-void AiDAQHandler::startAcquisition() {
+void AiMCCDAQ::startAcquisition() {
     UlError err = ulAInScan(this->handle, 0, this->numChannels-1, this->aiim, this->voltageRange, this->samplesPerChannel, &this->rate, this->so, this->aisf, this->dataBuffer.get());
     if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAInScan Error: " << err; }
 }
 
-void AiDAQHandler::stopAcquisition() {
+void AiMCCDAQ::stopAcquisition() {
     UlError err = ulAInScanStop(this->handle);
     if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAInScanStop Error: " << err; }
 }
 
-std::vector<double> AiDAQHandler::getLatestData() {
+std::vector<double> AiMCCDAQ::getLatestData() {
     ScanStatus status;
     TransferStatus transferStatus;
     UlError err = ulAInScanStatus(this->handle, &status, &transferStatus);

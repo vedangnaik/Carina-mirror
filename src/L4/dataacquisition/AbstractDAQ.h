@@ -4,13 +4,13 @@
 #include <vector>
 #include <string>
 
-class AbstractDAQDeviceHandler {
+class AbstractDAQ {
 public:
-    AbstractDAQDeviceHandler(std::string deviceID, unsigned int numChannels) : deviceID{deviceID}, numChannels{numChannels} {};
+    AbstractDAQ(std::string deviceID, unsigned int numChannels) : deviceID{deviceID}, numChannels{numChannels} {};
     virtual void startAcquisition() = 0;
     virtual void stopAcquisition() = 0;
     virtual std::vector<double> getLatestData() = 0;
-    virtual ~AbstractDAQDeviceHandler() {};
+    virtual ~AbstractDAQ() {};
     const std::string deviceID;
     const unsigned int numChannels;
 };

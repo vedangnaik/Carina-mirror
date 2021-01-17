@@ -1,7 +1,7 @@
 SOURCES += \
-    $$PWD/dataacquisition/AiDAQHandler.cpp \
-    $$PWD/dataacquisition/SerialPortHandler.cpp \
+    $$PWD/dataacquisition/AiMCCDAQ.cpp \
     $$PWD/dataacquisition/DAQManager.cpp \
+    $$PWD/dataacquisition/SerialPortDAQ.cpp \
     $$PWD/ui/DAQManagerFactory.cpp \
     $$PWD/ui/ErrorUIHandler.cpp \
     $$PWD/ui/GSManager.cpp \
@@ -10,10 +10,10 @@ SOURCES += \
     $$PWD/ui/SystemDiagramUIHandler.cpp
 
 HEADERS += \
-    $$PWD/dataacquisition/AbstractDAQDeviceHandler.h \
-    $$PWD/dataacquisition/AiDAQHandler.h \
-    $$PWD/dataacquisition/SerialPortHandler.h \
+    $$PWD/dataacquisition/AbstractDAQ.h \
+    $$PWD/dataacquisition/AiMCCDAQ.h \
     $$PWD/dataacquisition/DAQManager.h \
+    $$PWD/dataacquisition/SerialPortDAQ.h \
     $$PWD/ui/DAQManagerFactory.h \
     $$PWD/ui/Draggable.h \
     $$PWD/ui/ErrorUIHandler.h \
