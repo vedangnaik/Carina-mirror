@@ -1,5 +1,4 @@
-#ifndef SYSTEMDIAGRAMUIHANDLER_H
-#define SYSTEMDIAGRAMUIHANDLER_H
+#pragma once
 
 #include <QWidget>
 #include <QPushButton>
@@ -52,5 +51,3 @@ private:
     APIC& apic;
     ACIC& acic;
 };
-
-#endif // SYSTEMDIAGRAMUIHANDLER_H

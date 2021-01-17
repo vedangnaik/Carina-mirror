@@ -28,9 +28,7 @@ SystemDiagramUIHandler::SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramU
 }
 
 void SystemDiagramUIHandler::togglePositionLock(int state) {
-    if (state == Qt::CheckState::Checked) {
-        for (auto& d : this->draggables) { d->lockPosition(); }
-    } else {
-        for (auto& d : this->draggables) { d->unlockPosition(); }
+    for (const auto& d : this->draggables) {
+        state == Qt::CheckState::Checked ? d->lockPosition() : d->unlockPosition();
     }
 }
