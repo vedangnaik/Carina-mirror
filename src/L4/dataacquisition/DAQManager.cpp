@@ -24,11 +24,10 @@ void DAQManager::stopAcquisition() {
 }
 
 void DAQManager::getLatestData() {
-    for (std::string id : this->svgic->getSensorIDs()) {
-        // Precondition: id and channel will always been in the map, svgic will not be null.
-        const auto& daq = this->sensorToDAQMap.at(id).first;
-        const auto& channel = this->sensorToDAQMap.at(id).second;
-        this->svgic->updateValue(id, daq->getLatestData().at(channel));
+    for (const auto& p : this->sensorToDAQMap) {
+        const auto& daq = p.second.first;
+        const auto& channel = p.second.second;
+        this->svgic->updateValue(p.first, daq->getLatestData().at(channel));
     }
 }
 

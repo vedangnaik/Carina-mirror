@@ -16,8 +16,8 @@ class DAQManager : public QObject {
 public:
     DAQManager(std::vector<AbstractDAQ*> DAQDevices);
     void startAcquisition();
-    void stopAcquisition();
     void getLatestData();
+    void stopAcquisition();
     void relinkSensors();
     void setOutputContract(SVGIC* svgic);
 private:
