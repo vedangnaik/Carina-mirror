@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QCheckBox>
 #include <variant>
+#include <cmath>
 
 #include "Draggable.h"
 #include "ActuatorsController.h"
@@ -19,12 +20,26 @@ namespace Ui {
 QT_END_NAMESPACE
 
 namespace SystemDiagramUI {
-class SensorDisplayLabel : public QLabel, public SPOC {
+class SensorDisplayLabel : public QWidget, public SPOC {
 public:
-    SensorDisplayLabel(QFrame& parent) : QLabel(&parent) {};
+    SensorDisplayLabel(QFrame& parent) : QWidget(&parent) {
+        this->l = new QLabel(this);
+        this->v = new QLabel(this);
+        QHBoxLayout* hb = new QHBoxLayout();
+        hb->addWidget(this->l);
+        hb->addWidget(this->v);
+        delete this->layout();
+        this->setLayout(hb);
+    };
     void displayValue(const float value) override {
-        this->setText(QString::number(value));
+        this->v->setText(QString::number(value));
     }
+    void setLabel(std::string label) {
+        this->l->setText(QString::fromStdString(label));
+    }
+private:
+    QLabel* v = nullptr;
+    QLabel* l = nullptr;
 };
 
 class ActuatorButton : public QPushButton, public APOC {
@@ -45,7 +60,7 @@ private slots:
 private:
     Ui::SystemDiagram& systemDiagramUI;
     // these objects are children of the main UI, so no manual deletion is required.
-    std::vector<DraggableBase*> draggables;
+    std::vector<AbstractDraggable*> draggables;
 
     SPIC& spic;
     APIC& apic;

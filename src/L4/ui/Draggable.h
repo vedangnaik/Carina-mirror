@@ -1,23 +1,22 @@
-#ifndef DRAGGABLE_H
-#define DRAGGABLE_H
+#pragma once
 
 #include <QWidget>
 #include <QFrame>
 #include <QMouseEvent>
 #include <iostream>
 
-class DraggableBase {
+class AbstractDraggable {
 public:
     virtual void unlockPosition() = 0;
     virtual void lockPosition() = 0;
-    virtual ~DraggableBase() {};
+    virtual ~AbstractDraggable() {};
 };
 
 template <typename T>
-class Draggable : public DraggableBase, public T {
+class Draggable : public AbstractDraggable, public T {
     static_assert(std::is_base_of<QWidget, T>::value, "T must inherit from QWidget");
 public:
-    Draggable(QFrame& parent) : T(parent), parentFrame(&parent) {};
+    Draggable(QFrame& parent) : T(parent), parentFrame{&parent} {};
     void unlockPosition() override { this->positionLocked = false; }
     void lockPosition() override { this->positionLocked = true; }
 protected:
@@ -51,5 +50,3 @@ private:
     QPoint cursorPosOnMoveStart;
     QFrame* parentFrame;
 };
-
-#endif // DRAGGABLE_H

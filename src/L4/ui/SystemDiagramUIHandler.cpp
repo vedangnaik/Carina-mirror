@@ -6,8 +6,9 @@ SystemDiagramUIHandler::SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramU
 
     for (const auto& id : sensorIds) {
         Draggable<SystemDiagramUI::SensorDisplayLabel>* s = new Draggable<SystemDiagramUI::SensorDisplayLabel>(*this->systemDiagramUI.systemDiagramFrame);
+        s->setLabel(id + ": ");
+        s->displayValue(std::nan("NaN"));
         this->spic.subscribe(id, s);
-        s->setText("__ NaN __");
         this->draggables.push_back(s);
         this->systemDiagramUI.systemDiagramFrame->layout()->addWidget(s);
     }
