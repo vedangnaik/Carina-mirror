@@ -1,10 +1,11 @@
 #include "SensorsManager.h"
 
 SensorsManager::SensorsManager(const std::map<std::string, Sensor*> sensors) : sensors(sensors) {
-    for (const auto& [id, sensor] : sensors) {
-        if (sensor == nullptr) {
-            throw NullptrSensorError(id);
+    for (const auto& p : sensors) {
+        if (p.second == nullptr) {
+            throw NullptrSensorError(p.first);
         }
+        this->sensorIDs.push_back(p.first);
     }
 }
 
@@ -30,9 +31,5 @@ void SensorsManager::setSensorValue(std::string id, float value) {
 }
 
 std::vector<std::string> SensorsManager::getSensorIDs() {
-    std::vector<std::string> sensorIds;
-    for (const auto& [id, _] : this->sensors) {
-        sensorIds.push_back(id);
-    }
-    return sensorIds;
+    return this->sensorIDs;
 }

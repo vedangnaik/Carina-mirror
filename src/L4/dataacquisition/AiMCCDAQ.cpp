@@ -1,8 +1,8 @@
 #ifdef ULDAQ_AVAILABLE
 
-#include "AiDAQHandler.h"
+#include "AiMCCDAQ.h"
 
-AiDAQHandler::AiDAQHandler(std::string deviceID, DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange) : AbstractDAQDeviceHandler(deviceID, numChannels), handle{handle}, voltageRange{voltageRange} {
+AiMCCDAQ::AiMCCDAQ(std::string deviceID, DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange) : AbstractDAQ(deviceID, numChannels), handle{handle}, voltageRange{voltageRange} {
     // connect DAQ
     UlError err = ulConnectDaqDevice(handle);
     if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulConnectDaqDevice Error: " << err; }
@@ -11,21 +11,21 @@ AiDAQHandler::AiDAQHandler(std::string deviceID, DaqDeviceHandle handle, unsigne
     this->dataBuffer = std::make_unique<double[]>(this->numChannels * this->samplesPerChannel * sizeof(double));
 }
 
-AiDAQHandler::~AiDAQHandler() {
+AiMCCDAQ::~AiMCCDAQ() {
     this->stopAcquisition();
 }
 
-void AiDAQHandler::startAcquisition() {
+void AiMCCDAQ::startAcquisition() {
     UlError err = ulAInScan(this->handle, 0, this->numChannels-1, this->aiim, this->voltageRange, this->samplesPerChannel, &this->rate, this->so, this->aisf, this->dataBuffer.get());
     if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAInScan Error: " << err; }
 }
 
-void AiDAQHandler::stopAcquisition() {
+void AiMCCDAQ::stopAcquisition() {
     UlError err = ulAInScanStop(this->handle);
     if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAInScanStop Error: " << err; }
 }
 
-std::vector<double> AiDAQHandler::getLatestData() {
+std::vector<double> AiMCCDAQ::getLatestData() {
     ScanStatus status;
     TransferStatus transferStatus;
     UlError err = ulAInScanStatus(this->handle, &status, &transferStatus);
@@ -39,6 +39,8 @@ std::vector<double> AiDAQHandler::getLatestData() {
     if (status == SS_RUNNING && connected != 0) {
         // Report average of all samples seen since last run.
         for (unsigned int i = 0; i < this->numChannels; i++) {
+            // I was debating whether to use operator[] or .at(). But since we are guaranteed that i will be in range,
+            // I don't think it's needed. But maybe it's better to have?
             values[i] = std::accumulate(&this->dataBuffer[i], &this->dataBuffer[i] + this->samplesPerChannel, 0.0) / this->samplesPerChannel;
         }
     } else {

@@ -1,7 +1,7 @@
 #ifdef ULDAQ_AVAILABLE
 #pragma once
 
-#include "AbstractDAQDeviceHandler.h"
+#include "AbstractDAQ.h"
 #include "easylogging++.h"
 #include <uldaq.h>
 #include <stdlib.h>
@@ -14,10 +14,10 @@
 /**
  * @brief The AiDAQHandler class handles an analog input DAQ device
  */
-class AiDAQHandler : public AbstractDAQDeviceHandler {
+class AiMCCDAQ : public AbstractDAQ {
 public:
-    AiDAQHandler(std::string id, DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange);
-    ~AiDAQHandler();
+    AiMCCDAQ(std::string id, DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange);
+    ~AiMCCDAQ();
     void startAcquisition() override;
     std::vector<double> getLatestData() override;
     void stopAcquisition() override;

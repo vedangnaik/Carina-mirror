@@ -1,4 +1,4 @@
-#include "SystemDiagramUIhandler.h"
+#include "SystemDiagramUIHandler.h"
 
 SystemDiagramUIHandler::SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI, SPIC& spic, APIC& apic, ACIC& acic, std::vector<std::string> sensorIds, std::vector<std::string> actuatorIds) : systemDiagramUI(systemDiagramUI), spic(spic), apic(apic), acic(acic) {
     connect(this->systemDiagramUI.lockPositionsCheckbox, &QCheckBox::stateChanged, this, &SystemDiagramUIHandler::togglePositionLock);

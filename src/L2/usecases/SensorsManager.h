@@ -19,6 +19,8 @@ public:
     virtual void setSensorValue(std::string id, float value) = 0;
     virtual std::vector<std::string> getSensorIDs() = 0;
     virtual ~SMIC() {};
+private:
+
 };
 
 class SensorsManager : public SMIC {
@@ -32,6 +34,7 @@ public:
     }
 private:
     const std::map<std::string, Sensor*> sensors;
+    std::vector<std::string> sensorIDs;
     SMOC* smoc;
 };
 

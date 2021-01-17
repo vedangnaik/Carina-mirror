@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ui_error.h"
+#include "ui_Error.h"
 #include <iostream>
 
 class ErrorUIHandler {

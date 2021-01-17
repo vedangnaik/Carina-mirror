@@ -1,11 +1,14 @@
 #include "DAQManager.h"
 
-DAQManager::DAQManager(std::vector<AbstractDAQDeviceHandler*> DAQDevices) : DAQDevices{DAQDevices} {
+DAQManager::DAQManager(std::vector<AbstractDAQ*> DAQDevices) : DAQDevices{DAQDevices} {
     this->DAQReadTimer = new QTimer(this);
     this->DAQReadTimer->start(1000);
 }
 
 void DAQManager::startAcquisition() {
+    if (this->svgic == nullptr) {
+        LOG(FATAL) << "DAQManager: this->svgic is nullptr. Aborting...";
+    }
     if (sensorToDAQMap.empty()) { this->relinkSensors(); }
     for (const auto& d : this->DAQDevices) {
         d->startAcquisition();
@@ -21,15 +24,18 @@ void DAQManager::stopAcquisition() {
 }
 
 void DAQManager::getLatestData() {
-    if (this->svgic == nullptr) { return; }
-    for (std::string id : this->svgic->getSensorIDs()) {
-        const auto& daq = this->sensorToDAQMap.at(id).first;
-        const auto& channel = this->sensorToDAQMap.at(id).second;
-        this->svgic->updateValue(id, daq->getLatestData().at(channel));
+    for (const auto& p : this->sensorToDAQMap) {
+        const auto& daq = p.second.first;
+        const auto& channel = p.second.second;
+        this->svgic->updateValue(p.first, daq->getLatestData().at(channel));
     }
 }
 
 void DAQManager::relinkSensors() {
     std::lock_guard<std::mutex> guard(this->sensorLinksMutex);
     this->sensorToDAQMap = SensorToDAQLinker::getSensorToDAQLinks(svgic->getSensorIDs(), this->DAQDevices);
+}
+
+void DAQManager::setOutputContract(SVGIC* svgic) {
+    this->svgic = svgic;
 }

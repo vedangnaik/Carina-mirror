@@ -5,14 +5,15 @@
 #endif
 #include "easylogging++.h"
 #include "DAQManager.h"
-#include "SerialPortHandler.h"
-#include "AiDAQHandler.h"
+#include "SerialPortDAQ.h"
+#include "AiMCCDAQ.h"
+#include <tuple>
 #include <QDialog>
 #include <QLabel>
 #include <QDir>
 #include <QComboBox>
 #include <QCheckBox>
-#include "ui_daqmanagerfactory.h"
+#include "ui_DAQManagerFactory.h"
 
 namespace Ui {
     class DAQManagerFactory;
@@ -25,12 +26,8 @@ public:
 private:
     DAQManagerFactory(QWidget *parent = nullptr);
     ~DAQManagerFactory();
-    void accept() override;
-    std::vector<AbstractDAQDeviceHandler*> prospectiveDAQDevices;
+    std::vector<AbstractDAQ*> prospectiveDAQDevices;
     Ui::DAQManagerFactory *ui;
 private slots:
-    void openAndTestSerialPort();
-#ifdef ULDAQ_AVAILABLE
-    void openAndTestAiMCCDAQs();
-#endif
+    void accept() override;
 };

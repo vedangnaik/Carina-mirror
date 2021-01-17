@@ -27,13 +27,13 @@
 #include "DAQManagerFactory.h"
 #include "DAQManager.h"
 #include "StateUIHandler.h"
-#include "SystemDiagramUIhandler.h"
+#include "SystemDiagramUIHandler.h"
 #include "ErrorUIHandler.h"
 #include "UIHelpers.h"
-#include "ui_gsmainwindow.h"
-#include "ui_state.h"
-#include "ui_systemdiagram.h"
-#include "ui_error.h"
+#include "ui_GSMainWindow.h"
+#include "ui_State.h"
+#include "ui_SystemDiagram.h"
+#include "ui_Error.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

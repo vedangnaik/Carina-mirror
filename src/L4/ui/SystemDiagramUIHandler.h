@@ -11,7 +11,7 @@
 #include "ActuatorsController.h"
 #include "ActuatorsPresenter.h"
 #include "SensorsPresenter.h"
-#include "ui_systemdiagram.h"
+#include "ui_SystemDiagram.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
