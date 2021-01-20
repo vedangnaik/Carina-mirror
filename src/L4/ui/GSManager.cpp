@@ -32,25 +32,26 @@ GSManager::GSManager() {
 }
 
 void GSManager::openProcessFromFile(std::string filepath) {
-    // The only use for Process Gateway: to parse the process file here.
     // Exceptions will be thrown for any errors in the file format.
-    struct ProcessData pgdata;
+    std::map<std::string, Sensor> sensors;
+    std::map<std::string, Actuator> actuators;
+    std::map<std::string, State> states;
     try {
-        ProcessGateway pg(filepath);
-        pgdata = pg.parseProcessFile();
+        ProcessFileParser pg(filepath);
+        std::tie(sensors, actuators, states) = pg.parseProcessFile();
     } catch (ProcessFileParseError& e) {
         LOG(ERROR) << "Process file parse error:" << e.what();
     }
 
     // Array of sensor and actuator IDs for the L2 classes
     std::vector<std::string> sensorIds, actuatorIds;
-    for (const auto& [id, _] : pgdata.sensors) { sensorIds.push_back(id); }
-    for (const auto& [id, _] : pgdata.actuators) { actuatorIds.push_back(id); }
+    for (const auto& p : sensors) { sensorIds.push_back(p.first); }
+    for (const auto& p : actuators) { actuatorIds.push_back(p.first); }
     // Now initialize the L2 classes with them.
     try {
-        this->sm = std::make_unique<SensorsManager>(pgdata.sensors);
-        this->am = std::make_unique<ActuatorsManager>(pgdata.actuators);
-        this->stm = std::make_unique<StatesManager>(pgdata.states, *this->sm, *this->am);
+        this->sm = std::make_unique<SensorsManager>(sensors);
+        this->am = std::make_unique<ActuatorsManager>(actuators);
+        this->stm = std::make_unique<StatesManager>(states, *this->sm, *this->am);
     } catch (SensorsManagerError& e) {
         LOG(ERROR) << "SensorsManager error: " << e.what();
     }

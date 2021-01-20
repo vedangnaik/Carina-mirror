@@ -1,5 +1,4 @@
-#ifndef SENSOR_H
-#define SENSOR_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -20,5 +19,3 @@ public:
     const std::string name;
     std::vector<float> values;
 };
-
-#endif // SENSOR_H
