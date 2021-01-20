@@ -11,12 +11,12 @@ SensorToDAQLinker::SensorToDAQLinker(std::vector<std::string> sensorIDs, std::ve
 
     for (const auto& id : sensorIDs) {
         QComboBox* cmb = new QComboBox(this);
-        cmb->addItem("<unlinked>");
         for (const auto& d : DAQDevices) {
             for (unsigned int i = 0; i < d->numChannels; i++) {
                 cmb->addItem(QString::fromStdString(d->deviceID + "-" + std::to_string(i)));
             }
         }
+        cmb->addItem("<unlinked>");
         this->ui->sensorAndDaqFormLayout->addRow(QString::fromStdString(id), cmb);
     }
 
