@@ -5,8 +5,8 @@
 #include <map>
 #include <stdexcept>
 
-using std::map;
 using std::string;
+using std::map;
 
 class AMOC {
 public:

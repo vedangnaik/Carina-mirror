@@ -19,15 +19,15 @@ ActuatorsManager::getActuatorStatus(string id)
 void
 ActuatorsManager::actuate(string id)
 {
+    // Make sure this actuator is present.
     try {
-        // Make sure this actuator is present.
-        Actuator& a = this->actuators.at(id);
-        a.status = !a.status;
+        bool currentState = this->actuators.at(id).status;
+        this->actuators.at(id).status = !currentState;
         // Make sure that this display output is not null.
         if (this->amoc == nullptr) {
             LOG(ERROR) << "ActuatorsManager::actuate(" << id << "): this->amoc is nullptr, not displaying actuator state.";
         } else {
-            this->amoc->notify(id, a.status);
+            this->amoc->notify(id, this->actuators.at(id).status);
         }
     } catch (std::out_of_range& e) {
         // Precondition violation, it's over.

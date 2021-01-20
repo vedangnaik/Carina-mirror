@@ -1,9 +1,9 @@
 #include "StatesManager.h"
 #include <iostream>
 
-StatesManager::StatesManager(std::map<const std::string, const State> states, SMIC& smic, AMIC& amic)
+StatesManager::StatesManager(map<const string, const State> states, SMIC& smic, AMIC& amic)
     : states{std::move(states)},  smic{smic}, amic{amic}
-{};
+{}
 
 void
 StatesManager::transition(Transition t)
@@ -34,7 +34,7 @@ StatesManager::startProcess()
     this->currentState = &this->states.at("start");
     this->stmoc->displayState(*this->currentState);
 
-    std::vector<std::string> processSummary = {};
+    std::vector<string> processSummary = {};
     const State* curr = this->currentState;
     processSummary.push_back(curr->description);
     while (curr->transitions.at(Transition::Proceed) != "") {

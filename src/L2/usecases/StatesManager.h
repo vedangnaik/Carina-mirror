@@ -4,9 +4,12 @@
 #include "SensorsManager.h"
 #include "ActuatorsManager.h"
 
+using std::string;
+using std::map;
+
 class StMOC {
 public:
-    virtual void displayStatesSummary(const std::vector<std::string> processSummary) = 0;
+    virtual void displayStatesSummary(const std::vector<string> processSummary) = 0;
     virtual void displayState(const State& s) = 0;
     virtual ~StMOC() {};
 };
@@ -19,7 +22,7 @@ public:
 
 class StatesManager : public StMIC {
 public:
-    StatesManager(std::map<const std::string, const State> states, SMIC& smic, AMIC& amic);
+    StatesManager(map<const string, const State> states, SMIC& smic, AMIC& amic);
     void transition(Transition t);
     void setOutputContract(StMOC* stmoc) {
         this->stmoc = stmoc;
@@ -27,7 +30,7 @@ public:
     void startProcess();
     void stopProcess();
 private:
-    std::map<const std::string, const State> states;
+    map<const string, const State> states;
     const State* currentState;
 
     StMOC* stmoc;

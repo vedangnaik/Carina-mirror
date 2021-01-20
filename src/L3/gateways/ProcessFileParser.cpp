@@ -10,7 +10,7 @@ ProcessFileParser::ProcessFileParser(const string filepath)
     //    }
 }
 
-std::tuple<const map<const std::string, Sensor>, const map<const std::string, Actuator>, const map<const std::string, const State> > ProcessFileParser::parseProcessFile()
+std::tuple<const map<const string, Sensor>, const map<const string, Actuator>, const map<const string, const State> > ProcessFileParser::parseProcessFile()
 {
     QFile file(QString::fromStdString(this->filepath));
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -27,7 +27,7 @@ std::tuple<const map<const std::string, Sensor>, const map<const std::string, Ac
     return std::make_tuple(sensors, actuators, states);
 }
 
-const map<const std::string, Sensor>
+const map<const string, Sensor>
 ProcessFileParser::parseSensors(const QJsonObject& sensorsObj)
 {
     map<const string, Sensor> sensors = {};
@@ -47,7 +47,7 @@ ProcessFileParser::parseSensors(const QJsonObject& sensorsObj)
     return sensors;
 }
 
-const map<const std::string, Actuator>
+const map<const string, Actuator>
 ProcessFileParser::parseActuators(const QJsonObject& actuatorsObj)
 {
     map<const string, Actuator> actuators;
@@ -65,7 +65,7 @@ ProcessFileParser::parseActuators(const QJsonObject& actuatorsObj)
 }
 
 
-const map<const std::string, const State>
+const map<const string, const State>
 ProcessFileParser::parseStates(const QJsonObject& statesObj, const map<const string, Sensor>& sensors, const map<const string, Actuator>& actuators)
 {
     map<const string, const State> states;
