@@ -22,24 +22,27 @@ QT_END_NAMESPACE
 namespace SystemDiagramUI {
 class SensorDisplayLabel : public QWidget, public SPOC {
 public:
-    SensorDisplayLabel(QFrame& parent) : QWidget(&parent) {
-        this->l = new QLabel(this);
-        this->v = new QLabel(this);
+    SensorDisplayLabel(QFrame& parent, std::string ID, std::string unit) : QWidget(&parent) {
+        this->id = new QLabel(QString::fromStdString(ID), this);
+        this->value = new QLabel(this);
+        this->unit = new QLabel(QString::fromStdString(unit), this);
+        // Place them horizontally.
+        // MinimumSize makes the labels resize to fit the value.
         QHBoxLayout* hb = new QHBoxLayout();
-        hb->addWidget(this->l);
-        hb->addWidget(this->v);
+        hb->setSizeConstraint(QLayout::SetMinimumSize);
+        hb->addWidget(this->id);
+        hb->addWidget(this->value);
+        hb->addWidget(this->unit);
         delete this->layout();
         this->setLayout(hb);
     };
     void displayValue(const float value) override {
-        this->v->setText(QString::number(value));
-    }
-    void setLabel(std::string label) {
-        this->l->setText(QString::fromStdString(label));
+        this->value->setText(QString("").asprintf("%+09f", value));
     }
 private:
-    QLabel* v = nullptr;
-    QLabel* l = nullptr;
+    QLabel* id = nullptr;
+    QLabel* value = nullptr;
+    QLabel* unit = nullptr;
 };
 
 class ActuatorButton : public QPushButton, public APOC {

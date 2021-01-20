@@ -16,7 +16,8 @@ template <typename T>
 class Draggable : public AbstractDraggable, public T {
     static_assert(std::is_base_of<QWidget, T>::value, "T must inherit from QWidget");
 public:
-    Draggable(QFrame& parent) : T(parent), parentFrame{&parent} {};
+    template<class... Args>
+    Draggable(QFrame& parent, Args... args) : T(parent, args...), parentFrame{&parent} {}
     void unlockPosition() override { this->positionLocked = false; }
     void lockPosition() override { this->positionLocked = true; }
 protected:
