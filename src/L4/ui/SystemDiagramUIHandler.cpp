@@ -1,13 +1,15 @@
 #include "SystemDiagramUIHandler.h"
 
-SystemDiagramUIHandler::SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI, SPIC& spic, APIC& apic, ACIC& acic, std::vector<std::string> sensorIds, std::vector<std::string> actuatorIds) : systemDiagramUI(systemDiagramUI), spic(spic), apic(apic), acic(acic) {
+SystemDiagramUIHandler::SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI, SPIC& spic, APIC& apic, ACIC& acic, std::vector<std::string> sensorIds, std::vector<std::string> actuatorIds) :
+    systemDiagramUI(systemDiagramUI), spic(spic), apic(apic), acic(acic)
+{
     connect(this->systemDiagramUI.lockPositionsCheckbox, &QCheckBox::stateChanged, this, &SystemDiagramUIHandler::togglePositionLock);
     this->systemDiagramUI.lockPositionsCheckbox->setEnabled(true);
 
     for (const auto& id : sensorIds) {
-        Draggable<SystemDiagramUI::SensorDisplayLabel>* s = new Draggable<SystemDiagramUI::SensorDisplayLabel>(*this->systemDiagramUI.systemDiagramFrame);
+        auto* s = new Draggable<SystemDiagramUI::SensorDisplayLabel>(*this->systemDiagramUI.systemDiagramFrame, id, "psi");
+        s->displayValue(std::nan("NaN"));
         this->spic.subscribe(id, s);
-        s->setText("__ NaN __");
         this->draggables.push_back(s);
         this->systemDiagramUI.systemDiagramFrame->layout()->addWidget(s);
     }
@@ -28,9 +30,7 @@ SystemDiagramUIHandler::SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramU
 }
 
 void SystemDiagramUIHandler::togglePositionLock(int state) {
-    if (state == Qt::CheckState::Checked) {
-        for (auto& d : this->draggables) { d->lockPosition(); }
-    } else {
-        for (auto& d : this->draggables) { d->unlockPosition(); }
+    for (const auto& d : this->draggables) {
+        state == Qt::CheckState::Checked ? d->lockPosition() : d->unlockPosition();
     }
 }

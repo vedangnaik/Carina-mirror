@@ -16,6 +16,7 @@ SensorToDAQLinker::SensorToDAQLinker(std::vector<std::string> sensorIDs, std::ve
                 cmb->addItem(QString::fromStdString(d->deviceID + "-" + std::to_string(i)));
             }
         }
+        cmb->addItem("<unlinked>");
         this->ui->sensorAndDaqFormLayout->addRow(QString::fromStdString(id), cmb);
     }
 
@@ -30,15 +31,20 @@ SensorToDAQLinker::~SensorToDAQLinker() {
 void SensorToDAQLinker::accept() {
     for (int i = 0; i < this->ui->sensorAndDaqFormLayout->rowCount(); i++) {
         std::string sensorID = ((QLabel*)this->ui->sensorAndDaqFormLayout->itemAt(i, QFormLayout::ItemRole::LabelRole)->widget())->text().toStdString();
-
-        QStringList parts = ((QComboBox*)this->ui->sensorAndDaqFormLayout->itemAt(i, QFormLayout::ItemRole::FieldRole)->widget())->currentText().split("-");
-        std::string deviceID = parts.at(0).toStdString();
-        auto adhIt = std::find_if(this->DAQDevices.begin(), this->DAQDevices.end(), [deviceID](const auto& n) {
-            return n->deviceID == deviceID;
-        });
-        unsigned int channel = parts.at(1).toUInt();
-
-        this->sensorToDAQLinks.insert({ sensorID, { *adhIt, channel } });
+        QString choice = ((QComboBox*)this->ui->sensorAndDaqFormLayout->itemAt(i, QFormLayout::ItemRole::FieldRole)->widget())->currentText();
+        if (choice == "<unlinked>") {
+            // Pass, this sensor doesn't have a linkage.
+            continue;
+        } else {
+            QStringList parts = choice.split("-");
+            std::string deviceID = parts.at(0).toStdString();
+            // Find the AbstractDAQ* that this deviceID points to. Guaranteed to not be .end();
+            auto adhIt = std::find_if(this->DAQDevices.begin(), this->DAQDevices.end(), [deviceID](const auto& n) {
+                return n->deviceID == deviceID;
+            });
+            unsigned int channel = parts.at(1).toUInt();
+            this->sensorToDAQLinks.insert({ sensorID, { *adhIt, channel } });
+        }
     }
 
     this->done(QDialog::Accepted);

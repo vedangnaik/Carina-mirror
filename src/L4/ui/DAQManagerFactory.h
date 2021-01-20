@@ -7,6 +7,8 @@
 #include "DAQManager.h"
 #include "SerialPortDAQ.h"
 #include "AiMCCDAQ.h"
+#include "DummyDAQ.h"
+
 #include <tuple>
 #include <QDialog>
 #include <QLabel>

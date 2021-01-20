@@ -7,7 +7,8 @@
 #include <fstream>
 #include <cmath>
 
-class SerialPortDAQ : public AbstractDAQ {
+class SerialPortDAQ : public AbstractDAQ
+{
 public:
     SerialPortDAQ(std::string id, std::string serialportPath, unsigned int numChannels);
     void startAcquisition() override;

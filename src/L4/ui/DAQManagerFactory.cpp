@@ -12,6 +12,16 @@ DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QDialog(parent), ui(new 
 {
     ui->setupUi(this);
 
+    // connect dummy DAQ
+    QComboBox* cmb = new QComboBox(this);
+    cmb->addItems({"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
+    cmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+    int row = this->ui->MCCDAQDevicesLayout->rowCount();
+    this->ui->DummyDAQsLayout->addWidget(new QCheckBox("dummy:0", this), row, 0);
+    this->ui->DummyDAQsLayout->addWidget(new QLabel("Number of channels: ", this), row, 1);
+    this->ui->DummyDAQsLayout->addWidget(cmb, row, 2);
+
 #ifdef ULDAQ_AVAILABLE
     // connect MCCDAQ is available
     for (const auto& t : scanForAiMCCDAQs()) {
@@ -57,6 +67,18 @@ DAQManagerFactory::~DAQManagerFactory() {
 
 void DAQManagerFactory::accept() {
     // Note: QGridLayout row numberings start from 1 for some reason.
+
+    // loop through and create dummy daq here
+    for (int i = 1; i < this->ui->DummyDAQsLayout->rowCount(); i++) {
+        QCheckBox* chb = (QCheckBox*)this->ui->DummyDAQsLayout->itemAtPosition(i, 0)->widget();
+        if (chb->isChecked()) {
+            QComboBox* cmb = (QComboBox*)this->ui->DummyDAQsLayout->itemAtPosition(i, 2)->widget();
+            this->prospectiveDAQDevices.push_back(
+                new DummyDAQ(chb->text().toStdString(), cmb->currentText().toUInt())
+            );
+        }
+    }
+
 #ifdef ULDAQ_AVAILABLE
     // if available, loop through and create MCCDAQ handlers here
     for (int i = 1; i < this->ui->MCCDAQDevicesLayout->rowCount(); i++) {

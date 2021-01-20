@@ -1,6 +1,7 @@
 #include "SerialPortDAQ.h"
 
-SerialPortDAQ::SerialPortDAQ(std::string deviceID, std::string serialportPath, unsigned int numChannels) : AbstractDAQ(deviceID, numChannels), serialportPath{serialportPath} {
+SerialPortDAQ::SerialPortDAQ(std::string deviceID, std::string serialportPath, unsigned int numChannels) : AbstractDAQ(deviceID, numChannels), serialportPath{serialportPath}
+{
     std::ifstream test(serialportPath);
     if (!test.is_open()) {
         LOG(ERROR) << "SerialPortHandler error - device id: " << this->deviceID << ", num channels: " << this->numChannels << ", serial port path: " << this->serialportPath << "; Serial port path could not be opened.";

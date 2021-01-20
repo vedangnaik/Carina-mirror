@@ -1,6 +1,7 @@
 SOURCES += \
     $$PWD/dataacquisition/AiMCCDAQ.cpp \
     $$PWD/dataacquisition/DAQManager.cpp \
+    $$PWD/dataacquisition/DummyDAQ.cpp \
     $$PWD/dataacquisition/SerialPortDAQ.cpp \
     $$PWD/ui/DAQManagerFactory.cpp \
     $$PWD/ui/ErrorUIHandler.cpp \
@@ -13,6 +14,7 @@ HEADERS += \
     $$PWD/dataacquisition/AbstractDAQ.h \
     $$PWD/dataacquisition/AiMCCDAQ.h \
     $$PWD/dataacquisition/DAQManager.h \
+    $$PWD/dataacquisition/DummyDAQ.h \
     $$PWD/dataacquisition/SerialPortDAQ.h \
     $$PWD/ui/DAQManagerFactory.h \
     $$PWD/ui/Draggable.h \
