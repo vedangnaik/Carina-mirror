@@ -33,54 +33,50 @@ GSManager::GSManager() {
 
 void GSManager::openProcessFromFile(string filepath) {
     // Exceptions will be thrown for any errors in the file format.
-    map<const string, Sensor> sensors;
-    map<const string, Actuator> actuators;
-    map<const string, State> states;
     try {
         ProcessFileParser pg(filepath);
-        std::tie(sensors, actuators, states) = pg.parseProcessFile();
+        auto t = pg.parseProcessFile();
+
+        // Array of sensor and actuator IDs for the L2 classes
+        std::vector<string> sensorIds, actuatorIds;
+        for (const auto& p : std::get<0>(t)) { sensorIds.push_back(p.first); }
+        for (const auto& p : std::get<1>(t)) { actuatorIds.push_back(p.first); }
+        // Now initialize the L2 classes with them.
+        this->sm = make_unique<SensorsManager>(std::get<0>(t));
+        this->am = make_unique<ActuatorsManager>(std::get<1>(t));
+        this->stm = make_unique<StatesManager>(std::get<2>(t), *this->sm, *this->am);
+
+        // init L3 classes here
+        this->svg = make_unique<SensorValuesGateway>(*this->sm);
+        this->ac = make_unique<ActuatorsController>(*this->am);
+        this->stc = make_unique<StatesController>(*this->stm);
+        // init L4 and presenters here
+        this->sp = make_unique<SensorsPresenter>();
+        this->ap = make_unique<ActuatorsPresenter>();
+        this->suih = make_unique<StateUIHandler>(this->stateUI, *this->sp, *this->ap, *this->ac, *this->stc);
+        this->sduih = make_unique<SystemDiagramUIHandler>(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIds, actuatorIds);
+        this->stp = make_unique<StatesPresenter>(*this->suih);
+
+        // make the DAQManager here, using the GUI factory.
+        while (this->daqm == nullptr) {
+            LOG(ERROR) << "Please configure your data acqusition methods.";
+            this->daqm = DAQManagerFactory::createDAQManager();
+        }
+        this->daqm->setOutputContract(this->svg.get());
+
+        // attach presenters to managers (kinda ugly, but idk another way to do it)
+        this->sm->setOutputContract(this->sp.get());
+        this->am->setOutputContract(this->ap.get());
+        this->stm->setOutputContract(this->stp.get());
+
+        this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
+        this->GSMainWindowUI.startProcessAction->setEnabled(true);
+
     } catch (ProcessFileParseError& e) {
         LOG(ERROR) << "Process file parse error:" << e.what();
-    }
-
-    // Array of sensor and actuator IDs for the L2 classes
-    std::vector<string> sensorIds, actuatorIds;
-    for (const auto& p : sensors) { sensorIds.push_back(p.first); }
-    for (const auto& p : actuators) { actuatorIds.push_back(p.first); }
-    // Now initialize the L2 classes with them.
-    try {
-        this->sm = make_unique<SensorsManager>(sensors);
-        this->am = make_unique<ActuatorsManager>(actuators);
-        this->stm = make_unique<StatesManager>(states, *this->sm, *this->am);
     } catch (SensorsManagerError& e) {
         LOG(ERROR) << "SensorsManager error: " << e.what();
     }
-
-    // init L3 classes here
-    this->svg = make_unique<SensorValuesGateway>(*this->sm);
-    this->ac = make_unique<ActuatorsController>(*this->am);
-    this->stc = make_unique<StatesController>(*this->stm);
-    // init L4 and presenters here
-    this->sp = make_unique<SensorsPresenter>();
-    this->ap = make_unique<ActuatorsPresenter>();
-    this->suih = make_unique<StateUIHandler>(this->stateUI, *this->sp, *this->ap, *this->ac, *this->stc);
-    this->sduih = make_unique<SystemDiagramUIHandler>(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIds, actuatorIds);
-    this->stp = make_unique<StatesPresenter>(*this->suih);
-
-    // make the DAQManager here, using the GUI factory.
-    while (this->daqm == nullptr) {
-        LOG(ERROR) << "Please configure your data acqusition methods.";
-        this->daqm = DAQManagerFactory::createDAQManager();
-    }
-    this->daqm->setOutputContract(this->svg.get());
-
-    // attach presenters to managers (kinda ugly, but idk another way to do it)
-    this->sm->setOutputContract(this->sp.get());
-    this->am->setOutputContract(this->ap.get());
-    this->stm->setOutputContract(this->stp.get());
-
-    this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
-    this->GSMainWindowUI.startProcessAction->setEnabled(true);
 }
 
 void GSManager::startProcess() {

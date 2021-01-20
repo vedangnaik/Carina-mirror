@@ -1,5 +1,4 @@
-#ifndef STATESMANAGER_H
-#define STATESMANAGER_H
+#pragma once
 
 #include "State.h"
 #include "SensorsManager.h"
@@ -35,5 +34,3 @@ private:
     SMIC& smic;
     AMIC& amic;
 };
-
-#endif // STATESMANAGER_H
