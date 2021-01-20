@@ -25,7 +25,7 @@ private:
 
 class SensorsManager : public SMIC {
 public:
-    SensorsManager(const std::map<std::string, Sensor*> sensors);
+    SensorsManager(std::map<const std::string, Sensor> sensors);
     float getSensorValue(std::string id);
     void setSensorValue(std::string id, float value);
     std::vector<std::string> getSensorIDs();
@@ -33,8 +33,7 @@ public:
         this->smoc = smoc;
     }
 private:
-    const std::map<std::string, Sensor*> sensors;
-    std::vector<std::string> sensorIDs;
+    std::map<const std::string, Sensor> sensors;
     SMOC* smoc;
 };
 

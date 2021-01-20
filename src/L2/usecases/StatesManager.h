@@ -20,8 +20,7 @@ public:
 
 class StatesManager : public StMIC {
 public:
-    StatesManager(std::map<std::string, State*> states, SMIC& smic,
-                  AMIC& amic) : states(states), smic(smic), amic(amic) {};
+    StatesManager(std::map<const std::string, const State> states, SMIC& smic, AMIC& amic);
     void transition(Transition t);
     void setOutputContract(StMOC* stmoc) {
         this->stmoc = stmoc;
@@ -29,9 +28,8 @@ public:
     void startProcess();
     void stopProcess();
 private:
-    const std::map<std::string, State*> states;
-    State* currentState;
-    bool inProgress = false;
+    std::map<const std::string, const State> states;
+    const State* currentState;
 
     StMOC* stmoc;
     SMIC& smic;
