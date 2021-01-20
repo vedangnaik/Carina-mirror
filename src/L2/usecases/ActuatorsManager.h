@@ -5,39 +5,42 @@
 #include <map>
 #include <stdexcept>
 
+using std::map;
+using std::string;
+
 class AMOC {
 public:
-    virtual void notify(const std::string id, const bool status) = 0;
+    virtual void notify(const string id, const bool status) = 0;
     virtual ~AMOC() {};
 };
 
 class AMIC {
 public:
-    virtual bool getActuatorStatus(std::string id) = 0;
-    virtual void actuate(std::string id) = 0;
+    virtual bool getActuatorStatus(string id) = 0;
+    virtual void actuate(string id) = 0;
     virtual ~AMIC() {};
 };
 
 class ActuatorsManager : public AMIC {
 public:
-    ActuatorsManager(std::map<std::string, Actuator*> actuators);
-    bool getActuatorStatus(std::string id);
-    void actuate(std::string id);
+    ActuatorsManager(map<const string, Actuator> actuators);
+    bool getActuatorStatus(string id);
+    void actuate(string id);
     void setOutputContract(AMOC* amoc) {
         this->amoc = amoc;
     }
 private:
-    const std::map<std::string, Actuator*> actuators;
+    map<const string, Actuator> actuators;
     AMOC* amoc = nullptr;
 };
 
 
 class ActuatorsManagerError : public std::runtime_error {
 protected:
-    ActuatorsManagerError(std::string message) : std::runtime_error(message) {}
+    ActuatorsManagerError(string message) : std::runtime_error(message) {}
 };
 
 class NullptrActuatorError : public ActuatorsManagerError {
 public:
-    NullptrActuatorError(const std::string id) : ActuatorsManagerError("Actuator '" + id + "' is nullptr.") {}
+    NullptrActuatorError(const string id) : ActuatorsManagerError("Actuator '" + id + "' is nullptr.") {}
 };

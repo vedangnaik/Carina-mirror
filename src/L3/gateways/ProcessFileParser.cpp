@@ -1,6 +1,6 @@
 #include "ProcessFileParser.h"
 
-ProcessFileParser::ProcessFileParser(const std::string filepath)
+ProcessFileParser::ProcessFileParser(const string filepath)
     : filepath(filepath)
 {
     // TODO: Find some C++14 or lower way to acheive this
@@ -10,7 +10,7 @@ ProcessFileParser::ProcessFileParser(const std::string filepath)
     //    }
 }
 
-std::tuple<std::map<std::string, Sensor>, std::map<std::string, Actuator>, std::map<std::string, State>>
+std::tuple<map<const string, Sensor>, map<const string, Actuator>, map<const string, State>>
 ProcessFileParser::parseProcessFile()
 {
     QFile file(QString::fromStdString(this->filepath));
@@ -22,16 +22,16 @@ ProcessFileParser::parseProcessFile()
     file.close();
 
     QJsonObject jsonObj = QJsonDocument::fromJson(val.toUtf8()).object();
-    std::map<std::string, Sensor> sensors = this->parseSensors(jsonObj["sensors"].toObject());
-    std::map<std::string, Actuator> actuators = this->parseActuators(jsonObj["actuators"].toObject());
-    std::map<std::string, State> states = this->parseStates(jsonObj["states"].toObject(), sensors, actuators);
+    auto sensors = this->parseSensors(jsonObj["sensors"].toObject());
+    auto actuators = this->parseActuators(jsonObj["actuators"].toObject());
+    auto states = this->parseStates(jsonObj["states"].toObject(), sensors, actuators);
     return std::make_tuple(sensors, actuators, states);
 }
 
-std::map<std::string, Sensor>
+map<const string, Sensor>
 ProcessFileParser::parseSensors(const QJsonObject& sensorsObj)
 {
-    std::map<std::string, Sensor> sensors = {};
+    map<const string, Sensor> sensors = {};
     for (QString sensorID: sensorsObj.keys()) {
         if (sensorID == "") {
             throw EmptySensorIDError();
@@ -48,10 +48,10 @@ ProcessFileParser::parseSensors(const QJsonObject& sensorsObj)
     return sensors;
 }
 
-std::map<std::string, Actuator>
+map<const string, Actuator>
 ProcessFileParser::parseActuators(const QJsonObject& actuatorsObj)
 {
-    std::map<std::string, Actuator> actuators;
+    map<const string, Actuator> actuators;
     for (QString actuatorID: actuatorsObj.keys()) {
         if (actuatorID == "") {
             throw EmptyActuatorIDError();
@@ -66,25 +66,27 @@ ProcessFileParser::parseActuators(const QJsonObject& actuatorsObj)
 }
 
 
-std::map<std::string, State> ProcessFileParser::parseStates(const QJsonObject& statesObj, const map<std::string, Sensor>& sensors, const map<std::string, Actuator>& actuators) {
-    std::map<std::string, State> states;
+map<const string, State>
+ProcessFileParser::parseStates(const QJsonObject& statesObj, const map<const string, Sensor>& sensors, const map<const string, Actuator>& actuators)
+{
+    map<const string, State> states;
     for (QString k: statesObj.keys()) {
         QJsonValue v = statesObj[k];
 
-        std::string stateID = k.toStdString();
+        string stateID = k.toStdString();
         if (stateID == "") {
             throw EmptyStateIDError();
         }
 
-        std::string name = v["name"].toString().toStdString();
-        std::string safetyRating = v["safetyRating"].toString().toStdString();
-        std::string description = v["description"].toString().toStdString();
+        string name = v["name"].toString().toStdString();
+        string safetyRating = v["safetyRating"].toString().toStdString();
+        string description = v["description"].toString().toStdString();
 
-        std::vector<std::string> actionsOrder = {};
-        std::map<std::string, std::vector<SensorOption>> sensorOptions = {};
-        std::map<std::string, std::vector<ActuatorOption>> actuatorOptions = {};
+        std::vector<string> actionsOrder = {};
+        map<string, std::vector<SensorOption>> sensorOptions = {};
+        map<string, std::vector<ActuatorOption>> actuatorOptions = {};
         for (QJsonValue action: v["actions"].toArray()) {
-            std::string actionID = action["id"].toString().toStdString();
+            string actionID = action["id"].toString().toStdString();
             if (actionID == "") {
                 throw EmptyActionIDError(stateID);
             }
@@ -107,8 +109,8 @@ std::map<std::string, State> ProcessFileParser::parseStates(const QJsonObject& s
         }
 
         // Parse actions checks.
-        std::map<Transition, std::map<std::string, SensorCheck>> sensorChecks;
-        std::map<Transition, std::map<std::string, ActuatorCheck>> actuatorChecks;
+        map<Transition, map<string, SensorCheck>> sensorChecks;
+        map<Transition, map<string, ActuatorCheck>> actuatorChecks;
         try {
             // proceed checks; even if it's empty, the key still needs to be there.
             sensorChecks.insert({Transition::Proceed, parseSensorChecks(v["checks"]["proceed"], sensors)});
@@ -122,7 +124,7 @@ std::map<std::string, State> ProcessFileParser::parseStates(const QJsonObject& s
             throw InvalidActuatorPositionCheckError(stateID, e.actuatorID);
         }
 
-        std::map<Transition, std::string> transitions = {
+        map<Transition, string> transitions = {
             { Transition::Proceed, v["transitions"]["proceed"].toString().toStdString() },
             { Transition::Abort, v["transitions"]["abort"].toString().toStdString() }
         };
@@ -133,14 +135,16 @@ std::map<std::string, State> ProcessFileParser::parseStates(const QJsonObject& s
     return states;
 }
 
-std::map<std::string, SensorCheck> ProcessFileParser::parseSensorChecks(const QJsonValue& checks, const map<std::string, Sensor>& sensors) {
+map<string, SensorCheck>
+ProcessFileParser::parseSensorChecks(const QJsonValue& checks, const map<const string, Sensor>& sensors)
+{
     if (checks.toObject().isEmpty()) {
         return {};
     }
 
-    std::map<std::string, SensorCheck> sensorChecks;
+    map<string, SensorCheck> sensorChecks;
     for (QString k : checks.toObject().keys()) {
-        std::string sensorID = k.toStdString();
+        string sensorID = k.toStdString();
         if (sensors.find(sensorID) != sensors.end()) {
             QJsonValue range = checks[k];
             if (range.isArray()) {
@@ -159,16 +163,16 @@ std::map<std::string, SensorCheck> ProcessFileParser::parseSensorChecks(const QJ
 }
 
 
-std::map<std::string, ActuatorCheck>
-ProcessFileParser::parseActuatorChecks(const QJsonValue& checks, const map<std::string, Actuator>& actuators)
+map<string, ActuatorCheck>
+ProcessFileParser::parseActuatorChecks(const QJsonValue& checks, const map<const string, Actuator>& actuators)
 {
     if (checks.toObject().isEmpty()) {
         return {};
     }
 
-    std::map<std::string, ActuatorCheck> actuatorChecks;
+    map<string, ActuatorCheck> actuatorChecks;
     for (QString k : checks.toObject().keys()) {
-        std::string actuatorID = k.toStdString();
+        string actuatorID = k.toStdString();
         if (actuators.find(actuatorID) != actuators.end()) {
             QString check = checks[k].toString();
             if (check == "close") {

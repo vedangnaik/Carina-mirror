@@ -23,13 +23,13 @@ using std::string;
 class ProcessFileParser {
 public:
     ProcessFileParser(const string filepath);
-    std::tuple<map<string, Sensor>, map<string, Actuator>, map<string, State>> parseProcessFile();
+    std::tuple<map<const string, Sensor>, map<const string, Actuator>, map<const string, State>> parseProcessFile();
 private:
-    map<string, Sensor> parseSensors(const QJsonObject& sensorsObj);
-    map<string, Actuator> parseActuators(const QJsonObject& actuatorsObj);
-    map<string, State> parseStates(const QJsonObject& statesObj, const map<string, Sensor>& sensors, const map<string, Actuator>& actuators);
-    map<string, ActuatorCheck> parseActuatorChecks(const QJsonValue& checks, const map<string, Actuator>& actuators);
-    map<string, SensorCheck> parseSensorChecks(const QJsonValue& checks, const map<string, Sensor>& sensors);
+    map<const string, Sensor> parseSensors(const QJsonObject& sensorsObj);
+    map<const string, Actuator> parseActuators(const QJsonObject& actuatorsObj);
+    map<const string, State> parseStates(const QJsonObject& statesObj, const map<const std::string, Sensor>& sensors, const map<const std::string, Actuator>& actuators);
+    map<string, ActuatorCheck> parseActuatorChecks(const QJsonValue& checks, const map<const string, Actuator>& actuators);
+    map<string, SensorCheck> parseSensorChecks(const QJsonValue& checks, const map<const string, Sensor>& sensors);
 
     const string filepath;
 };
