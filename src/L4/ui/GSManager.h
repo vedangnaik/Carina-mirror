@@ -1,5 +1,4 @@
-#ifndef GSMAINWINDOWHANDLER_H
-#define GSMAINWINDOWHANDLER_H
+#pragma once
 
 #include <QObject>
 #include <QMainWindow>
@@ -18,7 +17,7 @@
 #include "StatesManager.h"
 // L3
 #include "ActuatorsController.h"
-#include "ProcessGateway.h"
+#include "ProcessFileParser.h"
 #include "SensorValuesGateway.h"
 #include "SensorsPresenter.h"
 #include "ActuatorsPresenter.h"
@@ -34,6 +33,11 @@
 #include "ui_State.h"
 #include "ui_SystemDiagram.h"
 #include "ui_Error.h"
+
+using std::map;
+using std::string;
+using std::make_unique;
+using std::unique_ptr;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -59,20 +63,18 @@ private:
     Ui::SystemDiagram systemDiagramUI;
     Ui::Error errorUI;
     // L2
-    std::unique_ptr<SensorsManager> sm;
-    std::unique_ptr<ActuatorsManager> am;
-    std::unique_ptr<StatesManager> stm;
+    unique_ptr<SensorsManager> sm;
+    unique_ptr<ActuatorsManager> am;
+    unique_ptr<StatesManager> stm;
     // L3
-    std::unique_ptr<SensorValuesGateway> svg;
-    std::unique_ptr<ActuatorsController> ac;
-    std::unique_ptr<StatesController> stc;
-    std::unique_ptr<SensorsPresenter> sp;
-    std::unique_ptr<ActuatorsPresenter> ap;
-    std::unique_ptr<StatesPresenter> stp;
+    unique_ptr<SensorValuesGateway> svg;
+    unique_ptr<ActuatorsController> ac;
+    unique_ptr<StatesController> stc;
+    unique_ptr<SensorsPresenter> sp;
+    unique_ptr<ActuatorsPresenter> ap;
+    unique_ptr<StatesPresenter> stp;
     // L4
-    std::unique_ptr<StateUIHandler> suih;
-    std::unique_ptr<SystemDiagramUIHandler> sduih;
-    std::unique_ptr<DAQManager> daqm;
+    unique_ptr<StateUIHandler> suih;
+    unique_ptr<SystemDiagramUIHandler> sduih;
+    unique_ptr<DAQManager> daqm;
 };
-
-#endif // GSMAINWINDOWHANDLER_H

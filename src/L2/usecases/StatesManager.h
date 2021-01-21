@@ -1,13 +1,15 @@
-#ifndef STATESMANAGER_H
-#define STATESMANAGER_H
+#pragma once
 
 #include "State.h"
 #include "SensorsManager.h"
 #include "ActuatorsManager.h"
 
+using std::string;
+using std::map;
+
 class StMOC {
 public:
-    virtual void displayStatesSummary(const std::vector<std::string> processSummary) = 0;
+    virtual void displayStatesSummary(const std::vector<string> processSummary) = 0;
     virtual void displayState(const State& s) = 0;
     virtual ~StMOC() {};
 };
@@ -20,8 +22,7 @@ public:
 
 class StatesManager : public StMIC {
 public:
-    StatesManager(std::map<std::string, State*> states, SMIC& smic,
-                  AMIC& amic) : states(states), smic(smic), amic(amic) {};
+    StatesManager(map<const string, const State> states, SMIC& smic, AMIC& amic);
     void transition(Transition t);
     void setOutputContract(StMOC* stmoc) {
         this->stmoc = stmoc;
@@ -29,13 +30,10 @@ public:
     void startProcess();
     void stopProcess();
 private:
-    const std::map<std::string, State*> states;
-    State* currentState;
-    bool inProgress = false;
+    map<const string, const State> states;
+    const State* currentState;
 
     StMOC* stmoc;
     SMIC& smic;
     AMIC& amic;
 };
-
-#endif // STATESMANAGER_H

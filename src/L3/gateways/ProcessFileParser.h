@@ -14,27 +14,24 @@
 #include <QFileDialog>
 #include <stdexcept>
 #include <filesystem>
+#include <tuple>
+
+using std::map;
+using std::string;
 
 
-
-struct ProcessData {
-    std::map<std::string, Sensor*> sensors;
-    std::map<std::string, Actuator*> actuators;
-    std::map<std::string, State*> states;
-};
-
-class ProcessGateway {
+class ProcessFileParser {
 public:
-    ProcessGateway(const std::string filepath);
-    struct ProcessData parseProcessFile();
+    ProcessFileParser(const string filepath);
+    std::tuple<const map<const string, Sensor>, const map<const string, Actuator>, const map<const string, const State>> parseProcessFile();
 private:
-    std::map<std::string, Sensor*> parseSensors(QJsonObject sensorsObj);
-    std::map<std::string, Actuator*> parseActuators(QJsonObject actuatorsObj);
-    std::map<std::string, State*> parseStates(QJsonObject statesObj, std::map<std::string, Sensor*> sensors, std::map<std::string, Actuator*> actuators);
-    std::map<std::string, ActuatorCheck> parseActuatorChecks(QJsonValue checks, std::map<std::string, Actuator*> actuators);
-    std::map<std::string, SensorCheck> parseSensorChecks(QJsonValue checks, std::map<std::string, Sensor*> sensors);
+    const map<const string, Sensor> parseSensors(const QJsonObject& sensorsObj);
+    const map<const string, Actuator> parseActuators(const QJsonObject& actuatorsObj);
+    const map<const string, const State> parseStates(const QJsonObject& statesObj, const map<const std::string, Sensor>& sensors, const map<const std::string, Actuator>& actuators);
+    map<string, ActuatorCheck> parseActuatorChecks(const QJsonValue& checks, const map<const string, Actuator>& actuators);
+    map<string, SensorCheck> parseSensorChecks(const QJsonValue& checks, const map<const string, Sensor>& sensors);
 
-    const std::string filepath;
+    const string filepath;
 };
 
 
@@ -47,55 +44,55 @@ private:
 // Subclass a new exception from it if a new bug/error needs to be handled.
 class ProcessFileParseError : public std::runtime_error {
 protected:
-    ProcessFileParseError(std::string message) : std::runtime_error(message) {}
+    ProcessFileParseError(string message) : std::runtime_error(message) {}
 };
 
 // These exceptions handle file-related problems.
 class FileOpenError : public ProcessFileParseError {
 public:
-    FileOpenError(const std::string fileName) :
+    FileOpenError(const string fileName) :
         ProcessFileParseError("The process file '" + fileName + "' could not be opened.") {}
 };
 class InvalidFileTypeError : public ProcessFileParseError {
 public:
-    InvalidFileTypeError(const std::string fileName) :
+    InvalidFileTypeError(const string fileName) :
         ProcessFileParseError("The process file '" + fileName + "' must be of type JSON.") {}
 };
 
 // Actions whose IDs are not recognized need their state ID to be printed as well.
 class InvalidActionIDError : public ProcessFileParseError {
 public:
-    InvalidActionIDError(std::string stateID, std::string actionID) :
+    InvalidActionIDError(string stateID, string actionID) :
         ProcessFileParseError("State '" + stateID + "': '" + actionID + "' is neither an actuator nor a sensor.") {}
 };
 // Empty actions inside states need the state ID to be printed as well.
 class EmptyActionIDError: public ProcessFileParseError {
 public:
-    EmptyActionIDError(std::string stateID) :
+    EmptyActionIDError(string stateID) :
         ProcessFileParseError("State '" + stateID + "': actions must have non-empty IDs.") {}
 };
 
 // These two classes work together to display an invalid range check
 class InvalidSensorRangeCheck : public std::exception {
 public:
-    InvalidSensorRangeCheck(std::string sensorID) : sensorID(sensorID) {}
-    const std::string sensorID;
+    InvalidSensorRangeCheck(string sensorID) : sensorID(sensorID) {}
+    const string sensorID;
 };
 class InvalidSensorRangeCheckError : public ProcessFileParseError {
 public:
-    InvalidSensorRangeCheckError(std::string stateID, std::string sensorID) :
+    InvalidSensorRangeCheckError(string stateID, string sensorID) :
         ProcessFileParseError("State '" + stateID + "': '" + sensorID + "' range check must be of form [a, b].") {}
 };
 
 // Same for invalid actuator position check
 class InvalidActuatorPositionCheck : public std::exception {
 public:
-    InvalidActuatorPositionCheck(std::string actuatorID) : actuatorID(actuatorID) {}
-    const std::string actuatorID;
+    InvalidActuatorPositionCheck(string actuatorID) : actuatorID(actuatorID) {}
+    const string actuatorID;
 };
 class InvalidActuatorPositionCheckError : public ProcessFileParseError {
 public:
-    InvalidActuatorPositionCheckError(std::string stateID, std::string actuatorID) :
+    InvalidActuatorPositionCheckError(string stateID, string actuatorID) :
         ProcessFileParseError("State '" + stateID + "': '" + actuatorID + "' position check must be either 'open' or 'close'.") {}
 };
 
@@ -103,7 +100,7 @@ public:
 // It ideally will never need to be subclassed beyond these three.
 class EmptyIDError : public ProcessFileParseError {
 protected:
-    EmptyIDError(const std::string object) :
+    EmptyIDError(const string object) :
         ProcessFileParseError(object + " IDs must be non-empty.") {}
 };
 class EmptySensorIDError : public EmptyIDError {

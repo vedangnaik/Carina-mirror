@@ -1,16 +1,14 @@
 #include "ActuatorsManager.h"
 
-ActuatorsManager::ActuatorsManager(std::map<std::string, Actuator*> actuators) : actuators(actuators) {
-    for (const auto& [id, actuator] : this->actuators) {
-        if (actuator == nullptr) {
-            throw NullptrActuatorError(id);
-        }
-    }
-}
+ActuatorsManager::ActuatorsManager(map<const string, Actuator> actuators)
+    : actuators{std::move(actuators)}
+{}
 
-bool ActuatorsManager::getActuatorStatus(std::string id) {
+bool
+ActuatorsManager::getActuatorStatus(string id)
+{
     try {
-        return this->actuators.at(id)->status;
+        return this->actuators.at(id).status;
     } catch (std::out_of_range& e) {
         // Precondition violation, it's over.
         LOG(FATAL) << "ActuatorsManager::getActuatorStatus(" << id << "): ID not found. Exception: " << e.what();
@@ -18,23 +16,22 @@ bool ActuatorsManager::getActuatorStatus(std::string id) {
     }
 }
 
-void ActuatorsManager::actuate(std::string id) {
-    Actuator* a;
-
+void
+ActuatorsManager::actuate(string id)
+{
     // Make sure this actuator is present.
     try {
-        a  = this->actuators.at(id);
-        a->status = !a->status;
+        bool currentState = this->actuators.at(id).status;
+        this->actuators.at(id).status = !currentState;
+        // Make sure that this display output is not null.
+        if (this->amoc == nullptr) {
+            LOG(ERROR) << "ActuatorsManager::actuate(" << id << "): this->amoc is nullptr, not displaying actuator state.";
+        } else {
+            this->amoc->notify(id, this->actuators.at(id).status);
+        }
     } catch (std::out_of_range& e) {
         // Precondition violation, it's over.
         LOG(FATAL) << "ActuatorsManager::getActuatorStatus(" << id << "): ID not found. Exception: " << e.what();
         std::terminate();
-    }
-
-    // Make sure that this display output is not null.
-    if (this->amoc == nullptr) {
-        LOG(ERROR) << "ActuatorsManager::actuate(" << id << "): this->amoc* is nullptr, not displaying actuator state.";
-    } else {
-        this->amoc->notify(id, a->status);
     }
 }

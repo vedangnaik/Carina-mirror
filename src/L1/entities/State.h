@@ -1,5 +1,4 @@
-#ifndef STATE_H
-#define STATE_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -34,19 +33,8 @@ public:
         actuatorOptions(actuatorOptions),
         sensorChecks(sensorChecks),
         actuatorChecks(actuatorChecks),
-        transitions(transitions) {};
-
-    std::map<Transition, std::map<std::string, SensorCheck>> getSensorChecks() {
-        return this->sensorChecks;
-    }
-
-    std::map<Transition, std::map<std::string, ActuatorCheck>> getActuatorChecks() {
-        return this->actuatorChecks;
-    }
-
-    std::map<Transition, std::string> getTransitions() {
-        return this->transitions;
-    }
+        transitions(transitions)
+    {};
 
     const std::string id;
     const std::string name;
@@ -61,5 +49,3 @@ public:
 
     const std::map<Transition, std::string> transitions;
 };
-
-#endif // STATE_H
