@@ -6,7 +6,7 @@
 
 class ActuatorsManagerTest : public ::testing::Test {
 protected:
-    std::map<std::string, Actuator*> testActuators;
+    std::vector<std::string> testActuatorIDs = {"act1", "act2", "act3"};
     ActuatorsManager am = ActuatorsManager({
        {"act1", Actuator("act1", "act1name")},
        {"act2", Actuator("act2", "act2name")},
@@ -16,10 +16,10 @@ protected:
 
 // Assuming correct initialization, that members, etc. are in the right state.
 TEST_F(ActuatorsManagerTest, BasicProperties) {
-    for (const auto& p : this->testActuators) {
+    for (const auto& id : this->testActuatorIDs) {
         // Do nothing here: if it crashes, it "failed" the test :D
-        this->am.getActuatorStatus(p.first);
-        this->am.actuate(p.first);
+        this->am.getActuatorStatus(id);
+        this->am.actuate(id);
     }
 }
 

@@ -8,6 +8,7 @@
 #include "SerialPortDAQ.h"
 #include "AiMCCDAQ.h"
 #include "DummyDAQ.h"
+#include "ui_DAQManagerFactory.h"
 
 #include <tuple>
 #include <QDialog>
@@ -15,7 +16,7 @@
 #include <QDir>
 #include <QComboBox>
 #include <QCheckBox>
-#include "ui_DAQManagerFactory.h"
+#include <unistd.h>
 
 namespace Ui {
     class DAQManagerFactory;
