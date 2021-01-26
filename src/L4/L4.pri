@@ -1,4 +1,5 @@
 SOURCES += \
+    $$PWD/dataacquisition/AD799xDAQ.cpp \
     $$PWD/dataacquisition/AiMCCDAQ.cpp \
     $$PWD/dataacquisition/DAQManager.cpp \
     $$PWD/dataacquisition/DummyDAQ.cpp \
@@ -11,6 +12,7 @@ SOURCES += \
     $$PWD/ui/SystemDiagramUIHandler.cpp
 
 HEADERS += \
+    $$PWD/dataacquisition/AD799xDAQ.h \
     $$PWD/dataacquisition/AbstractDAQ.h \
     $$PWD/dataacquisition/AiMCCDAQ.h \
     $$PWD/dataacquisition/DAQManager.h \
