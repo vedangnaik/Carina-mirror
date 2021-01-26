@@ -6,6 +6,9 @@
 std::vector<std::tuple<DaqDeviceHandle, bool, unsigned int, Range>> scanForAiMCCDAQs();
 #endif
 std::vector<std::tuple<std::string, std::string>> scanForOpenSerialPorts();
+#ifndef WIRINGPI_AVAILABLE
+std::vector<char> scanForI2CDevices();
+#endif
 
 
 DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QDialog(parent), ui(new Ui::DAQManagerFactory)
@@ -55,6 +58,9 @@ DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QDialog(parent), ui(new 
         this->ui->SerialportDevicesLayout->addWidget(new QLabel("\tNumber of 'channels': ", this), row, 3);
         this->ui->SerialportDevicesLayout->addWidget(cmb, row, 4);
     }
+
+    // connect any AD799x devices via I2C
+    // TODO: Add UI and connect it here.
 
     // connect dialog button
     connect(this->ui->configureButton, &QPushButton::clicked, this, &DAQManagerFactory::accept);
@@ -184,3 +190,17 @@ std::vector<std::tuple<std::string, std::string>> scanForOpenSerialPorts()
     }
     return ports;
 }
+
+#ifdef WIRINGPI_AVAILABLE
+std::vector<char> scanForI2CDevices() {
+    std::vector<char> availableDevices{};
+    for(unsigned char i = 0; i < 128; i++) {
+        int fd = wiringPiI2CSetup(i);
+        if (fd != -1) {
+            availableDevices.push_back(fd);
+            close(fd);
+        }
+    }
+    return availableDevices;
+}
+#endif

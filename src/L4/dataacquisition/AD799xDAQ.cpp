@@ -1,4 +1,4 @@
-//#ifdef WIRINGPI_AVAILABLE
+#ifdef WIRINGPI_AVAILABLE
 
 #include "AD799xDAQ.h"
 
@@ -26,4 +26,4 @@ AD799xDAQ::getLatestData()
     return {};
 }
 
-//#endif
+#endif

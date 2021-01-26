@@ -1,8 +1,8 @@
-//#ifdef WIRINGPI_AVAILABLE
+#ifdef WIRINGPI_AVAILABLE
 
 #pragma once
 
-//#include <wiringPiI2C.h>
+#include <wiringPiI2C.h>
 #include "AbstractDAQ.h"
 
 class AD799xDAQ : public AbstractDAQ
@@ -16,4 +16,4 @@ private:
     const char I2CAddress;
 };
 
-//#endif
+#endif
