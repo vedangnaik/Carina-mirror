@@ -1,7 +1,9 @@
 #include "SensorToDAQLinker.h"
 #include "ui_SensorToDAQLinker.h"
 
-SensorToDAQLinker::SensorToDAQLinker(std::vector<std::string> sensorIDs, std::vector<AbstractDAQ*> DAQDevices, QWidget *parent) : QDialog(parent), ui(new Ui::SensorToDAQLinker), DAQDevices{DAQDevices} {
+SensorToDAQLinker::SensorToDAQLinker(std::vector<std::string> sensorIDs, std::vector<AbstractDAQ*> DAQDevices, QWidget *parent)
+    : QDialog(parent), ui(new Ui::SensorToDAQLinker), DAQDevices{DAQDevices}
+{
     ui->setupUi(this);
 
     std::map<std::string, AbstractDAQ*> DAQDeviceIDs;
@@ -28,7 +30,8 @@ SensorToDAQLinker::~SensorToDAQLinker() {
     delete ui;
 }
 
-void SensorToDAQLinker::accept() {
+void
+SensorToDAQLinker::accept() {
     for (int i = 0; i < this->ui->sensorAndDaqFormLayout->rowCount(); i++) {
         std::string sensorID = ((QLabel*)this->ui->sensorAndDaqFormLayout->itemAt(i, QFormLayout::ItemRole::LabelRole)->widget())->text().toStdString();
         QString choice = ((QComboBox*)this->ui->sensorAndDaqFormLayout->itemAt(i, QFormLayout::ItemRole::FieldRole)->widget())->currentText();
@@ -51,7 +54,7 @@ void SensorToDAQLinker::accept() {
 }
 
 std::map<std::string, std::pair<AbstractDAQ*, unsigned int>>
-    SensorToDAQLinker::getSensorToDAQLinks(std::vector<std::string> sensorIDs, std::vector<AbstractDAQ*> DAQDevices)
+SensorToDAQLinker::getSensorToDAQLinks(std::vector<std::string> sensorIDs, std::vector<AbstractDAQ*> DAQDevices)
 {
     SensorToDAQLinker* stdl = new SensorToDAQLinker(sensorIDs, DAQDevices);
     if (stdl->exec() == QDialog::Accepted) {

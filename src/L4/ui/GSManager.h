@@ -5,7 +5,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFileDialog>
-#include <QtUiTools>
 #include <QHBoxLayout>
 #include <iostream>
 // dependencies
@@ -23,6 +22,7 @@
 #include "ActuatorsPresenter.h"
 #include "StatesPresenter.h"
 // L4
+#include "DAQManagerWizard/DAQManagerWizard.h"
 #include "DAQManagerFactory.h"
 #include "DAQManager.h"
 #include "StateUIHandler.h"

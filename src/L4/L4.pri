@@ -5,6 +5,7 @@ SOURCES += \
     $$PWD/dataacquisition/DummyDAQ.cpp \
     $$PWD/dataacquisition/SerialPortDAQ.cpp \
     $$PWD/ui/DAQManagerFactory.cpp \
+    $$PWD/ui/DAQManagerWizard/DAQManagerWizard.cpp \
     $$PWD/ui/ErrorUIHandler.cpp \
     $$PWD/ui/GSManager.cpp \
     $$PWD/ui/SensorToDAQLinker.cpp \
@@ -19,6 +20,7 @@ HEADERS += \
     $$PWD/dataacquisition/DummyDAQ.h \
     $$PWD/dataacquisition/SerialPortDAQ.h \
     $$PWD/ui/DAQManagerFactory.h \
+    $$PWD/ui/DAQManagerWizard/DAQManagerWizard.h \
     $$PWD/ui/Draggable.h \
     $$PWD/ui/ErrorUIHandler.h \
     $$PWD/ui/GSManager.h \
@@ -41,7 +43,7 @@ FORMS += \
     $$PWD/ui/SystemDiagram.ui
 
 # Runtime loading of .ui files required the uitools module.
-QT += uitools
+#QT += uitools
 
 # Defines the variable which includes uldaq.h and the associated code for reading real DAQs.
 # Turn it on if you want to test real DAQs; it's off by default since uldaq.h is not included

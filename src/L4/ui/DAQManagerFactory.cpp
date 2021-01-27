@@ -11,7 +11,8 @@ std::vector<char> scanForI2CDevices();
 #endif
 
 
-DAQManagerFactory::DAQManagerFactory(QWidget *parent) : QDialog(parent), ui(new Ui::DAQManagerFactory)
+DAQManagerFactory::DAQManagerFactory(QWidget *parent)
+    : QDialog(parent), ui(new Ui::DAQManagerFactory)
 {
     ui->setupUi(this);
 
