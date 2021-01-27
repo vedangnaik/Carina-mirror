@@ -1,5 +1,6 @@
 SOURCES += \
     $$PWD/dataacquisition/AD799xDAQ.cpp \
+    $$PWD/dataacquisition/AbstractDAQ.cpp \
     $$PWD/dataacquisition/AiMCCDAQ.cpp \
     $$PWD/dataacquisition/DAQManager.cpp \
     $$PWD/dataacquisition/DummyDAQ.cpp \
