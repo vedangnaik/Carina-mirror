@@ -27,9 +27,7 @@ GSManager::GSManager() {
     });
 
     connect(this->GSMainWindowUI.actionConfigure_DAQ_Devices, &QAction::triggered, this, [=]() {
-//        this->daqm = DAQManagerFactory::createDAQManager();
-        DAQManagerWizard dmw;
-        dmw.exec();
+        this->dmw->exec();
     });
 }
 
@@ -40,9 +38,9 @@ void GSManager::openProcessFromFile(string filepath) {
         auto t = pg.parseProcessFile();
 
         // Array of sensor and actuator IDs for the L2 classes
-        std::vector<string> sensorIds, actuatorIds;
-        for (const auto& p : std::get<0>(t)) { sensorIds.push_back(p.first); }
-        for (const auto& p : std::get<1>(t)) { actuatorIds.push_back(p.first); }
+        std::vector<string> sensorIDs, actuatorIDs;
+        for (const auto& p : std::get<0>(t)) { sensorIDs.push_back(p.first); }
+        for (const auto& p : std::get<1>(t)) { actuatorIDs.push_back(p.first); }
         // Now initialize the L2 classes with them.
         this->sm = make_unique<SensorsManager>(std::get<0>(t));
         this->am = make_unique<ActuatorsManager>(std::get<1>(t));
@@ -56,15 +54,11 @@ void GSManager::openProcessFromFile(string filepath) {
         this->sp = make_unique<SensorsPresenter>();
         this->ap = make_unique<ActuatorsPresenter>();
         this->suih = make_unique<StateUIHandler>(this->stateUI, *this->sp, *this->ap, *this->ac, *this->stc);
-        this->sduih = make_unique<SystemDiagramUIHandler>(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIds, actuatorIds);
+        this->sduih = make_unique<SystemDiagramUIHandler>(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIDs, actuatorIDs);
         this->stp = make_unique<StatesPresenter>(*this->suih);
-
-        // make the DAQManager here, using the GUI factory.
-        while (this->daqm == nullptr) {
-            LOG(ERROR) << "Please configure your data acqusition methods.";
-            this->daqm = DAQManagerFactory::createDAQManager();
-        }
-        this->daqm->setOutputContract(this->svg.get());
+        // make the DAQ manager configuration/creation wizard here
+        this->dmw = make_unique<DAQManagerWizard>(sensorIDs);
+        this->GSMainWindowUI.actionConfigure_DAQ_Devices->setEnabled(true);
 
         // attach presenters to managers (kinda ugly, but idk another way to do it)
         this->sm->setOutputContract(this->sp.get());
@@ -82,6 +76,7 @@ void GSManager::openProcessFromFile(string filepath) {
 }
 
 void GSManager::startProcess() {
+    // TODO: Add the wizard invocation here
     this->stm->startProcess();
     this->daqm->startAcquisition();
 

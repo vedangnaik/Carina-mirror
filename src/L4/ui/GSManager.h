@@ -77,4 +77,5 @@ private:
     unique_ptr<StateUIHandler> suih;
     unique_ptr<SystemDiagramUIHandler> sduih;
     unique_ptr<DAQManager> daqm;
+    unique_ptr<DAQManagerWizard> dmw;
 };

@@ -1,10 +1,11 @@
 #include "DAQManagerWizard.h"
 
-DAQManagerWizard::DAQManagerWizard(QWidget* parent)
+DAQManagerWizard::DAQManagerWizard(std::vector<std::string> sensorIDs, QWidget* parent)
     : QWizard(parent)
 {
     this->addPage(new DAQScanPage());
     this->addPage(new DAQCalibrationPage());
+    this->addPage(new DAQLinkingPage(sensorIDs));
 }
 
 void
