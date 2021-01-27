@@ -16,7 +16,7 @@
  */
 class AiMCCDAQ : public AbstractDAQ {
 public:
-    AiMCCDAQ(std::string id, DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange);
+    AiMCCDAQ(const std::string deviceID, const unsigned int numChannels, const std::pair<std::vector<double>, std::vector<double>> calibrationPoints, DaqDeviceHandle handle, Range voltageRange);
     ~AiMCCDAQ();
     void startAcquisition() override;
     std::vector<double> getLatestData() override;

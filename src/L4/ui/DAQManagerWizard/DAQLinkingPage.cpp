@@ -33,3 +33,9 @@ DAQLinkingPage::initializePage()
     this->setLayout(new QVBoxLayout());
     this->layout()->addWidget(page);
 }
+
+void
+DAQLinkingPage::cleanupPage()
+{
+    uihelpers::clearLayout(this->layout());
+}

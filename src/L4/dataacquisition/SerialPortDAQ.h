@@ -10,7 +10,7 @@
 class SerialPortDAQ : public AbstractDAQ
 {
 public:
-    SerialPortDAQ(std::string id, std::string serialportPath, unsigned int numChannels);
+    SerialPortDAQ(const std::string deviceID, const unsigned int numChannels, const std::pair<std::vector<double>, std::vector<double>> calibrationPoints);
     void startAcquisition() override;
     std::vector<double> getLatestData() override;
     void stopAcquisition() override;

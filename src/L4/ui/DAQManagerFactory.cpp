@@ -80,9 +80,9 @@ void DAQManagerFactory::accept() {
         QCheckBox* chb = (QCheckBox*)this->ui->DummyDAQsLayout->itemAtPosition(i, 0)->widget();
         if (chb->isChecked()) {
             QComboBox* cmb = (QComboBox*)this->ui->DummyDAQsLayout->itemAtPosition(i, 2)->widget();
-            this->prospectiveDAQDevices.push_back(
-                new DummyDAQ(chb->text().toStdString(), cmb->currentText().toUInt())
-            );
+//            this->prospectiveDAQDevices.push_back(
+//                new DummyDAQ(chb->text().toStdString(), cmb->currentText().toUInt())
+//            );
         }
     }
 
@@ -94,9 +94,9 @@ void DAQManagerFactory::accept() {
             QLabel* h = (QLabel*)this->ui->MCCDAQDevicesLayout->itemAtPosition(i, 3)->widget();
             QLabel* nc = (QLabel*)this->ui->MCCDAQDevicesLayout->itemAtPosition(i, 5)->widget();
             QLabel* vr = (QLabel*)this->ui->MCCDAQDevicesLayout->itemAtPosition(i, 7)->widget();
-            this->prospectiveDAQDevices.push_back(
-                new AiMCCDAQ(chb->text().toStdString(), h->text().toLongLong(), nc->text().toUInt(), (Range)vr->text().toLongLong())
-            );
+//            this->prospectiveDAQDevices.push_back(
+//                new AiMCCDAQ(chb->text().toStdString(), h->text().toLongLong(), nc->text().toUInt(), (Range)vr->text().toLongLong())
+//            );
         }
     }
 #endif
@@ -106,9 +106,9 @@ void DAQManagerFactory::accept() {
         if (chb->isChecked()) {
             QLabel* path = (QLabel*)this->ui->SerialportDevicesLayout->itemAtPosition(i, 2)->widget();
             QComboBox* cmb = (QComboBox*)this->ui->SerialportDevicesLayout->itemAtPosition(i, 4)->widget();
-            this->prospectiveDAQDevices.push_back(
-                new SerialPortDAQ(chb->text().toStdString(), path->text().toStdString(), cmb->currentText().toUInt())
-            );
+//            this->prospectiveDAQDevices.push_back(
+//                new SerialPortDAQ(chb->text().toStdString(), path->text().toStdString(), cmb->currentText().toUInt())
+//            );
         }
     }
     this->done(QDialog::Accepted);

@@ -1,6 +1,7 @@
 #include "SerialPortDAQ.h"
 
-SerialPortDAQ::SerialPortDAQ(std::string deviceID, std::string serialportPath, unsigned int numChannels) : AbstractDAQ(deviceID, numChannels), serialportPath{serialportPath}
+SerialPortDAQ::SerialPortDAQ(const std::string deviceID, const unsigned int numChannels, const std::pair<std::vector<double>, std::vector<double>> calibrationPoints)
+    : AbstractDAQ(deviceID, numChannels, calibrationPoints), serialportPath{serialportPath}
 {
     std::ifstream test(serialportPath);
     if (!test.is_open()) {

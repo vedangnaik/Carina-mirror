@@ -42,3 +42,9 @@ DAQCalibrationPage::initializePage()
     this->setLayout(new QVBoxLayout());
     this->layout()->addWidget(sa);
 }
+
+void
+DAQCalibrationPage::cleanupPage()
+{
+    uihelpers::clearLayout(this->layout());
+}

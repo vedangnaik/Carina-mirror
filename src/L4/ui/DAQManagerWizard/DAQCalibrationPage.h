@@ -6,6 +6,7 @@
 #include <QLineEdit>
 #include <QValidator>
 #include "DAQManagerWizard.h"
+#include "UIHelpers.h"
 
 class DAQCalibrationPage : public QWizardPage
 {
@@ -13,5 +14,6 @@ class DAQCalibrationPage : public QWizardPage
 public:
     DAQCalibrationPage(QWidget *parent = nullptr);
     void initializePage() override;
+    void cleanupPage() override;
 };
 
