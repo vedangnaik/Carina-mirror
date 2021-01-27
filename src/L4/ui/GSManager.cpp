@@ -27,7 +27,7 @@ GSManager::GSManager() {
     });
 
     connect(this->GSMainWindowUI.actionConfigure_DAQ_Devices, &QAction::triggered, this, [=]() {
-        this->dmw->exec();
+        this->dmw->open();
     });
 }
 
