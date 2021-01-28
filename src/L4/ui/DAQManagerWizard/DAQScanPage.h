@@ -4,7 +4,7 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include "DAQManagerWizard.h"
-#include "ui_DAQManagerFactory.h"
+#include "ui_DAQScanPage.h"
 
 class DAQScanPage : public QWizardPage
 {

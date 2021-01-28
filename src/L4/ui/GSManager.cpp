@@ -78,11 +78,11 @@ void GSManager::openProcessFromFile(string filepath) {
 
 void GSManager::startProcess() {
     // TODO: Add the wizard invocation here
-    this->stm->startProcess();
     if (this->daqm == nullptr) {
         LOG(FATAL) << "null";
     }
     this->daqm->startAcquisition();
+    this->stm->startProcess();
 
     this->GSMainWindowUI.startProcessAction->setEnabled(false);
     this->GSMainWindowUI.closeProcessAction->setEnabled(true);
