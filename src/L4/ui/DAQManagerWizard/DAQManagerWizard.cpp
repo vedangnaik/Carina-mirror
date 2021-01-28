@@ -55,3 +55,16 @@ DAQManagerWizard::reject()
 {
     QDialog::done(QDialog::Rejected);
 }
+
+std::unique_ptr<DAQManager>
+DAQManagerWizard::setupDAQManager(std::vector<std::string> sensorIDs, SVGIC& svgic)
+{
+    std::unique_ptr<DAQManager> daqm;
+    DAQManagerWizard dmw(sensorIDs, svgic);
+    if (dmw.exec() == QDialog::Accepted) {
+        daqm = std::move(dmw.daqm);
+        return daqm;
+    } else {
+        return nullptr;
+    }
+}

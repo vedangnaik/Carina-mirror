@@ -14,13 +14,11 @@ class DAQManagerWizard : public QWizard
     Q_OBJECT
 public:
     DAQManagerWizard(std::vector<std::string> sensorIDs, SVGIC& svgic, QWidget* parent = nullptr);
+    static std::unique_ptr<DAQManager> setupDAQManager(std::vector<std::string> sensorIDs, SVGIC& svgic);
+    std::unique_ptr<DAQManager> daqm;
+    std::map<std::string, bool> abstractDAQData;
+private:
     void accept() override;
     void reject() override;
-    std::map<std::string, bool> abstractDAQData;
-    std::unique_ptr<DAQManager> daqm;
     SVGIC& svgic;
 };
-
-
-
-

@@ -18,7 +18,7 @@ DAQLinkingPage::initializePage()
     QStringList options;
     for (const auto& p : dmw->abstractDAQData) {
         if (!p.second) continue;
-        for (int i = 0; i < this->field(QString::fromStdString(p.first + "|numChannels")).toInt(); i++) {
+        for (int i = 0; i <= this->field(QString::fromStdString(p.first + "|numChannels")).toInt(); i++) {
             options.push_back(QString::fromStdString(p.first + "-" + std::to_string(i)));
         }
     }
@@ -47,4 +47,5 @@ void
 DAQLinkingPage::cleanupPage()
 {
     uihelpers::clearLayout(this->layout());
+    delete this->layout();
 }

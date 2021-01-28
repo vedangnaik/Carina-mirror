@@ -56,4 +56,5 @@ void
 DAQCalibrationPage::cleanupPage()
 {
     uihelpers::clearLayout(this->layout());
+    delete this->layout();
 }
