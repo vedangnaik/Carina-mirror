@@ -5,6 +5,8 @@
 #include "DAQScanPage.h"
 #include "DAQCalibrationPage.h"
 #include "DAQLinkingPage.h"
+#include "AbstractDAQ.h"
+#include "DummyDAQ.h"
 
 class DAQManagerWizard : public QWizard
 {

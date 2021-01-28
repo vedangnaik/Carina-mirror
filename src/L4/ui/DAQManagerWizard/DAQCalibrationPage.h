@@ -15,5 +15,6 @@ public:
     DAQCalibrationPage(QWidget *parent = nullptr);
     void initializePage() override;
     void cleanupPage() override;
+    std::map<std::string, std::pair<std::vector<double>, std::vector<double>>> calibrationPoints;
 };
 

@@ -19,6 +19,8 @@ DAQCalibrationPage::initializePage()
         QGridLayout* gl = new QGridLayout();
         gb->setLayout(gl);
 
+        this->calibrationPoints.insert({ p.first, std::make_pair(std::vector<double>(5, 1), std::vector<double>(5, 1)) });
+
         auto v = new QDoubleValidator(this);
         gl->addWidget(new QLabel("Raw Voltage", this), 0, 0);
         gl->addWidget(new QLabel("Calibrated Value", this), 0, 1);
@@ -29,6 +31,13 @@ DAQCalibrationPage::initializePage()
             calibratedValue->setValidator(v);
             gl->addWidget(rawVoltage, i, 0);
             gl->addWidget(calibratedValue, i, 1);
+
+            connect(rawVoltage, &QLineEdit::textEdited, this, [=](const QString& text) {
+                this->calibrationPoints.at(p.first).first.at(i) = text.toDouble();
+            });
+            connect(calibratedValue, &QLineEdit::textEdited, this, [=](const QString& text) {
+                this->calibrationPoints.at(p.first).second.at(i) = text.toDouble();
+            });
         }
 
         page->layout()->addWidget(gb);

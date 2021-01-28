@@ -1,8 +1,12 @@
 #include "DAQLinkingPage.h"
 
 DAQLinkingPage::DAQLinkingPage(std::vector<std::string> sensorIDs, QWidget *parent) :
-    QWizardPage(parent), sensorIDs{sensorIDs}
-{}
+    QWizardPage(parent)
+{
+    for (const auto& id : sensorIDs) {
+        this->sensorLinks.insert({ id, {} });
+    }
+}
 
 void
 DAQLinkingPage::initializePage()
@@ -20,13 +24,18 @@ DAQLinkingPage::initializePage()
     }
     options.push_back("<unlinked>");
 
-    gl->addWidget(new QLabel("Sensor ID", this), 0, 0);
-    gl->addWidget(new QLabel("DAQ Channel", this), 0, 1);
-    for (unsigned char i = 0; i < this->sensorIDs.size(); i++) {
+    int row = 0;
+    gl->addWidget(new QLabel("Sensor ID", this), row, 0);
+    gl->addWidget(new QLabel("DAQ Channel", this), row++, 1);
+    for (const auto& p : this->sensorLinks) {
         QComboBox* cmb = new QComboBox(this);
+        connect(cmb, &QComboBox::currentTextChanged, this, [=](const QString& text) {
+            this->sensorLinks.at(p.first) = text.toStdString();
+        });
+
         cmb->addItems(options);
-        gl->addWidget(new QLabel(QString::fromStdString(this->sensorIDs.at(i)), this), i+1, 0);
-        gl->addWidget(cmb, i+1, 1);
+        gl->addWidget(new QLabel(QString::fromStdString(p.first), this), row, 0);
+        gl->addWidget(cmb, row++, 1);
     }
 
     page->setLayout(gl);

@@ -13,5 +13,5 @@ public:
     DAQScanPage(QWidget* parent = nullptr);
     void initializePage() override;
 private:
-    Ui::DAQManagerFactory *ui;
+    Ui::DAQManagerFactory* ui;
 };

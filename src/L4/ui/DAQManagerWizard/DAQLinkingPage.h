@@ -15,7 +15,6 @@ public:
     DAQLinkingPage(std::vector<std::string> sensorIDs, QWidget *parent = nullptr);
     void initializePage() override;
     void cleanupPage() override;
-private:
-    const std::vector<std::string> sensorIDs;
+    std::map<std::string, std::string> sensorLinks;
 };
 
