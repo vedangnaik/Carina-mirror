@@ -27,9 +27,8 @@ GSManager::GSManager() {
     });
 
     connect(this->GSMainWindowUI.actionConfigure_DAQ_Devices, &QAction::triggered, this, [=]() {
-        if (this->dmw->exec() == QDialog::Accepted) {
-            this->daqm = std::move(this->dmw->daqm);
-        }
+        this->dmw->exec();
+        this->daqm = std::move(this->dmw->daqm);
     });
 }
 
@@ -59,7 +58,7 @@ void GSManager::openProcessFromFile(string filepath) {
         this->sduih = make_unique<SystemDiagramUIHandler>(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIDs, actuatorIDs);
         this->stp = make_unique<StatesPresenter>(*this->suih);
         // make the DAQ manager configuration/creation wizard here
-        this->dmw = make_unique<DAQManagerWizard>(sensorIDs);
+        this->dmw = make_unique<DAQManagerWizard>(sensorIDs, *this->svg);
         this->GSMainWindowUI.actionConfigure_DAQ_Devices->setEnabled(true);
 
         // attach presenters to managers (kinda ugly, but idk another way to do it)
@@ -80,6 +79,9 @@ void GSManager::openProcessFromFile(string filepath) {
 void GSManager::startProcess() {
     // TODO: Add the wizard invocation here
     this->stm->startProcess();
+    if (this->daqm == nullptr) {
+        LOG(FATAL) << "null";
+    }
     this->daqm->startAcquisition();
 
     this->GSMainWindowUI.startProcessAction->setEnabled(false);

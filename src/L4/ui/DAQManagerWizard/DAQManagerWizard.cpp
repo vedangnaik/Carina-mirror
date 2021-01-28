@@ -1,7 +1,7 @@
 #include "DAQManagerWizard.h"
 
-DAQManagerWizard::DAQManagerWizard(std::vector<std::string> sensorIDs, QWidget* parent)
-    : QWizard(parent)
+DAQManagerWizard::DAQManagerWizard(std::vector<std::string> sensorIDs, SVGIC& svgic, QWidget* parent)
+    : QWizard(parent), svgic{svgic}
 {
     this->setWindowTitle("DAQ Manager Configuration Wizard");
     this->addPage(new DAQScanPage());
@@ -33,6 +33,8 @@ DAQManagerWizard::accept()
     // assemble map of links
     std::map<std::string, std::pair<AbstractDAQ*, unsigned int>> sensorToDAQLinks;
     for (const auto& p : dlp->sensorLinks) {
+        if (p.second == "<unlinked>") continue;
+
         const auto& IDAndChannel = p.second;
         std::string::size_type n = IDAndChannel.find("-");
         std::string id = IDAndChannel.substr(0, n);
@@ -44,7 +46,7 @@ DAQManagerWizard::accept()
         sensorToDAQLinks.insert({ p.first, std::make_pair(daq, numChannels) });
     }
 
-    this->daqm = std::make_unique<DAQManager>(DAQDevices, sensorToDAQLinks);
+    this->daqm = std::make_unique<DAQManager>(DAQDevices, sensorToDAQLinks, this->svgic);
     QDialog::done(QDialog::Accepted);
 }
 
