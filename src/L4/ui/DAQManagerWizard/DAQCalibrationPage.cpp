@@ -33,10 +33,10 @@ DAQCalibrationPage::initializePage()
             gl->addWidget(calibratedValue, i, 1);
 
             connect(rawVoltage, &QLineEdit::textEdited, this, [=](const QString& text) {
-                this->calibrationPoints.at(p.first).first.at(i) = text.toDouble();
+                this->calibrationPoints.at(p.first).first.at(i-1) = text.toDouble();
             });
             connect(calibratedValue, &QLineEdit::textEdited, this, [=](const QString& text) {
-                this->calibrationPoints.at(p.first).second.at(i) = text.toDouble();
+                this->calibrationPoints.at(p.first).second.at(i-1) = text.toDouble();
             });
         }
 

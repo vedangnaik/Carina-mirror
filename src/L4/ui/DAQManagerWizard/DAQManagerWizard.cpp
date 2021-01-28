@@ -37,7 +37,6 @@ DAQManagerWizard::accept()
         std::string::size_type n = IDAndChannel.find("-");
         std::string id = IDAndChannel.substr(0, n);
         unsigned int numChannels = std::stoul(IDAndChannel.substr(n, IDAndChannel.length()));
-        LOG(INFO) << id << ": " << numChannels;
 
         AbstractDAQ* daq = *std::find_if(DAQDevices.begin(), DAQDevices.end(), [=](AbstractDAQ* d) {
             return d->deviceID == id;
@@ -45,7 +44,7 @@ DAQManagerWizard::accept()
         sensorToDAQLinks.insert({ p.first, std::make_pair(daq, numChannels) });
     }
 
-
+    this->daqm = std::make_unique<DAQManager>(DAQDevices, sensorToDAQLinks);
     QDialog::done(QDialog::Accepted);
 }
 

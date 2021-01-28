@@ -27,7 +27,9 @@ GSManager::GSManager() {
     });
 
     connect(this->GSMainWindowUI.actionConfigure_DAQ_Devices, &QAction::triggered, this, [=]() {
-        this->dmw->open();
+        if (this->dmw->exec() == QDialog::Accepted) {
+            this->daqm = std::move(this->dmw->daqm);
+        }
     });
 }
 

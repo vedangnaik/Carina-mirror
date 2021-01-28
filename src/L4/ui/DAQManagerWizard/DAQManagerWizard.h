@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QWizard>
+#include "DAQManager.h"
 #include "easylogging++.h"
 #include "DAQScanPage.h"
 #include "DAQCalibrationPage.h"
@@ -16,6 +17,7 @@ public:
     void accept() override;
     void reject() override;
     std::map<std::string, bool> abstractDAQData;
+    std::unique_ptr<DAQManager> daqm;
 };
 
 

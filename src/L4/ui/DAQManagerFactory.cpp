@@ -115,12 +115,13 @@ void DAQManagerFactory::accept() {
 }
 
 std::unique_ptr<DAQManager> DAQManagerFactory::createDAQManager() {
-    DAQManagerFactory dmf;
-    if (dmf.exec() == QDialog::Accepted) {
-        return std::make_unique<DAQManager>(dmf.prospectiveDAQDevices);
-    } else {
-        return nullptr;
-    }
+//    DAQManagerFactory dmf;
+//    if (dmf.exec() == QDialog::Accepted) {
+//        return std::make_unique<DAQManager>(dmf.prospectiveDAQDevices);
+//    } else {
+//        return nullptr;
+//    }
+    return nullptr;
 }
 
 #ifdef ULDAQ_AVAILABLE
