@@ -29,6 +29,10 @@ GSManager::GSManager() {
     connect(this->GSMainWindowUI.actionConfigure_DAQ_Devices, &QAction::triggered, this, [=]() {
         this->daqm = DAQManagerWizard::manufactureDAQManager(this->svg->getSensorIDs());
     });
+
+    connect(this->GSMainWindowUI.actionRecalibrate_DAQ_Devices, &QAction::triggered, this, [=]() {
+       this->daqm = DAQManagerWizard::recalibrateDAQs(std::move(this->daqm));
+    });
 }
 
 void GSManager::openProcessFromFile(string filepath) {

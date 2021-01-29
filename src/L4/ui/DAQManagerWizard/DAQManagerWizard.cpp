@@ -15,6 +15,7 @@ DAQManagerWizard::DAQManagerWizard(std::unique_ptr<DAQManager> daqm, QWidget* pa
     this->setWindowTitle("DAQ Manager Re-calibration Wizard");
     auto dcp = new DAQCalibrationPage();
     for (const auto& daq : this->daqm->DAQDevices) {
+        this->abstractDAQData.insert({ daq->deviceID, true });
         dcp->calibrationPoints.insert({ daq->deviceID, daq->calibrationPoints });
     }
     this->addPage(dcp);
@@ -91,5 +92,4 @@ DAQManagerWizard::recalibrateDAQs(std::unique_ptr<DAQManager> daqm)
         dmw.recalibrateDAQs();
     }
     return std::move(dmw.daqm);
-
 }

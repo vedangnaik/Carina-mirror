@@ -102,6 +102,7 @@
      <string>Data Acquisition</string>
     </property>
     <addaction name="actionConfigure_DAQ_Devices"/>
+    <addaction name="actionRecalibrate_DAQ_Devices"/>
    </widget>
    <addaction name="menuProcess"/>
    <addaction name="menuSystem_Diagram"/>
@@ -150,6 +151,11 @@
    </property>
    <property name="text">
     <string>Configure DAQ Devices</string>
+   </property>
+  </action>
+  <action name="actionRecalibrate_DAQ_Devices">
+   <property name="text">
+    <string>Re-calibrate DAQ Devices</string>
    </property>
   </action>
  </widget>
