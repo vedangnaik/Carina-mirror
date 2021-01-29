@@ -13,14 +13,14 @@
 class DAQManager : public QObject {
     Q_OBJECT
 public:
-    DAQManager(std::vector<AbstractDAQ*> DAQDevices, std::map<std::string, std::pair<AbstractDAQ*, unsigned int>> sensorToDAQLinks, SVGIC& svgic);
+    DAQManager(std::vector<AbstractDAQ*> DAQDevices, std::map<std::string, std::pair<AbstractDAQ*, unsigned int>> sensorToDAQLinks);
     void startAcquisition();
     void getLatestData();
     void stopAcquisition();
-private:
     const std::vector<AbstractDAQ*> DAQDevices;
     const std::map<std::string, std::pair<AbstractDAQ*, unsigned int>> sensorToDAQLinks;
-    SVGIC& svgic;
+private:
+    SVGIC* svgic;
     QTimer* DAQReadTimer;
     std::mutex sensorLinksMutex;
 };

@@ -1,7 +1,7 @@
 #include "DAQManager.h"
 
-DAQManager::DAQManager(std::vector<AbstractDAQ*> DAQDevices, std::map<std::string, std::pair<AbstractDAQ*, unsigned int>> sensorToDAQLinks, SVGIC& svgic)
-    : DAQDevices{DAQDevices}, sensorToDAQLinks{sensorToDAQLinks}, svgic{svgic}
+DAQManager::DAQManager(std::vector<AbstractDAQ*> DAQDevices, std::map<std::string, std::pair<AbstractDAQ*, unsigned int>> sensorToDAQLinks)
+    : DAQDevices{DAQDevices}, sensorToDAQLinks{sensorToDAQLinks}
 {
     this->DAQReadTimer = new QTimer(this);
     this->DAQReadTimer->start(1000);
@@ -25,6 +25,10 @@ void DAQManager::getLatestData() {
     for (const auto& p : this->sensorToDAQLinks) {
         const auto& daq = p.second.first;
         const auto& channel = p.second.second;
-        this->svgic.updateValue(p.first, daq->getLatestData().at(channel));
+        if (this->svgic == nullptr) {
+            LOG(INFO) << p.first << ", channel " << channel << ": " << daq->getLatestData().at(channel);
+        } else {
+            this->svgic->updateValue(p.first, daq->getLatestData().at(channel));
+        }
     }
 }

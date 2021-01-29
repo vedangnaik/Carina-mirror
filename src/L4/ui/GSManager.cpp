@@ -27,7 +27,7 @@ GSManager::GSManager() {
     });
 
     connect(this->GSMainWindowUI.actionConfigure_DAQ_Devices, &QAction::triggered, this, [=]() {
-        this->daqm = DAQManagerWizard::setupDAQManager(this->svg->getSensorIDs(), *this->svg);
+        this->daqm = DAQManagerWizard::manufactureDAQManager(this->svg->getSensorIDs());
     });
 }
 
@@ -77,7 +77,7 @@ void GSManager::openProcessFromFile(string filepath) {
 void GSManager::startProcess() {
     // TODO: Add the wizard invocation here
     if (this->daqm == nullptr) {
-        this->daqm = DAQManagerWizard::setupDAQManager(this->svg->getSensorIDs(), *this->svg);
+        this->daqm = DAQManagerWizard::manufactureDAQManager(this->svg->getSensorIDs());
         if (this->daqm != nullptr) this->daqm->startAcquisition();
     } else {
         this->daqm->startAcquisition();

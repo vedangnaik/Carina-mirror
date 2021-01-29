@@ -1,7 +1,7 @@
 #include "DAQManagerWizard.h"
 
-DAQManagerWizard::DAQManagerWizard(std::vector<std::string> sensorIDs, SVGIC& svgic, QWidget* parent)
-    : QWizard(parent), svgic{svgic}
+DAQManagerWizard::DAQManagerWizard(std::vector<std::string> sensorIDs, QWidget* parent)
+    : QWizard(parent)
 {
     this->setWindowTitle("DAQ Manager Configuration Wizard");
     this->addPage(new DAQScanPage());
@@ -9,8 +9,18 @@ DAQManagerWizard::DAQManagerWizard(std::vector<std::string> sensorIDs, SVGIC& sv
     this->addPage(new DAQLinkingPage(sensorIDs));
 }
 
-void
-DAQManagerWizard::accept()
+DAQManagerWizard::DAQManagerWizard(std::unique_ptr<DAQManager> daqm, QWidget* parent)
+    : QWizard(parent), daqm{std::move(daqm)}
+{
+    this->setWindowTitle("DAQ Manager Re-calibration Wizard");
+    auto dcp = new DAQCalibrationPage();
+    for (const auto& daq : this->daqm->DAQDevices) {
+        dcp->calibrationPoints.insert({ daq->deviceID, daq->calibrationPoints });
+    }
+    this->addPage(dcp);
+}
+
+void DAQManagerWizard::manufactureDAQManager()
 {
     auto* dcp = (DAQCalibrationPage*)this->page(1);
     auto* dlp = (DAQLinkingPage*)this->page(2);
@@ -38,33 +48,48 @@ DAQManagerWizard::accept()
         const auto& IDAndChannel = p.second;
         std::string::size_type n = IDAndChannel.find("-");
         std::string id = IDAndChannel.substr(0, n);
-        unsigned int numChannels = std::stoul(IDAndChannel.substr(n, IDAndChannel.length()));
+        unsigned int channel = std::stoul(IDAndChannel.substr(n, IDAndChannel.length()));
 
         AbstractDAQ* daq = *std::find_if(DAQDevices.begin(), DAQDevices.end(), [=](AbstractDAQ* d) {
             return d->deviceID == id;
         });
-        sensorToDAQLinks.insert({ p.first, std::make_pair(daq, numChannels) });
+        sensorToDAQLinks.insert({ p.first, std::make_pair(daq, channel) });
     }
 
-    this->daqm = std::make_unique<DAQManager>(DAQDevices, sensorToDAQLinks, this->svgic);
-    QDialog::done(QDialog::Accepted);
+    this->daqm = std::make_unique<DAQManager>(DAQDevices, sensorToDAQLinks);
 }
 
 void
-DAQManagerWizard::reject()
+DAQManagerWizard::recalibrateDAQs()
 {
-    QDialog::done(QDialog::Rejected);
+    auto* dcp = (DAQCalibrationPage*)this->page(0);
+    for (const auto& p : dcp->calibrationPoints) {
+        AbstractDAQ* daq = *std::find_if(this->daqm->DAQDevices.begin(), this->daqm->DAQDevices.end(), [=](AbstractDAQ* daq) {
+            return daq->deviceID == p.first;
+        });
+        daq->calibrate(p.second);
+    }
 }
 
 std::unique_ptr<DAQManager>
-DAQManagerWizard::setupDAQManager(std::vector<std::string> sensorIDs, SVGIC& svgic)
+DAQManagerWizard::manufactureDAQManager(std::vector<std::string> sensorIDs)
 {
-    std::unique_ptr<DAQManager> daqm;
-    DAQManagerWizard dmw(sensorIDs, svgic);
+    DAQManagerWizard dmw(sensorIDs);
     if (dmw.exec() == QDialog::Accepted) {
-        daqm = std::move(dmw.daqm);
-        return daqm;
+        dmw.manufactureDAQManager();
+        return std::move(dmw.daqm);
     } else {
         return nullptr;
     }
+}
+
+std::unique_ptr<DAQManager>
+DAQManagerWizard::recalibrateDAQs(std::unique_ptr<DAQManager> daqm)
+{
+    DAQManagerWizard dmw(std::move(daqm));
+    if (dmw.exec() == QDialog::Accepted) {
+        dmw.recalibrateDAQs();
+    }
+    return std::move(dmw.daqm);
+
 }
