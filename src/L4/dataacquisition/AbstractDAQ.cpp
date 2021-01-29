@@ -1,6 +1,6 @@
 #include "AbstractDAQ.h"
 
-AbstractDAQ::AbstractDAQ(const std::string deviceID, const unsigned int numChannels, const std::pair<std::vector<double>, std::vector<double>> calibrationPoints)
+AbstractDAQ::AbstractDAQ(const std::string deviceID, const unsigned int numChannels, const std::pair<std::array<double, 5>, std::array<double, 5>> calibrationPoints)
     : deviceID{deviceID}, numChannels{numChannels}
 {
     const auto& voltages = calibrationPoints.first;
@@ -16,4 +16,4 @@ AbstractDAQ::AbstractDAQ(const std::string deviceID, const unsigned int numChann
     }
     slope = numerator / denominator;
     y_intercept = meanUnits - (slope * meanVoltages);
-};
+}

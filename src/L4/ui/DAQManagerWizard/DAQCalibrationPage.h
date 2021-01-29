@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QWizardPage>
-#include <QGridLayout>
+#include <QFormLayout>
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QValidator>
@@ -15,6 +15,6 @@ public:
     DAQCalibrationPage(QWidget *parent = nullptr);
     void initializePage() override;
     void cleanupPage() override;
-    std::map<std::string, std::pair<std::vector<double>, std::vector<double>>> calibrationPoints;
+    std::map<std::string, std::pair<std::array<double, 5>, std::array<double, 5>>> calibrationPoints;
 };
 

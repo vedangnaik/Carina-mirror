@@ -8,7 +8,7 @@
 
 class AbstractDAQ {
 public:
-    AbstractDAQ(const std::string deviceID, const unsigned int numChannels, const std::pair<std::vector<double>, std::vector<double> > calibrationPoints);
+    AbstractDAQ(const std::string deviceID, const unsigned int numChannels, const std::pair<std::array<double, 5>, std::array<double, 5>> calibrationPoints);
     virtual void startAcquisition() = 0;
     virtual void stopAcquisition() = 0;
     virtual std::vector<double> getLatestData() = 0;
