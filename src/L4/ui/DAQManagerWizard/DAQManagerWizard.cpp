@@ -34,7 +34,7 @@ void DAQManagerWizard::manufactureDAQManager()
         auto& id = p.first;
         // Dummy DAQ Assembly
         if (id.find("dummy") != std::string::npos) {
-            unsigned int numChannels = this->field(QString::fromStdString(id + "|numChannels")).toUInt();
+            unsigned int numChannels = this->field(QString::fromStdString(id + "|numChannels")).toUInt() + 1;
             const auto& calibrationPoints = dcp->calibrationPoints.at(id);
             DAQDevices.push_back(new DummyDAQ(id, numChannels, calibrationPoints));
         }

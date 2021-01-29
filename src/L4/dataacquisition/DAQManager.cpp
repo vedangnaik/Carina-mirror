@@ -1,7 +1,7 @@
 #include "DAQManager.h"
 
 DAQManager::DAQManager(std::vector<AbstractDAQ*> DAQDevices, std::map<std::string, std::pair<AbstractDAQ*, unsigned int>> sensorToDAQLinks)
-    : DAQDevices{DAQDevices}, sensorToDAQLinks{sensorToDAQLinks}
+    : DAQDevices{DAQDevices}, sensorToDAQLinks{sensorToDAQLinks}, svgic{nullptr}
 {
     this->DAQReadTimer = new QTimer(this);
     this->DAQReadTimer->start(1000);
