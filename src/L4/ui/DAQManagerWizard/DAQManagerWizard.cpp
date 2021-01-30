@@ -32,12 +32,15 @@ void DAQManagerWizard::manufactureDAQManager()
         if (!p.second) continue;
 
         // Ugly searching based on substring xD
-        auto& id = p.first;
+        auto& deviceID = p.first;
+        unsigned int numChannels = this->field(QString::fromStdString(deviceID + "|numChannels")).toUInt() + 1;
+        const auto& calibrationPoints = dcp->calibrationPoints.at(deviceID);
         // Dummy DAQ Assembly
-        if (id.find("dummy") != std::string::npos) {
-            unsigned int numChannels = this->field(QString::fromStdString(id + "|numChannels")).toUInt() + 1;
-            const auto& calibrationPoints = dcp->calibrationPoints.at(id);
-            DAQDevices.push_back(new DummyDAQ(id, numChannels, calibrationPoints));
+        if (deviceID.find("dummy") != std::string::npos) {
+            DAQDevices.push_back(new DummyDAQ(deviceID, numChannels, calibrationPoints));
+        } else if (deviceID.find("serialport") != std::string::npos) {
+            std::string serialportPath = this->field(QString::fromStdString(deviceID + "|serialportPath")).toString().toStdString();
+            DAQDevices.push_back(new SerialPortDAQ(deviceID, numChannels, calibrationPoints, serialportPath));
         }
     }
 
@@ -49,7 +52,7 @@ void DAQManagerWizard::manufactureDAQManager()
         const auto& IDAndChannel = p.second;
         std::string::size_type n = IDAndChannel.find("-");
         std::string id = IDAndChannel.substr(0, n);
-        unsigned int channel = std::stoul(IDAndChannel.substr(n, IDAndChannel.length()));
+        unsigned int channel = std::stoul(IDAndChannel.substr(n+1, IDAndChannel.length()));
 
         AbstractDAQ* daq = *std::find_if(DAQDevices.begin(), DAQDevices.end(), [=](AbstractDAQ* d) {
             return d->deviceID == id;

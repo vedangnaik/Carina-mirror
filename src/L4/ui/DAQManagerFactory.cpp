@@ -178,20 +178,7 @@
 //}
 //#endif
 
-//std::vector<std::tuple<std::string, std::string>> scanForOpenSerialPorts()
-//{
-//    std::vector<std::tuple<std::string, std::string>> ports;
-//    QDir* d = new QDir("/dev","tty*", QDir::Name, QDir::System);
-//    for (const auto& f : d->entryList()) {
-//        std::string filename = f.toStdString();
-//        std::string path = "/dev/" + filename;
-//        std::ifstream test(path);
-//        if (test.is_open()) {
-//            ports.push_back(std::make_tuple(filename, path));
-//        }
-//    }
-//    return ports;
-//}
+
 
 //#ifdef WIRINGPI_AVAILABLE
 //std::vector<char> scanForI2CDevices() {
