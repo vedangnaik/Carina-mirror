@@ -9,6 +9,7 @@
 #include "AbstractDAQ.h"
 #include "DummyDAQ.h"
 #include "SerialPortDAQ.h"
+#include "AiMCCDAQ.h"
 
 class DAQManagerWizard : public QWizard
 {

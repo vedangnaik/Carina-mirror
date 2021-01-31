@@ -41,6 +41,14 @@ void DAQManagerWizard::manufactureDAQManager()
         } else if (deviceID.find("serialport") != std::string::npos) {
             std::string serialportPath = this->field(QString::fromStdString(deviceID + "|serialportPath")).toString().toStdString();
             DAQDevices.push_back(new SerialPortDAQ(deviceID, numChannels, calibrationPoints, serialportPath));
+#ifdef ULDAQ_AVAILABLE
+        } else if (deviceID.find("mccdaq") != std::string::npos) {
+            DaqDeviceHandle d = this->field(QString::fromStdString(deviceID + "|handle")).toLongLong();
+            Range r = (Range)this->field(QString::fromStdString(deviceID + "|range")).toLongLong();
+            DAQDevices.push_back(new AiMCCDAQ(deviceID, numChannels, calibrationPoints, d, r));
+#endif
+        } else {
+            LOG(FATAL) << "Internal error with DAQManagerWizard, abandon ship";
         }
     }
 

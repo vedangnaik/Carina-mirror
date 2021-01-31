@@ -5,7 +5,6 @@ SOURCES += \
     $$PWD/dataacquisition/DAQManager.cpp \
     $$PWD/dataacquisition/DummyDAQ.cpp \
     $$PWD/dataacquisition/SerialPortDAQ.cpp \
-    $$PWD/ui/DAQManagerFactory.cpp \
     $$PWD/ui/DAQManagerWizard/DAQCalibrationPage.cpp \
     $$PWD/ui/DAQManagerWizard/DAQLinkingPage.cpp \
     $$PWD/ui/DAQManagerWizard/DAQManagerWizard.cpp \
