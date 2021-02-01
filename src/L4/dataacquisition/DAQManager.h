@@ -17,8 +17,10 @@ public:
     void startAcquisition();
     void getLatestData();
     void stopAcquisition();
+    void setOutputContract(SVGIC* svgic);
+
     const std::vector<AbstractDAQ*> DAQDevices;
-    const std::map<std::string, std::pair<AbstractDAQ*, unsigned int>> sensorToDAQLinks;
+    std::map<std::string, std::pair<AbstractDAQ*, unsigned int>> sensorToDAQLinks;
 private:
     SVGIC* svgic;
     QTimer* DAQReadTimer;

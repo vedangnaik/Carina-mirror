@@ -7,7 +7,14 @@ DAQManager::DAQManager(std::vector<AbstractDAQ*> DAQDevices, std::map<std::strin
     this->DAQReadTimer->start(1000);
 }
 
+void
+DAQManager::setOutputContract(SVGIC* svgic) {
+    this->svgic = svgic;
+}
+
 void DAQManager::startAcquisition() {
+    if (this->svgic == nullptr) { LOG(FATAL) << "no output contract for daq manager"; }
+
     for (const auto& d : this->DAQDevices) {
         d->startAcquisition();
     }
@@ -25,10 +32,6 @@ void DAQManager::getLatestData() {
     for (const auto& p : this->sensorToDAQLinks) {
         const auto& daq = p.second.first;
         const auto& channel = p.second.second;
-        if (this->svgic == nullptr) {
-            LOG(INFO) << p.first << ", channel " << channel << ": " << daq->getLatestData().at(channel);
-        } else {
-            this->svgic->updateValue(p.first, daq->getLatestData().at(channel));
-        }
+        this->svgic->updateValue(p.first, daq->getLatestData().at(channel));
     }
 }

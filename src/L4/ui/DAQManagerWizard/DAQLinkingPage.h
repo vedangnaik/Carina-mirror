@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QWizardPage>
-#include <QGridLayout>
+#include <QFormLayout>
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QValidator>
@@ -16,5 +16,7 @@ public:
     void initializePage() override;
     void cleanupPage() override;
     std::map<std::string, std::string> sensorLinks;
+private:
+    const std::vector<std::string> sensorIDs;
 };
 

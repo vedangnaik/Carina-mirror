@@ -1,18 +1,14 @@
 #include "DAQLinkingPage.h"
 
 DAQLinkingPage::DAQLinkingPage(std::vector<std::string> sensorIDs, QWidget *parent) :
-    QWizardPage(parent)
-{
-    for (const auto& id : sensorIDs) {
-        this->sensorLinks.insert({ id, {} });
-    }
-}
+    QWizardPage(parent), sensorIDs{sensorIDs}
+{}
 
 void
 DAQLinkingPage::initializePage()
 {
     QWidget* page = new QWidget(this);
-    QGridLayout* gl = new QGridLayout();
+    QFormLayout* fl = new QFormLayout();
 
     DAQManagerWizard* dmw = (DAQManagerWizard*)this->wizard();
     QStringList options;
@@ -24,21 +20,24 @@ DAQLinkingPage::initializePage()
     }
     options.push_back("<unlinked>");
 
-    int row = 0;
-    gl->addWidget(new QLabel("Sensor ID", this), row, 0);
-    gl->addWidget(new QLabel("DAQ Channel", this), row++, 1);
-    for (const auto& p : this->sensorLinks) {
+    fl->addRow(new QLabel("Sensor ID", this), new QLabel("DAQ Channel", this));
+    for (const auto& id : this->sensorIDs) {
         QComboBox* cmb = new QComboBox(this);
         connect(cmb, &QComboBox::currentTextChanged, this, [=](const QString& text) {
-            this->sensorLinks.at(p.first) = text.toStdString();
+            // only place where operator[] is useful xD, and only cause
+            // we don't have insert_or_assign() from cpp17 :(
+            this->sensorLinks[id] = text.toStdString();
         });
-
         cmb->addItems(options);
-        gl->addWidget(new QLabel(QString::fromStdString(p.first), this), row, 0);
-        gl->addWidget(cmb, row++, 1);
+
+        if(this->sensorLinks.find(id) != this->sensorLinks.end()) {
+            cmb->setCurrentText(QString::fromStdString(this->sensorLinks.at(id)));
+        }
+
+        fl->addRow(new QLabel(QString::fromStdString(id), this), cmb);
     }
 
-    page->setLayout(gl);
+    page->setLayout(fl);
     this->setLayout(new QVBoxLayout());
     this->layout()->addWidget(page);
 }
