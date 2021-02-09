@@ -11,7 +11,7 @@ ActuatorsManager::getActuatorStatus(string id)
         return this->actuators.at(id).status;
     } catch (std::out_of_range& e) {
         // Precondition violation, it's over.
-        LOG(FATAL) << "ActuatorsManager::getActuatorStatus(" << id << "): ID not found. Exception: " << e.what();
+        LOG(FATAL) << "ActuatorsManager::getActuatorStatus(" << id << "): ID not found. Exception: " << e.what();  
         std::terminate();
     }
 }
