@@ -1,16 +1,16 @@
 #include "AbstractDAQ.h"
 
 AbstractDAQ::AbstractDAQ(const std::string deviceID, const unsigned int numChannels, const std::pair<std::array<double, 5>, std::array<double, 5>> calibrationPoints)
-    : deviceID{deviceID}, numChannels{numChannels}, calibrationPoints{calibrationPoints}
+    : deviceID{deviceID}, numChannels{numChannels}
 {
-    this->calibrate();
+    this->calibrate(calibrationPoints);
 }
 
 void
-AbstractDAQ::calibrate()
+AbstractDAQ::calibrate(std::pair<std::array<double, 5>, std::array<double, 5>> calibrationPoints)
 {
-    const auto& voltages = this->calibrationPoints.first;
-    const auto& units = this->calibrationPoints.second;
+    const auto& voltages = calibrationPoints.first;
+    const auto& units = calibrationPoints.second;
 
     double meanVoltages = std::accumulate(voltages.begin(), voltages.end(), 0.0) / voltages.size();
     double meanUnits = std::accumulate(units.begin(), units.end(), 0.0) / units.size();
@@ -22,10 +22,4 @@ AbstractDAQ::calibrate()
     }
     this->slope = numerator / denominator;
     this->y_intercept = meanUnits - (slope * meanVoltages);
-}
-
-void
-AbstractDAQ::calibrate(std::pair<std::array<double, 5>, std::array<double, 5>> calibrationPoints) {
-    this->calibrationPoints = calibrationPoints;
-    this->calibrate();
 }

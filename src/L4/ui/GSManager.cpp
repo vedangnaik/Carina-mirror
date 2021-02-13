@@ -26,11 +26,11 @@ GSManager::GSManager() {
         this->systemDiagramUI.systemDiagramFrame->setStyleSheet("");
     });
 
-    connect(this->GSMainWindowUI.actionConfigure_DAQ_Devices, &QAction::triggered, this, [=]() {
+    connect(this->GSMainWindowUI.manufactureDAQManagerAction, &QAction::triggered, this, [=]() {
         this->daqm = DAQManagerWizard::manufactureDAQManager(this->svg->getSensorIDs());
     });
 
-    connect(this->GSMainWindowUI.actionRecalibrate_DAQ_Devices, &QAction::triggered, this, [=]() {
+    connect(this->GSMainWindowUI.reconfigureDAQManagerAction, &QAction::triggered, this, [=]() {
         this->daqm->stopAcquisition();
         this->daqm = DAQManagerWizard::reconfigureDAQManager();
         this->daqm->setOutputContract(this->svg.get());
@@ -73,9 +73,10 @@ void GSManager::openProcessFromFile(string filepath) {
         this->sduih = make_unique<SystemDiagramUIHandler>(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIDs, actuatorIDs);
 
         // Enable configuration of DAQs, disable opening new file, enable starting loaded process.
-        this->GSMainWindowUI.actionConfigure_DAQ_Devices->setEnabled(true);
         this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
         this->GSMainWindowUI.startProcessAction->setEnabled(true);
+        this->GSMainWindowUI.manufactureDAQManagerAction->setEnabled(true);
+        this->GSMainWindowUI.reconfigureDAQManagerAction->setEnabled(false);
     } catch (ProcessFileParseError& e) {
         LOG(ERROR) << "Process file parse error:" << e.what();
     } catch (SensorsManagerError& e) {
@@ -93,6 +94,8 @@ void GSManager::startProcess() {
 
     this->GSMainWindowUI.startProcessAction->setEnabled(false);
     this->GSMainWindowUI.closeProcessAction->setEnabled(true);
+    this->GSMainWindowUI.manufactureDAQManagerAction->setEnabled(false);
+    this->GSMainWindowUI.reconfigureDAQManagerAction->setEnabled(true);
 }
 
 void GSManager::stopAndCloseProcess() {
@@ -102,6 +105,8 @@ void GSManager::stopAndCloseProcess() {
 
     this->GSMainWindowUI.closeProcessAction->setEnabled(false);
     this->GSMainWindowUI.openProcessFromFileAction->setEnabled(true);
+    this->GSMainWindowUI.manufactureDAQManagerAction->setEnabled(false);
+    this->GSMainWindowUI.reconfigureDAQManagerAction->setEnabled(false);
 }
 
 void GSManager::renderUi() {
