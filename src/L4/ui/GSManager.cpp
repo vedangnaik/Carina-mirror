@@ -3,8 +3,6 @@
 GSManager::GSManager() {
     this->renderUi();
 
-    LOG(INFO) << "The program has started.";
-
     connect(this->GSMainWindowUI.openProcessFromFileAction, &QAction::triggered, this, [=]() {
         QString fileName = QFileDialog::getOpenFileName(this,
             tr("Open Process File"), "/", tr("JSON Files (*.json)"));
@@ -36,10 +34,6 @@ GSManager::GSManager() {
         this->daqm->setOutputContract(this->svg.get());
         this->daqm->startAcquisition();
     });
-
-//    connect(this->GSMainWindowUI.actionRe_link_sensors_and_channels, &QAction::triggered, this, [=]() {
-//       this->daqm = DAQManagerWizard::relinkSensors(std::move(this->daqm), this->svg->getSensorIDs());
-//    });
 }
 
 void GSManager::openProcessFromFile(string filepath) {
