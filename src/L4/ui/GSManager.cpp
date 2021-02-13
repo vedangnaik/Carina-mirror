@@ -3,8 +3,6 @@
 GSManager::GSManager() {
     this->renderUi();
 
-    LOG(INFO) << "The program has started.";
-
     connect(this->GSMainWindowUI.openProcessFromFileAction, &QAction::triggered, this, [=]() {
         QString fileName = QFileDialog::getOpenFileName(this,
             tr("Open Process File"), "/", tr("JSON Files (*.json)"));
@@ -26,60 +24,58 @@ GSManager::GSManager() {
         this->systemDiagramUI.systemDiagramFrame->setStyleSheet("");
     });
 
-    connect(this->GSMainWindowUI.actionConfigure_DAQ_Devices, &QAction::triggered, this, [=]() {
-        this->daqm = DAQManagerWizard::manufactureDAQManager(std::move(this->daqm), this->svg->getSensorIDs());
+    connect(this->GSMainWindowUI.manufactureDAQManagerAction, &QAction::triggered, this, [=]() {
+        this->daqm = DAQManagerWizard::manufactureDAQManager(this->svg->getSensorIDs());
     });
 
-    connect(this->GSMainWindowUI.actionRecalibrate_DAQ_Devices, &QAction::triggered, this, [=]() {
-       this->daqm = DAQManagerWizard::recalibrateDAQs(std::move(this->daqm));
-    });
-
-    connect(this->GSMainWindowUI.actionRe_link_sensors_and_channels, &QAction::triggered, this, [=]() {
-       this->daqm = DAQManagerWizard::relinkSensors(std::move(this->daqm), this->svg->getSensorIDs());
+    connect(this->GSMainWindowUI.reconfigureDAQManagerAction, &QAction::triggered, this, [=]() {
+        this->daqm->stopAcquisition();
+        this->daqm = DAQManagerWizard::reconfigureDAQManager();
+        this->daqm->setOutputContract(this->svg.get());
+        this->daqm->startAcquisition();
     });
 }
 
 void GSManager::openProcessFromFile(string filepath) {
-    // Exceptions will be thrown for any errors in the file format.
     try {
+        // Exceptions will be thrown for any errors in the file format.
         ProcessFileParser pg(filepath);
         auto t = pg.parseProcessFile();
 
-        // Array of sensor and actuator IDs for the L2 classes
+        // Array of sensor and actuator IDs for various classes to use.
         std::vector<string> sensorIDs, actuatorIDs;
         for (const auto& p : std::get<0>(t)) { sensorIDs.push_back(p.first); }
         for (const auto& p : std::get<1>(t)) { actuatorIDs.push_back(p.first); }
-        // Now initialize the L2 classes with them.
-        this->sm = make_unique<SensorsManager>(std::get<0>(t));
-        this->am = make_unique<ActuatorsManager>(std::get<1>(t));
-        this->stm = make_unique<StatesManager>(std::get<2>(t), *this->sm, *this->am);
 
-        // init L3 classes here
+        // First make the presenters which dudes be subscribing to
+        this->sp = make_unique<SensorsPresenter>();
+        this->ap = make_unique<ActuatorsPresenter>();
+        this->stp = make_unique<StatesPresenter>();
+
+        // Now initialize the L2 classes with these presenters to use.
+        this->sm = make_unique<SensorsManager>(std::get<0>(t), *this->sp);
+        this->am = make_unique<ActuatorsManager>(std::get<1>(t), *this->ap);
+        this->stm = make_unique<StatesManager>(std::get<2>(t), *this->sm, *this->am, *this->stp);
+
+        // Make the remaining L3 classes here
         this->svg = make_unique<SensorValuesGateway>(*this->sm);
         this->ac = make_unique<ActuatorsController>(*this->am);
         this->stc = make_unique<StatesController>(*this->stm);
-        // init L4 and presenters here
-        this->sp = make_unique<SensorsPresenter>();
-        this->ap = make_unique<ActuatorsPresenter>();
-        this->suih = make_unique<StateUIHandler>(this->stateUI, *this->sp, *this->ap, *this->ac, *this->stc);
+
+        // Make the L4 UI classes here
+        this->suih = make_unique<StateUIHandler>(this->stateUI, *this->sp, *this->ap, *this->stp, *this->ac, *this->stc);
         this->sduih = make_unique<SystemDiagramUIHandler>(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIDs, actuatorIDs);
-        this->stp = make_unique<StatesPresenter>(*this->suih);
 
-        this->GSMainWindowUI.actionConfigure_DAQ_Devices->setEnabled(true);
-
-        // attach presenters to managers (kinda ugly, but idk another way to do it)
-        this->sm->setOutputContract(this->sp.get());
-        this->am->setOutputContract(this->ap.get());
-        this->stm->setOutputContract(this->stp.get());
-
+        // Enable configuration of DAQs, disable opening new file, enable starting loaded process.
         this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
         this->GSMainWindowUI.startProcessAction->setEnabled(true);
-
+        this->GSMainWindowUI.manufactureDAQManagerAction->setEnabled(true);
+        this->GSMainWindowUI.reconfigureDAQManagerAction->setEnabled(false);
     } catch (ProcessFileParseError& e) {
         LOG(ERROR) << "Process file parse error:" << e.what();
     } catch (SensorsManagerError& e) {
         LOG(ERROR) << "SensorsManager error: " << e.what();
-    } catch(NoStartStateError& e){
+    } catch(StatesManagerError& e){
         LOG(ERROR) << "StatesManager error: " << e.what();
     }
 }
@@ -92,6 +88,8 @@ void GSManager::startProcess() {
 
     this->GSMainWindowUI.startProcessAction->setEnabled(false);
     this->GSMainWindowUI.closeProcessAction->setEnabled(true);
+    this->GSMainWindowUI.manufactureDAQManagerAction->setEnabled(false);
+    this->GSMainWindowUI.reconfigureDAQManagerAction->setEnabled(true);
 }
 
 void GSManager::stopAndCloseProcess() {
@@ -101,6 +99,8 @@ void GSManager::stopAndCloseProcess() {
 
     this->GSMainWindowUI.closeProcessAction->setEnabled(false);
     this->GSMainWindowUI.openProcessFromFileAction->setEnabled(true);
+    this->GSMainWindowUI.manufactureDAQManagerAction->setEnabled(false);
+    this->GSMainWindowUI.reconfigureDAQManagerAction->setEnabled(false);
 }
 
 void GSManager::renderUi() {

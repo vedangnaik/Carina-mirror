@@ -23,15 +23,12 @@ public:
 
 class ActuatorsManager : public AMIC {
 public:
-    ActuatorsManager(map<const string, Actuator> actuators);
+    ActuatorsManager(map<const string, Actuator> actuators, AMOC& amoc);
     bool getActuatorStatus(string id);
     void actuate(string id);
-    void setOutputContract(AMOC* amoc) {
-        this->amoc = amoc;
-    }
 private:
     map<const string, Actuator> actuators;
-    AMOC* amoc = nullptr;
+    AMOC& amoc;
 };
 
 

@@ -4,7 +4,11 @@
 QLabel* displaySensorCheck(const SensorCheck& sc);
 QLabel* displayActuatorCheck(const ActuatorCheck& ac);
 
-StateUIHandler::StateUIHandler(Ui::State& stateUI, SPIC& spic, APIC& apic, ACIC& acic, StCIC& stcic) : stateUI(stateUI), spic(spic), apic(apic), acic(acic), stcic(stcic) {
+StateUIHandler::StateUIHandler(Ui::State& stateUI, SPIC& spic, APIC& apic, StPIC& stpic, ACIC& acic, StCIC& stcic)
+    : stateUI{stateUI}, spic{spic}, apic{apic}, stpic{stpic}, acic{acic}, stcic{stcic}
+{
+    // subscrivbe yourself to the presenter asap.
+    this->stpic.subscribe(this);
     this->actuatorButtonTimer = new QTimer(this);
     this->actuatorButtonTimer->start(1000);
     // this->actuatorButtonTimer->stop() should happen automatically on delete.
@@ -126,7 +130,7 @@ StateUIHandler::allowFailedChecksOverride(const std::vector<std::string> failure
     int ret = QMessageBox::warning(this, tr("Carina"), err, QMessageBox::Ok | QMessageBox::Cancel);
 
     if (ret == QMessageBox::Ok) {
-        t == Proceed ? this->stcic.proceed() : this->stcic.abort();
+        t == Proceed ? this->stcic.proceed(true) : this->stcic.abort(true);
     }
 }
 

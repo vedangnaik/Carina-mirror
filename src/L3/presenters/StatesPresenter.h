@@ -13,12 +13,21 @@ public:
     virtual ~StPOC() {};
 };
 
-class StatesPresenter : public StMOC {
+class StPIC {
 public:
-    StatesPresenter(StPOC& stpoc) : stpoc(stpoc){};
+    virtual void subscribe(StPOC* stpoc) = 0;
+    virtual void unsubscribe() = 0;
+    virtual ~StPIC() {};
+};
+
+
+class StatesPresenter : public StMOC, public StPIC {
+public:
     void displayStatesSummary(const std::vector<std::string> processSummary) override;
     void displayState(const State& s) override;
     void displayFailedChecks(const std::vector<std::string> failures, Transition t) override;
+    void subscribe(StPOC* stpoc) override;
+    void unsubscribe() override;
 private:
-    StPOC& stpoc;
+    StPOC* stpoc = nullptr;
 };

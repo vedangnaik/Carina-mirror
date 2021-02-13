@@ -1,5 +1,4 @@
-#ifndef ACTUATORSPRESENTER_H
-#define ACTUATORSPRESENTER_H
+#pragma once
 
 #include "ActuatorsManager.h"
 #include <map>
@@ -27,5 +26,3 @@ public:
 private:
     std::map<std::string, std::vector<APOC*>> subscribers;
 };
-
-#endif // ACTUATORSPRESENTER_H

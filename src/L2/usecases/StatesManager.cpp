@@ -1,8 +1,8 @@
 #include "StatesManager.h"
 #include <iostream>
 
-StatesManager::StatesManager(map<const string, const State> states, SMIC& smic, AMIC& amic)
-    : states{std::move(states)},  smic{smic}, amic{amic}
+StatesManager::StatesManager(map<const string, const State> states, SMIC& smic, AMIC& amic, StMOC& stmoc)
+    : states{std::move(states)},  smic{smic}, amic{amic}, stmoc{stmoc}
 {
     // start state not found
     if (this->states.find("start") == this->states.end()){
@@ -11,7 +11,7 @@ StatesManager::StatesManager(map<const string, const State> states, SMIC& smic, 
 }
 
 void
-StatesManager::transition(Transition t)
+StatesManager::transition(Transition t, bool override)
 {
     const auto& sensorChecks = this->currentState->sensorChecks;
 
@@ -31,30 +31,20 @@ StatesManager::transition(Transition t)
         }
     }
 
-    if (failures.size() == 0) {
+    // if override is true, the short circuit will ignore any failed checks.
+    if (override || failures.size() == 0) {
         this->currentState = &this->states.at(this->currentState->transitions.at(t));
-      
-        // Make sure that this display output is not null.
-        if (this->stmoc == nullptr) {          
-            LOG(FATAL) << this.currentState->name << ": Transition '" << (t == Transition::Proceed ? "Proceed" : "Abort") << "' display not possible as this->stmoc is nullptr.";
-        }
-      
-        this->stmoc->displayState(*this->currentState);
+        this->stmoc.displayState(*this->currentState);
     } else {
-        this->stmoc->displayFailedChecks(failures, t);
+        this->stmoc.displayFailedChecks(failures, t);
     }
 }
 
 void
 StatesManager::startProcess()
 {
-    try {
-        this->currentState = &this->states.at("start");
-    } catch (std::out_of_range& e) {
-        LOG(FATAL) << "StatesManager::startProcess: \"start\" state not found. Exception: " << e.what();
-        std::terminate();
-    }
-    this->stmoc->displayState(*this->currentState);
+    this->currentState = &this->states.at("start");
+    this->stmoc.displayState(*this->currentState);
 
     std::vector<string> processSummary = {};
     const State* curr = this->currentState;
@@ -63,7 +53,7 @@ StatesManager::startProcess()
         curr = &this->states.at(curr->transitions.at(Transition::Proceed));
         processSummary.push_back(curr->description);
     }
-    this->stmoc->displayStatesSummary(processSummary);
+    this->stmoc.displayStatesSummary(processSummary);
 }
 
 void

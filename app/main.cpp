@@ -6,8 +6,14 @@ INITIALIZE_EASYLOGGINGPP
 
 int main(int argc, char *argv[]) {
     START_EASYLOGGINGPP(argc, argv);
+
     QApplication a(argc, argv);
     GSManager gsm;
+    LOG(INFO) << "Carina has started.";
+
     gsm.show();
-    return a.exec();
+    int r = a.exec();
+
+    LOG(INFO) << "Carina has ended.";
+    return r;
 }

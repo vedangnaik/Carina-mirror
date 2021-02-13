@@ -1,6 +1,6 @@
 #include "SerialPortDAQ.h"
 
-SerialPortDAQ::SerialPortDAQ(const std::string deviceID, const unsigned int numChannels, const std::pair<std::array<double, 5>, std::array<double, 5>> calibrationPoints, std::string serialportPath)
+SerialPortDAQ::SerialPortDAQ(const std::string deviceID, const unsigned int numChannels, const std::vector<std::pair<std::array<double, 5>, std::array<double, 5>>> calibrationPoints, std::string serialportPath)
     : AbstractDAQ(deviceID, numChannels, calibrationPoints), serialportPath{serialportPath}
 {
     std::ifstream test(serialportPath);
@@ -24,13 +24,15 @@ std::vector<double> SerialPortDAQ::getLatestData() {
         std::string line;
         std::getline(this->serialport, line);
         std::istringstream iss(line);
-        for (unsigned int i = 0; i < this->numChannels; i++) {
+        for (unsigned int channel = 0; channel < this->numChannels; channel++) {
             std::string sval;
             iss >> sval;
             try {
-                values[i] = std::stod(sval);
+                double& slope = this->slopesAndIntercepts.at(channel).first;
+                double& intercept = this->slopesAndIntercepts.at(channel).second;
+                values.at(channel) = (slope * std::stod(sval)) + intercept;
             } catch (std::exception& e) {
-                LOG(ERROR) << "DAQ device ID '" << this->deviceID << "': channel value '" << i << "' could not be read. Reporting NaN.";
+                LOG(ERROR) << "DAQ device ID '" << this->deviceID << "': channel value '" << channel << "' could not be read. Reporting NaN.";
             }
         }
     } else {

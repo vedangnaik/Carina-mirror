@@ -2,7 +2,7 @@
 
 #include "AiMCCDAQ.h"
 
-AiMCCDAQ::AiMCCDAQ(const std::string deviceID, const unsigned int numChannels, const std::pair<std::array<double, 5>, std::array<double, 5>> calibrationPoints, DaqDeviceHandle handle, Range voltageRange)
+AiMCCDAQ::AiMCCDAQ(const std::string deviceID, const unsigned int numChannels, const std::vector<std::pair<std::array<double, 5>, std::array<double, 5>>> calibrationPoints, DaqDeviceHandle handle, Range voltageRange)
     : AbstractDAQ(deviceID, numChannels, calibrationPoints), handle{handle}, voltageRange{voltageRange}
 {
     // connect DAQ
@@ -40,10 +40,13 @@ std::vector<double> AiMCCDAQ::getLatestData() {
     std::vector<double> values(this->numChannels, std::nan("NaN"));
     if (status == SS_RUNNING && connected != 0) {
         // Report average of all samples seen since last run.
-        for (unsigned int i = 0; i < this->numChannels; i++) {
+        for (unsigned int channel = 0; channel < this->numChannels; channel++) {
             // I was debating whether to use operator[] or .at(). But since we are guaranteed that i will be in range,
             // I don't think it's needed. But maybe it's better to have?
-            values[i] = std::accumulate(&this->dataBuffer[i], &this->dataBuffer[i] + this->samplesPerChannel, 0.0) / this->samplesPerChannel;
+            // TODO: add calibration to whatever value chosen here
+            double& slope = this->slopesAndIntercepts.at(channel).first;
+            double& intercept = this->slopesAndIntercepts.at(channel).second;
+            values[channel] = (slope * std::accumulate(&this->dataBuffer[channel], &this->dataBuffer[channel] + this->samplesPerChannel, 0.0) / this->samplesPerChannel) + intercept;
         }
     } else {
         LOG(ERROR) << "DAQ device ID '" << this->deviceID << "' cannot be accessed. Reporting all NaN.";
