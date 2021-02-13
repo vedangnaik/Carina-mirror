@@ -12,31 +12,22 @@
 #include "SerialPortDAQ.h"
 #include "AiMCCDAQ.h"
 
-enum DAQManagerWizardAction {
-    Manufacture,
-    Recalibrate,
-    Relink
-};
+
 
 class DAQManagerWizard : public QWizard
 {
     Q_OBJECT
 public:
-    DAQManagerWizard(std::unique_ptr<DAQManager> daqm, DAQManagerWizardAction a, std::vector<std::string> sensorIDs = {}, QWidget* parent = nullptr);
+    DAQManagerWizard(std::vector<std::string> sensorIDs, QWidget* parent = nullptr);
+    void accept() override;
+    void reject() override;
+    std::map<std::string, bool> abstractDAQData;
+
     static std::unique_ptr<DAQManager> manufactureDAQManager(std::vector<std::string> sensorIDs);
     static std::unique_ptr<DAQManager> reconfigureDAQManager();
-//    static std::unique_ptr<DAQManager> recalibrateDAQs(std::unique_ptr<DAQManager>);
-//    static std::unique_ptr<DAQManager> relinkSensors(std::unique_ptr<DAQManager>, std::vector<std::string> sensorIDs);
-    std::unique_ptr<DAQManager> getDAQManager();
-
-    std::map<std::string, bool> abstractDAQData;
-    std::unique_ptr<DAQManager> daqm;
+    static DAQManagerWizard* dqm;
 private:
     bool done;
 
-    void manufactureDAQManager();
-//    void recalibrateDAQs();
-//    void relinkSensors();
-
-    static DAQManagerWizard* dqm;
+    static std::unique_ptr<DAQManager> assembleDAQManager();
 };

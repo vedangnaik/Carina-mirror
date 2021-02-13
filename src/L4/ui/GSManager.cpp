@@ -27,16 +27,19 @@ GSManager::GSManager() {
     });
 
     connect(this->GSMainWindowUI.actionConfigure_DAQ_Devices, &QAction::triggered, this, [=]() {
-        this->daqm = DAQManagerWizard::manufactureDAQManager(std::move(this->daqm), this->svg->getSensorIDs());
+        this->daqm = DAQManagerWizard::manufactureDAQManager(this->svg->getSensorIDs());
     });
 
     connect(this->GSMainWindowUI.actionRecalibrate_DAQ_Devices, &QAction::triggered, this, [=]() {
-       this->daqm = DAQManagerWizard::recalibrateDAQs(std::move(this->daqm));
+        this->daqm->stopAcquisition();
+        this->daqm = DAQManagerWizard::reconfigureDAQManager();
+        this->daqm->setOutputContract(this->svg.get());
+        this->daqm->startAcquisition();
     });
 
-    connect(this->GSMainWindowUI.actionRe_link_sensors_and_channels, &QAction::triggered, this, [=]() {
-       this->daqm = DAQManagerWizard::relinkSensors(std::move(this->daqm), this->svg->getSensorIDs());
-    });
+//    connect(this->GSMainWindowUI.actionRe_link_sensors_and_channels, &QAction::triggered, this, [=]() {
+//       this->daqm = DAQManagerWizard::relinkSensors(std::move(this->daqm), this->svg->getSensorIDs());
+//    });
 }
 
 void GSManager::openProcessFromFile(string filepath) {
