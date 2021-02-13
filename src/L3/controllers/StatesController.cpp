@@ -1,9 +1,9 @@
 #include "StatesController.h"
 
-void StatesController::proceed() {
-    this->stmic.transition(Transition::Proceed);
+void StatesController::proceed(bool override) {
+    this->stmic.transition(Transition::Proceed, override);
 }
 
-void StatesController::abort() {
-    this->stmic.transition(Transition::Abort);
+void StatesController::abort(bool override) {
+    this->stmic.transition(Transition::Abort, override);
 }

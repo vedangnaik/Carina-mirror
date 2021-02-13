@@ -7,6 +7,8 @@
 using std::string;
 using std::map;
 
+
+
 class StMOC {
 public:
     virtual void displayStatesSummary(const std::vector<string> processSummary) = 0;
@@ -17,14 +19,14 @@ public:
 
 class StMIC {
 public:
-    virtual void transition(Transition t) = 0;
+    virtual void transition(Transition t, bool override = false) = 0;
     virtual ~StMIC() {};
 };
 
 class StatesManager : public StMIC {
 public:
     StatesManager(map<const string, const State> states, SMIC& smic, AMIC& amic);
-    void transition(Transition t);
+    void transition(Transition t, bool override = false) override;
     void setOutputContract(StMOC* stmoc) {
         this->stmoc = stmoc;
     }
@@ -38,6 +40,8 @@ private:
     SMIC& smic;
     AMIC& amic;
 };
+
+
 
 // This is the base class of all exceptions that can occur with the StateManager class
 // Subclass a new exception from it if a new bug/error needs to be handled.

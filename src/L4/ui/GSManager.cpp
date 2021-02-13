@@ -79,7 +79,7 @@ void GSManager::openProcessFromFile(string filepath) {
         LOG(ERROR) << "Process file parse error:" << e.what();
     } catch (SensorsManagerError& e) {
         LOG(ERROR) << "SensorsManager error: " << e.what();
-    } catch(NoStartStateError& e){
+    } catch(StatesManagerError& e){
         LOG(ERROR) << "StatesManager error: " << e.what();
     }
 }

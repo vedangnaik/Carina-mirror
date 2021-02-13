@@ -126,7 +126,7 @@ StateUIHandler::allowFailedChecksOverride(const std::vector<std::string> failure
     int ret = QMessageBox::warning(this, tr("Carina"), err, QMessageBox::Ok | QMessageBox::Cancel);
 
     if (ret == QMessageBox::Ok) {
-        t == Proceed ? this->stcic.proceed() : this->stcic.abort();
+        t == Proceed ? this->stcic.proceed(true) : this->stcic.abort(true);
     }
 }
 
