@@ -38,3 +38,15 @@ private:
     SMIC& smic;
     AMIC& amic;
 };
+
+// This is the base class of all exceptions that can occur with the StateManager class
+// Subclass a new exception from it if a new bug/error needs to be handled.
+class StatesManagerError : public std::runtime_error {
+protected:
+    StatesManagerError(string message) : std::runtime_error(message) {}
+};
+
+class NoStartStateError : public StatesManagerError {
+public:
+    NoStartStateError() : StatesManagerError("No Start State found in Process FSM") {}
+};

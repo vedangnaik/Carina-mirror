@@ -3,7 +3,12 @@
 
 StatesManager::StatesManager(map<const string, const State> states, SMIC& smic, AMIC& amic)
     : states{std::move(states)},  smic{smic}, amic{amic}
-{}
+{
+    // start state not found
+    if (this->states.find("start") == this->states.end()){
+        throw NoStartStateError();
+    }
+}
 
 void
 StatesManager::transition(Transition t)
@@ -28,6 +33,12 @@ StatesManager::transition(Transition t)
 
     if (failures.size() == 0) {
         this->currentState = &this->states.at(this->currentState->transitions.at(t));
+      
+        // Make sure that this display output is not null.
+        if (this->stmoc == nullptr) {          
+            LOG(FATAL) << this.currentState->name << ": Transition '" << (t == Transition::Proceed ? "Proceed" : "Abort") << "' display not possible as this->stmoc is nullptr.";
+        }
+      
         this->stmoc->displayState(*this->currentState);
     } else {
         this->stmoc->displayFailedChecks(failures, t);
@@ -37,7 +48,12 @@ StatesManager::transition(Transition t)
 void
 StatesManager::startProcess()
 {
-    this->currentState = &this->states.at("start");
+    try {
+        this->currentState = &this->states.at("start");
+    } catch (std::out_of_range& e) {
+        LOG(FATAL) << "StatesManager::startProcess: \"start\" state not found. Exception: " << e.what();
+        std::terminate();
+    }
     this->stmoc->displayState(*this->currentState);
 
     std::vector<string> processSummary = {};
