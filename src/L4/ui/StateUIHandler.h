@@ -1,11 +1,11 @@
-#ifndef STATEUIHANDLER_H
-#define STATEUIHANDLER_H
+#pragma once
 
 #include <QWidget>
 #include <QLabel>
 #include <QPushButton>
 #include <QGroupBox>
 #include <QTimer>
+#include <QMessageBox>
 
 #include "ActuatorsController.h"
 #include "StatesController.h"
@@ -46,6 +46,7 @@ public:
     void displayState(const State& s) override;
     void allowProceed(bool permission) override;
     void allowAbort(bool permission) override;
+    void allowFailedChecksOverride(const std::vector<std::string> failures, Transition t) override;
 private:
     QLabel* displayTimedActuator(QPushButton* aButton);
 
@@ -56,5 +57,3 @@ private:
     ACIC& acic;
     StCIC& stcic;
 };
-
-#endif // STATEUIHANDLER_H
