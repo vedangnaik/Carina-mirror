@@ -115,6 +115,21 @@ void StateUIHandler::allowAbort(bool permission) {
     this->stateUI.abortButton->setEnabled(permission);
 }
 
+void
+StateUIHandler::allowFailedChecksOverride(const std::vector<std::string> failures, Transition t)
+{
+    QString err = "The following checks have failed:\n";
+    for (const auto& e : failures) {
+        err += QString::fromStdString("\t" + e + "\n");
+    }
+    err += "Do you wish to " + (t == Proceed ? QString::fromStdString("proceed?") : QString::fromStdString("abort?"));
+    int ret = QMessageBox::warning(this, tr("Carina"), err, QMessageBox::Ok | QMessageBox::Cancel);
+
+    if (ret == QMessageBox::Ok) {
+        t == Proceed ? this->stcic.proceed() : this->stcic.abort();
+    }
+}
+
 QLabel* StateUIHandler::displayTimedActuator(QPushButton* aButton) {
     QLabel* elapsedTimeLabel = new QLabel();
     connect(aButton, &QPushButton::toggled, elapsedTimeLabel, [=](bool checked) {

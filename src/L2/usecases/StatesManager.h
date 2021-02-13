@@ -11,6 +11,7 @@ class StMOC {
 public:
     virtual void displayStatesSummary(const std::vector<string> processSummary) = 0;
     virtual void displayState(const State& s) = 0;
+    virtual void displayFailedChecks(const std::vector<std::string> failures, Transition t) = 0;
     virtual ~StMOC() {};
 };
 
