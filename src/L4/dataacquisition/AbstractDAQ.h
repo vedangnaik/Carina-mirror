@@ -8,7 +8,7 @@
 
 class AbstractDAQ {
 public:
-    AbstractDAQ(const std::string deviceID, const unsigned int numChannels, const std::pair<std::array<double, 5>, std::array<double, 5>> calibrationPoints);
+    AbstractDAQ(const std::string deviceID, const unsigned int numChannels, const std::vector<std::pair<std::array<double, 5>, std::array<double, 5>>> calibrationPoints);
     virtual void startAcquisition() = 0;
     virtual void stopAcquisition() = 0;
     virtual std::vector<double> getLatestData() = 0;
@@ -17,8 +17,7 @@ public:
     const std::string deviceID;
     const unsigned int numChannels;
 protected:
-    double slope;
-    double y_intercept;
+    std::vector<std::pair<double, double>> slopesAndIntercepts;
 private:
-    void calibrate(std::pair<std::array<double, 5>, std::array<double, 5>> calibrationPoints);
+    void calibrate(std::vector<std::pair<std::array<double, 5>, std::array<double, 5>>> calibrationPoints);
 };

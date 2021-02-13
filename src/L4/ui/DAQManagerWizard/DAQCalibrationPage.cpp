@@ -21,10 +21,12 @@ DAQCalibrationPage::initializePage()
         gb->setLayout(fl);
 
         int numChannels = this->field(QString::fromStdString(p.first + "|numChannels")).toInt() + 1;
-        for (int channel = 0; channel < numChannels; channel++) {
-            std::vector<std::pair<std::array<double, 5>, std::array<double, 5>>> DAQChannelCalibrationPoints(numChannels);
-            DAQChannelCalibrationPoints.push_back({ std::array<double, 5>{1, 2, 3, 4, 5}, std::array<double, 5>{1, 2, 3, 4, 5} });
+        std::vector<std::pair<std::array<double, 5>, std::array<double, 5>>> DAQChannelCalibrationPoints(
+            numChannels, { std::array<double, 5>{1, 2, 3, 4, 5}, std::array<double, 5>{1, 2, 3, 4, 5} }
+        );
+        this->calibrationPoints.insert({ p.first, DAQChannelCalibrationPoints });
 
+        for (int channel = 0; channel < numChannels; channel++) {
             auto v = new QDoubleValidator(this);
             fl->addRow(new QLabel("Channel " + QString::number(channel) + ": Raw Voltage", this), new QLabel("Calibrated Value", this));
             for (int i = 0; i < 5; i++) {
@@ -43,9 +45,8 @@ DAQCalibrationPage::initializePage()
                     this->calibrationPoints.at(p.first).at(channel).second.at(i) = text.toDouble();
                 });
             }
-
-            this->calibrationPoints.insert({ p.first, DAQChannelCalibrationPoints });
         }
+
         page->layout()->addWidget(gb);
     }
 

@@ -75,29 +75,29 @@ DAQManagerWizard::assembleDAQManager()
 
     // assemble vector of abstract daq devices
     std::vector<AbstractDAQ*> DAQDevices;
-//    for (const auto& p : dqm->abstractDAQData) {
-//        if (!p.second) continue;
+    for (const auto& p : dqm->abstractDAQData) {
+        if (!p.second) continue;
 
-//        // Ugly searching based on substring xD
-//        auto& deviceID = p.first;
-//        unsigned int numChannels = dqm->field(QString::fromStdString(deviceID + "|numChannels")).toUInt() + 1;
-//        const auto& calibrationPoints = dcp->calibrationPoints.at(deviceID);
-//        // Dummy DAQ Assembly
-//        if (deviceID.find("dummy") != std::string::npos) {
-//            DAQDevices.push_back(new DummyDAQ(deviceID, numChannels, calibrationPoints));
-//        } else if (deviceID.find("serialport") != std::string::npos) {
-//            std::string serialportPath = dqm->field(QString::fromStdString(deviceID + "|serialportPath")).toString().toStdString();
-//            DAQDevices.push_back(new SerialPortDAQ(deviceID, numChannels, calibrationPoints, serialportPath));
-//#ifdef ULDAQ_AVAILABLE
-//        } else if (deviceID.find("mccdaq") != std::string::npos) {
-//            DaqDeviceHandle d = dqm->field(QString::fromStdString(deviceID + "|handle")).toLongLong();
-//            Range r = (Range)dqm->field(QString::fromStdString(deviceID + "|range")).toLongLong();
-//            DAQDevices.push_back(new AiMCCDAQ(deviceID, numChannels, calibrationPoints, d, r));
-//#endif
-//        } else {
-//            LOG(FATAL) << "Internal error with DAQManagerWizard, abandon ship";
-//        }
-//    }
+        // Ugly searching based on substring xD
+        auto& deviceID = p.first;
+        unsigned int numChannels = dqm->field(QString::fromStdString(deviceID + "|numChannels")).toUInt() + 1;
+        const auto& calibrationPoints = dcp->calibrationPoints.at(deviceID);
+        // Dummy DAQ Assembly
+        if (deviceID.find("dummy") != std::string::npos) {
+            DAQDevices.push_back(new DummyDAQ(deviceID, numChannels, calibrationPoints));
+        } else if (deviceID.find("serialport") != std::string::npos) {
+            std::string serialportPath = dqm->field(QString::fromStdString(deviceID + "|serialportPath")).toString().toStdString();
+            DAQDevices.push_back(new SerialPortDAQ(deviceID, numChannels, calibrationPoints, serialportPath));
+#ifdef ULDAQ_AVAILABLE
+        } else if (deviceID.find("mccdaq") != std::string::npos) {
+            DaqDeviceHandle d = dqm->field(QString::fromStdString(deviceID + "|handle")).toLongLong();
+            Range r = (Range)dqm->field(QString::fromStdString(deviceID + "|range")).toLongLong();
+            DAQDevices.push_back(new AiMCCDAQ(deviceID, numChannels, calibrationPoints, d, r));
+#endif
+        } else {
+            LOG(FATAL) << "Internal error with DAQManagerWizard, abandon ship";
+        }
+    }
 
     // assemble map of links
     std::map<std::string, std::pair<AbstractDAQ*, unsigned int>> sensorToDAQLinks;
