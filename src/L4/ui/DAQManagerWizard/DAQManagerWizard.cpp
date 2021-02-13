@@ -3,6 +3,18 @@
 DAQManagerWizard::DAQManagerWizard(std::unique_ptr<DAQManager> daqm, DAQManagerWizardAction a, std::vector<std::string> sensorIDs, QWidget* parent)
     : QWizard(parent), daqm{std::move(daqm)}
 {
+    // cheeky trick to exploit a side-effect/possible bug of QDialog where the internal state
+    // is saved on accept, but not on reject for some strange reason.
+    this->setOption(QWizard::NoCancelButton);
+    this->setOption(QWizard::HaveCustomButton1);
+    this->setButtonText(QWizard::CustomButton1, "Cancel");
+    connect(this->button(QWizard::CustomButton1), &QAbstractButton::clicked, this, &QDialog::accept);
+    // rearrange the buttons to look nicer.
+    QList<QWizard::WizardButton> layout;
+    layout << QWizard::CustomButton1 << QWizard::Stretch<< QWizard::BackButton << QWizard::NextButton << QWizard::FinishButton;
+    this->setButtonLayout(layout);
+
+
     switch(a) {
     case Manufacture: {
         this->setWindowTitle("DAQ Manager Configuration Wizard");
@@ -35,7 +47,6 @@ DAQManagerWizard::DAQManagerWizard(std::unique_ptr<DAQManager> daqm, DAQManagerW
         break;
     }
     }
-
 }
 
 void DAQManagerWizard::manufactureDAQManager()
@@ -88,37 +99,37 @@ void DAQManagerWizard::manufactureDAQManager()
     this->daqm = std::make_unique<DAQManager>(DAQDevices, sensorToDAQLinks);
 }
 
-void
-DAQManagerWizard::recalibrateDAQs()
-{
-    auto* dcp = (DAQCalibrationPage*)this->page(0);
-    for (const auto& p : dcp->calibrationPoints) {
-        AbstractDAQ* daq = *std::find_if(this->daqm->DAQDevices.begin(), this->daqm->DAQDevices.end(), [=](AbstractDAQ* daq) {
-            return daq->deviceID == p.first;
-        });
-        daq->calibrate(p.second);
-    }
-}
+//void
+//DAQManagerWizard::recalibrateDAQs()
+//{
+//    auto* dcp = (DAQCalibrationPage*)this->page(0);
+//    for (const auto& p : dcp->calibrationPoints) {
+//        AbstractDAQ* daq = *std::find_if(this->daqm->DAQDevices.begin(), this->daqm->DAQDevices.end(), [=](AbstractDAQ* daq) {
+//            return daq->deviceID == p.first;
+//        });
+//        daq->calibrate(p.second);
+//    }
+//}
 
-void
-DAQManagerWizard::relinkSensors()
-{
-    auto* dlp = (DAQLinkingPage*)this->page(0);
-    this->daqm->sensorToDAQLinks.clear();
-    for (const auto& p : dlp->sensorLinks) {
-        if (p.second == "<unlinked>") continue;
+//void
+//DAQManagerWizard::relinkSensors()
+//{
+//    auto* dlp = (DAQLinkingPage*)this->page(0);
+//    this->daqm->sensorToDAQLinks.clear();
+//    for (const auto& p : dlp->sensorLinks) {
+//        if (p.second == "<unlinked>") continue;
 
-        const auto& IDAndChannel = p.second;
-        std::string::size_type n = IDAndChannel.find("-");
-        std::string id = IDAndChannel.substr(0, n);
-        unsigned int channel = std::stoul(IDAndChannel.substr(n+1, IDAndChannel.length()));
+//        const auto& IDAndChannel = p.second;
+//        std::string::size_type n = IDAndChannel.find("-");
+//        std::string id = IDAndChannel.substr(0, n);
+//        unsigned int channel = std::stoul(IDAndChannel.substr(n+1, IDAndChannel.length()));
 
-        AbstractDAQ* daq = *std::find_if(this->daqm->DAQDevices.begin(), this->daqm->DAQDevices.end(), [=](AbstractDAQ* d) {
-            return d->deviceID == id;
-        });
-        this->daqm->sensorToDAQLinks.insert({ p.first, std::make_pair(daq, channel) });
-    }
-}
+//        AbstractDAQ* daq = *std::find_if(this->daqm->DAQDevices.begin(), this->daqm->DAQDevices.end(), [=](AbstractDAQ* d) {
+//            return d->deviceID == id;
+//        });
+//        this->daqm->sensorToDAQLinks.insert({ p.first, std::make_pair(daq, channel) });
+//    }
+//}
 
 std::unique_ptr<DAQManager>
 DAQManagerWizard::getDAQManager() {
@@ -128,9 +139,10 @@ DAQManagerWizard::getDAQManager() {
 
 
 std::unique_ptr<DAQManager>
-DAQManagerWizard::manufactureDAQManager(std::unique_ptr<DAQManager> daqm, std::vector<std::string> sensorIDs)
+DAQManagerWizard::manufactureDAQManager(std::vector<std::string> sensorIDs)
 {
     DAQManagerWizard dmw(std::move(daqm), DAQManagerWizardAction::Manufacture, sensorIDs);
+    LOG(INFO) << dmw.exec();
     if (dmw.exec() == QDialog::Accepted) {
         dmw.manufactureDAQManager();
         return dmw.getDAQManager();
@@ -139,22 +151,22 @@ DAQManagerWizard::manufactureDAQManager(std::unique_ptr<DAQManager> daqm, std::v
     }
 }
 
-std::unique_ptr<DAQManager>
-DAQManagerWizard::recalibrateDAQs(std::unique_ptr<DAQManager> daqm)
-{
-    DAQManagerWizard dmw(std::move(daqm), DAQManagerWizardAction::Recalibrate);
-    if (dmw.exec() == QDialog::Accepted) {
-        dmw.recalibrateDAQs();
-    }
-    return dmw.getDAQManager();
-}
+//std::unique_ptr<DAQManager>
+//DAQManagerWizard::recalibrateDAQs(std::unique_ptr<DAQManager> daqm)
+//{
+//    DAQManagerWizard dmw(std::move(daqm), DAQManagerWizardAction::Recalibrate);
+//    if (dmw.exec() == QDialog::Accepted) {
+//        dmw.recalibrateDAQs();
+//    }
+//    return dmw.getDAQManager();
+//}
 
-std::unique_ptr<DAQManager>
-DAQManagerWizard::relinkSensors(std::unique_ptr<DAQManager> daqm, std::vector<std::string> sensorIDs)
-{
-    DAQManagerWizard dmw(std::move(daqm), DAQManagerWizardAction::Relink, sensorIDs);
-    if (dmw.exec() == QDialog::Accepted) {
-        dmw.relinkSensors();
-    }
-    return dmw.getDAQManager();
-}
+//std::unique_ptr<DAQManager>
+//DAQManagerWizard::relinkSensors(std::unique_ptr<DAQManager> daqm, std::vector<std::string> sensorIDs)
+//{
+//    DAQManagerWizard dmw(std::move(daqm), DAQManagerWizardAction::Relink, sensorIDs);
+//    if (dmw.exec() == QDialog::Accepted) {
+//        dmw.relinkSensors();
+//    }
+//    return dmw.getDAQManager();
+//}
