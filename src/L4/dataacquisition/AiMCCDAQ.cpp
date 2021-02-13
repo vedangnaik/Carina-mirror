@@ -2,7 +2,9 @@
 
 #include "AiMCCDAQ.h"
 
-AiMCCDAQ::AiMCCDAQ(std::string deviceID, DaqDeviceHandle handle, unsigned int numChannels, Range voltageRange) : AbstractDAQ(deviceID, numChannels), handle{handle}, voltageRange{voltageRange} {
+AiMCCDAQ::AiMCCDAQ(const std::string deviceID, const unsigned int numChannels, const std::pair<std::array<double, 5>, std::array<double, 5>> calibrationPoints, DaqDeviceHandle handle, Range voltageRange)
+    : AbstractDAQ(deviceID, numChannels, calibrationPoints), handle{handle}, voltageRange{voltageRange}
+{
     // connect DAQ
     UlError err = ulConnectDaqDevice(handle);
     if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulConnectDaqDevice Error: " << err; }
