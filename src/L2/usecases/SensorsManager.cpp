@@ -1,7 +1,7 @@
 #include "SensorsManager.h"
 
-SensorsManager::SensorsManager(map<const string, Sensor> sensors)
-    : sensors{std::move(sensors)}
+SensorsManager::SensorsManager(map<const string, Sensor> sensors, SMOC& smoc)
+    : sensors{std::move(sensors)}, smoc{smoc}
 {}
 
 float SensorsManager::getSensorValue(string id) {
@@ -10,18 +10,18 @@ float SensorsManager::getSensorValue(string id) {
     }  catch (std::out_of_range& e) {
         // Precondition violation, it's over.
         LOG(FATAL) << "SensorsManager::getSensorValue(" << id << "): ID not found. Exception: " << e.what();
-        std::terminate();
+        std::terminate(); // just to stop the compiler complaining about no return value xD
     }
 }
 
 void SensorsManager::setSensorValue(string id, float value) {
     try {
         this->sensors.at(id).values.push_back(value);
-        this->smoc->notify(id, value);
+        this->smoc.notify(id, value);
     }  catch (std::out_of_range& e) {
         // Precondition violation, it's over.
         LOG(FATAL) << "SensorsManager::setSensorValue(" << id << ", " << value << "): ID not found. Exception: " << e.what();
-        std::terminate();
+        std::terminate(); // just to stop the compiler complaining about no return value xD
     }
 }
 

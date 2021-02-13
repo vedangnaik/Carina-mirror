@@ -25,20 +25,17 @@ public:
 
 class StatesManager : public StMIC {
 public:
-    StatesManager(map<const string, const State> states, SMIC& smic, AMIC& amic);
+    StatesManager(map<const string, const State> states, SMIC& smic, AMIC& amic, StMOC& stmoc);
     void transition(Transition t, bool override = false) override;
-    void setOutputContract(StMOC* stmoc) {
-        this->stmoc = stmoc;
-    }
     void startProcess();
     void stopProcess();
 private:
     map<const string, const State> states;
     const State* currentState;
 
-    StMOC* stmoc;
     SMIC& smic;
     AMIC& amic;
+    StMOC& stmoc;
 };
 
 

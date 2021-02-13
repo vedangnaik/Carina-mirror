@@ -40,41 +40,39 @@ GSManager::GSManager() {
 }
 
 void GSManager::openProcessFromFile(string filepath) {
-    // Exceptions will be thrown for any errors in the file format.
     try {
+        // Exceptions will be thrown for any errors in the file format.
         ProcessFileParser pg(filepath);
         auto t = pg.parseProcessFile();
 
-        // Array of sensor and actuator IDs for the L2 classes
+        // Array of sensor and actuator IDs for various classes to use.
         std::vector<string> sensorIDs, actuatorIDs;
         for (const auto& p : std::get<0>(t)) { sensorIDs.push_back(p.first); }
         for (const auto& p : std::get<1>(t)) { actuatorIDs.push_back(p.first); }
-        // Now initialize the L2 classes with them.
-        this->sm = make_unique<SensorsManager>(std::get<0>(t));
-        this->am = make_unique<ActuatorsManager>(std::get<1>(t));
-        this->stm = make_unique<StatesManager>(std::get<2>(t), *this->sm, *this->am);
 
-        // init L3 classes here
+        // First make the presenters which dudes be subscribing to
+        this->sp = make_unique<SensorsPresenter>();
+        this->ap = make_unique<ActuatorsPresenter>();
+        this->stp = make_unique<StatesPresenter>();
+
+        // Now initialize the L2 classes with these presenters to use.
+        this->sm = make_unique<SensorsManager>(std::get<0>(t), *this->sp);
+        this->am = make_unique<ActuatorsManager>(std::get<1>(t), *this->ap);
+        this->stm = make_unique<StatesManager>(std::get<2>(t), *this->sm, *this->am, *this->stp);
+
+        // Make the remaining L3 classes here
         this->svg = make_unique<SensorValuesGateway>(*this->sm);
         this->ac = make_unique<ActuatorsController>(*this->am);
         this->stc = make_unique<StatesController>(*this->stm);
-        // init L4 and presenters here
-        this->sp = make_unique<SensorsPresenter>();
-        this->ap = make_unique<ActuatorsPresenter>();
-        this->suih = make_unique<StateUIHandler>(this->stateUI, *this->sp, *this->ap, *this->ac, *this->stc);
+
+        // Make the L4 UI classes here
+        this->suih = make_unique<StateUIHandler>(this->stateUI, *this->sp, *this->ap, *this->stp, *this->ac, *this->stc);
         this->sduih = make_unique<SystemDiagramUIHandler>(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIDs, actuatorIDs);
-        this->stp = make_unique<StatesPresenter>(*this->suih);
 
+        // Enable configuration of DAQs, disable opening new file, enable starting loaded process.
         this->GSMainWindowUI.actionConfigure_DAQ_Devices->setEnabled(true);
-
-        // attach presenters to managers (kinda ugly, but idk another way to do it)
-        this->sm->setOutputContract(this->sp.get());
-        this->am->setOutputContract(this->ap.get());
-        this->stm->setOutputContract(this->stp.get());
-
         this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
         this->GSMainWindowUI.startProcessAction->setEnabled(true);
-
     } catch (ProcessFileParseError& e) {
         LOG(ERROR) << "Process file parse error:" << e.what();
     } catch (SensorsManagerError& e) {

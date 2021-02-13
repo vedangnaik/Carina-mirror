@@ -40,7 +40,7 @@ public:
 class StateUIHandler : public QWidget, public StPOC {
     Q_OBJECT
 public:
-    StateUIHandler(Ui::State& stateUI, SPIC& spic, APIC& apic, ACIC& acic, StCIC& stcic);
+    StateUIHandler(Ui::State& stateUI, SPIC& spic, APIC& apic, StPIC& stpic, ACIC& acic, StCIC& stcic);
 
     void displayProcessSummary(const std::vector<std::string> processSummary) override;
     void displayState(const State& s) override;
@@ -52,8 +52,11 @@ private:
 
     Ui::State& stateUI;
     QTimer* actuatorButtonTimer;
+    // presenters to subscribe to
     SPIC& spic;
     APIC& apic;
+    StPIC& stpic;
+    // controllers to report actions to
     ACIC& acic;
     StCIC& stcic;
 };
