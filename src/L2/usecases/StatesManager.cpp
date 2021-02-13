@@ -49,12 +49,7 @@ StatesManager::transition(Transition t, bool override)
 void
 StatesManager::startProcess()
 {
-    try {
-        this->currentState = &this->states.at("start");
-    } catch (std::out_of_range& e) {
-        LOG(FATAL) << "StatesManager::startProcess: 'start' state not found. Exception: " << e.what();
-        std::terminate();
-    }
+    this->currentState = &this->states.at("start");
     this->stmoc->displayState(*this->currentState);
 
     std::vector<string> processSummary = {};

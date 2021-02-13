@@ -52,5 +52,5 @@ protected:
 
 class NoStartStateError : public StatesManagerError {
 public:
-    NoStartStateError() : StatesManagerError("No Start State found in Process FSM") {}
+    NoStartStateError() : StatesManagerError("No 'start' state found in process file") {}
 };
