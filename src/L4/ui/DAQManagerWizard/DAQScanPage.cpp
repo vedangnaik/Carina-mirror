@@ -9,9 +9,11 @@ DAQScanPage::DAQScanPage(QWidget* parent)
 void
 DAQScanPage::initializePage()
 {
-   this->displayDummyDAQs();
-   this->displayOpenSerialPorts();
-   this->displayAvailableAiMCCDAQs();
+    this->displayDummyDAQs();
+    this->displayOpenSerialPorts();
+#ifdef ULDAQ_AVAILABLE
+    this->displayAvailableAiMCCDAQs();
+#endif
 }
 
 void
