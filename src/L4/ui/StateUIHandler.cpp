@@ -54,7 +54,7 @@ void StateUIHandler::displayState(const State& s) {
                     this->stateUI.actionsLayout->addWidget(this->displayTimedActuator(ab), row, 4);
                     break;
                 case ActuatorOption::Automatic:
-                    ab->toggle();
+                    ab->click();
                     break;
                 }
             }
