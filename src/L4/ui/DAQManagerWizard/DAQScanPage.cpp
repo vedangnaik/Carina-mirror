@@ -11,7 +11,9 @@ DAQScanPage::initializePage()
 {
    this->displayDummyDAQs();
    this->displayOpenSerialPorts();
+#ifdef ULDAQ_AVAILABLE
    this->displayAvailableAiMCCDAQs();
+#endif
 }
 
 void
