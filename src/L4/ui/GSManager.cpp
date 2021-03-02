@@ -82,6 +82,10 @@ void GSManager::openProcessFromFile(string filepath) {
 
 void GSManager::startProcess() {
     // TODO: Add the wizard invocation here if it's nullptr
+    if (this->daqm == nullptr) {
+        LOG(ERROR) << "Please configure your DAQ devices first.";
+        return;
+    }
     this->daqm->setOutputContract(this->svg.get());
     this->daqm->startAcquisition();
     this->stm->startProcess();

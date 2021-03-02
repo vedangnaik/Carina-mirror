@@ -32,6 +32,9 @@
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
            <widget class="QPushButton" name="abortButton">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -104,7 +107,7 @@ background-color: rgb(170, 0, 0);</string>
                   <x>0</x>
                   <y>0</y>
                   <width>536</width>
-                  <height>563</height>
+                  <height>565</height>
                  </rect>
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -120,6 +123,9 @@ background-color: rgb(170, 0, 0);</string>
           </item>
           <item>
            <widget class="QPushButton" name="proceedButton">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
