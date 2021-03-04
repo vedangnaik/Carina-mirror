@@ -21,6 +21,9 @@ DAQScanPage::initializePage()
     this->displayAvailableAiMCCDAQs();
 >>>>>>> 50e4af9f13645a4aa7b9738c929657a89b9df54c
 #endif
+#ifdef WIRINGPI_AVAILABLE
+    this->displayAvailableI2CDAQs();
+#endif
 }
 
 void
@@ -95,7 +98,7 @@ DAQScanPage::displayOpenSerialPorts()
         this->ui->SerialportDevicesLayout->addWidget(chb, row, 0);
         this->ui->SerialportDevicesLayout->addWidget(new QLabel("Path: ", this), row, 1);
         this->ui->SerialportDevicesLayout->addWidget(l, row, 2);
-        this->ui->SerialportDevicesLayout->addWidget(new QLabel("\tNumber of 'channels': ", this), row, 3);
+        this->ui->SerialportDevicesLayout->addWidget(new QLabel("Number of 'channels': ", this), row, 3);
         this->ui->SerialportDevicesLayout->addWidget(cmb, row, 4);
     }
 }
@@ -103,11 +106,13 @@ DAQScanPage::displayOpenSerialPorts()
 /* UNTESTED, PLEASE BE WARY
 */
 #ifdef ULDAQ_AVAILABLE
-void DAQScanPage::displayAvailableAiMCCDAQs()
+void
+DAQScanPage::displayAvailableAiMCCDAQs()
 {
     DAQManagerWizard* dmw = (DAQManagerWizard*)this->wizard();
 
-    auto scanForAvailableAiMCCDAQs = []() -> std::vector<std::tuple<DaqDeviceHandle, bool, unsigned int, Range>> {
+    auto scanForAvailableAiMCCDAQs = []() -> std::vector<std::tuple<DaqDeviceHandle, bool, unsigned int, Range>>
+    {
         std::vector<std::tuple<DaqDeviceHandle, bool, unsigned int, Range>> daqs;
 
         // Interface type to look for.
@@ -182,6 +187,51 @@ void DAQScanPage::displayAvailableAiMCCDAQs()
         this->ui->MCCDAQDevicesLayout->addWidget(l, row, 5);
         this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Voltage range: ", this), row, 6);
         this->ui->MCCDAQDevicesLayout->addWidget(m, row, 7);
+    }
+}
+#endif
+
+#ifdef WIRINGPI_AVAILABLE
+void
+DAQScanPage::displayAvailableI2CDAQs()
+{
+    auto scanForAvailableI2CDAQs = []() -> std::vector<unsigned char> {
+            std::vector<unsigned char> daqs;
+        int f;
+        if ((f = open("/dev/i2c-1", O_RDWR)) >= 0) {
+            for (unsigned char addr = 0; addr < 128; addr++) {
+                if (ioctl(f, I2C_SLAVE, addr) > 0) {
+                    daqs.push_back(addr);
+                }
+            }
+        }
+        return daqs;
+    };
+
+    DAQManagerWizard* dmw = (DAQManagerWizard*)this->wizard();
+    for (const auto& addr: scanForAvailableI2CDAQs()) {
+        std::string deviceID = "i2c:" + std::to_string(addr);
+        dmw->abstractDAQData.insert({ deviceID, false });
+
+        QCheckBox* chb = new QCheckBox(QString::fromStdString(deviceID), this);
+        connect(chb, &QCheckBox::stateChanged, this, [=](int state) {
+            state == Qt::Unchecked ? dmw->abstractDAQData.at(deviceID) = false : dmw->abstractDAQData.at(deviceID) = true;
+        });
+
+        QLabel* l = new QLabel(QString::number(addr), this);
+        this->registerField(QString::fromStdString(deviceID + "|i2cAddr"), l, "text");
+
+        QComboBox* cmb = new QComboBox(this);
+        cmb->addItems({"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
+        cmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        this->registerField(QString::fromStdString(deviceID + "|numChannels"), cmb);
+
+        int row = this->ui->SerialportDevicesLayout->rowCount();
+        this->ui->I2CDAQDevicesLayout->addWidget(chb, row, 0);
+        this->ui->I2CDAQDevicesLayout->addWidget(new QLabel("I2C Address: ", this), row, 1);
+        this->ui->I2CDAQDevicesLayout->addWidget(l, row, 2);
+        this->ui->I2CDAQDevicesLayout->addWidget(new QLabel("Number of 'channels': ", this), row, 3);
+        this->ui->I2CDAQDevicesLayout->addWidget(cmb, row, 4);
     }
 }
 #endif

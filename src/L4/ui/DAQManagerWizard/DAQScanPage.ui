@@ -19,7 +19,7 @@
   <property name="windowTitle">
    <string>DAQ Device Configuration</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_5">
+  <layout class="QVBoxLayout" name="verticalLayout_10">
    <item>
     <widget class="QLabel" name="label_3">
      <property name="sizePolicy">
@@ -29,7 +29,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>General daq help text here</string>
+      <string>DAQs can communicate over a number of interfaces. Each DAQ has a number of channels, which is the number of separate values they collect and provide on each read cycle.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -56,7 +56,7 @@
         <x>0</x>
         <y>0</y>
         <width>893</width>
-        <height>845</height>
+        <height>830</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -69,7 +69,10 @@
           <item>
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Dummy DAQ help text here</string>
+             <string>Dummy DAQs are random number generators that are always available for testing. They can be equipped with up to ten channels, for use with as many data sinks as necessary.</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -112,7 +115,7 @@
              <enum>QFrame::StyledPanel</enum>
             </property>
             <property name="text">
-             <string>Serial port help text here</string>
+             <string>Serial port DAQs communiate over the serial port interface. They can be equpped with a number of 'channels', where each 'channel' is a number of values sent back to back. For example, if a seial port is equipped with 5 channels, then every 5 values sent over the port will be interpreted as a one reading for 5 channels.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -158,7 +161,7 @@
              <enum>QFrame::StyledPanel</enum>
             </property>
             <property name="text">
-             <string>MCCDAQ help text here</string>
+             <string>MCCDAQs communicate over the USB interface. Measurement Computings 'uldaq.h' library is required to interface with MCCDAQs.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -176,6 +179,52 @@
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <item>
               <layout class="QGridLayout" name="MCCDAQDevicesLayout"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="I2CDAQGroupBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="title">
+          <string>I2C DAQs</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="text">
+             <string>I2C DAQ communicate over the I2C interface. They can be equipped with 'channels' similar to serial port DAQs. The Raspberry Pi 'wiringPi' library is required to interface with I2C DAQs.</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_3" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <layout class="QGridLayout" name="I2CDAQDevicesLayout"/>
              </item>
             </layout>
            </widget>
