@@ -9,18 +9,19 @@
 #include <sstream>
 #include <fstream>
 #include <cmath>
+#include <chrono>
+#include <thread>
 
 class AD799xDAQ : public AbstractDAQ
 {
 public:
-    AD799xDAQ(std::string id, unsigned int numChannels, char I2CAddress, std::string I2CPath);
+    AD799xDAQ(std::string id, unsigned int numChannels, char I2CAddress);
     void startAcquisition() override;
     void stopAcquisition() override;
     std::vector<double> getLatestData() override;
 private:
-    const std::string I2CPath;
+    private int fd;  // -1 if device not found
     const char I2CAddress;
-    std::ifstream I2CPort;
 };
 
 // #endif
