@@ -17,6 +17,7 @@ I2CDAQ::I2CDAQ(const std::string id, const unsigned int numChannels, const std::
 void
 I2CDAQ::startAcquisition()
 {
+    int result;
     this->fd = wiringPiI2CSetup(I2CAddress);
     if (fd == -1){
         LOG(ERROR) << "Could not setup I2C device at address: " << I2CAddress << std::endl;
@@ -28,8 +29,12 @@ I2CDAQ::startAcquisition()
     }
 
     // program the Advanced Configuration Register
-    wiringPiI2CWriteReg8(this->fd, ADVANCED_CONFIG_REG, 0b00000001); // not too sure what bits [2:1] should be (ASK KAMRAN)
+    result = wiringPiI2CWriteReg8(this->fd, ADVANCED_CONFIG_REG, 0b00000001);
+    if (result == -1){
+        LOG(ERROR) << "Failed to write to the Advanced Configuration Register for the device at: " << I2CAddress << std::endl;
+        // throw exception?
 
+    }
     // program the Conversion Rate Register (ASK KAMRAN)
 
     //  can just ignore int mask stuff? (ASK KAMRAN)
@@ -38,6 +43,11 @@ I2CDAQ::startAcquisition()
 
     // set START big of configuration register to 1
     wiringPiI2CWriteReg8(this->fd, CONFIG_REG, 0b00000001);
+    if (result == -1){
+        LOG(ERROR) << "Failed to write to the Configuration Register for the device at: " << I2CAddress << std::endl;
+        // throw exception?
+
+    }
 }
 
 void
