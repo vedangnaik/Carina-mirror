@@ -11,6 +11,7 @@
 #include "DummyDAQ.h"
 #include "SerialPortDAQ.h"
 #include "AiMCCDAQ.h"
+#include "I2CDAQ.h"
 
 
 

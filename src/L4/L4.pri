@@ -1,9 +1,9 @@
 SOURCES += \
-    $$PWD/dataacquisition/AD799xDAQ.cpp \
     $$PWD/dataacquisition/AbstractDAQ.cpp \
     $$PWD/dataacquisition/AiMCCDAQ.cpp \
     $$PWD/dataacquisition/DAQManager.cpp \
     $$PWD/dataacquisition/DummyDAQ.cpp \
+    $$PWD/dataacquisition/I2CDAQ.cpp \
     $$PWD/dataacquisition/SerialPortDAQ.cpp \
     $$PWD/ui/DAQManagerWizard/DAQCalibrationPage.cpp \
     $$PWD/ui/DAQManagerWizard/DAQLinkingPage.cpp \
@@ -15,11 +15,11 @@ SOURCES += \
     $$PWD/ui/SystemDiagramUIHandler.cpp
 
 HEADERS += \
-    $$PWD/dataacquisition/AD799xDAQ.h \
     $$PWD/dataacquisition/AbstractDAQ.h \
     $$PWD/dataacquisition/AiMCCDAQ.h \
     $$PWD/dataacquisition/DAQManager.h \
     $$PWD/dataacquisition/DummyDAQ.h \
+    $$PWD/dataacquisition/I2CDAQ.h \
     $$PWD/dataacquisition/SerialPortDAQ.h \
     $$PWD/ui/DAQManagerWizard/DAQCalibrationPage.h \
     $$PWD/ui/DAQManagerWizard/DAQLinkingPage.h \

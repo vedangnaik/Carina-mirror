@@ -85,16 +85,25 @@ DAQManagerWizard::assembleDAQManager()
         // Dummy DAQ Assembly
         if (deviceID.find("dummy") != std::string::npos) {
             DAQDevices.push_back(new DummyDAQ(deviceID, numChannels, calibrationPoints));
-        } else if (deviceID.find("serialport") != std::string::npos) {
+        }
+        else if (deviceID.find("serialport") != std::string::npos) {
             std::string serialportPath = dqm->field(QString::fromStdString(deviceID + "|serialportPath")).toString().toStdString();
             DAQDevices.push_back(new SerialPortDAQ(deviceID, numChannels, calibrationPoints, serialportPath));
+        }
 #ifdef ULDAQ_AVAILABLE
-        } else if (deviceID.find("mccdaq") != std::string::npos) {
+        else if (deviceID.find("mccdaq") != std::string::npos) {
             DaqDeviceHandle d = dqm->field(QString::fromStdString(deviceID + "|handle")).toLongLong();
             Range r = (Range)dqm->field(QString::fromStdString(deviceID + "|range")).toLongLong();
             DAQDevices.push_back(new AiMCCDAQ(deviceID, numChannels, calibrationPoints, d, r));
+        }
 #endif
-        } else {
+#ifdef WIRINGPI_AVAILABLE
+        else if (deviceID.find("i2c") != std::string::npos) {
+            unsigned char addr = dqm->field(QString::fromStdString(deviceID + "|i2cAddr")).toUInt();
+            DAQDevices.push_back(new I2CDAQ(deviceID, numChannels, calibrationPoints, addr));
+        }
+#endif
+        else {
             LOG(FATAL) << "Internal error with DAQManagerWizard, abandon ship";
         }
     }
