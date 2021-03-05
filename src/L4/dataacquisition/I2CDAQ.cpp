@@ -8,6 +8,8 @@
 #define CONFIG_REG          0x00
 #define IN0                 0x20
 #define DEEP_SHUTDOWN_REG   0x0A
+#define INTERUPT_MASK_REG   0x03
+#define CONVERSION_RATE_REG 0x07
 
 I2CDAQ::I2CDAQ(const std::string id, const unsigned int numChannels, const std::vector<std::pair<std::array<double, 5>, std::array<double, 5>>> calibrationPoints, const char I2CAddress)
     : AbstractDAQ(id, numChannels, calibrationPoints), I2CAddress{I2CAddress}
@@ -30,21 +32,31 @@ I2CDAQ::startAcquisition()
     }
 
     // program the Advanced Configuration Register
-    result = wiringPiI2CWriteReg8(this->fd, ADVANCED_CONFIG_REG, 0b00000001);
+    result = wiringPiI2CWriteReg8(this->fd, ADVANCED_CONFIG_REG, 0x01);
     if (result == -1){
         LOG(ERROR) << "Failed to write to the Advanced Configuration Register I2CDAQ::startAcquisition() for the device at: " << I2CAddress << std::endl;
         // throw exception?
 
     }
-    // program the Conversion Rate Register (ASK KAMRAN)
 
-    // can just ignore int mask stuff? (ASK KAMRAN)
-    // to ignore interupts, do i set the bits to 0 or 1
+    // program the Conversion Rate Register to continuous conversion
+    result = wiringPiI2CWriteReg8(this->fd, CONVERSION_RATE_REG, 0x01);
+    if (result == -1){
+        LOG(ERROR) << "Failed to write to the Conversion Rate Register I2CDAQ::startAcquisition() for the device at: " << I2CAddress << std::endl;
+        // throw exception?
 
-    // set limit registers (ASK KAMRAN)
+    }
+
+    // mask interrupts
+    result = wiringPiI2CWriteReg8(this->fd, INTERUPT_MASK_REG, 0xFF);
+    if (result == -1){
+        LOG(ERROR) << "Failed to write to the Interupt Mask Register I2CDAQ::startAcquisition() for the device at: " << I2CAddress << std::endl;
+        // throw exception?
+
+    }
 
     // set START bit of configuration register to 1
-    result = wiringPiI2CWriteReg8(this->fd, CONFIG_REG, 0b00000001);
+    result = wiringPiI2CWriteReg8(this->fd, CONFIG_REG, 0x01);
     if (result == -1){
         LOG(ERROR) << "Failed to write to the Configuration Register in I2CDAQ::startAcquisition() for the device at: " << I2CAddress << std::endl;
         // throw exception?
@@ -55,11 +67,7 @@ I2CDAQ::startAcquisition()
 void
 I2CDAQ::stopAcquisition()
 {
-    // not too sure how to turn off device (ASK KAMRAN)
-    // use shutdown or deep shutdown?
-
     int result;
-
     // set start bit to 0
     result = wiringPiI2CWriteReg8(this->fd, CONFIG_REG, 0x00);
     if (result == -1){
@@ -67,18 +75,6 @@ I2CDAQ::stopAcquisition()
         // throw exception?
 
     }
-
-    // configur deep shutdown reg
-    result = wiringPiI2CWriteReg8(this->fd, DEEP_SHUTDOWN_REG, 0x01);
-    if (result == -1){
-        LOG(ERROR) << "Failed to write to the Deep Shutdown Register in I2CDAQ::stopAcquisition() for the device at: " << I2CAddress << std::endl;
-        // throw exception?
-
-    }
-
-    // One-Shot register?
-
-
 }
 
 std::vector<double>
