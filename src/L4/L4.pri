@@ -58,3 +58,8 @@ FORMS += \
 contains(DEFINES, ULDAQ_AVAILABLE) {
     LIBS += -luldaq
 }
+
+# Link WiringPi for I2C stuff if it's available and required.
+contains(DEFINES, WIRINGPI_AVAILABLE) {
+    LIBS += -lwiringPi
+}
