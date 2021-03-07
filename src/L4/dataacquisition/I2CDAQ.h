@@ -4,6 +4,10 @@
 
 //#include <wiringPiI2C.h>
 #include "AbstractDAQ.h"
+#include "easylogging++.h"
+#include <cmath>
+#include <chrono>
+#include <thread>
 
 class I2CDAQ : public AbstractDAQ
 {
@@ -13,6 +17,7 @@ public:
     void stopAcquisition() override;
     std::vector<double> getLatestData() override;
 private:
+    int fd;  // -1 if device not found
     const char I2CAddress;
 };
 

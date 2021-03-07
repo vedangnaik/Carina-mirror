@@ -14,7 +14,7 @@ DAQScanPage::initializePage()
 #ifdef ULDAQ_AVAILABLE
     this->displayAvailableAiMCCDAQs();
 #endif
-#ifdef WIRINGPI_AVAILABLE
+#ifdef WIRINGPI_AVAILABLEs
     this->displayAvailableI2CDAQs();
 #endif
 }
