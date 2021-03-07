@@ -2,7 +2,7 @@
 
 #pragma once
 
-//#include <wiringPiI2C.h>
+#include <wiringPiI2C.h>
 #include "AbstractDAQ.h"
 #include "easylogging++.h"
 #include <cmath>
