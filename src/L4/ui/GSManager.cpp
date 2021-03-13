@@ -3,6 +3,9 @@
 GSManager::GSManager() {
     this->renderUi();
 
+    // Attach the error dialog right now, to allow logging as early as possible.
+    this->euih = std::make_unique<ErrorUIHandler>(this->errorUI);
+
     connect(this->GSMainWindowUI.openProcessFromFileAction, &QAction::triggered, this, [=]() {
         QString fileName = QFileDialog::getOpenFileName(this,
             tr("Open Process File"), "/", tr("JSON Files (*.json)"));
@@ -110,7 +113,6 @@ void GSManager::stopAndCloseProcess() {
 void GSManager::renderUi() {
     this->GSMainWindowUI.setupUi(this);
     this->errorUI.setupUi(this->GSMainWindowUI.errorFrame);
-    euih.setUI(&this->errorUI);
     this->stateUI.setupUi(this->GSMainWindowUI.stateFrame);
     this->systemDiagramUI.setupUi(this->GSMainWindowUI.systemDiagramFrame);
 }

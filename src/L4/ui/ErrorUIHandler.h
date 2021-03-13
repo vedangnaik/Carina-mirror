@@ -3,12 +3,13 @@
 #include "ui_Error.h"
 #include <iostream>
 
-class ErrorUIHandler {
+class ErrorUIHandler : std::basic_streambuf<char> {
 public:
-    void setUI(Ui::Error* errorUI);
-    friend ErrorUIHandler& operator<<(ErrorUIHandler& euih, std::string message);
+    ErrorUIHandler(Ui::Error& errorUI);
+    ~ErrorUIHandler();
+    std::streamsize xsputn(const char *p, std::streamsize n) override;
+    std::basic_streambuf<char>::int_type overflow(int_type v) override;
 private:
-    Ui::Error* errorUI = nullptr;
+    Ui::Error& errorUI;
+    std::streambuf* coutBufferBackup;
 };
-
-extern ErrorUIHandler euih;

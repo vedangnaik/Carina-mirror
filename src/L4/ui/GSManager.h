@@ -41,8 +41,6 @@ using std::unique_ptr;
 QT_BEGIN_NAMESPACE
 namespace Ui {
     class GSMainWindow;
-    class State;
-    class SystemDiagram;
 }
 QT_END_NAMESPACE
 
@@ -73,6 +71,7 @@ private:
     unique_ptr<ActuatorsPresenter> ap;
     unique_ptr<StatesPresenter> stp;
     // L4
+    unique_ptr<ErrorUIHandler> euih;
     unique_ptr<StateUIHandler> suih;
     unique_ptr<SystemDiagramUIHandler> sduih;
     unique_ptr<DAQManager> daqm;

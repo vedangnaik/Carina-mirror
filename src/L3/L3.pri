@@ -1,7 +1,6 @@
 SOURCES += \
     $$PWD/controllers/ActuatorsController.cpp \
     $$PWD/controllers/StatesController.cpp \
-    $$PWD/gateways/ActuatorStatusGateway.cpp \
     $$PWD/gateways/ProcessFileParser.cpp \
     $$PWD/gateways/SensorValuesGateway.cpp \
     $$PWD/presenters/ActuatorsPresenter.cpp \
@@ -11,7 +10,6 @@ SOURCES += \
 HEADERS += \
     $$PWD/controllers/ActuatorsController.h \
     $$PWD/controllers/StatesController.h \
-    $$PWD/gateways/ActuatorStatusGateway.h \
     $$PWD/gateways/ProcessFileParser.h \
     $$PWD/gateways/SensorValuesGateway.h
 

@@ -1,26 +1,31 @@
 #include "ErrorUIHandler.h"
 
-void ErrorUIHandler::setUI(Ui::Error* errorUI) {
-    this->errorUI = errorUI;
+// ErrorUIHandler redirects std::cout into it's own buffer, and prints that directly to a QTextEdit.
+// Upon destruction, it resets std::cout to it's original state.
+ErrorUIHandler::ErrorUIHandler(Ui::Error& errorUI)
+    : errorUI{errorUI}
+{
+    this->coutBufferBackup = std::cout.rdbuf();
+    std::cout.rdbuf(this);
 }
 
-ErrorUIHandler& operator<<(ErrorUIHandler& euih, std::string message) {
-    // If message if from easylogging++, it has a newline for some reason.
-    // This ugly check-and-remove thing deals with that.
-    if (message.back() == '\n') {
-        message.pop_back();
-    }
-
-    // redirect output to std::cout if for some reason the UI has crashed
-    // or not been instantiatied yet.
-    if (euih.errorUI != nullptr) {
-        euih.errorUI->errorTextEdit->append(QString::fromStdString(message));
-    } else {
-        std::cout << message << std::endl;
-    }
-
-    return euih;
+ErrorUIHandler::~ErrorUIHandler()
+{
+    std::cout.rdbuf(this->coutBufferBackup);
 }
 
-// instantiating global ErrorUIHandler instance here
-ErrorUIHandler euih;
+// TODO: Figure out exactly what this function does and adapt this properly.
+std::basic_streambuf<char>::int_type
+ErrorUIHandler::overflow(int_type v)
+{
+    this->errorUI.errorTextEdit->append("overflow()");
+    return v;
+}
+
+// TODO: Figure out exactly what this function does and adapt this properly.
+std::streamsize
+ErrorUIHandler::xsputn(const char *p, std::streamsize n)
+{
+    this->errorUI.errorTextEdit->append(QString(p));
+    return n;
+}

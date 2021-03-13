@@ -1,7 +1,7 @@
 # Force Qt version 5 or higher.
 lessThan(QT_MAJOR_VERSION, 5): error("Qt verion 5 or greater needed.")
 
-# Use c++17.
+# Use c++14.
 CONFIG += c++14
 
 # Maximum compiler warnings.

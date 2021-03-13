@@ -1,9 +1,7 @@
-#ifndef ACTUATORCONTROLLER_H
-#define ACTUATORCONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include "ActuatorsManager.h"
-#include "ActuatorStatusGateway.h"
 
 class ACIC : public QObject {
     Q_OBJECT
@@ -19,5 +17,3 @@ public:
 private:
    AMIC& amic;
 };
-
-#endif // ACTUATORCONTROLLER_H
