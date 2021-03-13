@@ -5,15 +5,11 @@
 
 class ErrorUIHandler : std::basic_streambuf<char> {
 public:
-    ErrorUIHandler();
+    ErrorUIHandler(Ui::Error& errorUI);
     ~ErrorUIHandler();
     std::streamsize xsputn(const char *p, std::streamsize n) override;
     std::basic_streambuf<char>::int_type overflow(int_type v) override;
-
-    void setUI(Ui::Error* errorUI);
 private:
-    Ui::Error* errorUI = nullptr;
+    Ui::Error& errorUI;
     std::streambuf* coutBufferBackup;
 };
-
-extern ErrorUIHandler euih;

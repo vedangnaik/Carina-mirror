@@ -32,6 +32,8 @@ void DAQManager::getLatestData() {
     for (const auto& p : this->sensorToDAQLinks) {
         const auto& daq = p.second.first;
         const auto& channel = p.second.second;
-        this->svgic->updateValue(p.first, daq->getLatestData().at(channel));
+        const double value = daq->getLatestData().at(channel);
+        CLOG(INFO, "sensorValueLogger") << daq->deviceID << "-" << channel << "," << value;
+        this->svgic->updateValue(p.first, value);
     }
 }
