@@ -73,6 +73,7 @@ private:
     unique_ptr<ActuatorsPresenter> ap;
     unique_ptr<StatesPresenter> stp;
     // L4
+    unique_ptr<ErrorUIHandler> euih;
     unique_ptr<StateUIHandler> suih;
     unique_ptr<SystemDiagramUIHandler> sduih;
     unique_ptr<DAQManager> daqm;

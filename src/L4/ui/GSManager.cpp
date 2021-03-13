@@ -1,6 +1,8 @@
 #include "GSManager.h"
 
 GSManager::GSManager() {
+    this->euih = std::make_unique<ErrorUIHandler>();
+
     this->renderUi();
 
     connect(this->GSMainWindowUI.openProcessFromFileAction, &QAction::triggered, this, [=]() {
@@ -110,7 +112,7 @@ void GSManager::stopAndCloseProcess() {
 void GSManager::renderUi() {
     this->GSMainWindowUI.setupUi(this);
     this->errorUI.setupUi(this->GSMainWindowUI.errorFrame);
-    euih.setUI(&this->errorUI);
+    this->euih->setUI(&this->errorUI);
     this->stateUI.setupUi(this->GSMainWindowUI.stateFrame);
     this->systemDiagramUI.setupUi(this->GSMainWindowUI.systemDiagramFrame);
 }
