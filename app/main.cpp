@@ -9,10 +9,7 @@ INITIALIZE_EASYLOGGINGPP
 int main(int argc, char *argv[]) {
     START_EASYLOGGINGPP(argc, argv);
 
-    // Create a new logger for logging all the sensor data.
     // We will use the default logger for normal Carina events.
-    el::Loggers::getLogger("sensorValueLogger");
-
     // Configure the default logger.
     el::Configurations defaultConf;
     defaultConf.setToDefault();
@@ -21,8 +18,10 @@ int main(int argc, char *argv[]) {
     std::string now = std::string(std::ctime(&now_time));
     std::replace(now.begin(), now.end(), ' ', '_');
     defaultConf.setGlobally(el::ConfigurationType::Filename, now + "_events.log");
-    el::Loggers::reconfigureLogger("default", defaultConf);
+    el::Loggers::reconfigureAllLoggers(defaultConf);
 
+    // Create a new logger for logging all the sensor data.
+    el::Loggers::getLogger("sensorValueLogger");
     // Configure the sensor value logger.
     // It will use the same date and time, but not write to stdout.
     defaultConf.setToDefault();

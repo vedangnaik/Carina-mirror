@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DAQManagerFactory</class>
- <widget class="QWidget" name="DAQManagerFactory">
+ <class>DAQScanDialog</class>
+ <widget class="QWidget" name="DAQScanDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -56,7 +56,7 @@
         <x>0</x>
         <y>0</y>
         <width>893</width>
-        <height>830</height>
+        <height>799</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -234,6 +234,13 @@
        </item>
       </layout>
      </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
     </widget>
    </item>
   </layout>

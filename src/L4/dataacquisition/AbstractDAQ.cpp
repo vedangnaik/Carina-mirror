@@ -1,26 +1,36 @@
 #include "AbstractDAQ.h"
 
-AbstractDAQ::AbstractDAQ(const std::string deviceID, const unsigned int numChannels, const std::vector<std::pair<std::array<double, 5>, std::array<double, 5>>> calibrationPoints)
+AbstractDAQ::AbstractDAQ(const std::string deviceID, const unsigned int numChannels)
     : deviceID{deviceID}, numChannels{numChannels}
 {
-    this->slopesAndIntercepts = std::vector<std::pair<double, double>>(this->numChannels);
-    this->calibrate(calibrationPoints);
+    // Give identity calibration points and 1 slope, 0 intercept for all channels.
+    std::array<std::pair<double, double>, 5> t {
+        std::make_pair(1.0, 1.0), std::make_pair(2.0, 2.0), std::make_pair(3.0, 3.0), std::make_pair(4.0, 4.0), std::make_pair(5.0, 5.0)
+    };
+    this->calibrationPoints = std::vector<std::array<std::pair<double, double>, 5>>(this->numChannels, t);
+    this->slopesAndIntercepts = std::vector<std::pair<double, double>>(this->numChannels, std::make_pair(1, 0));
 }
 
 void
-AbstractDAQ::calibrate(std::vector<std::pair<std::array<double, 5>, std::array<double, 5>>> calibrationPoints)
+AbstractDAQ::calibrate()
 {
     for (unsigned int channel = 0; channel < this->numChannels; channel++) {
-        const auto& voltages = calibrationPoints.at(channel).first;
-        const auto& units = calibrationPoints.at(channel).second;
-
-        double meanVoltages = std::accumulate(voltages.begin(), voltages.end(), 0.0) / voltages.size();
-        double meanUnits = std::accumulate(units.begin(), units.end(), 0.0) / units.size();
+        const auto& channelCalibrationPoints = this->calibrationPoints.at(channel);
+        double meanVoltages = 0;
+        double meanUnits = 0;
         double numerator = 0;
         double denominator = 0;
-        for (size_t i = 0; i < voltages.size(); i++) {
-            numerator += (voltages.at(i) - meanVoltages) * (units.at(i) - meanUnits);
-            denominator += std::pow((voltages.at(i) - meanVoltages), 2);
+
+        for (size_t i = 0; i < channelCalibrationPoints.size(); i++) {
+            meanVoltages += channelCalibrationPoints.at(i).first;
+            meanUnits += channelCalibrationPoints.at(i).second;
+        }
+        meanVoltages /= channelCalibrationPoints.size();
+        meanUnits /= channelCalibrationPoints.size();
+
+        for (size_t i = 0; i < channelCalibrationPoints.size(); i++) {
+            numerator += (channelCalibrationPoints.at(i).first - meanVoltages) * (channelCalibrationPoints.at(i).second - meanUnits);
+            denominator += std::pow((channelCalibrationPoints.at(i).first - meanVoltages), 2);
         }
 
         this->slopesAndIntercepts.at(channel).first = numerator / denominator;

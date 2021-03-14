@@ -5,10 +5,9 @@ SOURCES += \
     $$PWD/dataacquisition/DummyDAQ.cpp \
     $$PWD/dataacquisition/I2CDAQ.cpp \
     $$PWD/dataacquisition/SerialPortDAQ.cpp \
-    $$PWD/ui/DAQManagerWizard/DAQCalibrationPage.cpp \
-    $$PWD/ui/DAQManagerWizard/DAQLinkingPage.cpp \
-    $$PWD/ui/DAQManagerWizard/DAQManagerWizard.cpp \
-    $$PWD/ui/DAQManagerWizard/DAQScanPage.cpp \
+    $$PWD/ui/DAQManagerConfiguration/DAQCalibrationDialog.cpp \
+    $$PWD/ui/DAQManagerConfiguration/DAQLinkDialog.cpp \
+    $$PWD/ui/DAQManagerConfiguration/DAQScanDialog.cpp \
     $$PWD/ui/ErrorUIHandler.cpp \
     $$PWD/ui/GSManager.cpp \
     $$PWD/ui/StateUIHandler.cpp \
@@ -21,10 +20,9 @@ HEADERS += \
     $$PWD/dataacquisition/DummyDAQ.h \
     $$PWD/dataacquisition/I2CDAQ.h \
     $$PWD/dataacquisition/SerialPortDAQ.h \
-    $$PWD/ui/DAQManagerWizard/DAQCalibrationPage.h \
-    $$PWD/ui/DAQManagerWizard/DAQLinkingPage.h \
-    $$PWD/ui/DAQManagerWizard/DAQManagerWizard.h \
-    $$PWD/ui/DAQManagerWizard/DAQScanPage.h \
+    $$PWD/ui/DAQManagerConfiguration/DAQCalibrationDialog.h \
+    $$PWD/ui/DAQManagerConfiguration/DAQLinkDialog.h \
+    $$PWD/ui/DAQManagerConfiguration/DAQScanDialog.h \
     $$PWD/ui/Draggable.h \
     $$PWD/ui/ErrorUIHandler.h \
     $$PWD/ui/GSManager.h \
@@ -38,14 +36,11 @@ INCLUDEPATH += \
 
 # Add .ui forms for UI classes.
 FORMS += \
-    $$PWD/ui/DAQManagerWizard/DAQScanPage.ui \
+    $$PWD/ui/DAQManagerConfiguration/DAQScanDialog.ui \
     $$PWD/ui/Error.ui \
     $$PWD/ui/GSMainWindow.ui \
     $$PWD/ui/State.ui \
     $$PWD/ui/SystemDiagram.ui
-
-# Runtime loading of .ui files required the uitools module.
-#QT += uitools
 
 # Link uldaq.h for DAQ classes, if it's required.
 contains(DEFINES, ULDAQ_AVAILABLE) {

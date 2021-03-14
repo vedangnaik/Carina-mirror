@@ -1,7 +1,7 @@
 #include "DummyDAQ.h"
 
-DummyDAQ::DummyDAQ(const std::string deviceID, const unsigned int numChannels, const std::vector<std::pair<std::array<double, 5>, std::array<double, 5>>> calibrationPoints)
-    : AbstractDAQ(deviceID, numChannels, calibrationPoints)
+DummyDAQ::DummyDAQ(const std::string deviceID, const unsigned int numChannels)
+    : AbstractDAQ(deviceID, numChannels)
 {}
 
 void DummyDAQ::startAcquisition() {}

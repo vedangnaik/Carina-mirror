@@ -7,7 +7,7 @@
 class DummyDAQ : public AbstractDAQ
 {
 public:
-    DummyDAQ(const std::string deviceID, const unsigned int numChannels, const std::vector<std::pair<std::array<double, 5>, std::array<double, 5>>> calibrationPoints);
+    DummyDAQ(const std::string deviceID, const unsigned int numChannels);
     void startAcquisition() override;
     void stopAcquisition() override;
     std::vector<double> getLatestData() override;
