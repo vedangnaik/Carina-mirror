@@ -11,8 +11,8 @@
 #define INTERUPT_MASK_REG   0x03
 #define CONVERSION_RATE_REG 0x07
 
-I2CDAQ::I2CDAQ(const std::string id, const unsigned int numChannels, const std::vector<std::pair<std::array<double, 5>, std::array<double, 5>>> calibrationPoints, const char I2CAddress)
-    : AbstractDAQ(id, numChannels, calibrationPoints), I2CAddress{I2CAddress}
+I2CDAQ::I2CDAQ(const std::string id, const unsigned int numChannels, const char I2CAddress)
+    : AbstractDAQ(id, numChannels), I2CAddress{I2CAddress}
 {
     this->fd = -1;
 }

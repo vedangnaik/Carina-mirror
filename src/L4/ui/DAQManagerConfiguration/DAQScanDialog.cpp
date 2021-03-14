@@ -12,6 +12,9 @@ DAQScanDialog::DAQScanDialog(QWidget* parent)
 #ifdef ULDAQ_AVAILABLE
     this->displayAvailableAiMCCDAQs();
 #endif
+#ifdef WIRINGPI_AVAILABLE
+    this->displayAvailableI2CDAQs();
+#endif
 }
 
 void
@@ -40,8 +43,9 @@ DAQScanDialog::accept()
 #endif
 #ifdef WIRINGPI_AVAILABLE
         else if (deviceID.contains("i2c")) {
-            unsigned char addr = dqm->field(QString::fromStdString(deviceID + "|i2cAddr")).toUInt();
-            DAQDevices.push_back(new I2CDAQ(deviceID, numChannels, calibrationPoints, addr));
+            unsigned int numChannels = this->findChild<QComboBox*>(deviceID + "|numChannels")->currentIndex() + 1;
+            unsigned char addr = this->findChild<QLabel*>(deviceID + "|addr")->text().toUInt();
+            DAQDevices.push_back(new I2CDAQ(deviceID.toStdString(), numChannels, addr));
         }
 #endif
         else {
@@ -194,6 +198,48 @@ DAQScanDialog::displayAvailableAiMCCDAQs()
         this->ui->MCCDAQDevicesLayout->addWidget(channelLabel, row, 5);
         this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Voltage range: ", this), row, 6);
         this->ui->MCCDAQDevicesLayout->addWidget(rangeLabel, row, 7);
+    }
+}
+#endif
+
+#ifdef WIRINGPI_AVAILABLE
+void
+DAQScanDialog::displayAvailableI2CDAQs()
+{
+    auto scanForAvailableI2CDAQs = []() -> std::vector<unsigned char> {
+        std::vector<unsigned char> daqs;
+        int f;
+        if ((f = open("/dev/i2c-1", O_RDWR)) >= 0) {
+            for (unsigned char addr = 0; addr < 128; addr++) {
+                if (ioctl(f, I2C_SLAVE, addr) > 0) {
+                    daqs.push_back(addr);
+                }
+            }
+        }
+        return daqs;
+    };
+
+    for (const auto& addr: scanForAvailableI2CDAQs()) {
+        // device id
+        QString deviceID = QString::fromStdString("i2c:");
+        QCheckBox* chb = new QCheckBox(deviceID, this);
+        chb->setObjectName(deviceID);
+        this->selectedDAQs.push_back(chb);
+        // label for address
+        QLabel* addrLabel = new QLabel(QString::number(addr), this);
+        addrLabel->setObjectName(deviceID + "|addr");
+        // combox box for channels
+        QComboBox* cmb = new QComboBox(this);
+        cmb->setObjectName(deviceID + "|numChannels");
+        cmb->addItems({"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
+        cmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+        int row = this->ui->SerialportDevicesLayout->rowCount();
+        this->ui->I2CDAQDevicesLayout->addWidget(chb, row, 0);
+        this->ui->I2CDAQDevicesLayout->addWidget(new QLabel("I2C Address: ", this), row, 1);
+        this->ui->I2CDAQDevicesLayout->addWidget(addrLabel, row, 2);
+        this->ui->I2CDAQDevicesLayout->addWidget(new QLabel("Number of 'channels': ", this), row, 3);
+        this->ui->I2CDAQDevicesLayout->addWidget(cmb, row, 4);
     }
 }
 #endif
