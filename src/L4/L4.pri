@@ -8,6 +8,7 @@ SOURCES += \
     $$PWD/ui/DAQManagerWizard/DAQCalibrationPage.cpp \
     $$PWD/ui/DAQManagerWizard/DAQLinkingPage.cpp \
     $$PWD/ui/DAQManagerWizard/DAQManagerWizard.cpp \
+    $$PWD/ui/DAQManagerWizard/DAQScanDialog.cpp \
     $$PWD/ui/DAQManagerWizard/DAQScanPage.cpp \
     $$PWD/ui/ErrorUIHandler.cpp \
     $$PWD/ui/GSManager.cpp \
@@ -24,6 +25,7 @@ HEADERS += \
     $$PWD/ui/DAQManagerWizard/DAQCalibrationPage.h \
     $$PWD/ui/DAQManagerWizard/DAQLinkingPage.h \
     $$PWD/ui/DAQManagerWizard/DAQManagerWizard.h \
+    $$PWD/ui/DAQManagerWizard/DAQScanDialog.h \
     $$PWD/ui/DAQManagerWizard/DAQScanPage.h \
     $$PWD/ui/Draggable.h \
     $$PWD/ui/ErrorUIHandler.h \

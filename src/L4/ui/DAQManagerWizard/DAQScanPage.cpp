@@ -1,7 +1,7 @@
 #include "DAQScanPage.h"
 
 DAQScanPage::DAQScanPage(QWidget* parent)
-    : QWizardPage(parent), ui(new Ui::DAQManagerFactory)
+    : QWizardPage(parent), ui(new Ui::DAQScanPage)
 {
     ui->setupUi(this);
 }

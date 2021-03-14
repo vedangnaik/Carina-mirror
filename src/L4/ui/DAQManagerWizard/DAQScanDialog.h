@@ -1,37 +1,42 @@
 #pragma once
 
-#include <QWizardPage>
+#include <QDialog>
 #include <QComboBox>
 #include <QCheckBox>
 #include <QDir>
 #include "DAQManagerWizard.h"
-#include "ui_DAQScanPage.h"
-
 #ifdef ULDAQ_AVAILABLE
 #include "uldaq.h"
 #endif
-
 #ifdef WIRINGPI_AVAILABLE
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
 #endif
+#include "ui_DAQScanPage.h"
 
-class DAQScanPage : public QWizardPage
+
+
+class DAQScanDialog : public QDialog
 {
     Q_OBJECT
 public:
-    DAQScanPage(QWidget* parent = nullptr);
+    DAQScanDialog(QWidget* parent = nullptr);
+    std::vector<AbstractDAQ*> DAQDevices;
 private:
-    void initializePage() override;
+    void accept() override;
+    void reject() override;
+
     void displayDummyDAQs();
-    void displayOpenSerialPorts();
+//    void displayOpenSerialPorts();
 #ifdef ULDAQ_AVAILABLE
-    void displayAvailableAiMCCDAQs();
+//    void displayAvailableAiMCCDAQs();
 #endif
 #ifdef WIRINGPI_AVAILABLE
     void displayAvailableI2CDAQs();
 #endif
+
+    std::vector<QCheckBox*> selectedDAQs;
     Ui::DAQScanPage* ui;
 };

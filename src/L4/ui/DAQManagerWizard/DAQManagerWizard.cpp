@@ -70,59 +70,59 @@ DAQManagerWizard::reconfigureDAQManager()
 std::unique_ptr<DAQManager>
 DAQManagerWizard::assembleDAQManager()
 {
-    auto* dcp = (DAQCalibrationPage*)dqm->page(1);
-    auto* dlp = (DAQLinkingPage*)dqm->page(2);
+//    auto* dcp = (DAQCalibrationPage*)dqm->page(1);
+//    auto* dlp = (DAQLinkingPage*)dqm->page(2);
 
-    // assemble vector of abstract daq devices
-    std::vector<AbstractDAQ*> DAQDevices;
-    for (const auto& p : dqm->abstractDAQData) {
-        if (!p.second) continue;
+//    // assemble vector of abstract daq devices
+//    std::vector<AbstractDAQ*> DAQDevices;
+//    for (const auto& p : dqm->abstractDAQData) {
+//        if (!p.second) continue;
 
-        // Ugly searching based on substring xD
-        auto& deviceID = p.first;
-        unsigned int numChannels = dqm->field(QString::fromStdString(deviceID + "|numChannels")).toUInt() + 1;
-        const auto& calibrationPoints = dcp->calibrationPoints.at(deviceID);
-        // Dummy DAQ Assembly
-        if (deviceID.find("dummy") != std::string::npos) {
-            DAQDevices.push_back(new DummyDAQ(deviceID, numChannels, calibrationPoints));
-        }
-        else if (deviceID.find("serialport") != std::string::npos) {
-            std::string serialportPath = dqm->field(QString::fromStdString(deviceID + "|serialportPath")).toString().toStdString();
-            DAQDevices.push_back(new SerialPortDAQ(deviceID, numChannels, calibrationPoints, serialportPath));
-        }
-#ifdef ULDAQ_AVAILABLE
-        else if (deviceID.find("mccdaq") != std::string::npos) {
-            DaqDeviceHandle d = dqm->field(QString::fromStdString(deviceID + "|handle")).toLongLong();
-            Range r = (Range)dqm->field(QString::fromStdString(deviceID + "|range")).toLongLong();
-            DAQDevices.push_back(new AiMCCDAQ(deviceID, numChannels, calibrationPoints, d, r));
-        }
-#endif
-#ifdef WIRINGPI_AVAILABLE
-        else if (deviceID.find("i2c") != std::string::npos) {
-            unsigned char addr = dqm->field(QString::fromStdString(deviceID + "|i2cAddr")).toUInt();
-            DAQDevices.push_back(new I2CDAQ(deviceID, numChannels, calibrationPoints, addr));
-        }
-#endif
-        else {
-            LOG(FATAL) << "Internal error with DAQManagerWizard, abandon ship";
-        }
-    }
+//        // Ugly searching based on substring xD
+//        auto& deviceID = p.first;
+//        unsigned int numChannels = dqm->field(QString::fromStdString(deviceID + "|numChannels")).toUInt() + 1;
+//        const auto& calibrationPoints = dcp->calibrationPoints.at(deviceID);
+//        // Dummy DAQ Assembly
+//        if (deviceID.find("dummy") != std::string::npos) {
+//            DAQDevices.push_back(new DummyDAQ(deviceID, numChannels, calibrationPoints));
+//        }
+//        else if (deviceID.find("serialport") != std::string::npos) {
+//            std::string serialportPath = dqm->field(QString::fromStdString(deviceID + "|serialportPath")).toString().toStdString();
+//            DAQDevices.push_back(new SerialPortDAQ(deviceID, numChannels, calibrationPoints, serialportPath));
+//        }
+//#ifdef ULDAQ_AVAILABLE
+//        else if (deviceID.find("mccdaq") != std::string::npos) {
+//            DaqDeviceHandle d = dqm->field(QString::fromStdString(deviceID + "|handle")).toLongLong();
+//            Range r = (Range)dqm->field(QString::fromStdString(deviceID + "|range")).toLongLong();
+//            DAQDevices.push_back(new AiMCCDAQ(deviceID, numChannels, calibrationPoints, d, r));
+//        }
+//#endif
+//#ifdef WIRINGPI_AVAILABLE
+//        else if (deviceID.find("i2c") != std::string::npos) {
+//            unsigned char addr = dqm->field(QString::fromStdString(deviceID + "|i2cAddr")).toUInt();
+//            DAQDevices.push_back(new I2CDAQ(deviceID, numChannels, calibrationPoints, addr));
+//        }
+//#endif
+//        else {
+//            LOG(FATAL) << "Internal error with DAQManagerWizard, abandon ship";
+//        }
+//    }
 
-    // assemble map of links
-    std::map<std::string, std::pair<AbstractDAQ*, unsigned int>> sensorToDAQLinks;
-    for (const auto& p : dlp->sensorLinks) {
-        if (p.second == "<unlinked>") continue;
+//    // assemble map of links
+//    std::map<std::string, std::pair<AbstractDAQ*, unsigned int>> sensorToDAQLinks;
+//    for (const auto& p : dlp->sensorLinks) {
+//        if (p.second == "<unlinked>") continue;
 
-        const auto& IDAndChannel = p.second;
-        std::string::size_type n = IDAndChannel.find("-");
-        std::string id = IDAndChannel.substr(0, n);
-        unsigned int channel = std::stoul(IDAndChannel.substr(n+1, IDAndChannel.length()));
+//        const auto& IDAndChannel = p.second;
+//        std::string::size_type n = IDAndChannel.find("-");
+//        std::string id = IDAndChannel.substr(0, n);
+//        unsigned int channel = std::stoul(IDAndChannel.substr(n+1, IDAndChannel.length()));
 
-        AbstractDAQ* daq = *std::find_if(DAQDevices.begin(), DAQDevices.end(), [=](AbstractDAQ* d) {
-            return d->deviceID == id;
-        });
-        sensorToDAQLinks.insert({ p.first, std::make_pair(daq, channel) });
-    }
+//        AbstractDAQ* daq = *std::find_if(DAQDevices.begin(), DAQDevices.end(), [=](AbstractDAQ* d) {
+//            return d->deviceID == id;
+//        });
+//        sensorToDAQLinks.insert({ p.first, std::make_pair(daq, channel) });
+//    }
 
-    return std::make_unique<DAQManager>(DAQDevices, sensorToDAQLinks);
+//    return std::make_unique<DAQManager>(DAQDevices, sensorToDAQLinks);
 }

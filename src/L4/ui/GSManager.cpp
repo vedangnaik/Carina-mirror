@@ -28,14 +28,18 @@ GSManager::GSManager() {
     });
 
     connect(this->GSMainWindowUI.manufactureDAQManagerAction, &QAction::triggered, this, [=]() {
-        this->daqm = DAQManagerWizard::manufactureDAQManager(this->svg->getSensorIDs());
+        DAQScanDialog* d = new DAQScanDialog();
+        if (d->exec() == QDialog::Accepted) {
+            this->daqm = std::make_unique<DAQManager>(d->DAQDevices, *this->svg);
+        };
+//        this->daqm = DAQManagerWizard::manufactureDAQManager(this->svg->getSensorIDs());
     });
 
     connect(this->GSMainWindowUI.reconfigureDAQManagerAction, &QAction::triggered, this, [=]() {
-        this->daqm->stopAcquisition();
-        this->daqm = DAQManagerWizard::reconfigureDAQManager();
-        this->daqm->setOutputContract(this->svg.get());
-        this->daqm->startAcquisition();
+//        this->daqm->stopAcquisition();
+//        this->daqm = DAQManagerWizard::reconfigureDAQManager();
+//        this->daqm->setOutputContract(this->svg.get());
+//        this->daqm->startAcquisition();
     });
 }
 
@@ -89,7 +93,6 @@ void GSManager::startProcess() {
         LOG(ERROR) << "Please configure your DAQ devices first.";
         return;
     }
-    this->daqm->setOutputContract(this->svg.get());
     this->daqm->startAcquisition();
     this->stm->startProcess();
 
