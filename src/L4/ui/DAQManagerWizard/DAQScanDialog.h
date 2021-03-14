@@ -26,7 +26,6 @@ public:
     std::vector<AbstractDAQ*> DAQDevices;
 private:
     void accept() override;
-    void reject() override;
 
     void displayDummyDAQs();
 //    void displayOpenSerialPorts();

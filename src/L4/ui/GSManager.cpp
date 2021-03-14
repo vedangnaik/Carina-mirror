@@ -40,6 +40,11 @@ GSManager::GSManager() {
 //        this->daqm = DAQManagerWizard::reconfigureDAQManager();
 //        this->daqm->setOutputContract(this->svg.get());
 //        this->daqm->startAcquisition();
+        if (this->daqm != nullptr) {
+            DAQCalibrationDialog* d = new DAQCalibrationDialog(std::move(this->daqm));
+            d->exec();
+            this->daqm = d->takeDAQManager();
+        }
     });
 }
 

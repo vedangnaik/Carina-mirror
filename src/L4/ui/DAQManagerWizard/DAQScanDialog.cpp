@@ -68,10 +68,3 @@ DAQScanDialog::accept()
     }
     this->done(QDialog::Accepted);
 }
-
-void
-DAQScanDialog::reject()
-{
-    LOG(INFO) << "Rejected";
-    this->done(QDialog::Rejected);
-}
