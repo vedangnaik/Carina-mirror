@@ -22,9 +22,9 @@
 #include "ActuatorsPresenter.h"
 #include "StatesPresenter.h"
 // L4
-#include "DAQManagerWizard/DAQManagerWizard.h"
 #include "DAQManagerWizard/DAQScanDialog.h"
 #include "DAQManagerWizard/DAQCalibrationDialog.h"
+#include "DAQManagerWizard/DAQLinkDialog.h"
 #include "DAQManager.h"
 #include "StateUIHandler.h"
 #include "SystemDiagramUIHandler.h"

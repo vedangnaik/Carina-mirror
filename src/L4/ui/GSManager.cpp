@@ -28,22 +28,33 @@ GSManager::GSManager() {
     });
 
     connect(this->GSMainWindowUI.manufactureDAQManagerAction, &QAction::triggered, this, [=]() {
-        DAQScanDialog* d = new DAQScanDialog();
-        if (d->exec() == QDialog::Accepted) {
-            this->daqm = std::make_unique<DAQManager>(d->DAQDevices, *this->svg);
-        };
-//        this->daqm = DAQManagerWizard::manufactureDAQManager(this->svg->getSensorIDs());
+        if (this->svg != nullptr) {
+            DAQScanDialog* d = new DAQScanDialog();
+            if (d->exec() == QDialog::Accepted) {
+                this->daqm = std::make_unique<DAQManager>(d->DAQDevices, *this->svg);
+            };
+        } else {
+            LOG(ERROR) << "Please load a process first.";
+        }
     });
 
-    connect(this->GSMainWindowUI.reconfigureDAQManagerAction, &QAction::triggered, this, [=]() {
-//        this->daqm->stopAcquisition();
-//        this->daqm = DAQManagerWizard::reconfigureDAQManager();
-//        this->daqm->setOutputContract(this->svg.get());
-//        this->daqm->startAcquisition();
+    connect(this->GSMainWindowUI.calibrateDAQManagerAction, &QAction::triggered, this, [=]() {
         if (this->daqm != nullptr) {
             DAQCalibrationDialog* d = new DAQCalibrationDialog(std::move(this->daqm));
             d->exec();
             this->daqm = d->takeDAQManager();
+        } else {
+            LOG(ERROR) << "Please configure some DAQ devices first.";
+        }
+    });
+
+    connect(this->GSMainWindowUI.linkDAQManagerAction, &QAction::triggered, this, [=]() {
+        if (this->daqm != nullptr) {
+            DAQLinkDialog* d = new DAQLinkDialog(std::move(this->daqm));
+            d->exec();
+            this->daqm = d->takeDAQManager();
+        } else {
+            LOG(ERROR) << "Please configure some DAQ devices first.";
         }
     });
 }
@@ -81,8 +92,6 @@ void GSManager::openProcessFromFile(string filepath) {
         // Enable configuration of DAQs, disable opening new file, enable starting loaded process.
         this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
         this->GSMainWindowUI.startProcessAction->setEnabled(true);
-        this->GSMainWindowUI.manufactureDAQManagerAction->setEnabled(true);
-        this->GSMainWindowUI.reconfigureDAQManagerAction->setEnabled(false);
     } catch (ProcessFileParseError& e) {
         LOG(ERROR) << "Process file parse error:" << e.what();
     } catch (SensorsManagerError& e) {
@@ -103,8 +112,6 @@ void GSManager::startProcess() {
 
     this->GSMainWindowUI.startProcessAction->setEnabled(false);
     this->GSMainWindowUI.closeProcessAction->setEnabled(true);
-    this->GSMainWindowUI.manufactureDAQManagerAction->setEnabled(false);
-    this->GSMainWindowUI.reconfigureDAQManagerAction->setEnabled(true);
 }
 
 void GSManager::stopAndCloseProcess() {
@@ -114,8 +121,6 @@ void GSManager::stopAndCloseProcess() {
 
     this->GSMainWindowUI.closeProcessAction->setEnabled(false);
     this->GSMainWindowUI.openProcessFromFileAction->setEnabled(true);
-    this->GSMainWindowUI.manufactureDAQManagerAction->setEnabled(false);
-    this->GSMainWindowUI.reconfigureDAQManagerAction->setEnabled(false);
 }
 
 void GSManager::renderUi() {

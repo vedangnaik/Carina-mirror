@@ -7,6 +7,7 @@ SOURCES += \
     $$PWD/dataacquisition/SerialPortDAQ.cpp \
     $$PWD/ui/DAQManagerWizard/DAQCalibrationDialog.cpp \
     $$PWD/ui/DAQManagerWizard/DAQCalibrationPage.cpp \
+    $$PWD/ui/DAQManagerWizard/DAQLinkDialog.cpp \
     $$PWD/ui/DAQManagerWizard/DAQLinkingPage.cpp \
     $$PWD/ui/DAQManagerWizard/DAQManagerWizard.cpp \
     $$PWD/ui/DAQManagerWizard/DAQScanDialog.cpp \
@@ -25,6 +26,7 @@ HEADERS += \
     $$PWD/dataacquisition/SerialPortDAQ.h \
     $$PWD/ui/DAQManagerWizard/DAQCalibrationDialog.h \
     $$PWD/ui/DAQManagerWizard/DAQCalibrationPage.h \
+    $$PWD/ui/DAQManagerWizard/DAQLinkDialog.h \
     $$PWD/ui/DAQManagerWizard/DAQLinkingPage.h \
     $$PWD/ui/DAQManagerWizard/DAQManagerWizard.h \
     $$PWD/ui/DAQManagerWizard/DAQScanDialog.h \

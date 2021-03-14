@@ -3,10 +3,8 @@
 DAQCalibrationDialog::DAQCalibrationDialog(std::unique_ptr<DAQManager> daqm, QWidget *parent)
     : QDialog(parent), daqm{std::move(daqm)}
 {
-    QWidget* scrollAreaWidget = new QWidget(this);
     QVBoxLayout* vb = new QVBoxLayout();
     vb->addStretch();
-    scrollAreaWidget->setLayout(vb);
 
     for (const auto& daq : this->daqm->DAQDevices) {
         QGroupBox* gb = new QGroupBox(QString::fromStdString(daq->deviceID), this);
@@ -31,9 +29,11 @@ DAQCalibrationDialog::DAQCalibrationDialog(std::unique_ptr<DAQManager> daqm, QWi
             }
         }
 
-        scrollAreaWidget->layout()->addWidget(gb);
+        vb->addWidget(gb);
     }
 
+    QWidget* scrollAreaWidget = new QWidget(this);
+    scrollAreaWidget->setLayout(vb);
     QScrollArea* sa = new QScrollArea(this);
     sa->setFrameStyle(QFrame::NoFrame);
     sa->setWidget(scrollAreaWidget);

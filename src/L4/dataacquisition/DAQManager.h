@@ -17,6 +17,7 @@ public:
     void startAcquisition();
     void getLatestData();
     void stopAcquisition();
+    std::vector<std::string> getSensorIDs();
 
     const std::vector<AbstractDAQ*> DAQDevices;
     std::map<std::string, std::pair<AbstractDAQ*, unsigned int>> sensorToDAQLinks;

@@ -102,7 +102,9 @@
      <string>Data Acquisition</string>
     </property>
     <addaction name="manufactureDAQManagerAction"/>
-    <addaction name="reconfigureDAQManagerAction"/>
+    <addaction name="separator"/>
+    <addaction name="calibrateDAQManagerAction"/>
+    <addaction name="linkDAQManagerAction"/>
    </widget>
    <addaction name="menuProcess"/>
    <addaction name="menuSystem_Diagram"/>
@@ -147,23 +149,31 @@
   </action>
   <action name="manufactureDAQManagerAction">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>Configure DAQ Devices</string>
    </property>
   </action>
-  <action name="reconfigureDAQManagerAction">
+  <action name="calibrateDAQManagerAction">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
-    <string>Re-configure DAQ Devices</string>
+    <string>Calibrate DAQ Devices</string>
    </property>
   </action>
   <action name="actionRe_link_sensors_and_channels">
    <property name="text">
     <string>Re-link sensors and channels</string>
+   </property>
+  </action>
+  <action name="linkDAQManagerAction">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Link DAQ Devices</string>
    </property>
   </action>
  </widget>

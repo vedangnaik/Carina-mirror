@@ -7,6 +7,10 @@ DAQManager::DAQManager(std::vector<AbstractDAQ*> DAQDevices, SVGIC& svgic)
     this->DAQReadTimer->start(1000);
 }
 
+std::vector<std::string> DAQManager::getSensorIDs() {
+    return this->svgic.getSensorIDs();
+}
+
 void DAQManager::startAcquisition() {
     for (const auto& d : this->DAQDevices) {
         d->startAcquisition();
