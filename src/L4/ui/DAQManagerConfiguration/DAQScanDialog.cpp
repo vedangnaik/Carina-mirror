@@ -9,6 +9,9 @@ DAQScanDialog::DAQScanDialog(QWidget* parent)
 
     this->displayDummyDAQs();
     this->displayOpenSerialPorts();
+#ifdef ULDAQ_AVAILABLE
+    this->displayAvailableAiMCCDAQs();
+#endif
 }
 
 void
@@ -29,13 +32,14 @@ DAQScanDialog::accept()
         }
 #ifdef ULDAQ_AVAILABLE
         else if (deviceID.contains("mccdaq")) {
-            DaqDeviceHandle d = dqm->field(QString::fromStdString(deviceID + "|handle")).toLongLong();
-            Range r = (Range)dqm->field(QString::fromStdString(deviceID + "|range")).toLongLong();
-            this->DAQDevices.push_back(new AiMCCDAQ(deviceID, numChannels, calibrationPoints, d, r));
+            unsigned int numChannels = this->findChild<QLabel*>(deviceID + "|numChannels")->text().toUInt();
+            DaqDeviceHandle handle = this->findChild<QLabel*>(deviceID + "|handle")->text().toLongLong();
+            Range range = (Range)this->findChild<QLabel*>(deviceID + "|range")->text().toLongLong();
+            this->DAQDevices.push_back(new AiMCCDAQ(deviceID.toStdString(), numChannels, handle, range));
         }
 #endif
 #ifdef WIRINGPI_AVAILABLE
-        else if (deviceID.find("i2c") != std::string::npos) {
+        else if (deviceID.contains("i2c")) {
             unsigned char addr = dqm->field(QString::fromStdString(deviceID + "|i2cAddr")).toUInt();
             DAQDevices.push_back(new I2CDAQ(deviceID, numChannels, calibrationPoints, addr));
         }
@@ -113,3 +117,83 @@ DAQScanDialog::displayOpenSerialPorts()
         this->ui->SerialportDevicesLayout->addWidget(cmb, row, 4);
     }
 }
+
+#ifdef ULDAQ_AVAILABLE
+void
+DAQScanDialog::displayAvailableAiMCCDAQs()
+{
+    auto scanForAvailableAiMCCDAQs = []() -> std::vector<std::tuple<DaqDeviceHandle, bool, unsigned int, Range>>
+    {
+        std::vector<std::tuple<DaqDeviceHandle, bool, unsigned int, Range>> daqs;
+
+        // Interface type to look for.
+        const DaqDeviceInterface DAQDeviceInterfaceType = ANY_IFC;
+        // Common error variable.
+        UlError err;
+        // Get the number of connected devices here.
+        std::vector<DaqDeviceDescriptor> devDescriptors;
+        unsigned int numDAQDevicesDetected = 0;
+        err = ulGetDaqDeviceInventory(DAQDeviceInterfaceType, devDescriptors.data(), &numDAQDevicesDetected);
+        // This will trip, but can be ignored safely (I think)
+        if (err != ERR_NO_ERROR) { LOG(INFO) << "Expected 'error': ulGetDaqDeviceInventory Error: " << err; }
+
+        // No DAQS are found, return empty vector.
+        if (numDAQDevicesDetected == 0) return daqs;
+
+        // Populate the vector of descriptors by calling this function again with the right number of connected daqs.
+        devDescriptors.reserve(numDAQDevicesDetected);
+        err = ulGetDaqDeviceInventory(DAQDeviceInterfaceType, devDescriptors.data(), &numDAQDevicesDetected);
+        if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulGetDaqDeviceInventory Error: " << err; }
+
+        for (unsigned int i = 0; i < numDAQDevicesDetected; i++) {
+            // Create the DAQ object
+            DaqDeviceHandle handle = ulCreateDaqDevice(devDescriptors[i]);
+
+            // Check if it's analog input; other types can be checked for here
+            long long aiSupported;
+            UlError err = ulDevGetInfo(handle, DEV_INFO_HAS_AI_DEV, 0, &aiSupported);
+            if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulDevGetInfo Error: " << err; }
+
+            // Get num channels
+            long long numChannels;
+            err = ulAIGetInfo(handle, AI_INFO_NUM_CHANS, 0, &numChannels);
+            if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulAIGetInfo Error: " << err << std::endl; }
+            if (aiSupported < 1) { LOG(ERROR) << "Analog input not supported: " << aiSupported; }
+
+            // get voltage range
+            long long voltageRange;
+            err = ulAIGetInfo(handle, AI_INFO_SE_RANGE, 0, &voltageRange);
+            if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAIGetInfo Error: " << err; }
+
+            daqs.push_back(std::make_tuple(handle, bool(aiSupported), (unsigned int)numChannels, (Range)voltageRange));
+        }
+
+        return daqs;
+    };
+
+    for (const auto& t : scanForAvailableAiMCCDAQs()) {
+        // create deviceID and checkbox
+        QString deviceID = QString::fromStdString("mccdaq:" + std::to_string(std::get<0>(t)));
+        QCheckBox* chb = new QCheckBox(deviceID, this);
+        chb->setObjectName(deviceID);
+        this->selectedDAQs.push_back(chb);
+        // Labels for num channels, voltage range, daq handle
+        QLabel* channelLabel = new QLabel(QString::number(std::get<2>(t)), this);
+        channelLabel->setObjectName(deviceID + "|numChannels");
+        QLabel* rangeLabel = new QLabel(QString::number(std::get<3>(t)), this);
+        rangeLabel->setObjectName(deviceID + "|range");
+        QLabel* handleLabel = new QLabel(QString::number(std::get<0>(t)), this);
+        handleLabel->setObjectName(deviceID + "|handle");
+
+        int row = this->ui->MCCDAQDevicesLayout->rowCount();
+        this->ui->MCCDAQDevicesLayout->addWidget(chb, row, 0);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Analog Input: " + QString(std::get<1>(t) ? "yes" : "no"), this), row, 1);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Handle: ", this), row, 2);
+        this->ui->MCCDAQDevicesLayout->addWidget(handleLabel, row, 3);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Number of channels: ", this), row, 4);
+        this->ui->MCCDAQDevicesLayout->addWidget(channelLabel, row, 5);
+        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Voltage range: ", this), row, 6);
+        this->ui->MCCDAQDevicesLayout->addWidget(rangeLabel, row, 7);
+    }
+}
+#endif
