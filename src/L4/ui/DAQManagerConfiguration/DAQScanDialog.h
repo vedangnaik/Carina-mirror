@@ -6,6 +6,7 @@
 #include <QDir>
 #include "DAQManager.h"
 #include "DummyDAQ.h"
+#include "SerialPortDAQ.h"
 #ifdef ULDAQ_AVAILABLE
 #include <uldaq.h>
 #include "AiMCCDAQ.h"
@@ -31,9 +32,9 @@ private:
     void accept() override;
 
     void displayDummyDAQs();
-//    void displayOpenSerialPorts();
+    void displayOpenSerialPorts();
 #ifdef ULDAQ_AVAILABLE
-//    void displayAvailableAiMCCDAQs();
+    void displayAvailableAiMCCDAQs();
 #endif
 #ifdef WIRINGPI_AVAILABLE
     void displayAvailableI2CDAQs();
