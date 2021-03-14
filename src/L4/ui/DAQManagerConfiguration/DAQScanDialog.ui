@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DAQScanPage</class>
- <widget class="QWidget" name="DAQScanPage">
+ <class>DAQScanDialog</class>
+ <widget class="QWidget" name="DAQScanDialog">
   <property name="geometry">
    <rect>
     <x>0</x>

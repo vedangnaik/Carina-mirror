@@ -1,7 +1,7 @@
 #include "DAQScanDialog.h"
 
 DAQScanDialog::DAQScanDialog(QWidget* parent)
-    : QDialog(parent), ui(new Ui::DAQScanPage)
+    : QDialog(parent), ui(new Ui::DAQScanDialog)
 {
     this->ui->setupUi(this);
     connect(this->ui->buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);

@@ -4,17 +4,20 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QDir>
-#include "DAQManagerWizard.h"
+#include "DAQManager.h"
+#include "DummyDAQ.h"
 #ifdef ULDAQ_AVAILABLE
-#include "uldaq.h"
+#include <uldaq.h>
+#include "AiMCCDAQ.h"
 #endif
 #ifdef WIRINGPI_AVAILABLE
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
+#include "I2CDAQ.h"
 #endif
-#include "ui_DAQScanPage.h"
+#include "ui_DAQScanDialog.h"
 
 
 
@@ -37,5 +40,5 @@ private:
 #endif
 
     std::vector<QCheckBox*> selectedDAQs;
-    Ui::DAQScanPage* ui;
+    Ui::DAQScanDialog* ui;
 };

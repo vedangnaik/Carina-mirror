@@ -8,7 +8,7 @@
 #include <QHBoxLayout>
 #include <iostream>
 // dependencies
-#include "easylogging++.h"
+#include <easylogging++.h>
 // L1
 // L2
 #include "SensorsManager.h"
@@ -22,9 +22,9 @@
 #include "ActuatorsPresenter.h"
 #include "StatesPresenter.h"
 // L4
-#include "DAQManagerWizard/DAQScanDialog.h"
-#include "DAQManagerWizard/DAQCalibrationDialog.h"
-#include "DAQManagerWizard/DAQLinkDialog.h"
+#include "DAQManagerConfiguration/DAQCalibrationDialog.h"
+#include "DAQManagerConfiguration/DAQScanDialog.h"
+#include "DAQManagerConfiguration/DAQLinkDialog.h"
 #include "DAQManager.h"
 #include "StateUIHandler.h"
 #include "SystemDiagramUIHandler.h"
