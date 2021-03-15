@@ -1,11 +1,9 @@
 #include "DAQCalibrationDialog.h"
 
 DAQCalibrationDialog::DAQCalibrationDialog(std::unique_ptr<DAQManager> daqm, QWidget *parent)
-    : QDialog(parent), daqm{std::move(daqm)}
+    : QDialog(parent), daqm{std::move(daqm)}, ui{new Ui::DAQCalibrationDialog}
 {
-    QVBoxLayout* vb = new QVBoxLayout();
-    vb->addStretch();
-
+    this->ui->setupUi(this);
     for (const auto& daq : this->daqm->DAQDevices) {
         QGroupBox* gb = new QGroupBox(QString::fromStdString(daq->deviceID), this);
         QFormLayout* daqFormLayout = new QFormLayout(this);
@@ -29,22 +27,11 @@ DAQCalibrationDialog::DAQCalibrationDialog(std::unique_ptr<DAQManager> daqm, QWi
             }
         }
 
-        vb->addWidget(gb);
+        this->ui->scrollAreaWidgetLayout->addWidget(gb);
     }
-
-    QWidget* scrollAreaWidget = new QWidget(this);
-    scrollAreaWidget->setLayout(vb);
-    QScrollArea* sa = new QScrollArea(this);
-    sa->setFrameStyle(QFrame::NoFrame);
-    sa->setWidget(scrollAreaWidget);
-    sa->setWidgetResizable(true);
-    this->setLayout(new QVBoxLayout());
-    this->layout()->addWidget(sa);
-
-    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    this->layout()->addWidget(buttonBox);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    // Connect the buttons at the end to prevent somebody from clicking something before it renders xD
+    connect(this->ui->buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(this->ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 void

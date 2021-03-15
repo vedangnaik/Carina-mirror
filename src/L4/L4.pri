@@ -32,10 +32,12 @@ HEADERS += \
 
 INCLUDEPATH += \
     $$PWD/dataacquisition \
-    $$PWD/ui
+    $$PWD/ui \
+    $$PWD/ui/DAQManagerConfiguration
 
 # Add .ui forms for UI classes.
 FORMS += \
+    $$PWD/ui/DAQManagerConfiguration/DAQCalibrationDialog.ui \
     $$PWD/ui/DAQManagerConfiguration/DAQScanDialog.ui \
     $$PWD/ui/Error.ui \
     $$PWD/ui/GSMainWindow.ui \

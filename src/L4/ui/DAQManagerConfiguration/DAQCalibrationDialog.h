@@ -9,7 +9,8 @@
 #include <QScrollArea>
 #include <QGroupBox>
 #include <QLabel>
-#include <DAQManager.h>
+#include "DAQManager.h"
+#include "ui_DAQCalibrationDialog.h"
 
 class DAQCalibrationDialog : public QDialog
 {
@@ -20,4 +21,5 @@ public:
     std::unique_ptr<DAQManager> takeDAQManager();
 private:
     std::unique_ptr<DAQManager> daqm;
+    Ui::DAQCalibrationDialog* ui;
 };
