@@ -1,29 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DAQCalibrationDialog</class>
- <widget class="QDialog" name="DAQCalibrationDialog">
+ <class>DAQLinkDialog</class>
+ <widget class="QDialog" name="DAQLinkDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>645</width>
-    <height>540</height>
+    <width>507</width>
+    <height>427</height>
    </rect>
   </property>
-  <property name="contextMenuPolicy">
-   <enum>Qt::DefaultContextMenu</enum>
-  </property>
   <property name="windowTitle">
-   <string>Calibrate DAQ Channels</string>
+   <string>Link Sensors to DAQ Channels</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>The channels of your DAQ(s) can be calibrated here. All DAQs initially start with the identity calibration i.e. the raw value is simply passed through, hence the (1, 1), (2, 2), etc. These can be changed as required to get any desired linear relationship.</string>
-     </property>
-     <property name="scaledContents">
-      <bool>false</bool>
+      <string>Each sensor on the left can be linked to one DAQ channel on the right. If no value is desired for a sensor, the &lt;unlinked&gt; option can be chosen.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -35,9 +29,6 @@
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::Box</enum>
-     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
@@ -46,13 +37,28 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>623</width>
-        <height>434</height>
+        <width>487</width>
+        <height>338</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <layout class="QVBoxLayout" name="scrollAreaWidgetLayout"/>
+        <layout class="QFormLayout" name="scrollAreaWidgetLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sensor&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Linked DAQ and Channel&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -66,9 +72,6 @@
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
-     <property name="centerButtons">
-      <bool>false</bool>
-     </property>
     </widget>
    </item>
   </layout>
@@ -78,7 +81,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DAQCalibrationDialog</receiver>
+   <receiver>DAQLinkDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -94,7 +97,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DAQCalibrationDialog</receiver>
+   <receiver>DAQLinkDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

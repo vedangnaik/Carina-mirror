@@ -8,7 +8,9 @@
 #include <QScrollArea>
 #include <QDialogButtonBox>
 #include <QLabel>
-#include <DAQManager.h>
+#include "DAQManager.h"
+#include "ui_DAQLinkDialog.h"
+
 
 class DAQLinkDialog : public QDialog
 {
@@ -18,6 +20,7 @@ public:
     void accept() override;
     std::unique_ptr<DAQManager> takeDAQManager();
 private:
+    Ui::DAQLinkDialog* ui;
     std::unique_ptr<DAQManager> daqm;
 };
 

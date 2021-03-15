@@ -1,8 +1,10 @@
 #include "DAQLinkDialog.h"
 
 DAQLinkDialog::DAQLinkDialog(std::unique_ptr<DAQManager> daqm, QWidget *parent)
-    : QDialog(parent), daqm{std::move(daqm)}
+    : QDialog(parent), ui{new Ui::DAQLinkDialog}, daqm{std::move(daqm)}
 {
+    this->ui->setupUi(this);
+
     // Get all channels from all daqs
     QStringList options{"<unlinked>"};
     for (const auto& daq : this->daqm->DAQDevices) {
@@ -10,14 +12,12 @@ DAQLinkDialog::DAQLinkDialog(std::unique_ptr<DAQManager> daqm, QWidget *parent)
             options.push_back(QString::fromStdString(daq->deviceID + "-") + QString::number(channel));
         }
     }
-
     // Create a combo box with all channels, then set it to the current one
-    QFormLayout* sensorLinksFormLayout = new QFormLayout();
-    sensorLinksFormLayout->setObjectName("fl");
     for (const auto& sensorID : this->daqm->getSensorIDs()) {
         QComboBox* cmb = new QComboBox(this);
         cmb->addItems(options);
-        sensorLinksFormLayout->addRow(QString::fromStdString(sensorID), cmb);
+        cmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        this->ui->scrollAreaWidgetLayout->addRow(QString::fromStdString(sensorID), cmb);
 
         if (this->daqm->sensorToDAQLinks.find(sensorID) != this->daqm->sensorToDAQLinks.end()) {
             AbstractDAQ* daq = this->daqm->sensorToDAQLinks.at(sensorID).first;
@@ -26,27 +26,16 @@ DAQLinkDialog::DAQLinkDialog(std::unique_ptr<DAQManager> daqm, QWidget *parent)
         }
     }
 
-    QWidget* scrollAreaWidget = new QWidget(this);
-    scrollAreaWidget->setLayout(sensorLinksFormLayout);
-    QScrollArea* sa = new QScrollArea(this);
-    sa->setFrameStyle(QFrame::NoFrame);
-    sa->setWidget(scrollAreaWidget);
-    sa->setWidgetResizable(true);
-    this->setLayout(new QVBoxLayout());
-    this->layout()->addWidget(sa);
-
-    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    this->layout()->addWidget(buttonBox);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(this->ui->buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(this->ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 void
 DAQLinkDialog::accept()
 {
     this->daqm->sensorToDAQLinks.clear();
-    QFormLayout* fl = this->findChild<QFormLayout*>("fl");
-    for (int i = 0; i < fl->rowCount(); i++) {
+    QFormLayout* fl = this->ui->scrollAreaWidgetLayout;
+    for (int i = 1; i < fl->rowCount(); i++) {
         std::string sensorID = ((QLabel*)fl->itemAt(i, QFormLayout::LabelRole)->widget())->text().toStdString();
         QString daqAndChannel = ((QComboBox*)fl->itemAt(i, QFormLayout::FieldRole)->widget())->currentText();
 

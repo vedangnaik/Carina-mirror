@@ -38,6 +38,7 @@ INCLUDEPATH += \
 # Add .ui forms for UI classes.
 FORMS += \
     $$PWD/ui/DAQManagerConfiguration/DAQCalibrationDialog.ui \
+    $$PWD/ui/DAQManagerConfiguration/DAQLinkDialog.ui \
     $$PWD/ui/DAQManagerConfiguration/DAQScanDialog.ui \
     $$PWD/ui/Error.ui \
     $$PWD/ui/GSMainWindow.ui \
