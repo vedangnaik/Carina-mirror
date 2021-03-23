@@ -209,7 +209,8 @@ DAQScanDialog::displayAvailableI2CDAQs()
     auto scanForAvailableI2CDAQs = []() -> std::vector<unsigned char> {
         std::vector<unsigned char> daqs;
         int f;
-        if ((f = open("/dev/i2c-1", O_RDWR)) >= 0) {
+        // Explicit global namespace to prevent namespace collision with QDialog::open
+        if ((f = ::open("/dev/i2c-1", O_RDWR)) >= 0) {
             for (unsigned char addr = 0; addr < 128; addr++) {
                 if (ioctl(f, I2C_SLAVE, addr) > 0) {
                     daqs.push_back(addr);
