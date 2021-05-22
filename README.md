@@ -145,7 +145,7 @@ This instructions detail how to install Ubuntu 20.04 on VirtualBox, although you
 
 
 ### Setting up on Linux
-1. Install Qt5 and Qt Creator. This can be done in a number of ways. You can either download it from the [official website](https://www.qt.io/download), or from your distro's package manager (for Ubunutu, see [this link](https://www.osradar.com/install-qtcreator-on-ubuntu-20-04-18-04/)). Note that if you go with the former option, you may be required to create an account. Whatever way you choose, make sure to download Qt version 5 or above.
+1. Install Qt5 and Qt Creator from the [official website](https://www.qt.io/download). Make sure to download Qt v5.xx (this should be the default).
 2. Install and set up Git for Linux by following the steps [here](https://www.atlassian.com/git/tutorials/install-git). Note that some distros come with Git pre-installed; you can check this by typing `git --version` into a terminal. If you get a version number, then you can skip this step. You may also have to install `gcc, g++, make` and other tools; the terminal will tell you how to do so.
 3. Clone this repository and open the `Carina.pro` file in Qt Creator.
 
