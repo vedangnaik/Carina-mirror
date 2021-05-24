@@ -174,7 +174,18 @@ make                    ## The previous step created a Makefile for the Linux ta
 ```
 
 ## Contributing
-Avionics uses the ClickUp tool for keeping track of new features to add, progress, and other relevant information. The list can be found [here](https://app.clickup.com/t/1g3n9t). Carina follows the **Clean Architecture** software design paradigm. A short introduction to this paradigm and how Carina uses it can be found [here](https://docs.google.com/document/d/1nojiR9O3od-X_OAvxXngy7_2Q1aDiMwlL0bXFLyTvfU/edit). We highly recommend you read up about Clean Architecture before contributing; otherwise, most of our decisions and flow of control will seem very mysterious.
+Avionics uses the ClickUp tool for keeping track of new features to add, progress, and other relevant information. The list can be found [here](https://app.clickup.com/t/1g3n9t). If you cannot access this, please see the [Contact](#contact) section and ask the concerned people to add you to the Clickup.
+
+Carina follows the **Clean Architecture** software design paradigm. A short introduction to this paradigm and how Carina uses it can be found [here](https://docs.google.com/document/d/1nojiR9O3od-X_OAvxXngy7_2Q1aDiMwlL0bXFLyTvfU/edit). We highly recommend you read up about Clean Architecture before contributing; otherwise, most of our decisions and flow of control will seem very mysterious.
+
+To contribute code, we follow the 'forking' method, outlined below:
+1. Create a fork of this repository to your own personal account and clone it.
+2. Make your changes there.
+3. Create a pull request to this repository on GitHub.
+4. Your pull request will be reviewed - any modifications needed will be communicated. Once the code is satisfactory, it will be merged into the master branch. 
+5. Do a `git pull` of this repository to your local clone to bring it up to date. Do this every time you start working on a new feature, otherwise you risk contributing to an 'out of date' version of the software.
+GitHub has some good guides about forking, pull requests, etc. Please review these if this process is unclear.
+
 
 ## Contact
 Please contact @Ammol or @Vedang on the UTAT Rocketry Slack for any help, questions, etc. 
