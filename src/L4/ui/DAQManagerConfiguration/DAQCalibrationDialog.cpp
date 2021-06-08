@@ -48,7 +48,9 @@ DAQCalibrationDialog::accept()
                 daq->calibrationPoints.at(channel).at(i).second = ((QLineEdit*)daqFormLayout->itemAt(row, QFormLayout::FieldRole)->widget())->text().toDouble();
             }
         }
+        daq->calibrate();
     }
+
     this->done(QDialog::Accepted);
 }
 

@@ -11,4 +11,7 @@ public:
     void startAcquisition() override;
     void stopAcquisition() override;
     std::vector<double> getLatestData() override;
+private:
+    std::mt19937 gen;
+    std::uniform_real_distribution<> dis;
 };
