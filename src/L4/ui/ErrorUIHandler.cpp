@@ -26,6 +26,9 @@ ErrorUIHandler::overflow(int_type v)
 std::streamsize
 ErrorUIHandler::xsputn(const char *p, std::streamsize n)
 {
-    this->errorUI.errorTextEdit->append(QString(p));
+    // Remove the trailing newline since the text edit will add another one.
+    QString qp = QString(p);
+    qp[qp.size() - 1] = '\0';
+    this->errorUI.errorTextEdit->append(qp);
     return n;
 }
