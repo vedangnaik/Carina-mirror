@@ -41,12 +41,15 @@ std::vector<double> AiMCCDAQ::getLatestData() {
     if (status == SS_RUNNING && connected != 0) {
         // Report average of all samples seen since last run.
         for (unsigned int channel = 0; channel < this->numChannels; channel++) {
-            // I was debating whether to use operator[] or .at(). But since we are guaranteed that i will be in range,
-            // I don't think it's needed. But maybe it's better to have?
-            // TODO: add calibration to whatever value chosen here
             double& slope = this->slopesAndIntercepts.at(channel).first;
             double& intercept = this->slopesAndIntercepts.at(channel).second;
-            values[channel] = (slope * std::accumulate(&this->dataBuffer[channel], &this->dataBuffer[channel] + this->samplesPerChannel, 0.0) / this->samplesPerChannel) + intercept;
+            double temp = 0.0;
+            for (unsigned int sample = 0; sample < this->samplesPerChannel; sample++) {
+                // This is like a 2D array, databuffer[channel][sample]
+                // It may be worth it to try and make 2D arrays work with uldaq but this works so yeah
+                temp += this->dataBuffer[channel + (this->numChannels * sample)];
+            }
+            values[channel] = (slope * temp / this->samplesPerChannel) + intercept;
         }
     } else {
         LOG(ERROR) << "DAQ device ID '" << this->deviceID << "' cannot be accessed. Reporting all NaN.";

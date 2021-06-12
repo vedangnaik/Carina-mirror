@@ -9,14 +9,17 @@ INITIALIZE_EASYLOGGINGPP
 int main(int argc, char *argv[]) {
     START_EASYLOGGINGPP(argc, argv);
 
+    // Setup the two log files, one for normal Carina events and the other for the sensor data.
+    // The logfile names will be based on the current date and time.
+    std::time_t now_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    std::string now = std::string(std::ctime(&now_time));
+    std::replace(now.begin(), now.end(), ' ', '_');
+    now.pop_back(); // Remove the newline character
+
     // We will use the default logger for normal Carina events.
     // Configure the default logger.
     el::Configurations defaultConf;
     defaultConf.setToDefault();
-    // The filename will be the current date and time.
-    std::time_t now_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    std::string now = std::string(std::ctime(&now_time));
-    std::replace(now.begin(), now.end(), ' ', '_');
     defaultConf.setGlobally(el::ConfigurationType::Filename, now + "_events.log");
     el::Loggers::reconfigureAllLoggers(defaultConf);
 

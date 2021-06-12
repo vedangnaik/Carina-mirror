@@ -160,7 +160,7 @@ DAQScanDialog::displayAvailableAiMCCDAQs()
 
             // Get num channels
             long long numChannels;
-            err = ulAIGetInfo(handle, AI_INFO_NUM_CHANS, 0, &numChannels);
+            err = ulAIGetInfo(handle, AI_INFO_NUM_CHANS_BY_MODE, AI_SINGLE_ENDED, &numChannels);
             if (err != ERR_NO_ERROR) { /*shit */ std::cout << "ulAIGetInfo Error: " << err << std::endl; }
             if (aiSupported < 1) { LOG(ERROR) << "Analog input not supported: " << aiSupported; }
 
@@ -168,6 +168,7 @@ DAQScanDialog::displayAvailableAiMCCDAQs()
             long long voltageRange;
             err = ulAIGetInfo(handle, AI_INFO_SE_RANGE, 0, &voltageRange);
             if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAIGetInfo Error: " << err; }
+
 
             daqs.push_back(std::make_tuple(handle, bool(aiSupported), (unsigned int)numChannels, (Range)voltageRange));
         }
