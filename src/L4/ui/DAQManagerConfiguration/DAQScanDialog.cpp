@@ -1,9 +1,11 @@
 #include "DAQScanDialog.h"
 
 DAQScanDialog::DAQScanDialog(QWidget* parent)
-    : QDialog(parent), ui(new Ui::DAQScanDialog)
+    : QDialog{parent}, ui{Ui::DAQScanDialog()}
 {
-    this->ui->setupUi(this);
+    this->ui.setupUi(this);
+    connect(this->ui.buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(this->ui.buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
     this->displayDummyDAQs();
     this->displayOpenSerialPorts();
@@ -69,10 +71,10 @@ DAQScanDialog::displayDummyDAQs()
     cmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     // display on UI
-    int row = this->ui->MCCDAQDevicesLayout->rowCount();
-    this->ui->DummyDAQsLayout->addWidget(chb, row, 0);
-    this->ui->DummyDAQsLayout->addWidget(new QLabel("Number of channels: ", this), row, 1);
-    this->ui->DummyDAQsLayout->addWidget(cmb, row, 2);
+    int row = this->ui.MCCDAQDevicesLayout->rowCount();
+    this->ui.DummyDAQsLayout->addWidget(chb, row, 0);
+    this->ui.DummyDAQsLayout->addWidget(new QLabel("Number of channels: ", this), row, 1);
+    this->ui.DummyDAQsLayout->addWidget(cmb, row, 2);
 }
 
 void
@@ -111,12 +113,12 @@ DAQScanDialog::displayOpenSerialPorts()
         QLabel* l = new QLabel(QString::fromStdString(std::get<1>(t)), this);
         l->setObjectName(deviceID + "|serialportPath");
 
-        int row = this->ui->SerialportDevicesLayout->rowCount();
-        this->ui->SerialportDevicesLayout->addWidget(chb, row, 0);
-        this->ui->SerialportDevicesLayout->addWidget(new QLabel("Path: ", this), row, 1);
-        this->ui->SerialportDevicesLayout->addWidget(l, row, 2);
-        this->ui->SerialportDevicesLayout->addWidget(new QLabel("Number of 'channels': ", this), row, 3);
-        this->ui->SerialportDevicesLayout->addWidget(cmb, row, 4);
+        int row = this->ui.SerialportDevicesLayout->rowCount();
+        this->ui.SerialportDevicesLayout->addWidget(chb, row, 0);
+        this->ui.SerialportDevicesLayout->addWidget(new QLabel("Path: ", this), row, 1);
+        this->ui.SerialportDevicesLayout->addWidget(l, row, 2);
+        this->ui.SerialportDevicesLayout->addWidget(new QLabel("Number of 'channels': ", this), row, 3);
+        this->ui.SerialportDevicesLayout->addWidget(cmb, row, 4);
     }
 }
 
@@ -188,15 +190,15 @@ DAQScanDialog::displayAvailableAiMCCDAQs()
         QLabel* handleLabel = new QLabel(QString::number(std::get<0>(t)), this);
         handleLabel->setObjectName(deviceID + "|handle");
 
-        int row = this->ui->MCCDAQDevicesLayout->rowCount();
-        this->ui->MCCDAQDevicesLayout->addWidget(chb, row, 0);
-        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Analog Input: " + QString(std::get<1>(t) ? "yes" : "no"), this), row, 1);
-        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Handle: ", this), row, 2);
-        this->ui->MCCDAQDevicesLayout->addWidget(handleLabel, row, 3);
-        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Number of channels: ", this), row, 4);
-        this->ui->MCCDAQDevicesLayout->addWidget(channelLabel, row, 5);
-        this->ui->MCCDAQDevicesLayout->addWidget(new QLabel("Voltage range: ", this), row, 6);
-        this->ui->MCCDAQDevicesLayout->addWidget(rangeLabel, row, 7);
+        int row = this->ui.MCCDAQDevicesLayout->rowCount();
+        this->ui.MCCDAQDevicesLayout->addWidget(chb, row, 0);
+        this->ui.MCCDAQDevicesLayout->addWidget(new QLabel("Analog Input: " + QString(std::get<1>(t) ? "yes" : "no"), this), row, 1);
+        this->ui.MCCDAQDevicesLayout->addWidget(new QLabel("Handle: ", this), row, 2);
+        this->ui.MCCDAQDevicesLayout->addWidget(handleLabel, row, 3);
+        this->ui.MCCDAQDevicesLayout->addWidget(new QLabel("Number of channels: ", this), row, 4);
+        this->ui.MCCDAQDevicesLayout->addWidget(channelLabel, row, 5);
+        this->ui.MCCDAQDevicesLayout->addWidget(new QLabel("Voltage range: ", this), row, 6);
+        this->ui.MCCDAQDevicesLayout->addWidget(rangeLabel, row, 7);
     }
 }
 #endif

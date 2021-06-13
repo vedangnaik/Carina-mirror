@@ -47,14 +47,10 @@
         <x>0</x>
         <y>0</y>
         <width>623</width>
-        <height>434</height>
+        <height>426</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <layout class="QVBoxLayout" name="scrollAreaWidgetLayout"/>
-       </item>
-      </layout>
+      <layout class="QVBoxLayout" name="verticalLayout"/>
      </widget>
     </widget>
    </item>

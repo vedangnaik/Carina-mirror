@@ -1,9 +1,9 @@
 #include "DAQCalibrationDialog.h"
 
 DAQCalibrationDialog::DAQCalibrationDialog(std::unique_ptr<DAQManager> daqm, QWidget *parent)
-    : QDialog(parent), daqm{std::move(daqm)}, ui{new Ui::DAQCalibrationDialog}
+    : QDialog(parent), daqm{std::move(daqm)}, ui{Ui::DAQCalibrationDialog()}
 {
-    this->ui->setupUi(this);
+    this->ui.setupUi(this);
     for (const auto& daq : this->daqm->DAQDevices) {
         QGroupBox* gb = new QGroupBox(QString::fromStdString(daq->deviceID), this);
         QFormLayout* daqFormLayout = new QFormLayout(this);
@@ -27,7 +27,7 @@ DAQCalibrationDialog::DAQCalibrationDialog(std::unique_ptr<DAQManager> daqm, QWi
             }
         }
 
-        this->ui->scrollAreaWidgetLayout->addWidget(gb);
+        this->ui.scrollAreaWidgetContents->layout()->addWidget(gb);
     }
 }
 

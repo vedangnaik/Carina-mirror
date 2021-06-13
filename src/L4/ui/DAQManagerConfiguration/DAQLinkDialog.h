@@ -16,11 +16,11 @@ class DAQLinkDialog : public QDialog
 {
     Q_OBJECT
 public:
-    DAQLinkDialog(std::unique_ptr<DAQManager> daqm, QWidget *parent = nullptr);
+    DAQLinkDialog(std::unique_ptr<DAQManager> daqm, QWidget* parent = nullptr);
     void accept() override;
     std::unique_ptr<DAQManager> takeDAQManager();
 private:
-    Ui::DAQLinkDialog* ui;
     std::unique_ptr<DAQManager> daqm;
+    Ui::DAQLinkDialog ui;
 };
 

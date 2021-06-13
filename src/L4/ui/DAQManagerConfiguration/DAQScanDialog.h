@@ -41,5 +41,5 @@ private:
 #endif
 
     std::vector<QCheckBox*> selectedDAQs;
-    Ui::DAQScanDialog* ui;
+    Ui::DAQScanDialog ui;
 };

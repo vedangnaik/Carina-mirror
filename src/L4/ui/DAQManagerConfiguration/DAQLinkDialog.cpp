@@ -1,9 +1,9 @@
 #include "DAQLinkDialog.h"
 
 DAQLinkDialog::DAQLinkDialog(std::unique_ptr<DAQManager> daqm, QWidget *parent)
-    : QDialog(parent), ui{new Ui::DAQLinkDialog}, daqm{std::move(daqm)}
+    : QDialog{parent}, daqm{std::move(daqm)}, ui{Ui::DAQLinkDialog()}
 {
-    this->ui->setupUi(this);
+    this->ui.setupUi(this);
 
     // Get all channels from all daqs
     QStringList options{"<unlinked>"};
@@ -17,7 +17,7 @@ DAQLinkDialog::DAQLinkDialog(std::unique_ptr<DAQManager> daqm, QWidget *parent)
         QComboBox* cmb = new QComboBox(this);
         cmb->addItems(options);
         cmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        this->ui->scrollAreaWidgetLayout->addRow(QString::fromStdString(sensorID), cmb);
+        this->ui.scrollAreaWidgetLayout->addRow(QString::fromStdString(sensorID), cmb);
 
         if (this->daqm->sensorToDAQLinks.find(sensorID) != this->daqm->sensorToDAQLinks.end()) {
             AbstractDAQ* daq = this->daqm->sensorToDAQLinks.at(sensorID).first;
@@ -31,7 +31,7 @@ void
 DAQLinkDialog::accept()
 {
     this->daqm->sensorToDAQLinks.clear();
-    QFormLayout* fl = this->ui->scrollAreaWidgetLayout;
+    QFormLayout* fl = this->ui.scrollAreaWidgetLayout;
     for (int i = 1; i < fl->rowCount(); i++) {
         std::string sensorID = ((QLabel*)fl->itemAt(i, QFormLayout::LabelRole)->widget())->text().toStdString();
         QString daqAndChannel = ((QComboBox*)fl->itemAt(i, QFormLayout::FieldRole)->widget())->currentText();

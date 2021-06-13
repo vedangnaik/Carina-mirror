@@ -17,9 +17,9 @@ class DAQCalibrationDialog : public QDialog
     Q_OBJECT
 public:
     DAQCalibrationDialog(std::unique_ptr<DAQManager> daqm, QWidget *parent = nullptr);
-    void accept() override;
     std::unique_ptr<DAQManager> takeDAQManager();
 private:
+    void accept() override;
     std::unique_ptr<DAQManager> daqm;
-    Ui::DAQCalibrationDialog* ui;
+    Ui::DAQCalibrationDialog ui;
 };
