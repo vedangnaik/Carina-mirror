@@ -10,9 +10,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 include(../dependencies/dependencies.pri)
-include(../src/L1/L1.pri)
-include(../src/L2/L2.pri)
-include(../src/L3/L3.pri)
+include(../src/src.pri)
 
 QT += core gui widgets
 
