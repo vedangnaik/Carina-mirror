@@ -236,12 +236,12 @@ DAQScanDialog::displayAvailableI2CDAQs()
         cmb->addItems({"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
         cmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
-        int row = this->ui->SerialportDevicesLayout->rowCount();
-        this->ui->I2CDAQDevicesLayout->addWidget(chb, row, 0);
-        this->ui->I2CDAQDevicesLayout->addWidget(new QLabel("I2C Address: ", this), row, 1);
-        this->ui->I2CDAQDevicesLayout->addWidget(addrLabel, row, 2);
-        this->ui->I2CDAQDevicesLayout->addWidget(new QLabel("Number of 'channels': ", this), row, 3);
-        this->ui->I2CDAQDevicesLayout->addWidget(cmb, row, 4);
+        int row = this->ui.SerialportDevicesLayout->rowCount();
+        this->ui.I2CDAQDevicesLayout->addWidget(chb, row, 0);
+        this->ui.I2CDAQDevicesLayout->addWidget(new QLabel("I2C Address: ", this), row, 1);
+        this->ui.I2CDAQDevicesLayout->addWidget(addrLabel, row, 2);
+        this->ui.I2CDAQDevicesLayout->addWidget(new QLabel("Number of 'channels': ", this), row, 3);
+        this->ui.I2CDAQDevicesLayout->addWidget(cmb, row, 4);
     }
 }
 #endif
