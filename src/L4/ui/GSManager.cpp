@@ -38,9 +38,9 @@ GSManager::GSManager() {
         LOG(INFO) << "User has requested DAQManager configuration.";
 
         if (this->svg != nullptr) {
-            DAQScanDialog* d = new DAQScanDialog();
-            if (d->exec() == QDialog::Accepted) {
-                this->daqm = std::make_unique<DAQManager>(d->DAQDevices, *this->svg);
+            DAQScanDialog d;
+            if (d.exec() == QDialog::Accepted) {
+                this->daqm = std::make_unique<DAQManager>(d.DAQDevices, *this->svg);
                 LOG(INFO) << "New DAQManager manufactured.";
             } else {
                 LOG(INFO) << "DAQManager manufacturing cancelled.";
@@ -55,10 +55,10 @@ GSManager::GSManager() {
 
         if (this->daqm != nullptr) {
             // Create a new calibration dialog window and move the existing DAQManager into it.
-            DAQCalibrationDialog* d = new DAQCalibrationDialog(std::move(this->daqm));
-            d->exec();
+            DAQCalibrationDialog d(std::move(this->daqm));
+            d.exec();
             // Take it back when done, then log this.
-            this->daqm = d->takeDAQManager();
+            this->daqm = d.takeDAQManager();
             LOG(INFO) << "DAQManager recalibrated.";
         } else {
             LOG(ERROR) << "Please configure some DAQ devices first.";
@@ -70,9 +70,9 @@ GSManager::GSManager() {
 
         if (this->daqm != nullptr) {
             // Same deal here as for calibration.
-            DAQLinkDialog* d = new DAQLinkDialog(std::move(this->daqm));
-            d->exec();
-            this->daqm = d->takeDAQManager();
+            DAQLinkDialog d(std::move(this->daqm));
+            d.exec();
+            this->daqm = d.takeDAQManager();
             LOG(INFO) << "DAQManager re-linked.";
         } else {
             LOG(ERROR) << "Please configure some DAQ devices first.";

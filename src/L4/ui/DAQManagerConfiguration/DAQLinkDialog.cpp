@@ -25,9 +25,6 @@ DAQLinkDialog::DAQLinkDialog(std::unique_ptr<DAQManager> daqm, QWidget *parent)
             cmb->setCurrentText(QString::fromStdString(daq->deviceID + "-") + QString::number(channel));
         }
     }
-
-    connect(this->ui->buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(this->ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 void

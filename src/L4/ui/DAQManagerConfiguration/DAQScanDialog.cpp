@@ -4,8 +4,6 @@ DAQScanDialog::DAQScanDialog(QWidget* parent)
     : QDialog(parent), ui(new Ui::DAQScanDialog)
 {
     this->ui->setupUi(this);
-    connect(this->ui->buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(this->ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
     this->displayDummyDAQs();
     this->displayOpenSerialPorts();
@@ -86,8 +84,8 @@ DAQScanDialog::displayOpenSerialPorts()
     auto scanForOpenSerialPorts = []() -> std::vector<std::tuple<std::string, std::string>>
     {
         std::vector<std::tuple<std::string, std::string>> ports;
-        QDir* d = new QDir("/dev","tty*", QDir::Name, QDir::System);
-        for (const auto& f : d->entryList()) {
+        QDir d("/dev","tty*", QDir::Name, QDir::System);
+        for (const auto& f : d.entryList()) {
             std::string filename = f.toStdString();
             std::string path = "/dev/" + filename;
             std::ifstream test(path);

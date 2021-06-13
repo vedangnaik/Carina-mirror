@@ -29,9 +29,6 @@ DAQCalibrationDialog::DAQCalibrationDialog(std::unique_ptr<DAQManager> daqm, QWi
 
         this->ui->scrollAreaWidgetLayout->addWidget(gb);
     }
-    // Connect the buttons at the end to prevent somebody from clicking something before it renders xD
-    connect(this->ui->buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(this->ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 void
