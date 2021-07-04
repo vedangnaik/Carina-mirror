@@ -37,7 +37,7 @@ jobs:
       - name: Include googletest and build
         run: |
           cd $GITHUB_WORKSPACE/Carina/build
-          $Qt5_DIR/bin/qmake $GITHUB_WORKSPACE/Carina/Carina.pro GOOGLETEST_DIR+=$GITHUB_WORKSPACE/googletest
+          $Qt5_DIR/bin/qmake $GITHUB_WORKSPACE/Carina/tests/tests.pro
           make
           ls
       
