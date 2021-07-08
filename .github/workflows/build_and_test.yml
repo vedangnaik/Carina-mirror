@@ -44,5 +44,5 @@ jobs:
       # Actually run all tests with googletest.
       - name: Run tests
         run: |
-          cd $GITHUB_WORKSPACE/Carina/build/tests
+          cd $GITHUB_WORKSPACE/Carina/build
           ./tests
