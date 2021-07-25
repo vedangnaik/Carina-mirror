@@ -5,6 +5,8 @@
 #include <string>
 #include <numeric>
 #include <cmath>
+#include <array>
+#include <utility>
 
 class AbstractDAQ {
 public:

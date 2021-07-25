@@ -27,7 +27,7 @@ public:
         this->value = new QLabel(this);
         this->unit = new QLabel(QString::fromStdString(unit), this);
         // Place them horizontally.
-        // MinimumSize makes the labels resize to fit the value.
+        // Minimumize makes the labels resize to fit the value.
         QHBoxLayout* hb = new QHBoxLayout();
         hb->setSizeConstraint(QLayout::SetMinimumSize);
         hb->addWidget(this->id);

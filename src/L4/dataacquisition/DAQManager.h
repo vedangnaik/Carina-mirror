@@ -5,10 +5,12 @@
 #include "easylogging++.h"
 #include <map>
 #include <vector>
-#include <mutex>
 #include <QObject>
 #include <iostream>
+// Temp, remove
 #include <QTimer>
+#include <chrono>
+#include <fstream>
 
 class DAQManager : public QObject {
     Q_OBJECT
@@ -22,7 +24,11 @@ public:
     const std::vector<AbstractDAQ*> DAQDevices;
     std::map<std::string, std::pair<AbstractDAQ*, unsigned int>> sensorToDAQLinks;
 private:
+    void updateUI();
+
     SVGIC& svgic;
     QTimer* DAQReadTimer;
-    std::mutex sensorLinksMutex;
+    QTimer* UIUpdateTimer;
+    std::map<std::string, double> valuesToDisplay;
+//    std::ofstream tempfile;
 };
