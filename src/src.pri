@@ -49,7 +49,8 @@ SOURCES += \
     $$PWD/L4/ui/ErrorUIHandler.cpp \
     $$PWD/L4/ui/GSManager.cpp \
     $$PWD/L4/ui/StateUIHandler.cpp \
-    $$PWD/L4/ui/SystemDiagramUIHandler.cpp
+    $$PWD/L4/ui/SystemDiagramUIHandler.cpp \
+    $$PWD/L4/control/AbstractActuator.cpp
 HEADERS += \
     $$PWD/L4/dataacquisition/AbstractDAQ.h \
     $$PWD/L4/dataacquisition/AiMCCDAQ.h \
@@ -65,11 +66,13 @@ HEADERS += \
     $$PWD/L4/ui/GSManager.h \
     $$PWD/L4/ui/StateUIHandler.h \
     $$PWD/L4/ui/SystemDiagramUIHandler.h \
-    $$PWD/L4/ui/UIHelpers.h
+    $$PWD/L4/ui/UIHelpers.h \
+    $$PWD/L4/control/AbstractActuator.h
 INCLUDEPATH += \
     $$PWD/L4/dataacquisition \
     $$PWD/L4/ui \
     $$PWD/L4/ui/DAQManagerConfiguration
+
 # Add .ui forms for UI classes.
 FORMS += \
     $$PWD/L4/ui/DAQManagerConfiguration/DAQCalibrationDialog.ui \
@@ -79,8 +82,6 @@ FORMS += \
     $$PWD/L4/ui/GSMainWindow.ui \
     $$PWD/L4/ui/State.ui \
     $$PWD/L4/ui/SystemDiagram.ui
-
-
 
 # Link uldaq.h for DAQ classes, if it's required.
 contains(DEFINES, ULDAQ_AVAILABLE) {
