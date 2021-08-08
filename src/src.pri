@@ -51,6 +51,7 @@ SOURCES += \
     $$PWD/L4/ui/GSManager.cpp \
     $$PWD/L4/ui/StateUIHandler.cpp \
     $$PWD/L4/ui/SystemDiagramUIHandler.cpp \
+    $$PWD/L4/control/Adafruit_PWMServoDriver.cpp \
     $$PWD/L4/control/AbstractActuator.cpp
 HEADERS += \
     $$PWD/L4/dataacquisition/AbstractDAQ.h \
@@ -69,6 +70,7 @@ HEADERS += \
     $$PWD/L4/ui/StateUIHandler.h \
     $$PWD/L4/ui/SystemDiagramUIHandler.h \
     $$PWD/L4/ui/UIHelpers.h \
+    $$PWD/L4/control/Adafruit_PWMServoDriver.h \
     $$PWD/L4/control/AbstractActuator.h
 INCLUDEPATH += \
     $$PWD/L4/dataacquisition \
