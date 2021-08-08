@@ -48,8 +48,7 @@
 #define MODE1_RESTART 0x80 /**< Restart enabled */
 // MODE2 bits
 #define MODE2_OUTNE_0 0x01 /**< Active LOW output enable input */
-#define MODE2_OUTNE_1                                                          \
-  0x02 /**< Active LOW output enable input - high impedience */
+#define MODE2_OUTNE_1 0x02 /**< Active LOW output enable input - high impedience */
 #define MODE2_OUTDRV 0x04 /**< totem pole structure vs open-drain */
 #define MODE2_OCH 0x08    /**< Outputs change on ACK vs STOP */
 #define MODE2_INVRT 0x10  /**< Output logic state inverted */
@@ -87,7 +86,8 @@ public:
   void setOscillatorFrequency(uint32_t freq);
   uint32_t getOscillatorFrequency(void);
 
-private:  int fd; // file descriptor for wiringpi i2c library: -1 if error
+private:
+  int fd; // file descriptor for wiringpi i2c library: -1 if error
   uint8_t _i2caddr;
   uint32_t _oscillator_freq;
   uint8_t read8(uint8_t addr);
