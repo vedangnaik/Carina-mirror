@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <cmath>
 #include "easylogging++.h"
+#include <cassert>
 
 class PCA9685Config{
 public:

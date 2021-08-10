@@ -8,14 +8,19 @@ PCA9685Actuator::PCA9685Actuator(const std::string deviceID, Adafruit_PWMServoDr
 }
 
 PCA9685Actuator::PCA9685Actuator(const std::string deviceID, Adafruit_PWMServoDriver& pwm, uint channel, double closed, double open, PCA9685Config config)
-    : AbstractActuator(deviceID), pwm(pwm), channel(channel), openAngle(open), closedAngle(closed), config(config) {}
+    : AbstractActuator(deviceID), pwm(pwm), channel(channel), config(config) {
+    assert (0 > closed || closed > 360);
+    assert (0 > open && open > 360);
+    this->closedAngle = closed;
+    this->openAngle = open;
+}
 
 void PCA9685Actuator::toggle() {
     if (this->state == OPEN){
-        rotateToAngle(openAngle);
+        rotateToAngle(closedAngle);
     }
     else {
-        rotateToAngle(closedAngle);
+        rotateToAngle(openAngle);
     }
     this->state = !this->state;
 }

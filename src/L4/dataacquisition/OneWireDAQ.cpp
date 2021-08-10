@@ -18,14 +18,15 @@ void OneWireDAQ::stopAcquisition() {
 std::vector<double> OneWireDAQ::getLatestData()
 {
     std::vector<double> values(this->numChannels, std::nan("NaN"));
+    /*
     if () { // check file exists + openable
         for (unsigned int channel = 0; channel < this->numChannels; channel++) {
-            // code to parse the data from /sys/bus/w1/devices/devicePath/w1_slave
+            // code to parse the data from /sys/bus/w1/devices/devicePath/w1_slave into val
 
             try {
                 double& slope = this->slopesAndIntercepts.at(channel).first;
                 double& intercept = this->slopesAndIntercepts.at(channel).second;
-                values.at(channel) = (slope * val) + intercept; // changed val to sval here @VEDANG
+                values.at(channel) = (slope * val) + intercept;
             } catch (std::exception& e) { // fix log statement
                 LOG(ERROR) << "DAQ device ID '" << this->deviceID << "': channel value '" << channel << "' could not be read. Reporting NaN.";
             }
@@ -33,5 +34,6 @@ std::vector<double> OneWireDAQ::getLatestData()
     } else {
         LOG(ERROR) << "DAQ device ID '" << this->deviceID << "' cannot be accessed. Reporting all NaN.";
     }
+    */
     return values;
 }
