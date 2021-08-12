@@ -8,10 +8,11 @@ OneWireDAQ::OneWireDAQ(const std::string deviceID, const unsigned int numChannel
 
 void OneWireDAQ::startAcquisition() {
     // check if file can be opened/exists
+    return;
 }
 
 void OneWireDAQ::stopAcquisition() {
-
+    return;
 }
 
 

@@ -1,7 +1,7 @@
 HEADERS += \
     $$PWD/L1/entities/Actuator.h \
     $$PWD/L1/entities/Sensor.h \
-    $$PWD/L1/entities/State.h \
+    $$PWD/L1/entities/State.h
 INCLUDEPATH += \
     $$PWD/L1/entities
 
@@ -9,7 +9,7 @@ INCLUDEPATH += \
 SOURCES += \
     $$PWD/L2/usecases/SensorsManager.cpp \
     $$PWD/L2/usecases/ActuatorsManager.cpp \
-    $$PWD/L2/usecases/StatesManager.cpp \
+    $$PWD/L2/usecases/StatesManager.cpp
 HEADERS += \
     $$PWD/L2/usecases/SensorsManager.h \
     $$PWD/L2/usecases/ActuatorsManager.h
