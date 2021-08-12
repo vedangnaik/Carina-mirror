@@ -1,6 +1,8 @@
 #ifndef PCA9685ACTUATOR_H
 #define PCA9685ACTUATOR_H
 
+#ifdef WIRINGPI_AVAILABLE
+
 #include "AbstractActuator.h"
 #include "Adafruit_PWMServoDriver.h"
 #include <cstdint>
@@ -42,4 +44,5 @@ private:
     PCA9685Config config;
 };
 
+#endif // WIRINGPI_AVAILABLE
 #endif // PCA9685ACTUATOR_H

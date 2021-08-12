@@ -1,3 +1,5 @@
+#ifdef WIRINGPI_AVAILABLE
+
 #include "PCA9685Actuator.h"
 
 PCA9685Actuator::PCA9685Actuator(const std::string deviceID, Adafruit_PWMServoDriver& pwm, uint channel, PCA9685Config config)
@@ -47,3 +49,5 @@ uint16_t PCA9685Actuator::getPWMFromAngle(double angle){
     double slope = (config.SERVOMAX-config.SERVOMIN) / (config.ANGLEMAX-config.ANGLEMIN);
     return config.SERVOMIN + (angle - config.ANGLEMAX) * slope;
 }
+
+#endif
