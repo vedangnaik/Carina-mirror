@@ -42,6 +42,7 @@ SOURCES += \
     $$PWD/L4/dataacquisition/DAQManager.cpp \
     $$PWD/L4/dataacquisition/DummyDAQ.cpp \
     $$PWD/L4/dataacquisition/I2CDAQ.cpp \
+    $$PWD/L4/dataacquisition/OneWireDAQ.cpp \
     $$PWD/L4/dataacquisition/SerialPortDAQ.cpp \
     $$PWD/L4/ui/DAQManagerConfiguration/DAQCalibrationDialog.cpp \
     $$PWD/L4/ui/DAQManagerConfiguration/DAQLinkDialog.cpp \
@@ -50,13 +51,16 @@ SOURCES += \
     $$PWD/L4/ui/GSManager.cpp \
     $$PWD/L4/ui/StateUIHandler.cpp \
     $$PWD/L4/ui/SystemDiagramUIHandler.cpp \
-    $$PWD/L4/control/AbstractActuator.cpp
+    $$PWD/L4/control/Adafruit_PWMServoDriver.cpp \
+    $$PWD/L4/control/AbstractActuator.cpp \
+    $$PWD/L4/control/PCA9685Actuator.cpp
 HEADERS += \
     $$PWD/L4/dataacquisition/AbstractDAQ.h \
     $$PWD/L4/dataacquisition/AiMCCDAQ.h \
     $$PWD/L4/dataacquisition/DAQManager.h \
     $$PWD/L4/dataacquisition/DummyDAQ.h \
     $$PWD/L4/dataacquisition/I2CDAQ.h \
+    $$PWD/L4/dataacquisition/OneWireDAQ.h \
     $$PWD/L4/dataacquisition/SerialPortDAQ.h \
     $$PWD/L4/ui/DAQManagerConfiguration/DAQCalibrationDialog.h \
     $$PWD/L4/ui/DAQManagerConfiguration/DAQLinkDialog.h \
@@ -67,7 +71,9 @@ HEADERS += \
     $$PWD/L4/ui/StateUIHandler.h \
     $$PWD/L4/ui/SystemDiagramUIHandler.h \
     $$PWD/L4/ui/UIHelpers.h \
-    $$PWD/L4/control/AbstractActuator.h
+    $$PWD/L4/control/Adafruit_PWMServoDriver.h \
+    $$PWD/L4/control/AbstractActuator.h \
+    $$PWD/L4/control/PCA9685Actuator.h
 INCLUDEPATH += \
     $$PWD/L4/dataacquisition \
     $$PWD/L4/ui \
