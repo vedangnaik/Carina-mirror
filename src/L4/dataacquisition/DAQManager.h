@@ -7,10 +7,7 @@
 #include <vector>
 #include <QObject>
 #include <iostream>
-// Temp, remove
 #include <QTimer>
-#include <chrono>
-#include <fstream>
 
 class DAQManager : public QObject {
     Q_OBJECT
@@ -30,5 +27,4 @@ private:
     QTimer* DAQReadTimer;
     QTimer* UIUpdateTimer;
     std::map<std::string, double> valuesToDisplay;
-//    std::ofstream tempfile;
 };

@@ -7,8 +7,6 @@ DAQManager::DAQManager(std::vector<AbstractDAQ*> DAQDevices, SVGIC& svgic)
     this->DAQReadTimer->start(1);
     this->UIUpdateTimer = new QTimer(this);
     this->UIUpdateTimer->start(30);
-//    Temp remove this
-//    this->tempfile = std::ofstream("temp.txt");
 }
 
 std::vector<std::string> DAQManager::getSensorIDs() {
@@ -29,7 +27,6 @@ void DAQManager::stopAcquisition() {
     for (const auto& d : this->DAQDevices) {
         d->stopAcquisition();
     }
-//    this->tempfile.close();
 }
 
 void DAQManager::getLatestData() {

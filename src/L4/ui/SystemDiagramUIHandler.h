@@ -47,7 +47,7 @@ private:
 
 class ActuatorButton : public QPushButton, public APOC {
 public:
-    ActuatorButton(QFrame& parent) : QPushButton(&parent) {};
+    ActuatorButton(QFrame& parent) : QPushButton(&parent) {}
     void displayStatus(const bool status) override {
         this->setChecked(status);
     }
