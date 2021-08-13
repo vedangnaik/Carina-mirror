@@ -9,10 +9,16 @@
 #include <cmath>
 #include "easylogging++.h"
 #include <cassert>
+#include <type_traits>
 
 class PCA9685Config{
 public:
     PCA9685Config(uint16_t SERVOMIN, uint16_t SERVMOMAX, double ANGLEMIN, double ANGLEMAX){
+        static_assert (SERVOMIN < SERVOMAX, "SERVOMIN must be less than SERVOMAX");
+        static_assert (ANGLEMIN < ANGLEMAX, "ANGLEMIN must be less than ANGLEMAX");
+        static_assert (0 <= ANGLEMIN && ANGLEMIN <= 360, "ANGLEMIN must be between 0 and 360 degrees");
+        static_assert (0 <= ANGLEMAX && ANGLEMAX <= 360, "ANGLEMAX must be between 0 and 360 degrees");
+
         this->SERVOMIN = SERVOMIN;
         this->SERVOMAX = SERVMOMAX;
         this->ANGLEMIN = ANGLEMIN;

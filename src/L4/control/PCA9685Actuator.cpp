@@ -14,8 +14,8 @@ PCA9685Actuator::PCA9685Actuator(const std::string deviceID, Adafruit_PWMServoDr
 
 PCA9685Actuator::PCA9685Actuator(const std::string deviceID, Adafruit_PWMServoDriver& pwm, uint channel, double closed, double open, PCA9685Config config)
     : AbstractActuator(deviceID), pwm(pwm), channel(channel), config(config) {
-    assert (0 > closed || closed > 360);
-    assert (0 > open || open > 360);
+    static_assert (0 <= closed && closed <= 360, "closed angle must be between 0 and 360 degrees");
+    static_assert (0 <= open && open <= 360, "open angle must be between 0 and 360 degrees");
     this->closedAngle = closed;
     this->openAngle = open;
     LOG(DEBUG) << "PCA9685 channel " << this->channel << " servo: closed angle is " << this->closedAngle " degrees";
@@ -57,7 +57,7 @@ void PCA9685Actuator::rotateToAngle(double angle) {
 
 uint16_t PCA9685Actuator::getPWMFromAngle(double angle){
     // angle should be between 0-360
-    double slope = (config.SERVOMAX-config.SERVOMIN) / (config.ANGLEMAX-config.ANGLEMIN);
+    double slope = (config.SERVOMAX-config.SERVOMIN) / (config.ANGLEMAX-config.ANGLEMIN); // div by 0 check handled by PCA9685Config constructor
     PWM = config.SERVOMIN + (angle - config.ANGLEMAX) * slope
     LOG(DEBUG) << "PCA9685 channel " << this->channel << " servo: PWM (out of 4096) for " << angle << " degrees is " << PWM;
     return PWM;
