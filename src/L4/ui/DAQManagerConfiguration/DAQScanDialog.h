@@ -27,7 +27,7 @@ class DAQScanDialog : public QDialog
     Q_OBJECT
 public:
     DAQScanDialog(QWidget* parent = nullptr);
-    std::vector<AbstractDAQ*> DAQDevices;
+    std::vector<Sensor*> DAQDevices;
 private:
     void accept() override;
 

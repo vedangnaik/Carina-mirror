@@ -1,7 +1,7 @@
-#include "AbstractDAQ.h"
+#include "Sensor.h"
 
-AbstractDAQ::AbstractDAQ(const std::string deviceID, const unsigned int numChannels)
-    : deviceID{deviceID}, numChannels{numChannels}
+Sensor(const std::string id, const unsigned int numChannels)
+    : id{id}, numChannels{numChannels}, latestValue{0.0}
 {
     // Give identity calibration points and 1 slope, 0 intercept for all channels.
     std::array<std::pair<double, double>, 5> t {
@@ -12,7 +12,7 @@ AbstractDAQ::AbstractDAQ(const std::string deviceID, const unsigned int numChann
 }
 
 void
-AbstractDAQ::calibrate()
+Sensor::calibrate()
 {
     for (unsigned int channel = 0; channel < this->numChannels; channel++) {
         const auto& channelCalibrationPoints = this->calibrationPoints.at(channel);

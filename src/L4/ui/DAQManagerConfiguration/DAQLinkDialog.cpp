@@ -20,7 +20,7 @@ DAQLinkDialog::DAQLinkDialog(std::unique_ptr<DAQManager> daqm, QWidget *parent)
         this->ui.scrollAreaWidgetLayout->addRow(QString::fromStdString(sensorID), cmb);
 
         if (this->daqm->sensorToDAQLinks.find(sensorID) != this->daqm->sensorToDAQLinks.end()) {
-            AbstractDAQ* daq = this->daqm->sensorToDAQLinks.at(sensorID).first;
+            Sensor* daq = this->daqm->sensorToDAQLinks.at(sensorID).first;
             unsigned int channel = this->daqm->sensorToDAQLinks.at(sensorID).second;
             cmb->setCurrentText(QString::fromStdString(daq->deviceID + "-") + QString::number(channel));
         }
@@ -41,7 +41,7 @@ DAQLinkDialog::accept()
         const auto p = daqAndChannel.split("-");
         std::string deviceID = p.at(0).toStdString();
         unsigned int channel = p.at(1).toUInt();
-        AbstractDAQ* daq = *std::find_if(this->daqm->DAQDevices.begin(), this->daqm->DAQDevices.end(), [=](AbstractDAQ* d) {
+        Sensor* daq = *std::find_if(this->daqm->DAQDevices.begin(), this->daqm->DAQDevices.end(), [=](Sensor* d) {
             return d->deviceID == deviceID;
         });
 

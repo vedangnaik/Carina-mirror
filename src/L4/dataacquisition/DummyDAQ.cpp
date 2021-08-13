@@ -1,7 +1,7 @@
 #include "DummyDAQ.h"
 
 DummyDAQ::DummyDAQ(const std::string deviceID, const unsigned int numChannels)
-    : AbstractDAQ(deviceID, numChannels)
+    : Sensor(deviceID, numChannels)
 {
     this->gen = std::mt19937(std::random_device{}());
     this->dis = std::uniform_real_distribution<>(-10.0, 10.0);

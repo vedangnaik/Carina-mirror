@@ -9,7 +9,7 @@
 #include <chrono>
 #include <thread>
 
-class I2CDAQ : public AbstractDAQ
+class I2CDAQ : public Sensor
 {
 public:
     I2CDAQ(const std::string id, const unsigned int numChannels, const char I2CAddress);

@@ -1,6 +1,6 @@
 #include "DAQManager.h"
 
-DAQManager::DAQManager(std::vector<AbstractDAQ*> DAQDevices, SVGIC& svgic)
+DAQManager::DAQManager(std::vector<Sensor*> DAQDevices, SVGIC& svgic)
     : DAQDevices{DAQDevices}, sensorToDAQLinks{}, svgic{svgic}
 {
     this->DAQReadTimer = new QTimer(this);

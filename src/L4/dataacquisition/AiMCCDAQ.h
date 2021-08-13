@@ -14,7 +14,7 @@
 /**
  * @brief The AiDAQHandler class handles an analog input DAQ device
  */
-class AiMCCDAQ : public AbstractDAQ {
+class AiMCCDAQ : public Sensor {
 public:
     AiMCCDAQ(const std::string deviceID, const unsigned int numChannels, DaqDeviceHandle handle, Range voltageRange);
     ~AiMCCDAQ();

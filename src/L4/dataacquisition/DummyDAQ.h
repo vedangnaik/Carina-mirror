@@ -4,7 +4,7 @@
 #include "AbstractDAQ.h"
 #include <random>
 
-class DummyDAQ : public AbstractDAQ
+class DummyDAQ : public Sensor
 {
 public:
     DummyDAQ(const std::string deviceID, const unsigned int numChannels);

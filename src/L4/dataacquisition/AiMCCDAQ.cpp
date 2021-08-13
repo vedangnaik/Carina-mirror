@@ -3,7 +3,7 @@
 #include "AiMCCDAQ.h"
 
 AiMCCDAQ::AiMCCDAQ(const std::string deviceID, const unsigned int numChannels, DaqDeviceHandle handle, Range voltageRange)
-    : AbstractDAQ(deviceID, numChannels), handle{handle}, voltageRange{voltageRange}
+    : Sensor(deviceID, numChannels), handle{handle}, voltageRange{voltageRange}
 {
     // connect DAQ
     UlError err = ulConnectDaqDevice(handle);

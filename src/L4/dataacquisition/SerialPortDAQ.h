@@ -7,7 +7,7 @@
 #include <fstream>
 #include <cmath>
 
-class SerialPortDAQ : public AbstractDAQ
+class SerialPortDAQ : public Sensor
 {
 public:
     SerialPortDAQ(const std::string deviceID, const unsigned int numChannels, std::string serialportPath);
