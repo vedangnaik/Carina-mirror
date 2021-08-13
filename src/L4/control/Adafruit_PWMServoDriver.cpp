@@ -32,7 +32,7 @@ Adafruit_PWMServoDriver::Adafruit_PWMServoDriver(const uint8_t addr)
  *          Sets External Clock (Optional)
  */
 void Adafruit_PWMServoDriver::begin(uint8_t prescale) {
-  this->fd = wiringPiI2CSetup(_i2caddr)
+  this->fd = wiringPiI2CSetup(_i2caddr);
   reset();
   if (prescale) {
     setExtClk(prescale);
