@@ -19,18 +19,18 @@ struct SensorCheck {
 
 class Sensor {
 public:
-    Sensor(const std::string id, const unsigned int numChannels);
+    Sensor(const std::string id);
     virtual void startAcquisition() = 0;
     virtual void stopAcquisition() = 0;
-    virtual std::vector<double> getLatestData() = 0;
+    virtual double getLatestData() = 0;
     virtual ~Sensor() {}
     
     void calibrate();
 
     const std::string id;
-    float latestValue;
-    const unsigned int numChannels;
-    std::vector<std::array<std::pair<double, double>, 5>> calibrationPoints;
+    double latestValue = 0.0;
+    std::array<std::pair<double, double>, 5> calibrationPoints;
 protected:
-    std::vector<std::pair<double, double>> slopesAndIntercepts;
+    double slope = 1.0;
+    double intercept = 0.0;
 };

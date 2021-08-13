@@ -21,15 +21,13 @@ SOURCES += \
     $$PWD/L3/controllers/ActuatorsController.cpp \
     $$PWD/L3/controllers/StatesController.cpp \
     $$PWD/L3/gateways/ProcessFileParser.cpp \
-    $$PWD/L3/gateways/SensorValuesGateway.cpp \
     $$PWD/L3/presenters/ActuatorsPresenter.cpp \
     $$PWD/L3/presenters/SensorsPresenter.cpp \
     $$PWD/L3/presenters/StatesPresenter.cpp
 HEADERS += \
     $$PWD/L3/controllers/ActuatorsController.h \
     $$PWD/L3/controllers/StatesController.h \
-    $$PWD/L3/gateways/ProcessFileParser.h \
-    $$PWD/L3/gateways/SensorValuesGateway.h
+    $$PWD/L3/gateways/ProcessFileParser.h
 INCLUDEPATH += \
     $$PWD/L3/controllers \
     $$PWD/L3/presenters \
@@ -37,9 +35,7 @@ INCLUDEPATH += \
 
 
 SOURCES += \
-    $$PWD/L4/dataacquisition/AbstractDAQ.cpp \
     $$PWD/L4/dataacquisition/AiMCCDAQ.cpp \
-    $$PWD/L4/dataacquisition/DAQManager.cpp \
     $$PWD/L4/dataacquisition/DummyDAQ.cpp \
     $$PWD/L4/dataacquisition/I2CDAQ.cpp \
     $$PWD/L4/dataacquisition/SerialPortDAQ.cpp \
@@ -52,9 +48,7 @@ SOURCES += \
     $$PWD/L4/ui/SystemDiagramUIHandler.cpp \
     $$PWD/L4/control/AbstractActuator.cpp
 HEADERS += \
-    $$PWD/L4/dataacquisition/AbstractDAQ.h \
     $$PWD/L4/dataacquisition/AiMCCDAQ.h \
-    $$PWD/L4/dataacquisition/DAQManager.h \
     $$PWD/L4/dataacquisition/DummyDAQ.h \
     $$PWD/L4/dataacquisition/I2CDAQ.h \
     $$PWD/L4/dataacquisition/SerialPortDAQ.h \

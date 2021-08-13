@@ -41,7 +41,7 @@ ProcessFileParser::parseSensors(const QJsonObject& sensorsObj)
         // In case their JSON linting software hasn't already done so.
         sensors.insert({
             sensorID.toStdString(),
-            Sensor(sensorID.toStdString(), sensorsObj[sensorID].toObject()["name"].toString().toStdString())
+            Sensor(sensorID.toStdString())
         });
     }
     return sensors;
