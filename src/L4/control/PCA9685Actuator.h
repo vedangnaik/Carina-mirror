@@ -2,7 +2,7 @@
 
 #ifdef WIRINGPI_AVAILABLE
 
-#include "AbstractActuator.h"
+#include "Actuator.h"
 #include "Adafruit_PWMServoDriver.h"
 #include <cstdint>
 #include <cmath>

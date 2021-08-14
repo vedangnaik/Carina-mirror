@@ -10,6 +10,8 @@
 // dependencies
 #include <easylogging++.h>
 // L1
+#include "Sensor.h"
+#include "Actuator.h"
 // L2
 #include "SensorsManager.h"
 #include "ActuatorsManager.h"
@@ -21,9 +23,8 @@
 #include "ActuatorsPresenter.h"
 #include "StatesPresenter.h"
 // L4
-#include "DAQCalibrationDialog.h"
-#include "DAQScanDialog.h"
-#include "DAQLinkDialog.h"
+#include "ConcreteSensorFactory.h"
+#include "ConcreteActuatorFactory.h"
 #include "StateUIHandler.h"
 #include "SystemDiagramUIHandler.h"
 #include "ErrorUIHandler.h"
@@ -59,7 +60,6 @@ private:
     std::unique_ptr<ActuatorsManager> am;
     std::unique_ptr<StatesManager> stm;
     // L3
-    std::unique_ptr<SensorValuesGateway> svg;
     std::unique_ptr<ActuatorsController> ac;
     std::unique_ptr<StatesController> stc;
     std::unique_ptr<SensorsPresenter> sp;
@@ -69,5 +69,4 @@ private:
     std::unique_ptr<ErrorUIHandler> euih;
     std::unique_ptr<StateUIHandler> suih;
     std::unique_ptr<SystemDiagramUIHandler> sduih;
-    std::unique_ptr<DAQManager> daqm;
 };

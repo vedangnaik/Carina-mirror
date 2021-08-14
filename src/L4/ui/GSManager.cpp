@@ -33,51 +33,6 @@ GSManager::GSManager() {
         this->systemDiagramUI.systemDiagramFrame->setStyleSheet("");
         LOG(INFO) << "Removed system diagram file.";
     });
-
-    connect(this->GSMainWindowUI.manufactureDAQManagerAction, &QAction::triggered, this, [=]() {
-        LOG(INFO) << "User has requested DAQManager configuration.";
-
-        if (this->svg != nullptr) {
-            DAQScanDialog d;
-            if (d.exec() == QDialog::Accepted) {
-                this->daqm = std::make_unique<DAQManager>(d.DAQDevices, *this->svg);
-                LOG(INFO) << "New DAQManager manufactured.";
-            } else {
-                LOG(INFO) << "DAQManager manufacturing cancelled.";
-            };
-        } else {
-            LOG(ERROR) << "Please load a process first.";
-        }
-    });
-
-    connect(this->GSMainWindowUI.calibrateDAQManagerAction, &QAction::triggered, this, [=]() {
-        LOG(INFO) << "User has requested DAQManager recalibration.";
-
-        if (this->daqm != nullptr) {
-            // Create a new calibration dialog window and move the existing DAQManager into it.
-            DAQCalibrationDialog d(std::move(this->daqm));
-            d.exec();
-            // Take it back when done, then log this.
-            this->daqm = d.takeDAQManager();
-            LOG(INFO) << "DAQManager recalibrated.";
-        } else {
-            LOG(ERROR) << "Please configure some DAQ devices first.";
-        }
-    });
-
-    connect(this->GSMainWindowUI.linkDAQManagerAction, &QAction::triggered, this, [=]() {
-        LOG(INFO) << "User has requested DAQManager re-linking.";
-
-        if (this->daqm != nullptr) {
-            // Same deal here as for calibration.
-            DAQLinkDialog d(std::move(this->daqm));
-            d.exec();
-            this->daqm = d.takeDAQManager();
-            LOG(INFO) << "DAQManager re-linked.";
-        } else {
-            LOG(ERROR) << "Please configure some DAQ devices first.";
-        }
-    });
 }
 
 void GSManager::openProcessFromFile(std::string filepath) {
@@ -87,10 +42,15 @@ void GSManager::openProcessFromFile(std::string filepath) {
         auto t = pg.parseProcessFile();
         LOG(INFO) << "Process file parsed successfully.";
 
-        // Array of sensor and actuator IDs for various classes to use.
-        std::vector<std::string> sensorIDs, actuatorIDs;
-        for (const auto& p : std::get<0>(t)) { sensorIDs.push_back(p.first); }
-        for (const auto& p : std::get<1>(t)) { actuatorIDs.push_back(p.first); }
+        // Manufacture all sensors and actuators here first
+        std::vector<Sensor*> sensors;
+        std::vector<Actuator*> actuators;
+        for (const auto& p : std::get<0>(t)) {
+            sensors.push_back(ConcreteSensorFactory::createSensor(p.first, p.second));
+        }
+        for (const auto& p : std::get<1>(t)) {
+            actuators.push_back(ConcreteActuatorFactory::createActuator(p.first, p.second));
+        }
 
         // First make the presenters which dudes be subscribing to
         this->sp = std::make_unique<SensorsPresenter>();
@@ -99,19 +59,22 @@ void GSManager::openProcessFromFile(std::string filepath) {
         LOG(INFO) << "Presenters ready.";
 
         // Now initialize the L2 classes with these presenters to use.
-        this->sm = std::make_unique<SensorsManager>(std::get<0>(t), *this->sp);
-        this->am = std::make_unique<ActuatorsManager>(std::get<1>(t), *this->ap);
+        this->sm = std::make_unique<SensorsManager>(sensors, *this->sp);
+        this->am = std::make_unique<ActuatorsManager>(actuators, *this->ap);
         this->stm = std::make_unique<StatesManager>(std::get<2>(t), *this->sm, *this->am, *this->stp);
         LOG(INFO) << "Managers ready.";
 
         // Make the remaining L3 classes here
-        this->svg = std::make_unique<SensorValuesGateway>(*this->sm);
         this->ac = std::make_unique<ActuatorsController>(*this->am);
         this->stc = std::make_unique<StatesController>(*this->stm);
         LOG(INFO) << "Controllers ready.";
 
         // Make the L4 UI classes here
         this->suih = std::make_unique<StateUIHandler>(this->stateUI, *this->sp, *this->ap, *this->stp, *this->ac, *this->stc);
+        // Array of sensor and actuator IDs for various classes to use.
+        std::vector<std::string> sensorIDs, actuatorIDs;
+        for (const auto& p : std::get<0>(t)) { sensorIDs.push_back(p.first); }
+        for (const auto& p : std::get<1>(t)) { actuatorIDs.push_back(p.first); }
         this->sduih = std::make_unique<SystemDiagramUIHandler>(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIDs, actuatorIDs);
         LOG(INFO) << "User interface ready.";
 
@@ -130,11 +93,7 @@ void GSManager::openProcessFromFile(std::string filepath) {
 void GSManager::startProcess() {
     LOG(INFO) << "User has requested process start.";
 
-    if (this->daqm == nullptr) {
-        LOG(ERROR) << "Please configure your DAQ devices first.";
-        return;
-    }
-    this->daqm->startAcquisition();
+    this->sm->startAcquisition();
     LOG(INFO) << "DAQManager acquisition started.";
     
     this->stm->startProcess();
@@ -147,7 +106,7 @@ void GSManager::startProcess() {
 void GSManager::stopAndCloseProcess() {
     LOG(INFO) << "User has requested process close.";
 
-    this->daqm->stopAcquisition();
+    this->sm->stopAcquisition();
     LOG(INFO) << "DAQManager acquisition stopped.";
     
     this->stm->stopProcess();
