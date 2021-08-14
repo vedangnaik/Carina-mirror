@@ -11,6 +11,6 @@ void DummyDAQ::startAcquisition() {}
 
 void DummyDAQ::stopAcquisition() {}
 
-std::vector<double> DummyDAQ::getLatestData() {
+double DummyDAQ::getLatestData() {
     return (this->slope * this->dis(this->gen)) + this->intercept;
 }

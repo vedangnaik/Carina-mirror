@@ -1,13 +1,11 @@
 #pragma once
 
-#include "Actuator.h"
 #include "State.h"
-#include "Sensor.h"
 #include "easylogging++.h"
-
 #include <QJsonObject>
 #include <QFile>
 #include <QJsonDocument>
+#include <QVariantMap>
 #include <QJsonObject>
 #include <iostream>
 #include <QJsonArray>
@@ -15,23 +13,30 @@
 #include <stdexcept>
 #include <filesystem>
 #include <tuple>
-
-using std::map;
-using std::string;
+#include <map>
+#include <string>
+#include <algorithm>
+#include <vector>
 
 
 class ProcessFileParser {
 public:
-    ProcessFileParser(const string filepath);
-    std::tuple<const map<const string, Sensor>, const map<const string, Actuator>, const map<const string, const State>> parseProcessFile();
-private:
-    const map<const string, Sensor> parseSensors(const QJsonObject& sensorsObj);
-    const map<const string, Actuator> parseActuators(const QJsonObject& actuatorsObj);
-    const map<const string, const State> parseStates(const QJsonObject& statesObj, const map<const std::string, Sensor>& sensors, const map<const std::string, Actuator>& actuators);
-    map<string, ActuatorCheck> parseActuatorChecks(const QJsonValue& checks, const map<const string, Actuator>& actuators);
-    map<string, SensorCheck> parseSensorChecks(const QJsonValue& checks, const map<const string, Sensor>& sensors);
+    ProcessFileParser(const std::string filepath);
+    std::tuple<
+        const std::map<const std::string, QVariantMap>, 
+        const std::map<const std::string, QVariantMap>,
+        const std::map<const std::string, const State>
+    >
+    parseProcessFile();
 
-    const string filepath;
+private:
+    const std::map<const std::string, QVariantMap> parseSensors(const QJsonObject& sensorsObj);
+    const std::map<const std::string, QVariantMap> parseActuators(const QJsonObject& actuatorsObj);
+    const std::map<const std::string, const State> parseStates(const QJsonObject& statesObj, const std::vector<const std::string> sensorIDs, const std::vector<const std::string> actuatorIDs);
+    std::map<std::string, SensorCheck> parseSensorChecks(const QJsonValue& checks, const std::vector<const std::string> sensorIDs);
+    std::map<std::string, ActuatorCheck> parseActuatorChecks(const QJsonValue& checks, const std::vector<const std::string> actuatorIDs);
+
+    const std::string filepath;
 };
 
 
@@ -44,55 +49,55 @@ private:
 // Subclass a new exception from it if a new bug/error needs to be handled.
 class ProcessFileParseError : public std::runtime_error {
 protected:
-    ProcessFileParseError(string message) : std::runtime_error(message) {}
+    ProcessFileParseError(std::string message) : std::runtime_error(message) {}
 };
 
 // These exceptions handle file-related problems.
 class FileOpenError : public ProcessFileParseError {
 public:
-    FileOpenError(const string fileName) :
+    FileOpenError(const std::string fileName) :
         ProcessFileParseError("The process file '" + fileName + "' could not be opened.") {}
 };
 class InvalidFileTypeError : public ProcessFileParseError {
 public:
-    InvalidFileTypeError(const string fileName) :
+    InvalidFileTypeError(const std::string fileName) :
         ProcessFileParseError("The process file '" + fileName + "' must be of type JSON.") {}
 };
 
 // Actions whose IDs are not recognized need their state ID to be printed as well.
 class InvalidActionIDError : public ProcessFileParseError {
 public:
-    InvalidActionIDError(string stateID, string actionID) :
+    InvalidActionIDError(std::string stateID, std::string actionID) :
         ProcessFileParseError("State '" + stateID + "': '" + actionID + "' is neither an actuator nor a sensor.") {}
 };
 // Empty actions inside states need the state ID to be printed as well.
 class EmptyActionIDError: public ProcessFileParseError {
 public:
-    EmptyActionIDError(string stateID) :
+    EmptyActionIDError(std::string stateID) :
         ProcessFileParseError("State '" + stateID + "': actions must have non-empty IDs.") {}
 };
 
 // These two classes work together to display an invalid range check
 class InvalidSensorRangeCheck : public std::exception {
 public:
-    InvalidSensorRangeCheck(string sensorID) : sensorID(sensorID) {}
-    const string sensorID;
+    InvalidSensorRangeCheck(std::string sensorID) : sensorID(sensorID) {}
+    const std::string sensorID;
 };
 class InvalidSensorRangeCheckError : public ProcessFileParseError {
 public:
-    InvalidSensorRangeCheckError(string stateID, string sensorID) :
+    InvalidSensorRangeCheckError(std::string stateID, std::string sensorID) :
         ProcessFileParseError("State '" + stateID + "': '" + sensorID + "' range check must be of form [a, b].") {}
 };
 
 // Same for invalid actuator position check
 class InvalidActuatorPositionCheck : public std::exception {
 public:
-    InvalidActuatorPositionCheck(string actuatorID) : actuatorID(actuatorID) {}
-    const string actuatorID;
+    InvalidActuatorPositionCheck(std::string actuatorID) : actuatorID(actuatorID) {}
+    const std::string actuatorID;
 };
 class InvalidActuatorPositionCheckError : public ProcessFileParseError {
 public:
-    InvalidActuatorPositionCheckError(string stateID, string actuatorID) :
+    InvalidActuatorPositionCheckError(std::string stateID, std::string actuatorID) :
         ProcessFileParseError("State '" + stateID + "': '" + actuatorID + "' position check must be either 'open' or 'close'.") {}
 };
 
@@ -100,7 +105,7 @@ public:
 // It ideally will never need to be subclassed beyond these three.
 class EmptyIDError : public ProcessFileParseError {
 protected:
-    EmptyIDError(const string object) :
+    EmptyIDError(const std::string object) :
         ProcessFileParseError(object + " IDs must be non-empty.") {}
 };
 class EmptySensorIDError : public EmptyIDError {

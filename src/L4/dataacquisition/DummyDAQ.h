@@ -1,16 +1,16 @@
 #pragma once
 
 #include "easylogging++.h"
-#include "AbstractDAQ.h"
+#include "Sensor.h"
 #include <random>
 
 class DummyDAQ : public Sensor
 {
 public:
-    DummyDAQ(const std::string deviceID, const unsigned int numChannels);
+    DummyDAQ(const std::string id);
     void startAcquisition() override;
     void stopAcquisition() override;
-    std::vector<double> getLatestData() override;
+    double getLatestData() override;
 private:
     std::mt19937 gen;
     std::uniform_real_distribution<> dis;
