@@ -1,5 +1,5 @@
 #include "Actuator.h"
 
-Actuator::Actuator(const std::string id)
-    : id{id}
+Actuator::Actuator(std::string id)
+    : id{std::move(id)}
 {}

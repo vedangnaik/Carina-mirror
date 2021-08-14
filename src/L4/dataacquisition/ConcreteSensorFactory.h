@@ -8,5 +8,5 @@
 
 class ConcreteSensorFactory {
 public:
-    static Sensor* createSensor(const std::string id, const QVariantMap args);
+    static Sensor* createSensor(const std::string& id, QVariantMap args);
 };

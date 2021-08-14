@@ -11,14 +11,14 @@
 
 class SMOC {
 public:
-    virtual void notify(const std::string id, const double value) = 0;
-    virtual ~SMOC() {};
+    virtual void notify(std::string id, double value) = 0;
+    virtual ~SMOC() = default;
 };
 
 class SMIC {
 public:
     virtual double getSensorValue(std::string id) = 0;
-    virtual ~SMIC() {};
+    virtual ~SMIC() = default;
 private:
 
 };

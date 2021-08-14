@@ -45,7 +45,7 @@ class GSManager : public QMainWindow {
 public:
     GSManager();
 private:
-    void openProcessFromFile(std::string filepath);
+    void openProcessFromFile(const std::string& filepath);
     void startProcess();
     void stopAndCloseProcess();
     void renderUi();

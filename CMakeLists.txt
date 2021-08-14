@@ -40,4 +40,4 @@ target_include_directories(Carina PUBLIC
 )
 
 # Set maximum warnings
-target_compile_options(Carina PRIVATE -Wall -Wextra -pedantic -Werror)
+target_compile_options(Carina PRIVATE -Wall -Wextra -pedantic)

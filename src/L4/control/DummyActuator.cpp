@@ -1,6 +1,6 @@
 #include "DummyActuator.h"
 
-DummyActuator::DummyActuator(const std::string id)
+DummyActuator::DummyActuator(const std::string& id)
     : Actuator(id)
 {}
 

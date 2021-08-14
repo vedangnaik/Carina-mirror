@@ -22,7 +22,7 @@ QT_END_NAMESPACE
 namespace SystemDiagramUI {
 class SensorDisplayLabel : public QWidget, public SPOC {
 public:
-    SensorDisplayLabel(QFrame& parent, std::string ID, std::string unit) : QWidget(&parent) {
+    SensorDisplayLabel(QFrame& parent, const std::string& ID, const std::string& unit) : QWidget(&parent) {
         this->id = new QLabel(QString::fromStdString(ID), this);
         this->value = new QLabel(this);
         this->unit = new QLabel(QString::fromStdString(unit), this);
@@ -36,7 +36,7 @@ public:
         delete this->layout();
         this->setLayout(hb);
     };
-    void displayValue(const float value) override {
+    void displayValue(const double value) override {
         this->value->setText(QString("").asprintf("%+09f", value));
     }
 private:
@@ -47,7 +47,7 @@ private:
 
 class ActuatorButton : public QPushButton, public APOC {
 public:
-    ActuatorButton(QFrame& parent) : QPushButton(&parent) {}
+    explicit ActuatorButton(QFrame& parent) : QPushButton(&parent) {}
     void displayStatus(const bool status) override {
         this->setChecked(status);
     }
@@ -57,7 +57,7 @@ public:
 class SystemDiagramUIHandler : public QWidget {
     Q_OBJECT
 public:
-    SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI, SPIC& spic, APIC& apic, ACIC& acic, std::vector<std::string> sensorIds, std::vector<std::string> actuatorIds);
+    SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramUI, SPIC& spic, APIC& apic, ACIC& acic, const std::vector<std::string>& sensorIDs, const std::vector<std::string>& actuatorIDs);
 private slots:
     void togglePositionLock(int state);
 private:

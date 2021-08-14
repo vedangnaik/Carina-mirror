@@ -31,15 +31,15 @@ void StateUIHandler::displayState(const State& s) {
     this->stateUI.actionsLayout->addWidget(new QLabel("Abort Check"), 0, 3);
     this->stateUI.actionsLayout->addWidget(new QLabel("Actuation Timer"), 0, 4);
 
-    unsigned int row = 1;
-    for (std::string id : s.actionsOrder) {
+    int row = 1;
+    for (const std::string& id : s.actionsOrder) {
         if (s.actuatorOptions.find(id) != s.actuatorOptions.end()) {
-            StateUI::ActuatorButton* ab = new StateUI::ActuatorButton();
+            auto* ab = new StateUI::ActuatorButton();
             this->apic.subscribe(id, ab);
             ab->setCheckable(true);
             ab->setText(QString::fromStdString(id));
-            connect(ab, &QPushButton::clicked, &this->acic, [=]() {
-                this->acic.setState(id);
+            connect(ab, &QPushButton::toggled, &this->acic, [=](bool checked) {
+                this->acic.setState(id, checked);
             });
             connect(ab, &QPushButton::destroyed, this, [=]() {
                 this->apic.unsubscribe(id, ab);
@@ -59,7 +59,7 @@ void StateUIHandler::displayState(const State& s) {
                 }
             }
         } else if (s.sensorOptions.find(id) != s.sensorOptions.end()) {
-            StateUI::SensorDisplayLabel* svl = new StateUI::SensorDisplayLabel();
+            auto* svl = new StateUI::SensorDisplayLabel();
             this->spic.subscribe(id, svl);
             connect(svl, &QLabel::destroyed, this, [=]() {
                 this->spic.unsubscribe(id, svl);
@@ -101,10 +101,10 @@ void StateUIHandler::displayState(const State& s) {
 void StateUIHandler::displayProcessSummary(const std::vector<std::string> processSummary) {
     uihelpers::clearLayout(this->stateUI.psLayout);
     for (const std::string& summary : processSummary) {
-        QGroupBox* summaryBox = new QGroupBox("", this->stateUI.psFrame);
-        QLabel* summaryLabel = new QLabel(QString::fromStdString(summary), this->stateUI.psFrame);
+        auto* summaryBox = new QGroupBox("", this->stateUI.psFrame);
+        auto* summaryLabel = new QLabel(QString::fromStdString(summary), this->stateUI.psFrame);
         summaryLabel->setWordWrap(true);
-        QHBoxLayout* h = new QHBoxLayout();
+        auto* h = new QHBoxLayout();
         h->addWidget(summaryLabel);
         summaryBox->setLayout(h);
         this->stateUI.psLayout->addWidget(summaryBox);
@@ -135,7 +135,7 @@ StateUIHandler::allowFailedChecksOverride(const std::vector<std::string> failure
 }
 
 QLabel* StateUIHandler::displayTimedActuator(QPushButton* aButton) {
-    QLabel* elapsedTimeLabel = new QLabel();
+    auto* elapsedTimeLabel = new QLabel();
     connect(aButton, &QPushButton::toggled, elapsedTimeLabel, [=](bool checked) {
         if (checked) {
             connect(this->actuatorButtonTimer, &QTimer::timeout, elapsedTimeLabel, [=]() {

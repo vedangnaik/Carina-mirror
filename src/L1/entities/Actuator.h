@@ -13,9 +13,9 @@ struct ActuatorCheck {
 
 class Actuator {
 public:
-    Actuator(const std::string id);
-    virtual void setState(const bool state) = 0;
-    virtual ~Actuator() {};
+    explicit Actuator(std::string id);
+    virtual void setState(bool state) = 0;
+    virtual ~Actuator() = default;
 
     const std::string id;
     bool state = false; // Closed by default

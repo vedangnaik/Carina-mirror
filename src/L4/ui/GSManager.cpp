@@ -35,11 +35,10 @@ GSManager::GSManager() {
     });
 }
 
-void GSManager::openProcessFromFile(std::string filepath) {
+void GSManager::openProcessFromFile(const std::string& filepath) {
     try {
         // Exceptions will be thrown for any errors in the file format.
-        ProcessFileParser pg(filepath);
-        auto t = pg.parseProcessFile();
+        auto t = ProcessFileParser::parseProcessFile(filepath);
         LOG(INFO) << "Process file parsed successfully.";
 
         // Manufacture all sensors and actuators here first

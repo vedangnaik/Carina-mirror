@@ -24,7 +24,7 @@ QT_END_NAMESPACE
 namespace StateUI {
 class SensorDisplayLabel : public QLabel, public SPOC {
 public:
-    void displayValue(const float value) override {
+    void displayValue(const double value) override {
         this->setText(QString::number(value));
     }
 };
@@ -42,11 +42,11 @@ class StateUIHandler : public QWidget, public StPOC {
 public:
     StateUIHandler(Ui::State& stateUI, SPIC& spic, APIC& apic, StPIC& stpic, ACIC& acic, StCIC& stcic);
 
-    void displayProcessSummary(const std::vector<std::string> processSummary) override;
+    void displayProcessSummary(std::vector<std::string> processSummary) override;
     void displayState(const State& s) override;
     void allowProceed(bool permission) override;
     void allowAbort(bool permission) override;
-    void allowFailedChecksOverride(const std::vector<std::string> failures, Transition t) override;
+    void allowFailedChecksOverride(std::vector<std::string> failures, Transition t) override;
 private:
     QLabel* displayTimedActuator(QPushButton* aButton);
 

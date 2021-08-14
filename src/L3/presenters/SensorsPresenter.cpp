@@ -1,6 +1,6 @@
 #include "SensorsPresenter.h"
 
-void SensorsPresenter::notify(const std::string id, const float value) {
+void SensorsPresenter::notify(std::string id, double value) {
     if (this->subscribers.find(id) != this->subscribers.end()) {
         for (SPOC* spoc : this->subscribers.at(id)) {
             spoc->displayValue(value);

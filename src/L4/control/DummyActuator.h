@@ -3,8 +3,8 @@
 #include "Actuator.h"
 #include "easylogging++.h"
 
-class DummyActuator : Actuator {
+class DummyActuator : public Actuator {
 public:
-    DummyActuator(const std::string id);
-    void setState(const bool state) override;
+    explicit DummyActuator(const std::string& id);
+    void setState(bool state) override;
 };
