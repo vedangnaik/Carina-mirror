@@ -7,5 +7,5 @@
 
 class ConcreteActuatorFactory {
 public:
-    static Actuator* createActuator(const std::string& id, const QVariantMap args);
+    static Actuator* createActuator(const std::string& id, const QVariantMap& args);
 };

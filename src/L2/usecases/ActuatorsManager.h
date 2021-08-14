@@ -9,15 +9,15 @@
 
 class AMOC {
 public:
-    virtual void notify(const std::string id, const bool status) = 0;
-    virtual ~AMOC() {};
+    virtual void notify(std::string id, bool status) = 0;
+    virtual ~AMOC() = default;
 };
 
 class AMIC {
 public:
     virtual bool getActuatorStatus(std::string id) = 0;
     virtual void setState(std::string id, bool status) = 0;
-    virtual ~AMIC() {};
+    virtual ~AMIC() = default;
 };
 
 class ActuatorsManager : public QObject, public AMIC {
@@ -34,10 +34,10 @@ private:
 
 class ActuatorsManagerError : public std::runtime_error {
 protected:
-    ActuatorsManagerError(std::string message) : std::runtime_error(message) {}
+    explicit ActuatorsManagerError(const std::string& message) : std::runtime_error(message) {}
 };
 
 class NullptrActuatorError : public ActuatorsManagerError {
 public:
-    NullptrActuatorError(const std::string id) : ActuatorsManagerError("Actuator '" + id + "' is nullptr.") {}
+    explicit NullptrActuatorError(const std::string& id) : ActuatorsManagerError("Actuator '" + id + "' is nullptr.") {}
 };

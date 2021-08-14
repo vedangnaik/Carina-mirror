@@ -23,6 +23,7 @@ ActuatorsManager::setState(std::string id, bool status)
     for (const auto& a : this->actuators) {
         if (a->id == id) {
             a->setState(status);
+            this->amoc.notify(id, status);
             return;
         }
     }
