@@ -6,13 +6,6 @@
 
 [Avionics] Carina: The new and improved user interface and driver software for the UTAT Ground Station.
 
-## Downloads
-### Windows
-Download the latest version from the Releases page.
-
-### Other platforms
-For any other platform, you will have to set up the [build environment](#build) and compile it yourself.
-
 ## Usage
 Once the software running, a 'Process' JSON file can be created as described in the [process file documentation](#process-file-format). Load in the file via `Process -> Open Process File` from the menu bar. Then, click `Process -> Start Process` to begin. If a system diagram is required, click `System Diagram -> Open Image` to add it to the right side of the interface. `System Diagram -> Clear Image` can be used to remove this image. Once done with the process, use `Process -> Close Process` to close the current process. A new process can be opened following the same steps as above from this point.
 
@@ -125,38 +118,47 @@ or
 }
 ```
 
-## Build
-The GroundStationUI software is built using C++ and Qt5. It must be compiled in a Linux environment since the DAQ libraries we use only run on Linux. If you currently run Windows, you must first install Linux on a [virtual machine](#installing-linux-on-virtualbox) or a dual-boot, then [set up the project on Linux](#setting-up-on-linux). Users who already have a Linux environment can immediately start [setting up the project on Linux](#setting-up-on-linux).
+## Setup and Build
+### Setup
+Carina is built using C++14 and Qt5. While the majority of the codebase can be compiled on any OS and architecture that has a C++14-compiliant compiler, we have decided to develop on Linux to ensure consistent behaviour and reproducibility. Thus, if your OS isn't Linux-based (i.e. Windows, Mac OS, etc.), you will need to set up a virtual machine to work on Carina. There are two ways to do this:
 
-### Installing Linux on VirtualBox
-This instructions detail how to install Ubuntu 20.04 on VirtualBox, although you can install any distro of your choice (Fedora, Debian, etc). VirtualBox is a program which allows 'guest' operating systems to run inside the 'host' operating system in a sandboxed environment.
+#### 1. With Docker (recommended)
+Docker is a product which allows applications be developed and run in isolated, reproducible Linux environments known as 'containers'. The `Dockerfile` in this repository builds a 'one-click' Docker image which contains all of Carina's dependencies, a C++ compiler, and other tools pre-installed.
+1. [Mac, Windows] First, install [Docker Desktop](https://docs.docker.com/desktop/) for your operating system. On Windows, use the WSL 2 backend if you're unsure which to choose. Ensure Docker is installed by running `docker --version` - if you see `Docker version ..., build ...`, you're set.
+2. Pull the pre-built image with `docker pull ghcr.io/utatrocketry/carina_dev_img:latest`. **Note:** This download is around 2.6Gb. If it's too slow, skip this step.
+3. Download and extract the zip of this repository. If you have `git` installed, you can use `git clone https://github.com/UTATRocketry/Carina.git` as well.
+4. [If you skipped Step 2] Run `docker .` inside the `Carina` folder to build the image locally. **Note:** This will take a while.
+5. Run `docker image ls` and note down the image ID. Then, run `docker run -d -t -p 3390:3390 --mount type=bind,source=<absolute path to Carina>,target="/root/Desktop/Carina" <image id>` to start the container. **Note:** The path to Carina must be *absolute*. Otherwise, this may not work.
+6. Run `docker ps` and note down the container ID. Then, run `docker exec -it <container id> bash`. This will replace your terminal with `bash` running inside the container.
+7. Type `/etc/init.d/xrdp stop` and then `/etc/init.d/xrdp start` to start the remote RDP server. Type `exit` to go back to your original terminal.
+8. [Mac] Download and install [Microsoft Remote Desktop](https://apps.apple.com/us/app/microsoft-remote-desktop/id1295203466?mt=12). [Windows]  Open the 'Remote Desktop Connection' app.
+9. Connect to `localhost:3390`. In the login screen, enter `root` for the username and `password` for the password.
+
+At this point, you should see a standard desktop environment. The Carina repository will be on the Desktop.
+
+#### 2. Installing Linux on VirtualBox
+Alternatively, you can set up a normal virtual machine on your system. These instructions detail how to install Ubuntu 20.04 on VirtualBox, although you can install any distro of your choice (Fedora, Debian, etc).
 1. Download VirtualBox [here](https://www.virtualbox.org/wiki/Downloads) and install it.
-1. Download an Ubuntu image file for version 20.04 or above [here](https://ubuntu.com/download/desktop)
-1. Start VirtualBox and click `New` to set up a new virtual machine.
-1. Enter a name for the virtual machine (ex. Ubuntu 20.04 LTS), choose a folder that will hold the virtual machine file, and select Linux and Ubuntu (64-bit) in the drop-down menus. Click `Next` once done.
-1. Choose how much RAM to allocate to the virtual machine. Ubuntu recommends 4 GB (4096 MB), but the virtual machine will still work fine with say 3 GB (3072 MB). It is recommended to stay within the green side of the slider when allocating the RAM. Click `Next` once done.
-2. Choose to create a virtual hard disk and click `Create`. In the following window, make sure VDI (VirtualBox Disk Image) is selected, then click Next.
-3. Make sure Dynamically allocated is selected and click `Next`. In the following window, make sure that the virtual hard disk image file is selected, then choose to reserve 30-40 GB to the virtual box. Click `Create` once done. *Note*: If you wish to increase the size in storage that you reserve in the future, you can do so through the VirtualBox settings for this virtual machine, then by increasing the partition size in the virtual machine itself.
-4. Start the virtual machine. Load the Ubuntu image file that you downloaded into the virtual CD drive dialog box. After that, the standard Ubunutu installer will open. Choose the appropriate options like keyboard type, etc. through the guided installation process and install Ubuntu. Ubuntu's installer provides an option to install either a minimal install or a full install. You may want to proceed with a minimal install to conserve disk space.
+2. Download an Ubuntu image file for version 20.04 or above [here](https://ubuntu.com/download/desktop)
+3. Start VirtualBox and click `New` to set up a new virtual machine.
+4. Enter a name for the virtual machine (ex. Ubuntu 20.04 LTS), choose a folder that will hold the virtual machine file, and select Linux and Ubuntu (64-bit) in the drop-down menus. Click `Next` once done.
+5. Choose how much RAM to allocate to the virtual machine. Ubuntu recommends 4 GB (4096 MB), but the virtual machine will still work fine with say 3 GB (3072 MB). It is recommended to stay within the green side of the slider when allocating the RAM. Click `Next` once done.
+6. Choose to create a virtual hard disk and click `Create`. In the following window, make sure VDI (VirtualBox Disk Image) is selected, then click Next.
+7. Make sure Dynamically allocated is selected and click `Next`. In the following window, make sure that the virtual hard disk image file is selected, then choose to reserve 30-40 GB to the virtual box. Click `Create` once done. *Note*: If you wish to increase the size in storage that you reserve in the future, you can do so through the VirtualBox settings for this virtual machine, then by increasing the partition size in the virtual machine itself.
+8. Start the virtual machine. Load the Ubuntu image file that you downloaded into the virtual CD drive dialog box. After that, the standard Ubunutu installer will open. Choose the appropriate options like keyboard type, etc. through the guided installation process and install Ubuntu. Ubuntu's installer provides an option to install either a minimal install or a full install. You may want to proceed with a minimal install to conserve disk space.
 
 **Note:** At one point in the installation you will be warned that all your existing files on your storage drive will be deleted. However, since the OS is being installed on a virtual machine, your existing files will not be affected, and you can safely proceed.
 
 **Note:** Some images of VirtualBox during the installation process can be found [here](https://docs.google.com/document/d/1vtiW0nMQoRikPAnt-vooWnDsOmRCbjK-_7TtYX9y6Fs/edit?usp=sharing). These images will likely be migrated here sometime in the future.
 
-
-### Setting up on Linux
+Now, you will need to set up the dependencies:
 1. Install Qt5 and Qt Creator from the [official website](https://www.qt.io/download). Make sure to download Qt v5.xx (this should be the default).
 2. Install and set up Git for Linux by following the steps [here](https://www.atlassian.com/git/tutorials/install-git). Note that some distros come with Git pre-installed; you can check this by typing `git --version` into a terminal. If you get a version number, then you can skip this step. You may also have to install `gcc, g++, make` and other tools; the terminal will tell you how to do so.
-3. Clone this repository and open the `Carina.pro` file in Qt Creator.
+3. Install MCC Universal Library. This is used to communicate with MCC devices. Install it by following the steps [here](https://github.com/mccdaq/uldaq).
+4. Install Googletest. This is the testing framework used by Carina. Clone [this repository](https://github.com/google/googletest) into the same directory `Carina` is in.
 
-#### Additional Libraries
-Carina requires some additional libraries to communicate with certain data acquisition and control devices, to run unit tests locally, etc. This list will be updated with these requirements. Install them if you plan to work on that aspect of Carina.
-* MCC Universal Library: To communicate with MCC devices. Install it for Linux by following the steps [here](https://github.com/mccdaq/uldaq).
-* WiringPi Library: To communicate with I2C and SPI devices. **Note**: This only works on the Raspberry Pi, and is **pre-installed** by default on recent versions of Raspbian. Do not try to install it again.
-* Googletest: To run local unittests locally. Clone [this repository](https://github.com/google/googletest) into the same directory you cloned `Carina` into.
-
-### Manual building
-This is useful for building it on the Raspberry Pi without installing Qt Creator. Assuming you have cloned `Carina` into your `Desktop`:
+### Build
+Now that you have a Linux environment and all the dependencies set up, you can build Carina. To do so, do the following in a terminal:
 ```bash
 cd Desktop/Carina
 mkdir build
@@ -172,6 +174,7 @@ make                    ## The previous step created a Makefile for the Linux ta
 ./app/app               ## The app folder contains the actual Carina executable; this command will launch it.
 ./tests/tests           ## The tests folder contains the tests executable; this command will run the tests.
 ```
+If you're using Qt Creator for development, click 'Open Project' and select `Carina.pro`. Qt Creator will automatically run a variant of the steps above. However, running them manually first is recommended to ensure that everything is installed properly.
 
 ## Contributing
 Avionics uses the ClickUp tool for keeping track of new features to add, progress, and other relevant information. The list can be found [here](https://app.clickup.com/t/1g3n9t). If you cannot access this, please see the [Contact](#contact) section and ask the concerned people to add you to the Clickup.

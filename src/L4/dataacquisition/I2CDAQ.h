@@ -17,7 +17,7 @@ public:
     void stopAcquisition() override;
     std::vector<double> getLatestData() override;
 private:
-    int fd;  // -1 if device not found
+    int fd;  // file descriptor: -1 if device not found
     const char I2CAddress;
 };
 
