@@ -1,5 +1,4 @@
-#ifndef PCA9685ACTUATOR_H
-#define PCA9685ACTUATOR_H
+#pragma once
 
 #ifdef WIRINGPI_AVAILABLE
 
@@ -10,7 +9,7 @@
 #include "easylogging++.h"
 #include <cassert>
 
-class PCA9685Config{
+class PCA9685Config {
 public:
     PCA9685Config(uint16_t SERVOMIN, uint16_t SERVMOMAX, double ANGLEMIN, double ANGLEMAX){
         this->SERVOMIN = SERVOMIN;
@@ -18,24 +17,19 @@ public:
         this->ANGLEMIN = ANGLEMIN;
         this->ANGLEMAX = ANGLEMAX;
     }
-
     uint16_t SERVOMIN;
     uint16_t SERVOMAX;
     double ANGLEMIN;
     double ANGLEMAX;
 };
 
-class PCA9685Actuator : AbstractActuator {
+class PCA9685Actuator : Actuator {
 public:
-    // "default" constructor: sets closed angle to 0, open angle to 90 degrees
-    PCA9685Actuator(const std::string deviceID, Adafruit_PWMServoDriver& pwm, uint channel, PCA9685Config config);
     // constructor to set custom closed and open angle
-    PCA9685Actuator(const std::string deviceID, Adafruit_PWMServoDriver& pwm, uint channel, double closed, double open, PCA9685Config config);
-    void toggle() override;
+    PCA9685Actuator(const std::string id, Adafruit_PWMServoDriver& pwm, uint channel, double closedAngle, double openAngle, PCA9685Config config);
     void setState(const bool state) override;
-    void rotateToAngle(double angle);
-
 private:
+    void rotateToAngle(double angle);
     uint16_t getPWMFromAngle(double angle);
     Adafruit_PWMServoDriver& pwm;
     uint8_t channel;
@@ -44,5 +38,4 @@ private:
     PCA9685Config config;
 };
 
-#endif // WIRINGPI_AVAILABLE
-#endif // PCA9685ACTUATOR_H
+#endif

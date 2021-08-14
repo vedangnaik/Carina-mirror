@@ -1,5 +1,4 @@
-#ifndef ACTUATOR_H
-#define ACTUATOR_H
+#pragma once
 
 #include <string>
 
@@ -14,10 +13,10 @@ struct ActuatorCheck {
 
 class Actuator {
 public:
-    Actuator(std::string id, std::string name) : id(id), name(name), status(false) {};
-    const std::string id;
-    const std::string name;
-    bool status = false;
-};
+    Actuator(const std::string id);
+    virtual void setState(const bool state) = 0;
+    virtual ~Actuator() {};
 
-#endif // ACTUATOR_H
+    const std::string id;
+    bool state = false; // Closed by default
+};

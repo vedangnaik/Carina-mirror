@@ -1,3 +1,6 @@
+SOURCES += \
+    $$PWD/L1/entities/Actuator.cpp \
+    $$PWD/L1/entities/Sensor.cpp
 HEADERS += \
     $$PWD/L1/entities/Actuator.h \
     $$PWD/L1/entities/Sensor.h \
@@ -47,8 +50,6 @@ SOURCES += \
     $$PWD/L4/ui/GSManager.cpp \
     $$PWD/L4/ui/StateUIHandler.cpp \
     $$PWD/L4/ui/SystemDiagramUIHandler.cpp \
-    $$PWD/L4/control/Adafruit_PWMServoDriver.cpp \
-    $$PWD/L4/control/AbstractActuator.cpp \
     $$PWD/L4/control/PCA9685Actuator.cpp
 HEADERS += \
     $$PWD/L4/dataacquisition/AiMCCDAQ.h \
@@ -65,8 +66,6 @@ HEADERS += \
     $$PWD/L4/ui/StateUIHandler.h \
     $$PWD/L4/ui/SystemDiagramUIHandler.h \
     $$PWD/L4/ui/UIHelpers.h \
-    $$PWD/L4/control/Adafruit_PWMServoDriver.h \
-    $$PWD/L4/control/AbstractActuator.h \
     $$PWD/L4/control/PCA9685Actuator.h
 INCLUDEPATH += \
     $$PWD/L4/dataacquisition \

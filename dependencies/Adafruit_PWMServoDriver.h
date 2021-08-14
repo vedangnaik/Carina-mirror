@@ -1,5 +1,4 @@
-#ifndef ADAFRUIT_PWMSERVODRIVER_H
-#define ADAFRUIT_PWMSERVODRIVER_H
+#pragma once
 
 #ifdef WIRINGPI_AVAILABLE
 /*!
@@ -94,5 +93,4 @@ private:
   void delay(int ms);
 };
 
-#endif // WIRINGPI_AVAILABLE
-#endif // ADAFRUIT_PWMSERVODRIVER_H
+#endif

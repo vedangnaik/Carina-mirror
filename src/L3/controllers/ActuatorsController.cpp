@@ -1,5 +1,9 @@
 #include "ActuatorsController.h"
 
-void ActuatorsController::actuate(std::string id) {
-    this->amic.actuate(id);
+ActuatorsController::ActuatorsController(AMIC& amic) 
+    : amic{amic}
+{}
+
+void ActuatorsController::setState(std::string id, bool status) {
+    this->amic.setState(id, status);
 }

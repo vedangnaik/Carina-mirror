@@ -39,7 +39,7 @@ void StateUIHandler::displayState(const State& s) {
             ab->setCheckable(true);
             ab->setText(QString::fromStdString(id));
             connect(ab, &QPushButton::clicked, &this->acic, [=]() {
-                this->acic.actuate(id);
+                this->acic.setState(id);
             });
             connect(ab, &QPushButton::destroyed, this, [=]() {
                 this->apic.unsubscribe(id, ab);

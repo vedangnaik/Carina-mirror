@@ -1,6 +1,6 @@
 #include "Sensor.h"
 
-Sensor(const std::string id)
+Sensor::Sensor(const std::string id)
     : id{id}
 {
     // Give identity calibration points and 1 slope, 0 intercept for all channels.

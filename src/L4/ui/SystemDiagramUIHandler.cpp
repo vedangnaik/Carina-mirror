@@ -20,7 +20,7 @@ SystemDiagramUIHandler::SystemDiagramUIHandler(Ui::SystemDiagram& systemDiagramU
         a->setCheckable(true);
         a->setText(QString::fromStdString(id));
         connect(a, &QPushButton::clicked, &this->acic, [=]() {
-            this->acic.actuate(id);
+            this->acic.setState(id);
         });
         this->draggables.push_back(a);
         this->systemDiagramUI.systemDiagramFrame->layout()->addWidget(a);

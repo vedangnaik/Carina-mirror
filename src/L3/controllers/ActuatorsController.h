@@ -6,14 +6,14 @@
 class ACIC : public QObject {
     Q_OBJECT
 public:
-    virtual void actuate(std::string id) = 0;
+    virtual void setState(std::string id, bool status) = 0;
     virtual ~ACIC() {};
 };
 
 class ActuatorsController : public ACIC {
 public:
-    ActuatorsController(AMIC& amic) : amic(amic) {};
-    void actuate(std::string id);
+    ActuatorsController(AMIC& amic);
+    void setState(std::string id, bool status) override;
 private:
    AMIC& amic;
 };
