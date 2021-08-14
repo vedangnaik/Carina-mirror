@@ -9,7 +9,7 @@
 !tests
 !tests/**
 !.gitignore
-!Carina.pro
+!CMakeLists.txt
 !Dockerfile
 !main.cpp
 !README.md
