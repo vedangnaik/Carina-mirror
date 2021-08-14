@@ -43,9 +43,6 @@ SOURCES += \
     $$PWD/L4/dataacquisition/I2CDAQ.cpp \
     $$PWD/L4/dataacquisition/OneWireDAQ.cpp \
     $$PWD/L4/dataacquisition/SerialPortDAQ.cpp \
-    # $$PWD/L4/ui/DAQManagerConfiguration/DAQCalibrationDialog.cpp \
-    # $$PWD/L4/ui/DAQManagerConfiguration/DAQLinkDialog.cpp \
-    # $$PWD/L4/ui/DAQManagerConfiguration/DAQScanDialog.cpp \
     $$PWD/L4/ui/ErrorUIHandler.cpp \
     $$PWD/L4/ui/GSManager.cpp \
     $$PWD/L4/ui/StateUIHandler.cpp \
@@ -57,9 +54,6 @@ HEADERS += \
     $$PWD/L4/dataacquisition/I2CDAQ.h \
     $$PWD/L4/dataacquisition/OneWireDAQ.h \
     $$PWD/L4/dataacquisition/SerialPortDAQ.h \
-    # $$PWD/L4/ui/DAQManagerConfiguration/DAQCalibrationDialog.h \
-    # $$PWD/L4/ui/DAQManagerConfiguration/DAQLinkDialog.h \
-    # $$PWD/L4/ui/DAQManagerConfiguration/DAQScanDialog.h \
     $$PWD/L4/ui/Draggable.h \
     $$PWD/L4/ui/ErrorUIHandler.h \
     $$PWD/L4/ui/GSManager.h \
@@ -74,9 +68,6 @@ INCLUDEPATH += \
 
 # Add .ui forms for UI classes.
 FORMS += \
-    $$PWD/L4/ui/DAQManagerConfiguration/DAQCalibrationDialog.ui \
-    $$PWD/L4/ui/DAQManagerConfiguration/DAQLinkDialog.ui \
-    $$PWD/L4/ui/DAQManagerConfiguration/DAQScanDialog.ui \
     $$PWD/L4/ui/Error.ui \
     $$PWD/L4/ui/GSMainWindow.ui \
     $$PWD/L4/ui/State.ui \

@@ -80,7 +80,7 @@ GSManager::GSManager() {
     });
 }
 
-void GSManager::openProcessFromFile(string filepath) {
+void GSManager::openProcessFromFile(std::string filepath) {
     try {
         // Exceptions will be thrown for any errors in the file format.
         ProcessFileParser pg(filepath);
@@ -88,31 +88,31 @@ void GSManager::openProcessFromFile(string filepath) {
         LOG(INFO) << "Process file parsed successfully.";
 
         // Array of sensor and actuator IDs for various classes to use.
-        std::vector<string> sensorIDs, actuatorIDs;
+        std::vector<std::string> sensorIDs, actuatorIDs;
         for (const auto& p : std::get<0>(t)) { sensorIDs.push_back(p.first); }
         for (const auto& p : std::get<1>(t)) { actuatorIDs.push_back(p.first); }
 
         // First make the presenters which dudes be subscribing to
-        this->sp = make_unique<SensorsPresenter>();
-        this->ap = make_unique<ActuatorsPresenter>();
-        this->stp = make_unique<StatesPresenter>();
+        this->sp = std::make_unique<SensorsPresenter>();
+        this->ap = std::make_unique<ActuatorsPresenter>();
+        this->stp = std::make_unique<StatesPresenter>();
         LOG(INFO) << "Presenters ready.";
 
         // Now initialize the L2 classes with these presenters to use.
-        this->sm = make_unique<SensorsManager>(std::get<0>(t), *this->sp);
-        this->am = make_unique<ActuatorsManager>(std::get<1>(t), *this->ap);
-        this->stm = make_unique<StatesManager>(std::get<2>(t), *this->sm, *this->am, *this->stp);
+        this->sm = std::make_unique<SensorsManager>(std::get<0>(t), *this->sp);
+        this->am = std::make_unique<ActuatorsManager>(std::get<1>(t), *this->ap);
+        this->stm = std::make_unique<StatesManager>(std::get<2>(t), *this->sm, *this->am, *this->stp);
         LOG(INFO) << "Managers ready.";
 
         // Make the remaining L3 classes here
-        this->svg = make_unique<SensorValuesGateway>(*this->sm);
-        this->ac = make_unique<ActuatorsController>(*this->am);
-        this->stc = make_unique<StatesController>(*this->stm);
+        this->svg = std::make_unique<SensorValuesGateway>(*this->sm);
+        this->ac = std::make_unique<ActuatorsController>(*this->am);
+        this->stc = std::make_unique<StatesController>(*this->stm);
         LOG(INFO) << "Controllers ready.";
 
         // Make the L4 UI classes here
-        this->suih = make_unique<StateUIHandler>(this->stateUI, *this->sp, *this->ap, *this->stp, *this->ac, *this->stc);
-        this->sduih = make_unique<SystemDiagramUIHandler>(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIDs, actuatorIDs);
+        this->suih = std::make_unique<StateUIHandler>(this->stateUI, *this->sp, *this->ap, *this->stp, *this->ac, *this->stc);
+        this->sduih = std::make_unique<SystemDiagramUIHandler>(this->systemDiagramUI, *this->sp, *this->ap, *this->ac, sensorIDs, actuatorIDs);
         LOG(INFO) << "User interface ready.";
 
         // Enable configuration of DAQs, disable opening new file, enable starting loaded process.
