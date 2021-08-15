@@ -24,7 +24,6 @@ public:
     virtual void stopAcquisition() = 0;
     virtual double getLatestData() = 0;
     virtual ~Sensor() = default;
-    
     void calibrate();
 
     const std::string id;

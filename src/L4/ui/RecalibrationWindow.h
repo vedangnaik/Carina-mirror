@@ -21,6 +21,8 @@ public:
     ~RecalibrationWindow();
 
 private:
+    void accept() override;
+
     Sensor* sensorToRecalibrate;
     Ui::RecalibrationWindow* ui;
 };
