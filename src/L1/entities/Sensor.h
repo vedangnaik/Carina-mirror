@@ -19,11 +19,11 @@ struct SensorCheck {
 
 class Sensor {
 public:
-    Sensor(const std::string id);
+    Sensor(const std::string& id, const std::array<std::pair<double, double>, 5>& calibrationPoints);
     virtual void startAcquisition() = 0;
     virtual void stopAcquisition() = 0;
     virtual double getLatestData() = 0;
-    virtual ~Sensor() {}
+    virtual ~Sensor() = default;
     
     void calibrate();
 

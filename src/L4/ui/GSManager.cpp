@@ -46,6 +46,9 @@ void GSManager::openProcessFromFile(const std::string& filepath) {
         std::vector<Actuator*> actuators;
         for (const auto& p : std::get<0>(t)) {
             sensors.push_back(ConcreteSensorFactory::createSensor(p.first, p.second));
+            auto* a = new QAction(QString::fromStdString(p.first));
+            // TODO: Connect these to the recalibration window
+            this->GSMainWindowUI.menuRecalibrate_Sensors->addAction(a);
         }
         for (const auto& p : std::get<1>(t)) {
             actuators.push_back(ConcreteActuatorFactory::createActuator(p.first, p.second));

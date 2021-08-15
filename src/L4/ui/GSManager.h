@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QAction>
 #include <QObject>
 #include <QMainWindow>
 #include <QHBoxLayout>

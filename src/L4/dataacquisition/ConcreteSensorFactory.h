@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QVariantMap>
+#include <QJsonArray>
 #include "Sensor.h"
 #include "DummyDAQ.h"
 #include "OneWireDAQ.h"

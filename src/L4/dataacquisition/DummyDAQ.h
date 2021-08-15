@@ -7,7 +7,7 @@
 class DummyDAQ : public Sensor
 {
 public:
-    DummyDAQ(const std::string id);
+    DummyDAQ(const std::string& id, const std::array<std::pair<double, double>, 5>& calibrationPoints);
     void startAcquisition() override;
     void stopAcquisition() override;
     double getLatestData() override;

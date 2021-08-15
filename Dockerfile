@@ -1,3 +1,14 @@
+# Build and run:
+#   docker build -t carina_dev_container_img .
+#   docker run -d --cap-add sys_ptrace -p 2222:22 -p 3390:3390 --name carina_dev_container
+#
+# stop:
+#   docker stop carina_dev_container
+#
+# ssh credentials:
+#   user: root
+#   password: password
+
 FROM ubuntu:latest
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get -y upgrade
@@ -19,3 +30,18 @@ RUN apt-get install -y xfce4 && apt-get install -y xfce4-terminal && echo "2" | 
 
 # Install Qt
 RUN apt-get install -y build-essential qtcreator qt5-default
+
+# Other stuff
+RUN apt-get install -y ssh git gdb cmake
+
+# Set up ssh
+RUN ( \
+    echo 'LogLevel DEBUG2'; \
+    echo 'PermitRootLogin yes'; \
+    echo 'PasswordAuthentication yes'; \
+    echo 'Subsystem sftp /usr/lib/openssh/sftp-server'; \
+  ) > /etc/ssh/sshd_config_test_clion \
+  && mkdir /run/sshd
+
+# Start ssh server
+CMD ["/usr/sbin/sshd", "-D", "-e", "-f", "/etc/ssh/sshd_config_test_clion"]
