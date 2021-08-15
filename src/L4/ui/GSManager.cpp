@@ -45,9 +45,18 @@ void GSManager::openProcessFromFile(const std::string& filepath) {
         std::vector<Sensor*> sensors;
         std::vector<Actuator*> actuators;
         for (const auto& p : std::get<0>(t)) {
-            sensors.push_back(ConcreteSensorFactory::createSensor(p.first, p.second));
+            Sensor* s = ConcreteSensorFactory::createSensor(p.first, p.second);
+            sensors.push_back(s);
             auto* a = new QAction(QString::fromStdString(p.first));
-            // TODO: Connect these to the recalibration window
+            connect(a, &QAction::triggered, this, [=]() {
+               LOG(INFO) << "User has requested recalibration of sensor '" << s->id << "'.";
+               RecalibrationWindow w(s);
+               if (w.exec() == QDialog::Accepted) {
+                   LOG(INFO) << "Accepted for sensor '" << s->id << "'.";
+               } else {
+                   LOG(INFO) << "Rejected for sensor '" << s->id << "'.";
+               }
+            });
             this->GSMainWindowUI.menuRecalibrate_Sensors->addAction(a);
         }
         for (const auto& p : std::get<1>(t)) {

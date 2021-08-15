@@ -30,6 +30,7 @@
 #include "SystemDiagramUIHandler.h"
 #include "ErrorUIHandler.h"
 #include "UIHelpers.h"
+#include "RecalibrationWindow.h"
 #include "ui_GSMainWindow.h"
 #include "ui_State.h"
 #include "ui_SystemDiagram.h"
