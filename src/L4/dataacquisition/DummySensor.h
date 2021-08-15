@@ -4,10 +4,10 @@
 #include "Sensor.h"
 #include <random>
 
-class DummyDAQ : public Sensor
+class DummySensor : public Sensor
 {
 public:
-    DummyDAQ(const std::string& id, const std::array<std::pair<double, double>, 5>& calibrationPoints);
+    DummySensor(const std::string& id, const std::array<std::pair<double, double>, 5>& calibrationPoints);
     void startAcquisition() override;
     void stopAcquisition() override;
     double getLatestData() override;
