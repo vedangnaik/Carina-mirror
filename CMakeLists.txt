@@ -13,8 +13,12 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
+# Add var for conditional compilation of uldaq stuff
+add_definitions(-DULDAQ_AVAILABLE=${ULDAQ_AVAILABLE})
+
 # Get all cpp files from various places and create the target.
 file(GLOB_RECURSE ALL_SRCS
+    "${PROJECT_SOURCE_DIR}/dependencies/*.cpp"
     "${PROJECT_SOURCE_DIR}/dependencies/*.cc"
     "${PROJECT_SOURCE_DIR}/dependencies/*.h"
     "${PROJECT_SOURCE_DIR}/src/*.cpp"
@@ -25,7 +29,7 @@ file(GLOB_RECURSE ALL_SRCS
 add_executable(Carina ${ALL_SRCS})
 
 # Target the Qt libraries and Carina's own headers.
-target_link_libraries(Carina Qt5::Widgets)
+target_link_libraries(Carina Qt5::Widgets uldaq)
 target_include_directories(Carina PUBLIC 
     "${PROJECT_SOURCE_DIR}/dependencies"
     "${PROJECT_SOURCE_DIR}/src/L1/entities"
@@ -36,7 +40,6 @@ target_include_directories(Carina PUBLIC
     "${PROJECT_SOURCE_DIR}/src/L4/control"
     "${PROJECT_SOURCE_DIR}/src/L4/dataacquisition"
     "${PROJECT_SOURCE_DIR}/src/L4/ui"
-    "${PROJECT_SOURCE_DIR}/src/L4/ui/DAQManagerConfiguration"
 )
 
 # Set maximum warnings

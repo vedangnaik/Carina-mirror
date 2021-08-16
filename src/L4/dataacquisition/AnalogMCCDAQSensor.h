@@ -29,6 +29,7 @@
      const unsigned int channelConnectedTo;
      long long numChannels;
      const unsigned int samplesPerChannel = 100;
+     Range voltageRange;
      double rate = 100; // must be non-const for uldaq.h :(
      const AiInputMode aiim = AI_SINGLE_ENDED;
      const ScanOption so = SO_CONTINUOUS;

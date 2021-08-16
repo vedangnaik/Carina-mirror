@@ -9,8 +9,15 @@
      : Sensor(deviceID, calibrationPoints), handle{handle}, channelConnectedTo{channelConnectedTo}
  {
      // Get number of channels
-     err = ulAIGetInfo(handle, AI_INFO_NUM_CHANS_BY_MODE, AI_SINGLE_ENDED, this->numChannels);
+     UlError err = ulAIGetInfo(handle, AI_INFO_NUM_CHANS_BY_MODE, AI_SINGLE_ENDED, &this->numChannels);
      if (err != ERR_NO_ERROR) { std::cout << "ulAIGetInfo Error: " << err << std::endl; }
+
+     // Get voltage range
+     // get voltage range
+     long long voltageRangeLL;
+     err = ulAIGetInfo(handle, AI_INFO_SE_RANGE, 0, &voltageRangeLL);
+     if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAIGetInfo Error: " << err; }
+     this->voltageRange = (Range)voltageRangeLL;
 
      // allocate the temporary data buffer
      this->dataBuffer = std::make_unique<double[]>(this->numChannels * this->samplesPerChannel * sizeof(double));
@@ -43,7 +50,7 @@
          for (unsigned int sample = 0; sample < this->samplesPerChannel; sample++) {
              // This is like a 2D array, databuffer[channel][sample]
              // It may be worth it to try and make 2D arrays work with uldaq but this works so yeah
-             temp += this->dataBuffer[this.channelConnectedTo + (this->numChannels * sample)];
+             temp += this->dataBuffer[this->channelConnectedTo + (this->numChannels * sample)];
          }
          this->latestValue = (this->slope * temp / this->samplesPerChannel) + this->intercept;
      } else {

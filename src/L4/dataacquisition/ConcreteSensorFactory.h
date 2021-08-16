@@ -2,10 +2,11 @@
 
 #include <QVariantMap>
 #include <QJsonArray>
+#include "easylogging++.h"
 #include "Sensor.h"
 #include "DummySensor.h"
-#include "AnalogMCCDAQSensor.h"
 #ifdef ULDAQ_AVAILABLE
+#include "AnalogMCCDAQSensor.h"
 #include <uldaq.h>
 #endif
 

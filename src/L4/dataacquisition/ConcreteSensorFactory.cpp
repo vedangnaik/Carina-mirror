@@ -1,18 +1,22 @@
 #include "ConcreteSensorFactory.h"
 
 Sensor* ConcreteSensorFactory::createSensor(const std::string& id, const QVariantMap& args) {
+    // TODO: Check for required keys and throw exceptions as needed.
     if (args["type"] == "DummySensor") {
-        if (!args.contains("calibration")) { /* TODO: Throw exception */ }
         return new DummySensor(id, parseCalibrationPointsFromArgs(args));
     }
-#ifdef ULDAQ_AVAILABLE
     else if (args["type"] == "AnalogMCCDAQSensor") {
+#ifdef ULDAQ_AVAILABLE
         // connect DAQ
+        DaqDeviceHandle handle = (DaqDeviceHandle)args["handle"].toLongLong();
         UlError err = ulConnectDaqDevice(handle);
         if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulConnectDaqDevice Error: " << err; }
-        return new AnalogMCCDAQSensor(id, parseCalibrationPointsFromArgs(args), )
-    }
+        return new AnalogMCCDAQSensor(id, parseCalibrationPointsFromArgs(args), args["channel"].toUInt(), handle);
+#else
+        LOG(WARNING) << "MCCDAQs are not supported for this platform."
+        // TODO: Exception
 #endif
+    }
     else {
         // TODO: Exception
         return nullptr;
