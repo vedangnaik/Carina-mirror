@@ -9,33 +9,22 @@
 #include "easylogging++.h"
 #include <cassert>
 
-class PCA9685Config {
+class PCA9685Actuator : public Actuator {
 public:
-    PCA9685Config(uint16_t SERVOMIN, uint16_t SERVMOMAX, double ANGLEMIN, double ANGLEMAX){
-        this->SERVOMIN = SERVOMIN;
-        this->SERVOMAX = SERVMOMAX;
-        this->ANGLEMIN = ANGLEMIN;
-        this->ANGLEMAX = ANGLEMAX;
-    }
+    // constructor to set custom closed and open angle
+    PCA9685Actuator(std::string id, uint8_t channel, double openAngle, double closedAngle, uint16_t SERVOMIN, uint16_t SERVMOMAX, double ANGLEMIN, double ANGLEMAX, std::shared_ptr<Adafruit_PWMServoDriver> pwm);
+    void setState(bool state) override;
+private:
+    void rotateToAngle(double angle);
+    uint16_t getPWMFromAngle(double angle) const;
+    uint8_t channel;
+    double openAngle;
+    double closedAngle;
     uint16_t SERVOMIN;
     uint16_t SERVOMAX;
     double ANGLEMIN;
     double ANGLEMAX;
-};
-
-class PCA9685Actuator : Actuator {
-public:
-    // constructor to set custom closed and open angle
-    PCA9685Actuator(const std::string id, Adafruit_PWMServoDriver& pwm, uint channel, double closedAngle, double openAngle, PCA9685Config config);
-    void setState(const bool state) override;
-private:
-    void rotateToAngle(double angle);
-    uint16_t getPWMFromAngle(double angle);
-    Adafruit_PWMServoDriver& pwm;
-    uint8_t channel;
-    double openAngle;
-    double closedAngle;
-    PCA9685Config config;
+    std::shared_ptr<Adafruit_PWMServoDriver> pwm;
 };
 
 #endif

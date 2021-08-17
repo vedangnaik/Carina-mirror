@@ -15,16 +15,11 @@
 
 /*!
  *  @brief  Instantiates a new PCA9685 PWM driver chip with the I2C address
- */
-Adafruit_PWMServoDriver::Adafruit_PWMServoDriver()
-    : _i2caddr(PCA9685_I2C_ADDRESS) {}
-
-/*!
- *  @brief  Instantiates a new PCA9685 PWM driver chip with the I2C address
  *  @param  addr The 7-bit I2C address to locate this chip, default is 0x40
  */
 Adafruit_PWMServoDriver::Adafruit_PWMServoDriver(const uint8_t addr)
-    : _i2caddr(addr) {}
+    : _i2caddr(addr)
+{}
 
 /*!
  *  @brief  Setups the I2C interface and hardware

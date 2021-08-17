@@ -44,6 +44,9 @@ void GSManager::openProcessFromFile(const std::string& filepath) {
         // Manufacture all sensors and actuators here first
         std::vector<Sensor*> sensors;
         std::vector<Actuator*> actuators;
+        // Reset the factories first
+        ConcreteSensorFactory::resetFactory();
+        ConcreteActuatorFactory::resetFactory();
         for (const auto& p : std::get<0>(t)) {
             Sensor* s = ConcreteSensorFactory::createSensor(p.first, p.second);
             sensors.push_back(s);

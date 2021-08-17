@@ -65,32 +65,31 @@
  */
 class Adafruit_PWMServoDriver {
 public:
-  Adafruit_PWMServoDriver();
-  Adafruit_PWMServoDriver(const uint8_t addr);
-  void begin(uint8_t prescale = 0);
-  void reset();
-  void sleep();
-  void wakeup();
-  void setExtClk(uint8_t prescale);
-  void setPWMFreq(float freq);
-  void setOutputMode(bool totempole);
-  uint16_t getPWM(uint8_t num); // functionality corrected from library
+    explicit Adafruit_PWMServoDriver(uint8_t addr = PCA9685_I2C_ADDRESS);
+    void begin(uint8_t prescale = 0);
+    void reset();
+    void sleep();
+    void wakeup();
+    void setExtClk(uint8_t prescale);
+    void setPWMFreq(float freq);
+    void setOutputMode(bool totempole);
+    uint16_t getPWM(uint8_t num); // functionality corrected from library
                                 // not a big deal since this isn't used anywhere
-  void setPWM(uint8_t num, uint16_t on, uint16_t off);
-  void setPin(uint8_t num, uint16_t val, bool invert = false);
-  uint8_t readPrescale(void);
-  void writeMicroseconds(uint8_t num, uint16_t Microseconds);
+    void setPWM(uint8_t num, uint16_t on, uint16_t off);
+    void setPin(uint8_t num, uint16_t val, bool invert = false);
+    uint8_t readPrescale();
+    void writeMicroseconds(uint8_t num, uint16_t Microseconds);
 
-  void setOscillatorFrequency(uint32_t freq);
-  uint32_t getOscillatorFrequency(void);
+    void setOscillatorFrequency(uint32_t freq);
+    uint32_t getOscillatorFrequency();
 
 private:
-  int fd; // file descriptor for wiringpi i2c library: -1 if error
-  uint8_t _i2caddr;
-  uint32_t _oscillator_freq;
-  uint8_t read8(uint8_t addr);
-  void write8(uint8_t addr, uint8_t d);
-  void delay(int ms);
+    int fd; // file descriptor for wiringpi i2c library: -1 if error
+    uint8_t _i2caddr;
+    uint32_t _oscillator_freq;
+    uint8_t read8(uint8_t addr);
+    void write8(uint8_t addr, uint8_t d);
+    void delay(int ms);
 };
 
 #endif

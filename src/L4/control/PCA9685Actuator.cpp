@@ -2,16 +2,13 @@
 
 #include "PCA9685Actuator.h"
 
-PCA9685Actuator::PCA9685Actuator(const std::string id, Adafruit_PWMServoDriver& pwm, uint channel, double closedAngle, double openAngle, PCA9685Config config)
-    : Actuator{deviceID}, pwm{pwm}, channel{channel}, config{config}
-{
-    assert(0 > closed && closed > 360);
-    assert(0 > open && open > 360);
-    this->closedAngle = closed;
-    this->openAngle = open;
-}
+#include <utility>
 
+PCA9685Actuator::PCA9685Actuator(std::string id, uint8_t channel, double openAngle, double closedAngle, uint16_t SERVOMIN, uint16_t SERVMOMAX, double ANGLEMIN, double ANGLEMAX, std::shared_ptr<Adafruit_PWMServoDriver> pwm)
+    : Actuator(std::move(id)), channel{channel}, openAngle{openAngle}, closedAngle{closedAngle}, SERVOMIN{SERVOMIN}, SERVOMAX{SERVMOMAX}, ANGLEMIN{ANGLEMIN}, ANGLEMAX{ANGLEMAX}, pwm{std::move(pwm)}
+{}
 
+#endif
 
 void PCA9685Actuator::setState(const bool state) {
     this->state = state;
@@ -27,16 +24,18 @@ void PCA9685Actuator::rotateToAngle(double angle) {
     if (angle < 0) {
         angle = 360 + angle;
     }
-    return pwm.setPWM(this->channel, 0, getPWMFromAngle(angle));
+    return pwm->setPWM(this->channel, 0, getPWMFromAngle(angle));
 }
 
-uint16_t PCA9685Actuator::getPWMFromAngle(double angle){
+uint16_t PCA9685Actuator::getPWMFromAngle(double angle) const {
     // angle should be between 0-360
-    double slope = (config.SERVOMAX-config.SERVOMIN) / (config.ANGLEMAX-config.ANGLEMIN);
-    return config.SERVOMIN + (angle - config.ANGLEMAX) * slope;
+    double slope = (this->SERVOMAX - this->SERVOMIN) / (this->ANGLEMAX - this->ANGLEMIN);
+    return this->SERVOMIN + (angle - this->ANGLEMAX) * slope;
 }
 
-#endif
+
+
+
 
 
 
