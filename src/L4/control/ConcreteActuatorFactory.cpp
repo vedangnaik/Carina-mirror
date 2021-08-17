@@ -1,8 +1,8 @@
 #include "ConcreteActuatorFactory.h"
 
 std::unordered_map<std::string, Actuator* (*)(const std::string&, const QVariantMap&)> ConcreteActuatorFactory::factoryMap = {
-    {"DummySensor", &ConcreteActuatorFactory::createDummyActuator},
-    {"AnalogMCCDAQSensor", &ConcreteActuatorFactory::createPCA9685Actuator},
+    {"DummyActuator", &ConcreteActuatorFactory::createDummyActuator},
+    {"PCA9685Actuator", &ConcreteActuatorFactory::createPCA9685Actuator},
 };
 
 Actuator* ConcreteActuatorFactory::createActuator(const std::string& id, const QVariantMap& args) {

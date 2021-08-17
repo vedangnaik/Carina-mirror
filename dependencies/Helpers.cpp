@@ -24,7 +24,11 @@ Helpers::checkForKeyAndConversionValidity(const QVariantMap& args, const QString
 
 std::array<std::pair<double, double>, 5>
 Helpers::parseCalibrationPointsFromArgs(const std::string& id, const QVariantMap &args) {
-    Helpers::checkForKeyAndConversionValidity(args, "calibration", QMetaType::QJsonArray, id + ": Sensor must contain set of 5 valid calibration points.");
+    // It appears that canConvert returns false with QJsonArray even though the conversion is fine. Hence we are checking with QJsonValue and isArray.
+    Helpers::checkForKeyAndConversionValidity(args, "calibration", QMetaType::QJsonValue, id + ": Sensor must contain set of 5 valid calibration points.");
+    if (!args["calibration"].toJsonValue().isArray()) {
+        throw std::domain_error(id + ": Calibration points must be valid JSON arrays.");
+    }
 
     std::array<std::pair<double, double>, 5> calibrationPoints;
     for (int i = 0; i < 5; i++) {
