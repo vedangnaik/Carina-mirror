@@ -15,7 +15,7 @@ set(CMAKE_AUTORCC ON)
 
 # Add var for conditional compilation of uldaq and raspi stuff
 add_definitions(-DULDAQ_AVAILABLE=${ULDAQ_AVAILABLE})
-add_definitions(-DWIRINGPI_AVAILABLE=${WIRINGPI_AVAILABLE})
+#add_definitions(-DWIRINGPI_AVAILABLE=${WIRINGPI_AVAILABLE})
 
 # Get all cpp files from various places and create the target.
 file(GLOB_RECURSE ALL_SRCS

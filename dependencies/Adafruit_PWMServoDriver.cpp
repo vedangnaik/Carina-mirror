@@ -313,4 +313,4 @@ void Adafruit_PWMServoDriver::delay(int ms){
     usleep(ms * MILLI_TO_MICRO);
 }
 
-#endif // WIRINGPI_AVAILABLE
+#endif

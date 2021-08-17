@@ -56,10 +56,12 @@ Actuator *ConcreteActuatorFactory::createPCA9685Actuator(const std::string &id, 
     // 🥴
     return new PCA9685Actuator(id, args["channel"].toUInt(), args["openAngle"].toDouble(), args["closeAngle"].toDouble(), args["servoMin"].toUInt(), args["servoMax"].toUInt(), args["angleMin"].toDouble(), args["angleMax"].toDouble(), std::shared_ptr<Adafruit_PWMServoDriver>(servoDriverBoard));
 #else
-    throw std::domain_error(id + ": This Carina has not been compiled to support PCA9685 actuators. Please recompile with the -DWIRINGPI_AVAILABLE flag and ensure wiringPiI2C.h is available on your platform.")
+    throw std::domain_error(id + ": This Carina has not been compiled to support PCA9685 actuators. Please recompile with the -DWIRINGPI_AVAILABLE flag and ensure wiringPiI2C.h is available on your platform.");
 #endif
 }
 
 void ConcreteActuatorFactory::resetFactory() {
+#ifdef WIRINGPI_AVAILABLE
     cachedServoDriverBoards.clear();
+#endif
 }

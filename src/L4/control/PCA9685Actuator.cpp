@@ -2,13 +2,9 @@
 
 #include "PCA9685Actuator.h"
 
-#include <utility>
-
 PCA9685Actuator::PCA9685Actuator(std::string id, uint8_t channel, double openAngle, double closedAngle, uint16_t SERVOMIN, uint16_t SERVMOMAX, double ANGLEMIN, double ANGLEMAX, std::shared_ptr<Adafruit_PWMServoDriver> pwm)
     : Actuator(std::move(id)), channel{channel}, openAngle{openAngle}, closedAngle{closedAngle}, SERVOMIN{SERVOMIN}, SERVOMAX{SERVMOMAX}, ANGLEMIN{ANGLEMIN}, ANGLEMAX{ANGLEMAX}, pwm{std::move(pwm)}
 {}
-
-#endif
 
 void PCA9685Actuator::setState(const bool state) {
     this->state = state;
@@ -33,6 +29,7 @@ uint16_t PCA9685Actuator::getPWMFromAngle(double angle) const {
     return this->SERVOMIN + (angle - this->ANGLEMAX) * slope;
 }
 
+#endif
 
 
 
