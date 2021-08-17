@@ -14,6 +14,7 @@ GSManager::GSManager() {
             tr("Open Process File"), "/", tr("JSON Files (*.json)"));
         if (fileName != "") {
             this->openProcessFromFile(fileName.toStdString());
+            LOG(INFO) << "Opened process file: " << fileName.toStdString();
         }
     });
 
@@ -41,15 +42,17 @@ void GSManager::openProcessFromFile(const std::string& filepath) {
         LOG(INFO) << "Process file parsed successfully.";
 
         // Manufacture all sensors and actuators here first
-        std::vector<Sensor*> sensors;
-        std::vector<Actuator*> actuators;
+        std::unordered_map<std::string, std::unique_ptr<Sensor>> sensors;
+        std::unordered_map<std::string, std::unique_ptr<Actuator>> actuators;
         // Reset the factories first
         ConcreteSensorFactory::resetFactory();
         ConcreteActuatorFactory::resetFactory();
+        // Create the maps for SensorManager and ActuatorManager
         for (const auto& p : std::get<0>(t)) {
             Sensor* s = ConcreteSensorFactory::createSensor(p.first, p.second);
-            sensors.push_back(s);
-            auto* a = new QAction(QString::fromStdString(p.first));
+            sensors.insert({p.first, std::unique_ptr<Sensor>(s)});
+            auto* a = this->GSMainWindowUI.menuRecalibrate_Sensors->addAction(QString::fromStdString(p.first));
+            // Connect recalibration function here
             connect(a, &QAction::triggered, this, [=]() {
                LOG(INFO) << "User has requested recalibration of sensor '" << s->id << "'.";
                RecalibrationWindow w(s);
@@ -59,10 +62,12 @@ void GSManager::openProcessFromFile(const std::string& filepath) {
                    LOG(INFO) << "Rejected for sensor '" << s->id << "'.";
                }
             });
-            this->GSMainWindowUI.menuRecalibrate_Sensors->addAction(a);
         }
         for (const auto& p : std::get<1>(t)) {
-            actuators.push_back(ConcreteActuatorFactory::createActuator(p.first, p.second));
+            actuators.insert({
+                p.first,
+                std::unique_ptr<Actuator>(ConcreteActuatorFactory::createActuator(p.first, p.second))
+            });
         }
 
         // First make the presenters which dudes be subscribing to
@@ -96,6 +101,7 @@ void GSManager::openProcessFromFile(const std::string& filepath) {
         this->GSMainWindowUI.startProcessAction->setEnabled(true);
     } catch (std::exception& e) {
         LOG(ERROR) << e.what();
+        this->rerenderUi();
     }
 }
 
@@ -145,4 +151,6 @@ void GSManager::rerenderUi() {
     Helpers::clearLayout(this->GSMainWindowUI.systemDiagramFrame->layout());
     delete this->GSMainWindowUI.systemDiagramFrame->layout();
     this->systemDiagramUI.setupUi(this->GSMainWindowUI.systemDiagramFrame);
+    // Clear the list of actions from previous processes
+    this->GSMainWindowUI.menuRecalibrate_Sensors->clear();
 }
