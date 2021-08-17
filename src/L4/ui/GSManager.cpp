@@ -14,7 +14,6 @@ GSManager::GSManager() {
             tr("Open Process File"), "/", tr("JSON Files (*.json)"));
         if (fileName != "") {
             this->openProcessFromFile(fileName.toStdString());
-            LOG(INFO) << "Opened process file: " << fileName.toStdString();
         }
     });
 
@@ -95,12 +94,8 @@ void GSManager::openProcessFromFile(const std::string& filepath) {
         // Enable configuration of DAQs, disable opening new file, enable starting loaded process.
         this->GSMainWindowUI.openProcessFromFileAction->setEnabled(false);
         this->GSMainWindowUI.startProcessAction->setEnabled(true);
-    } catch (ProcessFileParseError& e) {
-        LOG(ERROR) << "Process file parse error:" << e.what();
-    } catch (SensorsManagerError& e) {
-        LOG(ERROR) << "SensorsManager error: " << e.what();
-    } catch(StatesManagerError& e){
-        LOG(ERROR) << "StatesManager error: " << e.what();
+    } catch (std::exception& e) {
+        LOG(ERROR) << e.what();
     }
 }
 
