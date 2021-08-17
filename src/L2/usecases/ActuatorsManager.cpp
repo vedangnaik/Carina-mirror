@@ -1,13 +1,14 @@
 #include "ActuatorsManager.h"
 
-ActuatorsManager::ActuatorsManager(std::vector<Actuator*> actuators, AMOC& amoc)
+ActuatorsManager::ActuatorsManager(std::unordered_map<std::string, std::unique_ptr<Actuator>>& actuators, AMOC& amoc)
     : actuators{std::move(actuators)}, amoc{amoc}
 {}
 
 bool
 ActuatorsManager::getActuatorStatus(std::string id)
 {
-    for (const auto& a : this->actuators) {
+    for (const auto& p : this->actuators) {
+        const std::unique_ptr<Actuator>& a = p.second;
         if (a->id == id) {
             return a->state;
         }
@@ -20,7 +21,8 @@ ActuatorsManager::getActuatorStatus(std::string id)
 void
 ActuatorsManager::setState(std::string id, bool status)
 {
-    for (const auto& a : this->actuators) {
+    for (const auto& p : this->actuators) {
+        const std::unique_ptr<Actuator>& a = p.second;
         if (a->id == id) {
             a->setState(status);
             this->amoc.notify(id, status);

@@ -23,11 +23,11 @@ public:
 class ActuatorsManager : public QObject, public AMIC {
     Q_OBJECT
 public:
-    ActuatorsManager(std::vector<Actuator*> actuators, AMOC& amoc);
+    ActuatorsManager(std::unordered_map<std::string, std::unique_ptr<Actuator>>& actuators, AMOC& amoc);
     bool getActuatorStatus(std::string id) override;
     void setState(std::string id, bool status) override;
 private:
-    std::vector<Actuator*> actuators;
+    std::unordered_map<std::string, std::unique_ptr<Actuator>> actuators;
     AMOC& amoc;
 };
 

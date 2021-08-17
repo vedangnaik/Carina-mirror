@@ -26,7 +26,7 @@ private:
 class SensorsManager : public QObject, public SMIC {
     Q_OBJECT
 public:
-    SensorsManager(std::vector<Sensor*> sensors, SMOC& smoc);
+    SensorsManager(std::unordered_map<std::basic_string<char>, std::unique_ptr<Sensor>>& sensors, SMOC& smoc);
     void startAcquisition();
     void getLatestData();
     void stopAcquisition();
@@ -36,7 +36,7 @@ public:
 private:
     void updateUI();
 
-    std::vector<Sensor*> sensors;
+    std::unordered_map<std::basic_string<char>, std::unique_ptr<Sensor>> sensors;
     SMOC& smoc;
     QTimer* DAQReadTimer;
     QTimer* UIUpdateTimer;
