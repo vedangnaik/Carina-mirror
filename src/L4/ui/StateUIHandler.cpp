@@ -7,7 +7,7 @@ QLabel* displayActuatorCheck(const ActuatorCheck& ac);
 StateUIHandler::StateUIHandler(Ui::State& stateUI, SPIC& spic, APIC& apic, StPIC& stpic, ACIC& acic, StCIC& stcic)
     : stateUI{stateUI}, spic{spic}, apic{apic}, stpic{stpic}, acic{acic}, stcic{stcic}
 {
-    // subscrivbe yourself to the presenter asap.
+    // subscribe yourself to the presenter asap.
     this->stpic.subscribe(this);
     this->actuatorButtonTimer = new QTimer(this);
     this->actuatorButtonTimer->start(1000);
@@ -17,7 +17,7 @@ StateUIHandler::StateUIHandler(Ui::State& stateUI, SPIC& spic, APIC& apic, StPIC
 }
 
 void StateUIHandler::displayState(const State& s) {
-    uihelpers::clearLayout(this->stateUI.actionsLayout);
+    Helpers::clearLayout(this->stateUI.actionsLayout);
 
     this->stateUI.nameLabel->setText(QString::fromStdString(s.name));
     this->stateUI.abortLabel->setText(QString::fromStdString(s.transitions.at(Transition::Abort)));
@@ -99,7 +99,7 @@ void StateUIHandler::displayState(const State& s) {
 }
 
 void StateUIHandler::displayProcessSummary(const std::vector<std::string> processSummary) {
-    uihelpers::clearLayout(this->stateUI.psLayout);
+    Helpers::clearLayout(this->stateUI.psLayout);
     for (const std::string& summary : processSummary) {
         auto* summaryBox = new QGroupBox("", this->stateUI.psFrame);
         auto* summaryLabel = new QLabel(QString::fromStdString(summary), this->stateUI.psFrame);

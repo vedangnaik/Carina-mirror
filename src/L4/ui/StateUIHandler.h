@@ -7,13 +7,13 @@
 #include <QTimer>
 #include <QMessageBox>
 
+#include "Helpers.h"
 #include "ActuatorsController.h"
 #include "StatesController.h"
 #include "SensorsPresenter.h"
 #include "ActuatorsPresenter.h"
 #include "StatesPresenter.h"
 #include "ui_State.h"
-#include "UIHelpers.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

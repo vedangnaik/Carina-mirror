@@ -140,11 +140,11 @@ void GSManager::renderUi() {
 // made in the constructor.
 void GSManager::rerenderUi() {
     // clear stateFrame's layout, delete it, then remake and re-add the state UI.
-    uihelpers::clearLayout(this->GSMainWindowUI.stateFrame->layout());
+    Helpers::clearLayout(this->GSMainWindowUI.stateFrame->layout());
     delete this->GSMainWindowUI.stateFrame->layout();
     this->stateUI.setupUi(this->GSMainWindowUI.stateFrame);
     // same as above for systemDiagramFrame.
-    uihelpers::clearLayout(this->GSMainWindowUI.systemDiagramFrame->layout());
+    Helpers::clearLayout(this->GSMainWindowUI.systemDiagramFrame->layout());
     delete this->GSMainWindowUI.systemDiagramFrame->layout();
     this->systemDiagramUI.setupUi(this->GSMainWindowUI.systemDiagramFrame);
 }

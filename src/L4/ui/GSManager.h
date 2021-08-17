@@ -9,7 +9,8 @@
 #include <QHBoxLayout>
 #include <iostream>
 // dependencies
-#include <easylogging++.h>
+#include "Helpers.h"
+#include "easylogging++.h"
 // L1
 #include "Sensor.h"
 #include "Actuator.h"
@@ -29,7 +30,6 @@
 #include "StateUIHandler.h"
 #include "SystemDiagramUIHandler.h"
 #include "ErrorUIHandler.h"
-#include "UIHelpers.h"
 #include "RecalibrationWindow.h"
 #include "ui_GSMainWindow.h"
 #include "ui_State.h"
