@@ -14,8 +14,14 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 # Add var for conditional compilation of uldaq and raspi stuff
-add_definitions(-DULDAQ_AVAILABLE=${ULDAQ_AVAILABLE})
-#add_definitions(-DWIRINGPI_AVAILABLE=${WIRINGPI_AVAILABLE})
+if (ULDAQ_AVAILABLE)
+    message("Compiling with MCCDAQ Uldaq support...")
+    add_definitions(-DULDAQ_AVAILABLE=1)
+endif()
+if (WIRINGPI_AVAILABLE)
+    message("Compiling with WiringPi support...")
+    add_definitions(-DWIRINGPI_AVAILABLE=1)
+endif()
 
 # Get all cpp files from various places and create the target.
 file(GLOB_RECURSE ALL_SRCS
@@ -30,8 +36,11 @@ file(GLOB_RECURSE ALL_SRCS
 add_executable(Carina ${ALL_SRCS})
 
 # Target the Qt libraries and Carina's own headers.
-target_link_libraries(Carina Qt5::Widgets uldaq)
-target_include_directories(Carina PUBLIC 
+target_link_libraries(Carina Qt5::Widgets)
+if (ULDAQ_AVAILABLE)
+    target_link_libraries(Carina uldaq)
+endif()
+target_include_directories(Carina PUBLIC
     "${PROJECT_SOURCE_DIR}/dependencies"
     "${PROJECT_SOURCE_DIR}/src/L1/entities"
     "${PROJECT_SOURCE_DIR}/src/L2/usecases"

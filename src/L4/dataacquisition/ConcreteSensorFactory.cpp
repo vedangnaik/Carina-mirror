@@ -50,7 +50,7 @@ ConcreteSensorFactory::createAnalogMCCDAQSensor(const std::string &id, const QVa
     // Create the thing
     return new AnalogMCCDAQSensor(id, Helpers::parseCalibrationPointsFromArgs(id, args), channelConnectedTo, handle);
 #else
-    throw std::domain_error(id + ": This Carina has not been compiled to support AnalogMCCDAQSensors. Please recompile with the -DULDAQ_AVAILABLE flag and ensure uldaq.h is available on your platform.")
+    throw std::domain_error(id + ": This Carina has not been compiled to support AnalogMCCDAQSensors. Please recompile with the -DULDAQ_AVAILABLE flag and ensure uldaq.h is available on your platform.");
 #endif
 }
 
