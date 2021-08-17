@@ -163,9 +163,9 @@ Now that you have a Linux environment and all the dependencies set up, you can b
 cd Carina
 mkdir build
 cd build
-# Omit -DULDAQ_AVAILABLE=1 if uldaq.h is not needed or present.
-# Omit -DWIRINGPI_AVAILABLE=1 if wiringpi is not present or needed.
-cmake -S .. -B . -DULDAQ_AVAILABLE=1 -DWIRINGPI_AVAILABLE=1
+# Omit -DULDAQ_AVAILABLE=True if uldaq.h is not needed or present.
+# Omit -DWIRINGPI_AVAILABLE=True if wiringpi is not present or needed.
+cmake -S .. -B . -DULDAQ_AVAILABLE=True -DWIRINGPI_AVAILABLE=True
 # The previous step created a Makefile for the Linux target. This will start the build process. This may take a few minutes.
 make
 ./Carina
