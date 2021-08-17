@@ -15,8 +15,8 @@
 class ConcreteSensorFactory {
 public:
     static Sensor* createSensor(const std::string& id, const QVariantMap& args);
+    static void resetFactory();
 private:
-    static std::array<std::pair<double, double>, 5> parseCalibrationPointsFromArgs(const std::string& id, const QVariantMap& args);
     static Sensor* createDummySensor(const std::string& id, const QVariantMap& args);
     static Sensor* createAnalogMCCDAQSensor(const std::string& id, const QVariantMap& args);
 
