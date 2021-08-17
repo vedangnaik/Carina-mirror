@@ -21,7 +21,7 @@ ConcreteSensorFactory::createSensor(const std::string& id, const QVariantMap& ar
 
 std::array<std::pair<double, double>, 5>
 ConcreteSensorFactory::parseCalibrationPointsFromArgs(const std::string& id, const QVariantMap &args) {
-    checkForKeyAndConversionValidity(args, "calibration", QMetaType::QJsonArray, id + ": Sensor must contain valid set of 5 calibration points.");
+    Helpers::checkForKeyAndConversionValidity(args, "calibration", QMetaType::QJsonArray, id + ": Sensor must contain set of 5 valid calibration points.");
 
     std::array<std::pair<double, double>, 5> calibrationPoints;
     for (int i = 0; i < 5; i++) {
@@ -43,11 +43,11 @@ Sensor*
 ConcreteSensorFactory::createAnalogMCCDAQSensor(const std::string &id, const QVariantMap &args) {
 #ifdef ULDAQ_AVAILABLE
     // Retrieve the handle
-    checkForKeyAndConversionValidity(args, "handle", QMetaType::LongLong, id + ": Sensor must contain a valid numeric MCC device handle.");
+    Helpers::checkForKeyAndConversionValidity(args, "handle", QMetaType::LongLong, id + ": Sensor must contain a valid numeric MCC device handle.");
     DaqDeviceHandle handle = (DaqDeviceHandle)args["handle"].toLongLong();
 
     // Retrieve the channel this is connected to
-    checkForKeyAndConversionValidity(args, "channel", QMetaType::UInt, id + ": Sensor must contain a valid positive integer channel to connect to.");
+    Helpers::checkForKeyAndConversionValidity(args, "channel", QMetaType::UInt, id + ": Sensor must contain a valid positive integer channel to connect to.");
     unsigned int channelConnectedTo = args["channel"].toUInt();
 
     // If this DAQ has already been connected, leave it. Connecting twice appears to actually disconnect the DAQ.
@@ -61,16 +61,8 @@ ConcreteSensorFactory::createAnalogMCCDAQSensor(const std::string &id, const QVa
     }
 
     // Create the thing
-    LOG(INFO) << "Creating new AnalogMCCDAQSensor";
     return new AnalogMCCDAQSensor(id, parseCalibrationPointsFromArgs(id, args), channelConnectedTo, handle);
 #else
     throw std::domain_error(id + ": This Carina has not been compiled to support AnalogMCCDAQSensors. Please consult the developers for further information.")
 #endif
-}
-
-void
-ConcreteSensorFactory::checkForKeyAndConversionValidity(const QVariantMap& args, const QString& key, int targetTypeId, const std::string& exceptionMsg) {
-    if (!args.contains(key) || !args[key].canConvert(targetTypeId)) {
-        throw std::domain_error(exceptionMsg);
-    }
 }
