@@ -5,6 +5,8 @@ std::unordered_map<std::string, Actuator* (*)(const std::string&, const QVariant
     {"PCA9685Actuator", &ConcreteActuatorFactory::createPCA9685Actuator},
 };
 
+std::unordered_map<unsigned int, Adafruit_PWMServoDriver*> ConcreteActuatorFactory::cachedServoDriverBoards = {};
+
 Actuator* ConcreteActuatorFactory::createActuator(const std::string& id, const QVariantMap& args) {
     if (!args.contains("type")) {
         throw std::domain_error(id + ": Actuator must have a type.");

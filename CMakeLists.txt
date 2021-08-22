@@ -40,6 +40,9 @@ target_link_libraries(Carina Qt5::Widgets)
 if (ULDAQ_AVAILABLE)
     target_link_libraries(Carina uldaq)
 endif()
+if (WIRINGPI_AVAILABLE)
+    target_link_libraries(Carina wiringPi)
+endif()
 target_include_directories(Carina PUBLIC
     "${PROJECT_SOURCE_DIR}/dependencies"
     "${PROJECT_SOURCE_DIR}/src/L1/entities"
