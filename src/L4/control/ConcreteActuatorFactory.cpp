@@ -5,7 +5,9 @@ std::unordered_map<std::string, Actuator* (*)(const std::string&, const QVariant
     {"PCA9685Actuator", &ConcreteActuatorFactory::createPCA9685Actuator},
 };
 
+#ifdef WIRINGPI_AVAILABLE
 std::unordered_map<unsigned int, Adafruit_PWMServoDriver*> ConcreteActuatorFactory::cachedServoDriverBoards = {};
+#endif
 
 Actuator* ConcreteActuatorFactory::createActuator(const std::string& id, const QVariantMap& args) {
     if (!args.contains("type")) {
