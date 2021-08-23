@@ -11,7 +11,7 @@ GSManager::GSManager() {
         LOG(INFO) << "User has requested process file open.";
 
         QString fileName = QFileDialog::getOpenFileName(this,
-            tr("Open Process File"), "/", tr("JSON Files (*.json)"));
+            tr("Open Process File"), "/home/pi/Desktop/Carina", tr("JSON Files (*.json)"));
         if (fileName != "") {
             this->openProcessFromFile(fileName.toStdString());
             LOG(INFO) << "Opened process file: " << fileName.toStdString();
@@ -54,13 +54,8 @@ void GSManager::openProcessFromFile(const std::string& filepath) {
             auto* a = this->GSMainWindowUI.menuRecalibrate_Sensors->addAction(QString::fromStdString(p.first));
             // Connect recalibration function here
             connect(a, &QAction::triggered, this, [=]() {
-               LOG(INFO) << "User has requested recalibration of sensor '" << s->id << "'.";
                RecalibrationWindow w(s);
-               if (w.exec() == QDialog::Accepted) {
-                   LOG(INFO) << "Accepted for sensor '" << s->id << "'.";
-               } else {
-                   LOG(INFO) << "Rejected for sensor '" << s->id << "'.";
-               }
+               w.exec();
             });
         }
         for (const auto& p : std::get<1>(t)) {
