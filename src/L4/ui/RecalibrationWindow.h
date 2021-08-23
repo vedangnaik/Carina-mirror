@@ -7,6 +7,7 @@
 #include "Sensor.h"
 #include "ui_RecalibrationWindow.h"
 #include "easylogging++.h"
+#include <QPushButton>
 
 namespace Ui {
 class RecalibrationWindow;
