@@ -23,7 +23,9 @@ public:
 
 private:
     void accept() override;
+    void reject() override;
 
     Sensor* sensorToRecalibrate;
     Ui::RecalibrationWindow* ui;
+    std::vector<std::pair<QLineEdit*, QLineEdit*>> currentCalibrationPoints;
 };

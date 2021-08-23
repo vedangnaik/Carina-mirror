@@ -3,8 +3,9 @@
 RecalibrationWindow::RecalibrationWindow(Sensor* s, QWidget *parent) :
     QDialog(parent), sensorToRecalibrate{s}, ui{new Ui::RecalibrationWindow}
 {
+    LOG(INFO) << s->id << ": User has requested recalibration.";
     ui->setupUi(this);
-    LOG(INFO) << s->id;
+
     // Connect dialog buttons.
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -15,11 +16,24 @@ RecalibrationWindow::RecalibrationWindow(Sensor* s, QWidget *parent) :
         QLineEdit* rawValue = new QLineEdit("1", this);
         QLineEdit* unitsValue = new QLineEdit("1", this);
         QPushButton* deleteBtn = new QPushButton("X", this);
+        this->currentCalibrationPoints.emplace_back(rawValue, unitsValue);
+
         // This function removes the widgets from this row in the layout and then deletes them.
         connect(deleteBtn, &QPushButton::clicked, this, [=]() {
             g->removeWidget(rawValue);
             g->removeWidget(unitsValue);
             g->removeWidget(deleteBtn);
+
+            // Iterate through the vector and remove this pair. Pattern taken from https://en.cppreference.com/w/cpp/container/vector/erase.
+            for (auto it = this->currentCalibrationPoints.begin(); it != this->currentCalibrationPoints.end(); ) {
+                if (it->first == rawValue && it->second == unitsValue) {
+                    it = this->currentCalibrationPoints.erase(it);
+                } else {
+                    ++it;
+                }
+            }
+
+            // Delete the actual objects.
             delete rawValue;
             delete unitsValue;
             delete deleteBtn;
@@ -34,13 +48,9 @@ RecalibrationWindow::RecalibrationWindow(Sensor* s, QWidget *parent) :
 
     // Create line edits for each set of calibration points and fill them.
     for (const auto& point : s->calibrationPoints) {
-        // We just click the add button ourselves to add the point, then change the LineEdit values.
         ui->addCalibrationButton->click();
-        int lastRow = g->rowCount() - 1; // The row count - 1 is the index of the last row, which is the one just added.
-        QLineEdit* rawValue = (QLineEdit*)g->itemAtPosition(lastRow, 0)->widget();
-        rawValue->setText(QString::number(point.first));
-        QLineEdit* unitsValue = (QLineEdit*)g->itemAtPosition(lastRow, 1)->widget();
-        unitsValue->setText(QString::number(point.second));
+        this->currentCalibrationPoints.back().first->setText(QString::number(point.first));
+        this->currentCalibrationPoints.back().second->setText(QString::number(point.second));
     }
 }
 
@@ -52,17 +62,25 @@ RecalibrationWindow::~RecalibrationWindow()
 void
 RecalibrationWindow::accept()
 {
+    LOG(INFO) << this->sensorToRecalibrate->id << ": User has accepted modified recalibration.";
     // Clear the existing calibration points.
     this->sensorToRecalibrate->calibrationPoints.clear();
     // Copy line edit values back into calibration points, then recalibrate sensor.
-    QFormLayout* f = (QFormLayout*)this->ui->pointsWidget->layout();
-    // We skip the first row since that's the header.
-    for (int row = 1; row < f->rowCount(); row++) {
-        QLineEdit* rawValue = (QLineEdit*)f->itemAt(row, QFormLayout::LabelRole)->widget();
-        QLineEdit* unitsValue = (QLineEdit*)f->itemAt(row, QFormLayout::FieldRole)->widget();
-        std::pair<double, double> t {rawValue->text().toDouble(), unitsValue->text().toDouble()};
-        this->sensorToRecalibrate->calibrationPoints.push_back(t);
+    if (this->currentCalibrationPoints.size() < 2) {
+        LOG(WARNING) << this->sensorToRecalibrate->id << ": At least two calibration points are required. Default calibration of (1, 1), (2, 2) will be used.";
+        this->sensorToRecalibrate->calibrationPoints.emplace_back(1.0, 1.0);
+        this->sensorToRecalibrate->calibrationPoints.emplace_back(2.0, 2.0);
+    } else {
+        for (const auto& p : this->currentCalibrationPoints) {
+            this->sensorToRecalibrate->calibrationPoints.emplace_back(p.first->text().toDouble(), p.second->text().toDouble());
+        }
     }
     this->sensorToRecalibrate->calibrate();
     this->done(QDialog::Accepted);
+}
+
+void RecalibrationWindow::reject()
+{
+    LOG(INFO) << this->sensorToRecalibrate->id << ": User has rejected modified recalibration.";
+    this->done(QDialog::Rejected);
 }
