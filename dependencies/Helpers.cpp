@@ -22,21 +22,27 @@ Helpers::checkForKeyAndConversionValidity(const QVariantMap& args, const QString
     }
 }
 
-std::array<std::pair<double, double>, 5>
+std::vector<std::pair<double, double>>
 Helpers::parseCalibrationPointsFromArgs(const std::string& id, const QVariantMap &args) {
-    // It appears that canConvert returns false with QJsonArray even though the conversion is fine. Hence we are checking with QJsonValue and isArray.
-    Helpers::checkForKeyAndConversionValidity(args, "calibration", QMetaType::QJsonValue, id + ": Sensor must contain set of 5 valid calibration points.");
+    // It appears that canConvert returns false with QJsonArray even though the conversion is fine. Hence, we are checking with QJsonValue and isArray.
+    Helpers::checkForKeyAndConversionValidity(args, "calibration", QMetaType::QJsonValue, id + ": Sensor must contain a set of valid calibration points.");
     if (!args["calibration"].toJsonValue().isArray()) {
-        throw std::domain_error(id + ": Calibration points must be valid JSON arrays.");
+        throw std::domain_error(id + ": Calibration points must be a valid JSON array.");
     }
 
-    std::array<std::pair<double, double>, 5> calibrationPoints;
-    for (int i = 0; i < 5; i++) {
-        std::pair<double, double> t{
-            args["calibration"].toJsonArray().at(i).toArray().at(0).toDouble(),
-            args["calibration"].toJsonArray().at(i).toArray().at(1).toDouble()
+    QJsonArray pointsFromFile = args["calibration"].toJsonArray();
+    std::vector<std::pair<double, double>> calibrationPoints;
+    for (const auto& point : pointsFromFile) {
+        // Error checking for the individual point set
+        if (!point.isArray() || point.toArray().size() != 2) {
+            throw std::domain_error(id + ": Calibration point must be a valid JSON array with exactly 2 elements.");
+        }
+
+        std::pair<double, double> t {
+            point.toArray().at(0).toDouble(),
+            point.toArray().at(1).toDouble()
         };
-        calibrationPoints.at(i) = t;
+        calibrationPoints.push_back(t);
     }
     return calibrationPoints;
 }

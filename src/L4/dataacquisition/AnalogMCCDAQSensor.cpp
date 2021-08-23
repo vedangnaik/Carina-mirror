@@ -3,7 +3,7 @@
  #include "AnalogMCCDAQSensor.h"
 
  AnalogMCCDAQSensor::AnalogMCCDAQSensor(const std::string& deviceID,
-                                        const std::array<std::pair<double, double>, 5>& calibrationPoints,
+                                        const std::vector<std::pair<double, double>>& calibrationPoints,
                                         const unsigned int channelConnectedTo,
                                         DaqDeviceHandle handle)
      : Sensor(deviceID, calibrationPoints), handle{handle}, channelConnectedTo{channelConnectedTo}

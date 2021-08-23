@@ -19,7 +19,7 @@ struct SensorCheck {
 
 class Sensor {
 public:
-    Sensor(const std::string& id, const std::array<std::pair<double, double>, 5>& calibrationPoints);
+    Sensor(std::string id, std::vector<std::pair<double, double>> calibrationPoints);
     virtual void startAcquisition() = 0;
     virtual void stopAcquisition() = 0;
     virtual double getLatestData() = 0;
@@ -28,7 +28,7 @@ public:
 
     const std::string id;
     double latestValue = 0.0;
-    std::array<std::pair<double, double>, 5> calibrationPoints;
+    std::vector<std::pair<double, double>> calibrationPoints;
 protected:
     double slope = 1.0;
     double intercept = 0.0;

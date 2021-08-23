@@ -17,7 +17,7 @@
  class AnalogMCCDAQSensor : public Sensor {
  public:
      AnalogMCCDAQSensor(const std::string& deviceID,
-                        const std::array<std::pair<double, double>, 5>& calibrationPoints,
+                        const std::vector<std::pair<double, double>>& calibrationPoints,
                         unsigned int channelConnectedTo,
                         DaqDeviceHandle handle);
      void startAcquisition() override;

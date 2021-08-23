@@ -7,7 +7,7 @@
 class DummySensor : public Sensor
 {
 public:
-    DummySensor(const std::string& id, const std::array<std::pair<double, double>, 5>& calibrationPoints);
+    DummySensor(const std::string& id, const std::vector<std::pair<double, double>>& calibrationPoints);
     void startAcquisition() override;
     void stopAcquisition() override;
     double getLatestData() override;

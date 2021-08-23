@@ -1,6 +1,6 @@
 #include "DummySensor.h"
 
-DummySensor::DummySensor(const std::string& id, const std::array<std::pair<double, double>, 5>& calibrationPoints)
+DummySensor::DummySensor(const std::string& id, const std::vector<std::pair<double, double>>& calibrationPoints)
     : Sensor(id, calibrationPoints)
 {
     this->gen = std::mt19937(std::random_device{}());

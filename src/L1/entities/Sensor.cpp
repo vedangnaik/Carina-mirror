@@ -1,7 +1,7 @@
 #include "Sensor.h"
 
-Sensor::Sensor(const std::string& id, const std::array<std::pair<double, double>, 5>& calibrationPoints)
-    : id{id}, calibrationPoints{calibrationPoints}
+Sensor::Sensor(std::string  id, std::vector<std::pair<double, double>>  calibrationPoints)
+    : id{std::move(id)}, calibrationPoints{std::move(calibrationPoints)}
 {
     this->calibrate();
 }
