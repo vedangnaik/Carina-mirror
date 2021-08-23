@@ -1,31 +1,35 @@
 #include "ActuatorsManager.h"
 
-ActuatorsManager::ActuatorsManager(map<const string, Actuator> actuators, AMOC& amoc)
+ActuatorsManager::ActuatorsManager(std::unordered_map<std::string, std::unique_ptr<Actuator>>& actuators, AMOC& amoc)
     : actuators{std::move(actuators)}, amoc{amoc}
 {}
 
 bool
-ActuatorsManager::getActuatorStatus(string id)
+ActuatorsManager::getActuatorStatus(std::string id)
 {
-    try {
-        return this->actuators.at(id).status;
-    } catch (std::out_of_range& e) {
-        // Precondition violation, it's over.
-        LOG(FATAL) << "ActuatorsManager::getActuatorStatus(" << id << "): ID not found. Exception: " << e.what();  
-        std::terminate();
+    for (const auto& p : this->actuators) {
+        const std::unique_ptr<Actuator>& a = p.second;
+        if (a->id == id) {
+            return a->state;
+        }
     }
+
+    LOG(FATAL) << "ActuatorsManager::getActuatorStatus(" << id << "): ID not found. Terminating...";
+    std::terminate();
 }
 
 void
-ActuatorsManager::actuate(string id)
+ActuatorsManager::setState(std::string id, bool status)
 {
-    // Make sure this actuator is present.
-    try {
-        bool currentState = this->actuators.at(id).status;
-        this->actuators.at(id).status = !currentState;
-        this->amoc.notify(id, this->actuators.at(id).status);
-    } catch (std::out_of_range& e) {
-        // Precondition violation, it's over.
-        LOG(FATAL) << "ActuatorsManager::getActuatorStatus(" << id << "): ID not found. Exception: " << e.what();
+    for (const auto& p : this->actuators) {
+        const std::unique_ptr<Actuator>& a = p.second;
+        if (a->id == id) {
+            a->setState(status);
+            this->amoc.notify(id, status);
+            return;
+        }
     }
+
+    LOG(FATAL) << "ActuatorsManager::getActuatorStatus(" << id << "): ID not found. Terminating...";
+    std::terminate();
 }

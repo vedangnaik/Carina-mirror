@@ -8,14 +8,14 @@
 class APOC {
 public:
     virtual void displayStatus(const bool status) = 0;
-    virtual ~APOC() {};
+    virtual ~APOC() {}
 };
 
 class APIC {
 public:
     virtual void subscribe(std::string id, APOC* apoc) = 0;
     virtual void unsubscribe(std::string id, APOC* apoc) = 0;
-    virtual ~APIC() {};
+    virtual ~APIC() {}
 };
 
 class ActuatorsPresenter : public AMOC, public APIC {

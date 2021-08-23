@@ -1,6 +1,4 @@
 #include <QApplication>
-#include <chrono>
-#include <ctime>
 #include "GSManager.h"
 #include "easylogging++.h"
 

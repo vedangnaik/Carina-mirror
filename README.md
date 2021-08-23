@@ -125,12 +125,12 @@ Carina is built using C++14 and Qt5. While the majority of the codebase can be c
 #### 1. With Docker (recommended)
 Docker is a product which allows applications be developed and run in isolated, reproducible Linux environments known as 'containers'. The `Dockerfile` in this repository builds a 'one-click' Docker image which contains all of Carina's dependencies, a C++ compiler, and other tools pre-installed.
 1. [Mac, Windows] First, install [Docker Desktop](https://docs.docker.com/desktop/) for your operating system. On Windows, use the WSL 2 backend if you're unsure which to choose. Ensure Docker is installed by running `docker --version` - if you see `Docker version ..., build ...`, you're set.
-2. Pull the pre-built image with `docker pull ghcr.io/utatrocketry/carina_dev_img:latest`. **Note:** This download is around 2.6Gb. If it's too slow, skip this step.
-3. Download and extract the zip of this repository. If you have `git` installed, you can use `git clone https://github.com/UTATRocketry/Carina.git` as well.
-4. [If you skipped Step 2] Run `docker .` inside the `Carina` folder to build the image locally. **Note:** This will take a while.
-5. Run `docker image ls` and note down the image ID. Then, run `docker run -d -t -p 3390:3390 --mount type=bind,source=<absolute path to Carina>,target="/root/Desktop/Carina" <image id>` to start the container. **Note:** The path to Carina must be *absolute*. Otherwise, this may not work.
-6. Run `docker ps` and note down the container ID. Then, run `docker exec -it <container id> bash`. This will replace your terminal with `bash` running inside the container.
-7. Type `/etc/init.d/xrdp stop` and then `/etc/init.d/xrdp start` to start the remote RDP server. Type `exit` to go back to your original terminal.
+2. Pull the pre-built image with `docker pull ghcr.io/utatrocketry/carina_dev_img:latest`. This download is around 2.6Gb, so it may take a while.  **Note:** If it's much slower than your average internet speed, GitHub's bandwith limitations may have been exceeded. If so, skip this step.
+3. Download and extract the zip of this repository.
+4. [If you skipped Step 2] Run `docker -t carina_dev_img .` inside the `Carina` folder to build the image locally. **Note:** This will take a while.
+5. Run `docker run -d -t -p 3390:3390 --name carina_dev_img_cont --mount type=bind,source=<absolute path to Carina>,target="/root/Desktop/Carina" carina_dev_img` to start the container. **Note:** The path to Carina must be *absolute*. Otherwise, this may not work.
+6. Run `docker exec -it carina_dev_img_cont bash`. This will replace your terminal with `bash` running inside the container.
+7. Type `/etc/init.d/xrdp stop` and then `/etc/init.d/xrdp start` to start the remote RDP server.
 8. [Mac] Download and install [Microsoft Remote Desktop](https://apps.apple.com/us/app/microsoft-remote-desktop/id1295203466?mt=12). [Windows]  Open the 'Remote Desktop Connection' app.
 9. Connect to `localhost:3390`. In the login screen, enter `root` for the username and `password` for the password.
 
@@ -159,22 +159,18 @@ Now, you will need to set up the dependencies:
 
 ### Build
 Now that you have a Linux environment and all the dependencies set up, you can build Carina. To do so, do the following in a terminal:
-```bash
-cd Desktop/Carina
+```zsh
+cd Carina
 mkdir build
 cd build
-## If you want just the UI:
-    qmake ../Carina.pro     ## If this fails, you likely forgot qt5-default.
-## If you want the UI with the MCC library and WiringPi support
-    qmake ../Carina.pro DEFINES+=ULDAQ_AVAILABLE DEFINES+=WIRINGPI_AVAILABLE
-make                    ## The previous step created a Makefile for the Linux target.
-                        ## This will start the build process. It may take a few minutes.
-                        ## You may need to install make, gcc, and g++, among others.
-                        ## If you don't have googletest, you'll get errors but you can ignore them.
-./app/app               ## The app folder contains the actual Carina executable; this command will launch it.
-./tests/tests           ## The tests folder contains the tests executable; this command will run the tests.
+# Omit -DULDAQ_AVAILABLE=True if uldaq.h is not needed or present.
+# Omit -DWIRINGPI_AVAILABLE=True if wiringpi is not present or needed.
+cmake -S .. -B . -DULDAQ_AVAILABLE=True -DWIRINGPI_AVAILABLE=True
+# The previous step created a Makefile for the Linux target. This will start the build process. This may take a few minutes.
+make
+./Carina
 ```
-If you're using Qt Creator for development, click 'Open Project' and select `Carina.pro`. Qt Creator will automatically run a variant of the steps above. However, running them manually first is recommended to ensure that everything is installed properly.
+If you're using Qt Creator for development, click 'Open Project' and select `CMakeLists.txt`. Qt Creator will configure itself appropriately and the green 'Play' button at the bottom right will automatically run a variant of the steps above. However, running them manually first is recommended to ensure that everything is installed properly.
 
 ## Contributing
 Avionics uses the ClickUp tool for keeping track of new features to add, progress, and other relevant information. The list can be found [here](https://app.clickup.com/t/1g3n9t). If you cannot access this, please see the [Contact](#contact) section and ask the concerned people to add you to the Clickup.

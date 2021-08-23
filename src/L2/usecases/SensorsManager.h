@@ -2,48 +2,56 @@
 
 #include "Sensor.h"
 #include "easylogging++.h"
+#include <string>
 #include <map>
+#include <vector>
 #include <stdexcept>
-
-using std::string;
-using std::map;
+#include <QObject>
+#include <QTimer>
 
 class SMOC {
 public:
-    virtual void notify(const string id, const float value) = 0;
-    virtual ~SMOC() {};
+    virtual void notify(std::string id, double value) = 0;
+    virtual ~SMOC() = default;
 };
 
 class SMIC {
 public:
-    virtual float getSensorValue(string id) = 0;
-    virtual void setSensorValue(string id, float value) = 0;
-    virtual std::vector<string> getSensorIDs() = 0;
-    virtual ~SMIC() {};
+    virtual double getSensorValue(std::string id) = 0;
+    virtual ~SMIC() = default;
 private:
 
 };
 
-class SensorsManager : public SMIC {
+class SensorsManager : public QObject, public SMIC {
+    Q_OBJECT
 public:
-    SensorsManager(map<const string, Sensor> sensors, SMOC& smoc);
-    float getSensorValue(string id);
-    void setSensorValue(string id, float value);
-    std::vector<string> getSensorIDs();
+    SensorsManager(std::unordered_map<std::basic_string<char>, std::unique_ptr<Sensor>>& sensors, SMOC& smoc);
+    void startAcquisition();
+    void getLatestData();
+    void stopAcquisition();
+    double getSensorValue(std::string id);
+
+    // void setSensorValue(std::string id, float value);
 private:
-    map<const string, Sensor> sensors;
+    void updateUI();
+
+    std::unordered_map<std::basic_string<char>, std::unique_ptr<Sensor>> sensors;
     SMOC& smoc;
+    QTimer* DAQReadTimer;
+    QTimer* UIUpdateTimer;
+    std::map<std::string, double> valuesToDisplay;
 };
 
 
 
 class SensorsManagerError : public std::runtime_error {
 protected:
-    SensorsManagerError(string message) : std::runtime_error(message) {}
+    SensorsManagerError(std::string message) : std::runtime_error(message) {}
 };
 
 class NullptrSensorError : public SensorsManagerError {
 public:
-    NullptrSensorError(const string id) : SensorsManagerError("Sensor '" + id + "' is nullptr.") {}
+    NullptrSensorError(const std::string id) : SensorsManagerError("Sensor '" + id + "' is nullptr.") {}
 };
 
