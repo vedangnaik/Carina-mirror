@@ -72,6 +72,7 @@
     </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -97,20 +98,15 @@
     <addaction name="openSystemDiagramAction"/>
     <addaction name="clearSystemDiagramAction"/>
    </widget>
-   <widget class="QMenu" name="menuData_Acquisition">
+   <widget class="QMenu" name="menuRecalibrate_Sensors">
     <property name="title">
-     <string>Data Acquisition</string>
+     <string>Recalibrate Sensors</string>
     </property>
-    <addaction name="manufactureDAQManagerAction"/>
-    <addaction name="separator"/>
-    <addaction name="calibrateDAQManagerAction"/>
-    <addaction name="linkDAQManagerAction"/>
    </widget>
    <addaction name="menuProcess"/>
    <addaction name="menuSystem_Diagram"/>
-   <addaction name="menuData_Acquisition"/>
+   <addaction name="menuRecalibrate_Sensors"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="openProcessFromFileAction">
    <property name="text">
     <string>Open Process File</string>

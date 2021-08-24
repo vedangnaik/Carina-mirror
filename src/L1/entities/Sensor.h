@@ -1,7 +1,12 @@
 #pragma once
 
-#include <string>
+#include <map>
 #include <vector>
+#include <string>
+#include <numeric>
+#include <cmath>
+#include <array>
+#include <utility>
 
 enum class SensorOption {
 
@@ -14,8 +19,17 @@ struct SensorCheck {
 
 class Sensor {
 public:
-    Sensor(std::string id, std::string name) : id(id), name(name), values({0.0}) {};
+    Sensor(std::string id, std::vector<std::pair<double, double>> calibrationPoints);
+    virtual void startAcquisition() = 0;
+    virtual void stopAcquisition() = 0;
+    virtual double getLatestData() = 0;
+    virtual ~Sensor() = default;
+    void calibrate();
+
     const std::string id;
-    const std::string name;
-    std::vector<float> values;
+    double latestValue = 0.0;
+    std::vector<std::pair<double, double>> calibrationPoints;
+protected:
+    double slope = 1.0;
+    double intercept = 0.0;
 };

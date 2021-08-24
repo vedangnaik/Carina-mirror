@@ -8,20 +8,20 @@
 
 class SPOC {
 public:
-    virtual void displayValue(const float value) = 0;
-    virtual ~SPOC() {};
+    virtual void displayValue(double value) = 0;
+    virtual ~SPOC() = default;
 };
 
 class SPIC {
 public:
     virtual void subscribe(std::string id, SPOC* spoc) = 0;
     virtual void unsubscribe(std::string id, SPOC* spoc) = 0;
-    virtual ~SPIC() {};
+    virtual ~SPIC() = default;
 };
 
 class SensorsPresenter : public SMOC, public SPIC {
 public:
-    void notify(const std::string id, const float value) override;
+    void notify(std::string id, double value) override;
     void subscribe(std::string id, SPOC* spoc) override;
     void unsubscribe(std::string id, SPOC* spoc) override;
 private:
