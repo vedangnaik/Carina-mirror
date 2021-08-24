@@ -8,10 +8,10 @@
 #include <cmath>
 #include "easylogging++.h"
 #include <cassert>
+#include <type_traits>
 
 class PCA9685Actuator : public Actuator {
 public:
-    // constructor to set custom closed and open angle
     PCA9685Actuator(std::string id, uint8_t channel, double openAngle, double closedAngle, uint16_t SERVOMIN, uint16_t SERVMOMAX, double ANGLEMIN, double ANGLEMAX, std::shared_ptr<Adafruit_PWMServoDriver> pwm);
     void setState(bool state) override;
 private:
