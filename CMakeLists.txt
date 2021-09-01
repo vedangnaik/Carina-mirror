@@ -5,7 +5,7 @@ project(Carina VERSION 2.0)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Show CMake where Qt is
+# Show CMake where Qt is.
 set(CMAKE_PREFIX_PATH "/usr/lib/x86_64-linux-gnu")
 find_package(Qt5Widgets REQUIRED)
 # Enable automatic use of uic, moc, etc.
@@ -13,7 +13,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-# Add var for conditional compilation of uldaq and raspi stuff
+# Add var for conditional compilation of uldaq and raspi stuff.
 if (ULDAQ_AVAILABLE)
     message("Compiling with MCCDAQ Uldaq support...")
     add_definitions(-DULDAQ_AVAILABLE=1)
@@ -23,14 +23,21 @@ if (WIRINGPI_AVAILABLE)
     add_definitions(-DWIRINGPI_AVAILABLE=1)
 endif()
 
-# Get all cpp files from various places and create the target.
+# Grab all the cpp, h, and ui files from various locations.
+# We first use GLOB_RECURSE to get all the files from src, since they're nested quite deep.
 file(GLOB_RECURSE ALL_SRCS
-    "${PROJECT_SOURCE_DIR}/dependencies/*.cpp"
-    "${PROJECT_SOURCE_DIR}/dependencies/*.cc"
-    "${PROJECT_SOURCE_DIR}/dependencies/*.h"
     "${PROJECT_SOURCE_DIR}/src/*.cpp"
     "${PROJECT_SOURCE_DIR}/src/*.h"
     "${PROJECT_SOURCE_DIR}/src/*.ui"
+)
+# We then add on the singular files in dependencies and main.cpp.
+set(ALL_SRCS ${ALL_SRCS}
+    "${PROJECT_SOURCE_DIR}/dependencies/Adafruit_PWMServoDriver.cpp"
+    "${PROJECT_SOURCE_DIR}/dependencies/Adafruit_PWMServoDriver.h"
+    "${PROJECT_SOURCE_DIR}/dependencies/Helpers.cpp"
+    "${PROJECT_SOURCE_DIR}/dependencies/Helpers.h"
+    "${PROJECT_SOURCE_DIR}/dependencies/easyloggingpp/src/easylogging++.cc"
+    "${PROJECT_SOURCE_DIR}/dependencies/easyloggingpp/src/easylogging++.h"
     "${PROJECT_SOURCE_DIR}/main.cpp"
 )
 add_executable(Carina ${ALL_SRCS})
@@ -45,6 +52,7 @@ if (WIRINGPI_AVAILABLE)
 endif()
 target_include_directories(Carina PUBLIC
     "${PROJECT_SOURCE_DIR}/dependencies"
+    "${PROJECT_SOURCE_DIR}/dependencies/easyloggingpp/src"
     "${PROJECT_SOURCE_DIR}/src/L1/entities"
     "${PROJECT_SOURCE_DIR}/src/L2/usecases"
     "${PROJECT_SOURCE_DIR}/src/L3/controllers"
