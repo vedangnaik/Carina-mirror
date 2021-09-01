@@ -30,7 +30,7 @@ uint16_t PCA9685Actuator::getPWMFromAngle(double angle) const {
     // angle should be between 0-360
     double slope = (this->SERVOMAX - this->SERVOMIN) / (this->ANGLEMAX - this->ANGLEMIN);
     double PWMAngle = this->SERVOMIN + (angle - this->ANGLEMAX) * slope;
-    LOG(INFO) << this->id ": Servo PWM for " << angle << " degrees is " << PWM << " (out of 4096).";
+    LOG(INFO) << this->id << ": Servo PWM for " << angle << " degrees is " << PWMAngle << " (out of 4096).";
     return PWMAngle;
 }
 
