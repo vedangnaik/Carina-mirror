@@ -6,6 +6,9 @@
 
 [Avionics] Carina: The new and improved user interface and driver software for the UTAT Ground Station.
 
+![image](https://user-images.githubusercontent.com/25436568/131623179-44d48654-0c7c-4eb8-a3ec-a1b31fdcd67a.png)
+<p align="center"><em>Carina running a test process on a Raspberry Pi</em></p>
+
 ## Usage
 Once the software running, a 'Process' JSON file can be created as described in the [process file documentation](#process-file-format). Load in the file via `Process -> Open Process File` from the menu bar. Then, click `Process -> Start Process` to begin. If a system diagram is required, click `System Diagram -> Open Image` to add it to the right side of the interface. `System Diagram -> Clear Image` can be used to remove this image. Once done with the process, use `Process -> Close Process` to close the current process. A new process can be opened following the same steps as above from this point.
 
