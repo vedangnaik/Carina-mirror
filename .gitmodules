@@ -1,3 +1,0 @@
-[submodule "dependencies/easyloggingpp"]
-	path = dependencies/easyloggingpp
-	url = https://github.com/amrayn/easyloggingpp.git

@@ -23,6 +23,15 @@ if (WIRINGPI_AVAILABLE)
     add_definitions(-DWIRINGPI_AVAILABLE=1)
 endif()
 
+include(FetchContent)
+FetchContent_Declare(
+    easyloggingpp
+    GIT_REPOSITORY https://github.com/amrayn/easyloggingpp.git
+)
+FetchContent_MakeAvailable(easyloggingpp)
+
+message(${easyloggingpp_SOURCE_DIR})
+
 # Grab all the cpp, h, and ui files from various locations.
 # We first use GLOB_RECURSE to get all the files from src, since they're nested quite deep.
 file(GLOB_RECURSE ALL_SRCS
@@ -36,8 +45,8 @@ set(ALL_SRCS ${ALL_SRCS}
     "${PROJECT_SOURCE_DIR}/dependencies/Adafruit_PWMServoDriver.h"
     "${PROJECT_SOURCE_DIR}/dependencies/Helpers.cpp"
     "${PROJECT_SOURCE_DIR}/dependencies/Helpers.h"
-    "${PROJECT_SOURCE_DIR}/dependencies/easyloggingpp/src/easylogging++.cc"
-    "${PROJECT_SOURCE_DIR}/dependencies/easyloggingpp/src/easylogging++.h"
+    "${easyloggingpp_SOURCE_DIR}/src/easylogging++.cc"
+    "${easyloggingpp_SOURCE_DIR}/src/easylogging++.h"
     "${PROJECT_SOURCE_DIR}/main.cpp"
 )
 add_executable(Carina ${ALL_SRCS})
@@ -52,7 +61,7 @@ if (WIRINGPI_AVAILABLE)
 endif()
 target_include_directories(Carina PUBLIC
     "${PROJECT_SOURCE_DIR}/dependencies"
-    "${PROJECT_SOURCE_DIR}/dependencies/easyloggingpp/src"
+    "${easyloggingpp_SOURCE_DIR}/src"
     "${PROJECT_SOURCE_DIR}/src/L1/entities"
     "${PROJECT_SOURCE_DIR}/src/L2/usecases"
     "${PROJECT_SOURCE_DIR}/src/L3/controllers"
