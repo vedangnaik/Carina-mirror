@@ -2,22 +2,21 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock-matchers.h>
-#include "Actuator.h"
+#include "DummyActuator.h"
 
 class ActuatorTest : public ::testing::Test {
 protected:
-    Actuator a = Actuator("act1", "act1name");
+    DummyActuator a = DummyActuator("act1");
 };
 
 TEST_F(ActuatorTest, BasicProperties) {
     ASSERT_EQ(a.id, "act1");
-    EXPECT_EQ(a.name, "act1name");
-    ASSERT_EQ(a.status, false);
+    ASSERT_EQ(a.state, false);
 }
 
 TEST_F(ActuatorTest, ChangingStatus) {
-    this->a.status = true;
-    ASSERT_EQ(this->a.status, true);
-    this->a.status = false;
-    ASSERT_EQ(this->a.status, false);
+    this->a.state = true;
+    ASSERT_EQ(this->a.state, true);
+    this->a.state = false;
+    ASSERT_EQ(this->a.state, false);
 }
