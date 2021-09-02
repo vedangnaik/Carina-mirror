@@ -16,6 +16,7 @@ jobs:
         run: |
           g++ --version
           gcc --version
+          cmake --version
       
       # Install Qt with this very nice community action.
       - name: Install Qt
