@@ -11,8 +11,8 @@ jobs:
     name: Build and test
     runs-on: ubuntu-20.04
     steps:
-      # Log compiler versions, just for the record.
-      - name: Check compiler versions
+      # Log versions, just for the record.
+      - name: Check compiler and cmake versions
         run: |
           g++ --version
           gcc --version
@@ -22,24 +22,24 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
       
-      # Checkout our code and the latest official googletest release.
-      - name: Checkout our code
+      # Checkout our code.
+      - name: Checkout Carina
         uses: actions/checkout@v2
         with:
           path: "Carina/"
-      - name: Checkout latest release of googletest
-        run: git clone https://github.com/google/googletest.git -b release-1.10.0
       
-      # Make the build directory and build app and tests.
+      # Make the build directory.
       - name: Make build directory
         run: |
           cd $GITHUB_WORKSPACE/Carina
           mkdir $GITHUB_WORKSPACE/Carina/build
-      - name: Include googletest and build
+          
+      # Generate the Makefile and build the tests.
+      - name: Generate Makefile and build
         run: |
           cd $GITHUB_WORKSPACE/Carina/build
-          $Qt5_DIR/bin/qmake $GITHUB_WORKSPACE/Carina/tests/tests.pro
-          make
+          cmake -S .. -B .
+          cmake --build . --target tests
           ls
       
       # Actually run all tests with googletest.
