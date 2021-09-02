@@ -1,7 +1,6 @@
 <h1 align="center">Carina</h1>
 <p align="center">
     <img src="https://github.com/UTATRocketry/Carina/workflows/Unit%20Tests/badge.svg">
-    <img src="https://github.com/UTATRocketry/Carina/workflows/Make%20release/badge.svg">
 </p>
 
 [Avionics] Carina: The new and improved user interface and driver software for the UTAT Ground Station.
@@ -20,38 +19,94 @@ This file consists of three main sections: `sensors`, `actuators`, and `states`
 ```
 {
     "sensors": { ... },
-        "id1": { ... },
-        "id2": { ... }
+        "sens1": { ... },
+        "sens2": { ... },
+        ...
     },
     "actuators": {
-        "id3": { ... },
-        "id4": { ... },
-        "id5": { ... }
+        "act1": { ... },
+        "act2": { ... },
+        "act3": { ... },
+        ...
     },
     "states": {
         "start": { ... },
-        "id7": { ... },
-        "id1": { ... }
+        "state1": { ... },
+        "state2": { ... },
+        ...
     }
 }
 ```
 Each section consists of JSON objects with fields specific to that type (i.e. `sensor` objects will have different fields from `state` objects). These fields will be elaborated upon in their respective sections. However, all such objects contain an **id**, or identification field. These ids **must be unique** and these unique names **must be provided by you**. Also, note that the `states` section **must** have one state with id `"start"`. Failure to do any of these things will currently result in **unrealiable** behaviour.
 
 ### Sensors
-Only sensors which output a single floating-point value are currently supported. A `sensor` object has the following fields:
-* `name`: The name of this sensor.
+Only sensors which output a single floating-point value are currently supported. All `sensor` objects must have a `calibration` field and a `type` field. The former is a JSON array of at least two elements, wherein each element is itself a JSON array of two elements, the first being the raw voltage value from the sensor, and the second being the physical value that it corresponds to. The latter is the field which specifies what type of sensor this object is. Different objects have different fields. The types listed below are currently supported.
+
+#### DummySensor
+These are fake 'virtual' sensors that are always available as part of Carina. They are useful for sanity-checking and testing processes without having to connect the full electronics system. In this example, this sensor will always output zero since its calibration ties all raw 'voltages' to zero.
 ```
-"id1": { 
-  "name": "Pressure Sensor 1"
+"sens1": {
+    "type": "DummySensor",
+    "calibration": [
+        [1, 0],
+        [2, 0],
+        [3, 0],
+        [4, 0],
+        [5, 0]
+    ]
+}
+```
+
+#### AnalogMCCDAQSensor
+These represent any sensors connected to a MCC data acquisition device. This type of sensor is only available when Carina is compiled with the `-DULDAQ_AVAILABLE=True` option. In addition to the usual fields, it has two more:
+* `uniqueId` is the unique identifier of the DAQ device. This can be found by running `./AInScan` from the [MCCDAQ repository](https://github.com/mccdaq/uldaq/blob/master/examples/AInScan.c).
+* `channel` is a non-negative integer which indicates to which channel on the DAQ the sensor is connected to.
+
+```
+"sens2": {
+    "type": "AnalogMCCDAQSensor",
+    "calibration": [
+        ...
+    ],
+    "uniqueId": <id here>,
+    "channel": <channel here>,
 }
 ```
 
 ### Actuators
-Only actuators which have two states (open/close, etc.) are currently supported. An `actuator` object has the following fields:
-* `name`: The name of this actuator.
+Only actuators which have two states (open/close, etc.) are currently supported. Similar to the sensors, all `actuator` objects have the `type` field, which specifies what type they are. The listed types are currently supported.
+
+#### DummyActuator
+Similar to DummySensor, this is a 'virtual' actuator which can be used for sanity-checking and testing processes without connecting all the electronics. It has no fields other than `type`.
 ```
-"id3": { 
-  "name": "Vent Valve Actuator"
+"act1": { 
+  "type": "DummyActuator"
+}
+```
+
+#### PCA9685Actuator
+This represents an actuator connected via the 16-channel [PCA9685 Servo Driver](https://learn.adafruit.com/16-channel-pwm-servo-driver?view=all). This type of actuator is only available when Carina is compiled with the `-DWIRINGPI_AVAILABLE=True` flag, and will likely only work on a Raspberry Pi or similar. It has the following extra fields:
+* `channel` is a non-negative integer which indicates which channel of the PCA9685 this servo is connected to.
+* `openAngle` is a float which indicates the angle at which this servo is considered 'open'.
+* `closeAngle` is the same as the above but for the 'closed' state.
+* `servoMin`is a float which indicates the minimum angle the servo can take.
+* `servoMax` is the same as the above but for the maximum angle.
+* `angleMin` ??? TODO
+* `angleMax` ??? TODO
+* `boardID` is a special, non-negative integer. If there are multiple actuators connected to the same physical PCA9685 board, then they must have the same value for this field. It can be any integer; the value itself doesn't matter.
+* `boardAddr` is the I2C address of this board. If it is not provided, the default address of `0x40` will be used.
+```
+"act2": {
+    "type": "DummyActuator",
+    "channel": 1,
+    "openAngle": 0,
+    "closeAngle": 90.0,
+    "servoMin": 0,
+    "servoMax": 180,
+    "angleMin": 0,
+    "angleMax": 360,
+    "boardID": 1,
+    "boardAddr": 64
 }
 ```
 
@@ -158,7 +213,6 @@ Now, you will need to set up the dependencies:
 1. Install Qt5 and Qt Creator from the [official website](https://www.qt.io/download). Make sure to download Qt v5.xx (this should be the default).
 2. Install and set up Git for Linux by following the steps [here](https://www.atlassian.com/git/tutorials/install-git). Note that some distros come with Git pre-installed; you can check this by typing `git --version` into a terminal. If you get a version number, then you can skip this step. You may also have to install `gcc, g++, make` and other tools; the terminal will tell you how to do so.
 3. Install MCC Universal Library. This is used to communicate with MCC devices. Install it by following the steps [here](https://github.com/mccdaq/uldaq).
-4. Install Googletest. This is the testing framework used by Carina. Clone [this repository](https://github.com/google/googletest) into the same directory `Carina` is in.
 
 ### Build
 Now that you have a Linux environment and all the dependencies set up, you can build Carina. To do so, do the following in a terminal:
@@ -171,9 +225,10 @@ cd build
 cmake -S .. -B . -DULDAQ_AVAILABLE=True -DWIRINGPI_AVAILABLE=True
 # The previous step created a Makefile for the Linux target. This will start the build process. This may take a few minutes.
 make
-./Carina
+./Carina # To run the main UI
+./tests  # To run the unit tests
 ```
-If you're using Qt Creator for development, click 'Open Project' and select `CMakeLists.txt`. Qt Creator will configure itself appropriately and the green 'Play' button at the bottom right will automatically run a variant of the steps above. However, running them manually first is recommended to ensure that everything is installed properly.
+If you're using Qt Creator for development, click 'Open Project' and select `CMakeLists.txt`. Qt Creator will configure itself appropriately and the green 'Play' button at the bottom right will automatically run a variant of the steps above. However, running them manually first is recommended to ensure that everything is installed properly. The first time may take a while, since CMake will download `easyloggingpp` and `googletest`. The former is used by Carina for logging, and the latter for unit tests.
 
 ## Contributing
 Avionics uses the ClickUp tool for keeping track of new features to add, progress, and other relevant information. The list can be found [here](https://app.clickup.com/t/1g3n9t). If you cannot access this, please see the [Contact](#contact) section and ask the concerned people to add you to the Clickup.
