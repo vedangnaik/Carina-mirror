@@ -18,14 +18,16 @@
  public:
      AnalogMCCDAQSensor(const std::string& deviceID,
                         const std::vector<std::pair<double, double>>& calibrationPoints,
-                        unsigned int channelConnectedTo,
-                        DaqDeviceHandle handle);
+                        DaqDeviceDescriptor descriptor,
+                        unsigned int channelConnectedTo);
+     ~AnalogMCCDAQSensor();
      void startAcquisition() override;
      double getLatestData() override;
      void stopAcquisition() override;
  private:
      // config vars
-     const DaqDeviceHandle handle;
+     const DaqDeviceDescriptor descriptor;
+     DaqDeviceHandle handle;
      const unsigned int channelConnectedTo;
      long long numChannels;
      const unsigned int samplesPerChannel = 100;
