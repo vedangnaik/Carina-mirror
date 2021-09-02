@@ -1,6 +1,6 @@
 <h1 align="center">Carina</h1>
 <p align="center">
-    <img src="https://github.com/UTATRocketry/Carina/workflows/Build%20and%20test/badge.svg">
+    <img src="https://github.com/UTATRocketry/Carina/workflows/Unit%20Tests/badge.svg">
     <img src="https://github.com/UTATRocketry/Carina/workflows/Make%20release/badge.svg">
 </p>
 
