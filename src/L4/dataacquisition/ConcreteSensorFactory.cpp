@@ -29,26 +29,39 @@ ConcreteSensorFactory::createDummySensor(const std::string &id, const QVariantMa
 Sensor*
 ConcreteSensorFactory::createAnalogMCCDAQSensor(const std::string &id, const QVariantMap &args) {
 #ifdef ULDAQ_AVAILABLE
-    // Retrieve the handle
-    Helpers::checkForKeyAndConversionValidity(args, "handle", QMetaType::LongLong, id + ": Analog MCCDAQ sensor must contain a valid numeric MCC device 'handle'.");
-    DaqDeviceHandle handle = (DaqDeviceHandle)args["handle"].toLongLong();
+    // Retrieve the DAQDeviceDescriptorUniqueId. See https://www.mccdaq.com/PDFs/Manuals/UL-Linux/c/struct_daq_device_descriptor.html#a4e17bf9c02805011a7b5b02c4944f031.
+    Helpers::checkForKeyAndConversionValidity(args, "uniqueID", QMetaType::QString, id + ": Analog MCCDAQ sensor must contain a valid numeric MCC device ID 'uniqueId'.");
+    std::string uniqueId = args["uniqueID"].toString().toStdString();
 
     // Retrieve the channel this is connected to
     Helpers::checkForKeyAndConversionValidity(args, "channel", QMetaType::UInt, id + ": Analog MCCDAQ sensor must contain a valid positive integer 'channel'.");
     unsigned int channelConnectedTo = args["channel"].toUInt();
 
-    // If this DAQ has already been connected, leave it. Connecting twice appears to actually disconnect the DAQ.
-    int isConnected;
-    ulIsDaqDeviceConnected(handle, &isConnected);
-    if (isConnected == 0) {
-        UlError err = ulConnectDaqDevice(handle);
-        if (err != ERR_NO_ERROR) {
-            throw std::runtime_error(id + ": Unable to connect to MCC device with handle '" + std::to_string(handle) + "'.");
+    // Get the number and descriptors of connected devices here.
+    std::vector<DaqDeviceDescriptor> devDescriptors;
+    unsigned int numDAQDevicesDetected = 0;
+    UlError err = ulGetDaqDeviceInventory(ANY_IFC, devDescriptors.data(), &numDAQDevicesDetected);
+    if (err != ERR_NO_ERROR) {
+        throw std::runtime_error("Failed to get inventory of connected MCC devices. Please check your physical connections and platform's uldaq library.");
+    }
+
+    // No DAQS are found, complain.
+    if (numDAQDevicesDetected == 0) {
+        throw std::runtime_error("Unable to find any connected MCC devices.");
+    }
+
+    // Populate the vector of descriptors by calling this function again with the right number of connected daqs.
+    devDescriptors.reserve(numDAQDevicesDetected);
+    err = ulGetDaqDeviceInventory(ANY_IFC, devDescriptors.data(), &numDAQDevicesDetected);
+
+    // Iterate through all connected devices and check if any of them match the provided uniqueId. If so, create it.
+    for (unsigned int i = 0; i < numDAQDevicesDetected; i++) {
+        if (std::string(devDescriptors[i].uniqueId) == uniqueId) {
+            return new AnalogMCCDAQSensor(id, Helpers::parseCalibrationPointsFromArgs(id, args), devDescriptors[i], channelConnectedTo);
         }
     }
 
-    // Create the thing
-    return new AnalogMCCDAQSensor(id, Helpers::parseCalibrationPointsFromArgs(id, args), channelConnectedTo, handle);
+    throw std::runtime_error("No MCC device with uniqueId '" + uniqueId + "' found.");
 #else
     throw std::domain_error(id + ": This Carina has not been compiled to support AnalogMCCDAQSensors. Please recompile with the -DULDAQ_AVAILABLE flag and ensure uldaq.h is available on your platform.");
 #endif

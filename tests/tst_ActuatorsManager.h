@@ -1,36 +1,40 @@
 #pragma once
 
 #include <gtest/gtest.h>
-#include <gmock/gmock-matchers.h>
+#include "DummyActuator.h"
 #include "ActuatorsManager.h"
 #include "ActuatorsPresenter.h"
 
 class ActuatorsManagerTest : public ::testing::Test {
 protected:
-    std::vector<std::string> testActuatorIDs = {"act1", "act2", "act3"};
-    ActuatorsPresenter ap = ActuatorsPresenter();
-    ActuatorsManager am = ActuatorsManager({
-       {"act1", Actuator("act1", "act1name")},
-       {"act2", Actuator("act2", "act2name")},
-       {"act3", Actuator("act3", "act3name")}
-   }, ap);
+    void SetUp() override {
+        std::unordered_map<std::string, std::unique_ptr<Actuator>> t;
+        t.insert({"act1", std::unique_ptr<Actuator>(new DummyActuator("act1"))});
+        t.insert({"act2", std::unique_ptr<Actuator>(new DummyActuator("act2"))});
+        t.insert({"act3", std::unique_ptr<Actuator>(new DummyActuator("act3"))});
+        this->am = std::make_unique<ActuatorsManager>(t, ap);
+    }
+
+    ActuatorsPresenter ap;
+    std::unique_ptr<ActuatorsManager> am;
 };
 
 // Assuming correct initialization, that members, etc. are in the right state.
 TEST_F(ActuatorsManagerTest, BasicProperties) {
-    for (const auto& id : this->testActuatorIDs) {
-        // Do nothing here: if it crashes, it "failed" the test :D
-        this->am.getActuatorStatus(id);
-        this->am.actuate(id);
-    }
+     this->am->getActuatorStatus("act1");
+     this->am->setState("act1", false);
+     this->am->getActuatorStatus("act2");
+     this->am->setState("act2", false);
+     this->am->getActuatorStatus("act3");
+     this->am->setState("act3", false);
 }
 
 TEST_F(ActuatorsManagerTest, getActuatorStatus_fail) {
-    EXPECT_DEATH(this->am.getActuatorStatus("nonExistantID"), "");
-    EXPECT_DEATH(this->am.getActuatorStatus("anotherNonExistantID"), "");
+    EXPECT_DEATH(this->am->getActuatorStatus("nonExistantID"), "");
+    EXPECT_DEATH(this->am->getActuatorStatus("anotherNonExistantID"), "");
 }
 
 TEST_F(ActuatorsManagerTest, actuateTest_fail) {
-    EXPECT_DEATH(this->am.actuate("nonExistantID"), "");
-    EXPECT_DEATH(this->am.actuate("anotherNonExistantID"), "");
+    EXPECT_DEATH(this->am->setState("nonExistantID", false), "");
+    EXPECT_DEATH(this->am->setState("anotherNonExistantID", false), "");
 }
