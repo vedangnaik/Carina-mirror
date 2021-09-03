@@ -53,6 +53,10 @@ Actuator *ConcreteActuatorFactory::createPCA9685Actuator(const std::string &id, 
             LOG(WARNING) << id << ": 'boardAddr' field for PWM servo driver board is either missing or invalid. Using default address of 0x40.";
             servoDriverBoard = new Adafruit_PWMServoDriver();
         }
+        // Start the board here. TODO: May not be the best place to do this.
+        servoDriverBoard.begin();
+        servoDriverBoard.setOscillatorFrequency(27000000);
+        servoDriverBoard.setPWMFreq(50.0);
         // Add it to the cache here
         cachedServoDriverBoards.insert({boardID, servoDriverBoard});
     }
