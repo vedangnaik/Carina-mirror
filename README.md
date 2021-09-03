@@ -223,10 +223,12 @@ cd build
 # Omit -DULDAQ_AVAILABLE=True if uldaq.h is not needed or present.
 # Omit -DWIRINGPI_AVAILABLE=True if wiringpi is not present or needed.
 cmake -S .. -B . -DULDAQ_AVAILABLE=True -DWIRINGPI_AVAILABLE=True
-# The previous step created a Makefile for the Linux target. This will start the build process. This may take a few minutes.
-make
-./Carina # To run the main UI
-./tests  # To run the unit tests
+# To build and run the main UI:
+cmake --build . --target Carina
+./Carina
+# To build and run the tests
+cmake --build . --target tests
+./tests
 ```
 If you're using Qt Creator for development, click 'Open Project' and select `CMakeLists.txt`. Qt Creator will configure itself appropriately and the green 'Play' button at the bottom right will automatically run a variant of the steps above. However, running them manually first is recommended to ensure that everything is installed properly. The first time may take a while, since CMake will download `easyloggingpp` and `googletest`. The former is used by Carina for logging, and the latter for unit tests.
 
