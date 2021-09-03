@@ -30,8 +30,8 @@ Sensor*
 ConcreteSensorFactory::createAnalogMCCDAQSensor(const std::string &id, const QVariantMap &args) {
 #ifdef ULDAQ_AVAILABLE
     // Retrieve the DAQDeviceDescriptorUniqueId. See https://www.mccdaq.com/PDFs/Manuals/UL-Linux/c/struct_daq_device_descriptor.html#a4e17bf9c02805011a7b5b02c4944f031.
-    Helpers::checkForKeyAndConversionValidity(args, "uniqueID", QMetaType::QString, id + ": Analog MCCDAQ sensor must contain a valid numeric MCC device ID 'uniqueId'.");
-    std::string uniqueId = args["uniqueID"].toString().toStdString();
+    Helpers::checkForKeyAndConversionValidity(args, "uniqueId", QMetaType::QString, id + ": Analog MCCDAQ sensor must contain a valid numeric MCC device ID 'uniqueId'.");
+    std::string uniqueId = args["uniqueId"].toString().toStdString();
 
     // Retrieve the channel this is connected to
     Helpers::checkForKeyAndConversionValidity(args, "channel", QMetaType::UInt, id + ": Analog MCCDAQ sensor must contain a valid positive integer 'channel'.");
