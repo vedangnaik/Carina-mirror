@@ -41,9 +41,6 @@ ConcreteSensorFactory::createAnalogMCCDAQSensor(const std::string &id, const QVa
     std::vector<DaqDeviceDescriptor> devDescriptors;
     unsigned int numDAQDevicesDetected = 0;
     UlError err = ulGetDaqDeviceInventory(ANY_IFC, devDescriptors.data(), &numDAQDevicesDetected);
-    if (err != ERR_NO_ERROR) {
-        throw std::runtime_error("Failed to get inventory of connected MCC devices. Please check your physical connections and platform's uldaq library.");
-    }
 
     // No DAQS are found, complain.
     if (numDAQDevicesDetected == 0) {
@@ -53,6 +50,9 @@ ConcreteSensorFactory::createAnalogMCCDAQSensor(const std::string &id, const QVa
     // Populate the vector of descriptors by calling this function again with the right number of connected daqs.
     devDescriptors.reserve(numDAQDevicesDetected);
     err = ulGetDaqDeviceInventory(ANY_IFC, devDescriptors.data(), &numDAQDevicesDetected);
+    if (err != ERR_NO_ERROR) {
+        throw std::runtime_error("Failed to get inventory of connected MCC devices. Please check your physical connections and platform's uldaq library.");
+    }
 
     // Iterate through all connected devices and check if any of them match the provided uniqueId. If so, create it.
     for (unsigned int i = 0; i < numDAQDevicesDetected; i++) {
