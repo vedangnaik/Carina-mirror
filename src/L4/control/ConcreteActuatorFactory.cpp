@@ -2,6 +2,7 @@
 
 std::unordered_map<std::string, Actuator* (*)(const std::string&, const QVariantMap&)> ConcreteActuatorFactory::factoryMap = {
     {"DummyActuator", &ConcreteActuatorFactory::createDummyActuator},
+    {"SolenoidActuator", &ConcreteActuatorFactory::createSolenoidActuator},
     {"PCA9685Actuator", &ConcreteActuatorFactory::createPCA9685Actuator},
 };
 
@@ -24,6 +25,12 @@ Actuator* ConcreteActuatorFactory::createActuator(const std::string& id, const Q
 
 Actuator *ConcreteActuatorFactory::createDummyActuator(const std::string &id, const QVariantMap &args) {
     return new DummyActuator(id);
+}
+
+Actuator *ConcreteActuatorFactory::createSolenoidActuator(const std::string &id, const QVariantMap &args) {
+#ifdef WIRINGPI_AVAILABLE
+    return new SolenoidActuator(id, args["relayChannel"].toUInt(), args["gpioPin"].toUInt(), args["nominallyPowered"].toBool());
+#endif
 }
 
 Actuator *ConcreteActuatorFactory::createPCA9685Actuator(const std::string &id, const QVariantMap &args) {
