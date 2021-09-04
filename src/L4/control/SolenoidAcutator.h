@@ -4,6 +4,7 @@
 
 #include "Actuator.h"
 #include "easylogging++.h"
+#include <wiringPi.h>
 
 class SolenoidActuator : public Actuator {
 public:

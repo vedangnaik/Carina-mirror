@@ -6,6 +6,7 @@
 #include "DummyActuator.h"
 #ifdef WIRINGPI_AVAILABLE
 #include "SolenoidActuator.h"
+#include <wiringPi.h>
 #include "PCA9685Actuator.h"
 #include "Adafruit_PWMServoDriver.h"
 #endif
