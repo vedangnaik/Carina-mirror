@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 
 ###
-# 2. Set up Qt and it's custom compilation steps.
+# 2. Set up Qt and its custom compilation steps.
 ###
 set(CMAKE_PREFIX_PATH "/usr/lib/x86_64-linux-gnu")
 find_package(Qt5Widgets REQUIRED)

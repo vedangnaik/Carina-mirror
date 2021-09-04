@@ -63,6 +63,7 @@ ConcreteSensorFactory::createAnalogMCCDAQSensor(const std::string &id, const QVa
 
     throw std::runtime_error("No MCC device with uniqueId '" + uniqueId + "' found.");
 #else
+    (void)args; // "Use" this to stop the compiler yelling.
     throw std::domain_error(id + ": This Carina has not been compiled to support AnalogMCCDAQSensors. Please recompile with the -DULDAQ_AVAILABLE flag and ensure uldaq.h is available on your platform.");
 #endif
 }
