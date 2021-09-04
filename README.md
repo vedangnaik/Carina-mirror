@@ -110,6 +110,9 @@ This represents an actuator connected via the 16-channel [PCA9685 Servo Driver](
 }
 ```
 
+#### SolenoidActuator
+TODO
+
 ### States
 `State` objects are the building blocks out of which processes are built. A 'Process' in Carina is a set of `state` objects which can be progressed through in a logical, controllable manner with automatic assistance of the software. A `state` object has the following fields:
 * `"name"`: The name of this state.
