@@ -1,6 +1,9 @@
 #include <QApplication>
 #include "GSManager.h"
 #include "easylogging++.h"
+#ifdef WIRINGPI_AVAILABLE
+#include <wiringPi.h>
+#endif
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -29,6 +32,11 @@ int main(int argc, char *argv[]) {
     defaultConf.setGlobally(el::ConfigurationType::Filename, now + "_data.log");
     defaultConf.setGlobally(el::ConfigurationType::ToStandardOutput, "false");
     el::Loggers::reconfigureLogger("sensorValueLogger", defaultConf);
+
+    // Globally set up wiringPi if required.
+#ifdef WIRINGPI_AVAILABLE
+    wiringPiSetup();
+#endif
 
     // Start the QApplication. Logging can be used immediately.
     QApplication a(argc, argv);

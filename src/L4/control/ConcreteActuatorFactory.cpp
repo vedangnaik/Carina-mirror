@@ -29,8 +29,9 @@ Actuator *ConcreteActuatorFactory::createDummyActuator(const std::string &id, co
 
 Actuator *ConcreteActuatorFactory::createSolenoidActuator(const std::string &id, const QVariantMap &args) {
 #ifdef WIRINGPI_AVAILABLE
-    std::wiringPiSetup();
     return new SolenoidActuator(id, args["relayChannel"].toUInt(), args["gpioPin"].toUInt(), args["nominallyPowered"].toBool());
+#else
+    throw std::domain_error(id + ": This Carina has not been compiled to support solenoid actuators. Please recompile with the -DWIRINGPI_AVAILABLE flag and ensure wiringPiI2C.h is available on your platform.");
 #endif
 }
 
