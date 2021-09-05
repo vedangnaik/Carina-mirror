@@ -19,7 +19,7 @@ class RecalibrationWindow : public QDialog
 
 public:
     explicit RecalibrationWindow(Sensor* sensor, QWidget *parent = nullptr);
-    ~RecalibrationWindow();
+    ~RecalibrationWindow() override;
 
 private:
     void accept() override;
