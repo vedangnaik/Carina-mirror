@@ -8,12 +8,13 @@
 
 class SolenoidActuator : public Actuator {
 public:
-    SolenoidActuator(std::string id, uint8_t relayChannel, uint8_t gpioPin, bool nominallyPowered);
+    SolenoidActuator(std::string deviceID, uint8_t relayChannel, uint8_t gpioPin, bool nominallyPowered);
     void setState(bool state) override;
 private:
     void setDigitalPin(uint8_t pin, bool turnRelayChannelOn);
-    uint8_t gpioPin;
-    bool nominallyPowered;
+    const uint8_t gpioPin;
+    const uint8_t relayChannel;
+    const bool nominallyPowered;
 };
 
 #endif
