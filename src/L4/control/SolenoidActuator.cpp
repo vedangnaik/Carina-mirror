@@ -14,23 +14,42 @@ void SolenoidActuator::setState(const bool state) {
      * - solenoid nominally open or closed
     */
     this->state = state;
-    if (this->state == nominallyPowered) {
-        LOG(INFO) << "Solenoid '" << this->id << "' at relay channel " << relayChannel << " is now turned OFF.";
+    if (this->state) {  //  this->state == this->nominallyPowered
+        LOG(INFO) << "Solenoid '" << this->id << "' at relay channel " << std::to_string(this->relayChannel) << " is now turned ON.";  // OFF
     } else {
-        LOG(INFO) << "Solenoid '" << this->id << "' at relay channel " << relayChannel << " is now turned ON.";
+        LOG(INFO) << "Solenoid '" << this->id << "' at relay channel " << std::to_string(this->relayChannel) << " is now turned OFF.";  // ON
     }
 
-    setDigitalPin(gpioPin, this->state);
+    setDigitalPin(this->gpioPin, this->state);
 }
 
 void SolenoidActuator::setDigitalPin(uint8_t pin, bool turnRelayChannelOn) {
     // https://www.digikey.ca/en/maker/blogs/2019/how-to-use-gpio-on-the-raspberry-pi-with-c
-    pinMode(pin, OUTPUT);
+    // pinMode(pin, OUTPUT);
+    std::string s1 = "gpio -g mode ";
+    std::string s2 = "gpio -g write ";
+    
+    std::string output = " output";
+    std::string high = " 1";
+    std::string low = " 0";
+
+    std::string s_set_mode = s1 + std::to_string(pin) + output;
+    const char * set_mode = s_set_mode.c_str();
+    
+    std::string s_set_high = s2 + std::to_string(pin) + high;
+    const char * set_high = s_set_high.c_str();
+    
+    std::string s_set_low = s2 + std::to_string(pin) + low;
+    const char * set_low = s_set_low.c_str();
+    
+    system(set_mode);
 
     if (turnRelayChannelOn) {
-        digitalWrite(pin, 0);  // yes, activating the channel means pulling it to ground
+        // digitalWrite(pin, 0);  // yes, activating the channel means pulling it to ground
+        system(set_low);
     } else {
-        digitalWrite(pin, 1);
+        // digitalWrite(pin, 1);
+        system(set_high);
     }
 }
 
