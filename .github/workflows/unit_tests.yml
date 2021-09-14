@@ -38,7 +38,7 @@ jobs:
       - name: Generate Makefile and build
         run: |
           cd $GITHUB_WORKSPACE/Carina/build
-          cmake -S .. -B .
+          cmake -S .. -B . -DGOOGLETEST_REQUIRED=True
           cmake --build . --target tests
           ls
       
