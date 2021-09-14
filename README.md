@@ -222,11 +222,14 @@ mkdir build
 cd build
 # Omit -DULDAQ_AVAILABLE=True if uldaq.h is not needed or present.
 # Omit -DWIRINGPI_AVAILABLE=True if wiringpi is not present or needed.
-cmake -S .. -B . -DULDAQ_AVAILABLE=True -DWIRINGPI_AVAILABLE=True
+# Omit -DGOOGLETEST_REQUIRED=True if unit tests are not desired. 
+#   An Internet connection is required if this option is present.
+cmake -S .. -B . -DULDAQ_AVAILABLE=True -DWIRINGPI_AVAILABLE=True -DGOOGLETEST_REQUIRED=True
 # To build and run the main UI:
 cmake --build . --target Carina
 ./Carina
 # To build and run the tests
+#   This requires -DGOOGLETEST_REQUIRED=True to be present.
 cmake --build . --target tests
 ./tests
 ```
@@ -247,4 +250,4 @@ GitHub has some good guides about forking, pull requests, etc. Please review the
 
 
 ## Contact
-Please contact @Ammol or @Vedang on the UTAT Rocketry Slack for any help, questions, etc. 
+Please contact `@Hamza` or `@Cathy Feng` on the UTAT Rocketry Slack for any help, questions, etc. 
