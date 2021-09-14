@@ -20,19 +20,7 @@ set(CMAKE_AUTORCC ON)
 
 
 ###
-# 3. Fetch easyloggingpp.
-###
-include(FetchContent)
-FetchContent_Declare(
-        easyloggingpp
-        GIT_REPOSITORY https://github.com/amrayn/easyloggingpp.git
-)
-FetchContent_MakeAvailable(easyloggingpp) # At this point, the variable easyloggingpp_SOURCE_DIR points to the base of the easyloggingpp repository.
-
-
-
-###
-# 4. Set up variables for conditional compilation of uldaq and Raspberry Pi-specific files.
+# 4. Set up variables for conditional compilation of uldaq, Raspberry Pi-specific files, and unit tests.
 ###
 if (ULDAQ_AVAILABLE)
     message("Compiling with MCCDAQ Uldaq support...")
@@ -41,6 +29,10 @@ endif()
 if (WIRINGPI_AVAILABLE)
     message("Compiling with WiringPi support...")
     add_definitions(-DWIRINGPI_AVAILABLE=1)
+endif()
+if (GOOGLETEST_REQUIRED)
+    message("Compiling unit tests with googletest...")
+    add_definitions(-DGOOGLETEST_REQUIRED=1)
 endif()
 
 
@@ -60,13 +52,12 @@ set(COMMON_SRCS ${COMMON_SRCS}
     "${PROJECT_SOURCE_DIR}/dependencies/Adafruit_PWMServoDriver.h"
     "${PROJECT_SOURCE_DIR}/dependencies/Helpers.cpp"
     "${PROJECT_SOURCE_DIR}/dependencies/Helpers.h"
-    "${easyloggingpp_SOURCE_DIR}/src/easylogging++.cc"
-    "${easyloggingpp_SOURCE_DIR}/src/easylogging++.h"
+    "${PROJECT_SOURCE_DIR}/dependencies/easylogging++.cc"
+    "${PROJECT_SOURCE_DIR}/dependencies/easylogging++.h"
 )
 # Finally, all common include paths
 set(COMMON_INCLUDES
     "${PROJECT_SOURCE_DIR}/dependencies"
-    "${easyloggingpp_SOURCE_DIR}/src" # TODO: The tests need easyloggingpp too, see if it can be disabled.
     "${PROJECT_SOURCE_DIR}/src/L1/entities"
     "${PROJECT_SOURCE_DIR}/src/L2/usecases"
     "${PROJECT_SOURCE_DIR}/src/L3/controllers"
@@ -111,6 +102,7 @@ target_compile_options(Carina PRIVATE -Wall -Wextra -pedantic)
 ###
 # 7. Download and set up googletest.
 ###
+include(FetchContent)
 FetchContent_Declare(
         googletest
         URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
@@ -122,35 +114,35 @@ FetchContent_MakeAvailable(googletest)
 
 
 ###
-# 8. Set up tests.
+# 8. Set up tests if required.
 ###
-# Add googletest and testing headers to list of sources.
-add_executable(tests
-    ${COMMON_SRCS}
-    "${PROJECT_SOURCE_DIR}/tests/tests_main.cpp"
-    "${PROJECT_SOURCE_DIR}/tests/tst_ActuatorsManager.h"
-    "${PROJECT_SOURCE_DIR}/tests/tst_Actuator.h"
-    "${PROJECT_SOURCE_DIR}/tests/tst_Sensor.h"
-#    "${googletest_SOURCE_DIR}/googletest/src/gtest-all.cc"
-#    "${googletest_SOURCE_DIR}/googlemock/src/gmock-all.cc"
-)
+if (GOOGLETEST_REQUIRED)
+    # Add googletest and testing headers to list of sources.
+    add_executable(tests
+        ${COMMON_SRCS}
+        "${PROJECT_SOURCE_DIR}/tests/tests_main.cpp"
+        "${PROJECT_SOURCE_DIR}/tests/tst_ActuatorsManager.h"
+        "${PROJECT_SOURCE_DIR}/tests/tst_Actuator.h"
+        "${PROJECT_SOURCE_DIR}/tests/tst_Sensor.h"
+    )
 
-# Link Qt and googletest.
-target_link_libraries(tests Qt5::Widgets gtest_main)
-# Link uldaq if needed.
-if (ULDAQ_AVAILABLE)
-    target_link_libraries(tests uldaq)
-endif()
-# Link wiringPi if needed.
-if (WIRINGPI_AVAILABLE)
-    target_link_libraries(tests wiringPi)
-endif()
+    # Link Qt and googletest.
+    target_link_libraries(tests Qt5::Widgets gtest_main)
+    # Link uldaq if needed.
+    if (ULDAQ_AVAILABLE)
+        target_link_libraries(tests uldaq)
+    endif()
+    # Link wiringPi if needed.
+    if (WIRINGPI_AVAILABLE)
+        target_link_libraries(tests wiringPi)
+    endif()
 
-# Add include paths.
-target_include_directories(tests PUBLIC
-    ${COMMON_INCLUDES}
-    "${googletest_SOURCE_DIR}/googletest"
-    "${googletest_SOURCE_DIR}/googletest/include"
-    "${googletest_SOURCE_DIR}/googlemock"
-    "${googletest_SOURCE_DIR}/googlemock/include"
-)
+    # Add include paths.
+    target_include_directories(tests PUBLIC
+        ${COMMON_INCLUDES}
+        "${googletest_SOURCE_DIR}/googletest"
+        "${googletest_SOURCE_DIR}/googletest/include"
+        "${googletest_SOURCE_DIR}/googlemock"
+        "${googletest_SOURCE_DIR}/googlemock/include"
+    )
+endif()
