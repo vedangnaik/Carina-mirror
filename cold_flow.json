@@ -1,0 +1,295 @@
+{
+    "sensors": {
+        "c0": {
+            "type": "AnalogMCCDAQSensor",
+            "calibration": [
+                [-7.98003, 0],
+                [-7.20228, 100],
+                [-6.40969, 200],
+                [-5.61005, 300],
+                [-4.78645, 400],
+                [-3.98525, 500],
+                [-3.19307, 600],
+                [-2.39048, 700],
+                [-1.57818, 800],
+                [-0.78929, 900],
+                [0.00267, 1000]
+            ],
+            "channel": 0,
+            "uniqueId": "01D72EAB"
+        },
+        "c1": {
+            "type": "AnalogMCCDAQSensor",
+            "calibration": [
+                [1.00471, 0],
+                [1.39259, 100],
+                [1.79337, 200],
+                [2.18754, 300],
+                [2.60636, 400],
+                [2.99156, 500],
+                [3.38139, 600],
+                [3.7839, 700],
+                [4.19111, 800],
+                [4.58948, 900],
+                [4.99528, 1000]
+            ],
+            "channel": 1,
+            "uniqueId": "01D72EAB"
+        },
+        "c2": {
+            "type": "AnalogMCCDAQSensor",
+            "calibration": [
+                [-8.38995, 0],
+                [-8.9932, 1.79169],
+                [-8.5185, 24.51667],
+                [-8.63541, 47.287],
+                [-8.74252, 67.92546],
+                [-8.84909, 88.551855],
+                [-8.95609, 108.97557],
+                [-9.06294, 129.38722],
+                [-9.17116, 150.18443],
+                [-9.2785, 170.82289]
+            ],
+            "channel": 2,
+            "uniqueId": "01D72EAB"
+        },
+        "c3": {
+            "type": "AnalogMCCDAQSensor",
+            "calibration": [
+                [-6.13161, 0],
+                [-6.14232, 1.79169],
+                [-6.25933, 24.51667],
+                [-6.37624, 47.287],
+                [-6.48273, 67.92546],
+                [-6.588, 88.551855],
+                [-6.69417, 108.97557],
+                [-6.79947, 129.38722],
+                [-6.90559, 150.18443],
+                [-7.01252, 170.82289]
+            ],
+            "channel": 3,
+            "uniqueId": "01D72EAB"
+        },
+        "c4": {
+            "type": "AnalogMCCDAQSensor",
+            "calibration": [
+                [-0.54899, 0],
+                [-0.56599, 1.79169],
+                [-0.74323, 24.51667],
+                [-0.91973, 47.287],
+                [-1.08154, 67.92546],
+                [-1.24319, 88.551855],
+                [-1.40853, 108.97557],
+                [-1.56811, 129.38722],
+                [-1.7259, 150.18443],
+                [-1.885, 170.82289]
+            ],
+            "channel": 4,
+            "uniqueId": "01D72EAB"
+        },
+        "c5": {
+            "type": "AnalogMCCDAQSensor",
+            "calibration": [
+                [-0.52476, 0],
+                [0.31922, 100],
+                [1.07766, 200],
+                [1.87677, 300],
+                [2.67537, 400],
+                [3.48356, 500],
+                [4.27082, 600],
+                [5.08055, 700],
+                [5.86434, 800],
+                [6.64489, 900],
+                [7.44998, 1000]
+            ],
+            "channel": 5,
+            "uniqueId": "01D72EAB"
+        },
+        "c6": {
+            "type": "AnalogMCCDAQSensor",
+            "calibration": [
+                [-0.4761, 0],
+                [0.36969, 100],
+                [1.17348, 200],
+                [1.94389, 300],
+                [2.74869, 400],
+                [3.53218, 500],
+                [4.32598, 600],
+                [5.11697, 700],
+                [5.9216, 800],
+                [6.70853, 900],
+                [7.51302, 1000]
+            ],
+            "channel": 6,
+            "uniqueId": "01D72EAB"
+        },
+        "c7": {
+            "type": "AnalogMCCDAQSensor",
+            "calibration": [
+                [-0.50631, 0],
+                [0.35529, 100],
+                [1.14334, 200],
+                [1.91557, 300],
+                [2.72248, 400],
+                [3.53204, 500],
+                [4.31649, 600],
+                [5.14133, 700],
+                [5.95467, 800],
+                [6.74623, 900],
+                [7.54823, 1000]
+            ],
+            "channel": 7,
+            "uniqueId": "01D72EAB"
+        }
+    },
+
+
+    "actuators": {
+		"red": {
+            "type": "PCA9685Actuator",
+            "channel": 2,
+            "openAngle": 90,
+            "closeAngle": 0,
+            "servoMin": 150,
+            "servoMax": 430,
+            "angleMin": 0,
+            "angleMax": 90,
+            "boardID": 1,
+            "boardAddr": 64
+        },
+        "blue": {
+            "type": "PCA9685Actuator",
+            "channel": 1,
+            "openAngle": 90,
+            "closeAngle": 0,
+            "servoMin": 140,
+            "servoMax": 450,
+            "angleMin": 0,
+            "angleMax": 90,
+            "boardID": 1,
+            "boardAddr": 64
+        },
+        "black": {
+            "type": "PCA9685Actuator",
+            "channel": 0,
+            "openAngle": 90,
+            "closeAngle": 0,
+            "servoMin": 245,
+            "servoMax": 480,
+            "angleMin": 0,
+            "angleMax": 90,
+            "boardID": 1,
+            "boardAddr": 64
+        },
+        "vent": {
+            "type": "SolenoidActuator",
+            "relayChannel": 8,
+            "gpioPin": 7,
+            "nominallyPowered": false
+        },
+        "dump": {
+            "type": "SolenoidActuator",
+            "relayChannel": 7,
+            "gpioPin": 12,
+            "nominallyPowered": false
+        },
+        "pneumatic": {
+            "type": "SolenoidActuator",
+            "relayChannel": 2,
+            "gpioPin": 8,
+            "nominallyPowered": true
+        },
+        "release": {
+            "type": "SolenoidActuator",
+            "relayChannel": 1,
+            "gpioPin": 21,
+            "nominallyPowered": false
+        }
+    },
+
+
+    "states": {
+        "start": {
+            "name": "S0: System Check: Sensors",
+            "safetyRating": "green",
+            "description": "S0: Test each sensor.",
+            "actions": [
+                {
+					"id": "c0"
+				},
+				{
+					"id": "c1"
+				},
+                {
+					"id": "c2"
+				},
+				{
+					"id": "c3"
+				},
+                {
+					"id": "c4"
+				},
+				{
+					"id": "c5"
+				},
+                {
+					"id": "c6"
+				},
+				{
+					"id": "c7"
+				}
+            ],
+            "transitions": {
+                "proceed": "S1",
+                "abort": null
+            }
+        },
+
+        "S1": {
+            "name": "S1: System Check: Actuators",
+            "safetyRating": "green",
+            "description": "S1: Test each actuator.",
+            "actions": [
+                {
+                    "id": "red",
+                    "timed": false,
+                    "automatic": true
+                },
+                {
+                    "id": "blue",
+                    "timed": false,
+                    "automatic": true
+                },
+                {
+                    "id": "black",
+                    "timed": false,
+                    "automatic": false
+                },
+                {
+                    "id": "vent",
+                    "timed": false,
+                    "automatic": false
+                },
+                {
+                    "id": "dump",
+                    "timed": false,
+                    "automatic": false
+                },
+                {
+                    "id": "pneumatic",
+                    "timed": false,
+                    "automatic": false
+                },
+                {
+                    "id": "release",
+                    "timed": false,
+                    "automatic": false
+                }
+            ],
+            "transitions": {
+                "proceed": null,
+                "abort": null
+            }
+        }
+    }
+}
