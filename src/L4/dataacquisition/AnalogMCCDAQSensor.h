@@ -20,7 +20,7 @@
                         const std::vector<std::pair<double, double>>& calibrationPoints,
                         DaqDeviceDescriptor descriptor,
                         unsigned int channelConnectedTo);
-     ~AnalogMCCDAQSensor();
+     ~AnalogMCCDAQSensor() override;
      void startAcquisition() override;
      double getLatestData() override;
      void stopAcquisition() override;

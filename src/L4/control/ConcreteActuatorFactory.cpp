@@ -2,6 +2,7 @@
 
 std::unordered_map<std::string, Actuator* (*)(const std::string&, const QVariantMap&)> ConcreteActuatorFactory::factoryMap = {
     {"DummyActuator", &ConcreteActuatorFactory::createDummyActuator},
+    {"SolenoidActuator", &ConcreteActuatorFactory::createSolenoidActuator},
     {"PCA9685Actuator", &ConcreteActuatorFactory::createPCA9685Actuator},
 };
 
@@ -25,6 +26,14 @@ Actuator* ConcreteActuatorFactory::createActuator(const std::string& id, const Q
 Actuator *ConcreteActuatorFactory::createDummyActuator(const std::string &id,  const QVariantMap &args) {
     (void)args; // "Use" this to stop the compiler yelling.
     return new DummyActuator(id);
+}
+
+Actuator *ConcreteActuatorFactory::createSolenoidActuator(const std::string &id, const QVariantMap &args) {
+#ifdef WIRINGPI_AVAILABLE
+    return new SolenoidActuator(id, args["relayChannel"].toUInt(), args["gpioPin"].toUInt(), args["nominallyPowered"].toBool());
+#else
+    throw std::domain_error(id + ": This Carina has not been compiled to support solenoid actuators. Please recompile with the -DWIRINGPI_AVAILABLE flag and ensure wiringPiI2C.h is available on your platform.");
+#endif
 }
 
 Actuator *ConcreteActuatorFactory::createPCA9685Actuator(const std::string &id, const QVariantMap &args) {
