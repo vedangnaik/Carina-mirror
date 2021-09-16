@@ -42,6 +42,8 @@ Actuator *ConcreteActuatorFactory::createPCA9685Actuator(const std::string &id, 
     Helpers::checkForKeyAndConversionValidity(args, "channel", QMetaType::UInt, id + ": PCA9685 actuator must contain a positive integer 'channel'.");
     Helpers::checkForKeyAndConversionValidity(args, "openAngle", QMetaType::Double, id + ": PCA9685 actuator must contain a valid real number 'openAngle'.");
     Helpers::checkForKeyAndConversionValidity(args, "closeAngle", QMetaType::Double, id + ": PCA9685 actuator must contain a valid real number 'closeAngle'.");
+    Helpers::checkForKeyAndConversionValidity(args, "overAngle", QMetaType::Double, id + ": PCA9685 actuator must contain a valid real number 'overAngle'.");
+    Helpers::checkForKeyAndConversionValidity(args, "overDelay", QMetaType::Int, id + ": PCA9685 actuator must contain a valid integer number 'overDelay'.");
     Helpers::checkForKeyAndConversionValidity(args, "servoMin", QMetaType::UInt, id + ": PCA9685 actuator must contain a positive integer 'servoMin'.");
     Helpers::checkForKeyAndConversionValidity(args, "servoMax", QMetaType::UInt, id + ": PCA9685 actuator must contain a positive integer 'servoMax'.");
     Helpers::checkForKeyAndConversionValidity(args, "angleMin", QMetaType::Double, id + ": PCA9685 actuator must contain a real number 'angleMin'.");
@@ -72,7 +74,7 @@ Actuator *ConcreteActuatorFactory::createPCA9685Actuator(const std::string &id, 
     }
 
     // 🥴
-    return new PCA9685Actuator(id, args["channel"].toUInt(), args["openAngle"].toDouble(), args["closeAngle"].toDouble(), args["servoMin"].toUInt(), args["servoMax"].toUInt(), args["angleMin"].toDouble(), args["angleMax"].toDouble(), std::shared_ptr<Adafruit_PWMServoDriver>(servoDriverBoard));
+    return new PCA9685Actuator(id, args["channel"].toUInt(), args["openAngle"].toDouble(), args["closeAngle"].toDouble(), args["overAngle"].toDouble(), args["overDelay"].toInt(), args["servoMin"].toUInt(), args["servoMax"].toUInt(), args["angleMin"].toDouble(), args["angleMax"].toDouble(), std::shared_ptr<Adafruit_PWMServoDriver>(servoDriverBoard));
 #else
     (void)args; // "Use" this to stop the compiler yelling.
     throw std::domain_error(id + ": This Carina has not been compiled to support PCA9685 actuators. Please recompile with the -DWIRINGPI_AVAILABLE flag and ensure wiringPiI2C.h is available on your platform.");
