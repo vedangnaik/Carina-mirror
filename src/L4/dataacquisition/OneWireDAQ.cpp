@@ -1,3 +1,4 @@
+/*
 #include "OneWireDAQ.h"
 #include <fstream>
 #include <sstream>
@@ -94,3 +95,4 @@ std::vector<double> OneWireDAQ::getLatestData()
 
     return values;
 }
+*/

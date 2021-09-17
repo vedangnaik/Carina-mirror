@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 #include "AbstractDAQ.h"
@@ -18,4 +19,5 @@ private:
     int gpioPin;
     std::string w1_file;
 };
+*/
 
