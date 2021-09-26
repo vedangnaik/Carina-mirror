@@ -98,7 +98,7 @@ target_include_directories(Carina PUBLIC ${COMMON_INCLUDES})
 target_compile_options(Carina PRIVATE -Wall -Wextra -pedantic)
 
 
-
+if (GOOGLETEST_REQUIRED)
 ###
 # 7. Download and set up googletest.
 ###
@@ -116,33 +116,32 @@ FetchContent_MakeAvailable(googletest)
 ###
 # 8. Set up tests if required.
 ###
-if (GOOGLETEST_REQUIRED)
-    # Add googletest and testing headers to list of sources.
-    add_executable(tests
-        ${COMMON_SRCS}
-        "${PROJECT_SOURCE_DIR}/tests/tests_main.cpp"
-        "${PROJECT_SOURCE_DIR}/tests/tst_ActuatorsManager.h"
-        "${PROJECT_SOURCE_DIR}/tests/tst_Actuator.h"
-        "${PROJECT_SOURCE_DIR}/tests/tst_Sensor.h"
-    )
+# Add googletest and testing headers to list of sources.
+add_executable(tests
+    ${COMMON_SRCS}
+    "${PROJECT_SOURCE_DIR}/tests/tests_main.cpp"
+    "${PROJECT_SOURCE_DIR}/tests/tst_ActuatorsManager.h"
+    "${PROJECT_SOURCE_DIR}/tests/tst_Actuator.h"
+    "${PROJECT_SOURCE_DIR}/tests/tst_Sensor.h"
+)
 
-    # Link Qt and googletest.
-    target_link_libraries(tests Qt5::Widgets gtest_main)
-    # Link uldaq if needed.
-    if (ULDAQ_AVAILABLE)
-        target_link_libraries(tests uldaq)
-    endif()
-    # Link wiringPi if needed.
-    if (WIRINGPI_AVAILABLE)
-        target_link_libraries(tests wiringPi)
-    endif()
+# Link Qt and googletest.
+target_link_libraries(tests Qt5::Widgets gtest_main)
+# Link uldaq if needed.
+if (ULDAQ_AVAILABLE)
+    target_link_libraries(tests uldaq)
+endif()
+# Link wiringPi if needed.
+if (WIRINGPI_AVAILABLE)
+    target_link_libraries(tests wiringPi)
+endif()
 
-    # Add include paths.
-    target_include_directories(tests PUBLIC
-        ${COMMON_INCLUDES}
-        "${googletest_SOURCE_DIR}/googletest"
-        "${googletest_SOURCE_DIR}/googletest/include"
-        "${googletest_SOURCE_DIR}/googlemock"
-        "${googletest_SOURCE_DIR}/googlemock/include"
-    )
+# Add include paths.
+target_include_directories(tests PUBLIC
+    ${COMMON_INCLUDES}
+    "${googletest_SOURCE_DIR}/googletest"
+    "${googletest_SOURCE_DIR}/googletest/include"
+    "${googletest_SOURCE_DIR}/googlemock"
+    "${googletest_SOURCE_DIR}/googlemock/include"
+)
 endif()
