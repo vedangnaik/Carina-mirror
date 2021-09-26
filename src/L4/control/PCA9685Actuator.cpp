@@ -4,7 +4,7 @@
 #include <thread>         // std::this_thread::sleep_for
 #include <chrono>         // std::chrono::milliseconds
 
-PCA9685Actuator(std::string id, uint8_t channel, double openAngle, double closedAngle,
+PCA9685Actuator::PCA9685Actuator(std::string id, uint8_t channel, double openAngle, double closedAngle,
                 double overdriveAngle, int overdriveDelay,
                 uint16_t SERVOMIN, uint16_t SERVMOMAX,
                 double ANGLEMIN, double ANGLEMAX,
