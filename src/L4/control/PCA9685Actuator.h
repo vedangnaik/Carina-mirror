@@ -15,7 +15,7 @@ public:
     PCA9685Actuator(std::string id, uint8_t channel, double openAngle, double closedAngle, double overdriveAngle, int overdriveDelay, uint16_t SERVOMIN, uint16_t SERVMOMAX, double ANGLEMIN, double ANGLEMAX, std::shared_ptr<Adafruit_PWMServoDriver> pwm);
     void setState(bool state) override;
 private:
-    void rotateToAngleWithOverdrive(double angle);
+    void rotateOverdrive(double angle, double overAngle);
     void rotateToAngle(double angle);
     uint16_t getPWMFromAngle(double angle) const;
     uint8_t channel;
