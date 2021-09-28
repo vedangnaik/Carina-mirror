@@ -22,25 +22,23 @@ void PCA9685Actuator::setState(const bool state) {
     this->state = state;
     if (this->state){
         if (openAngle > closedAngle) {
-            // needs overdrive
-            rotateToAngleWithOverdrive(openAngle);
+            rotateOverdrive(openAngle, overdriveAngle);
         } else {
-            rotateToAngle(openAngle);
+            rotateOverdrive(openAngle, 0.0);
         }
         LOG(DEBUG) << "PCA9685 channel " << this->channel << " servo: state set to OPEN.";
     } else {
         if (closedAngle > openAngle){
-            // needs overdrive
-            rotateToAngleWithOverdrive(closedAngle);
+            rotateOverdrive(closedAngle, overdriveAngle);
         } else {
-            rotateToAngle(closedAngle);
+            rotateOverdrive(closedAngle, 0.0);
         }
         LOG(DEBUG) << "PCA9685 channel " << this->channel << " servo: state set to CLOSED.";
     }
 }
 
-void PCA9685Actuator::rotateToAngleWithOverdrive(double angle){
-    rotateToAngle(overdriveAngle);
+void PCA9685Actuator::rotateOverdrive(double angle, double overAngle){
+    rotateToAngle(overAngle);
     std::this_thread::sleep_for(std::chrono::milliseconds(overdriveDelay));
     rotateToAngle(angle);
 }
