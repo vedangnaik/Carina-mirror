@@ -24,14 +24,14 @@ void PCA9685Actuator::setState(const bool state) {
         if (openAngle > closedAngle) {
             rotateOverdrive(openAngle, overdriveAngle);
         } else {
-            rotateToAngle(openAngle, 0.0);
+            rotateOverdrive(openAngle, 0.0);
         }
         LOG(DEBUG) << "PCA9685 channel " << this->channel << " servo: state set to OPEN.";
     } else {
         if (closedAngle > openAngle){
             rotateOverdrive(closedAngle, overdriveAngle);
         } else {
-            rotateToAngle(closedAngle, 0.0);
+            rotateOverdrive(closedAngle, 0.0);
         }
         LOG(DEBUG) << "PCA9685 channel " << this->channel << " servo: state set to CLOSED.";
     }
