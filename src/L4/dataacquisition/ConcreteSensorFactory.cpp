@@ -93,9 +93,3 @@ ConcreteSensorFactory::disconnectFromMCCDAQs() {
     }
 }
 #endif
-
-ConcreteSensorFactory::~ConcreteSensorFactory() {
-#ifdef ULDAQ_AVAILABLE
-    this->disconnectFromMCCDAQs();
-#endif
-}

@@ -22,6 +22,13 @@ AnalogMCCDAQSensor::AnalogMCCDAQSensor(const std::string& deviceID,
     this->dataBuffer = std::make_unique<double[]>(this->numChannels * this->samplesPerChannel * sizeof(double));
 }
 
+AnalogMCCDAQSensor::~AnalogMCCDAQSensor() {
+    UlError err = ulReleaseDaqDevice(this->handle);
+    if (err != ERR_NO_ERROR) {
+        LOG(WARNING) << id << ": Failed to deallocate resources for MCC device with handle '" << std::to_string(this->handle) << "' .";
+    }
+}
+
  void AnalogMCCDAQSensor::startAcquisition() {
      UlError err = ulAInScan(this->handle, 0, this->numChannels-1, this->aiim, this->voltageRange, this->samplesPerChannel, &this->rate, this->so, this->aisf, this->dataBuffer.get());
      if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAInScan Error: " << err; }

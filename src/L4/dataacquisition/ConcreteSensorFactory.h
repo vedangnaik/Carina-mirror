@@ -16,7 +16,6 @@
 class ConcreteSensorFactory {
 public:
     ConcreteSensorFactory();
-    ~ConcreteSensorFactory();
     Sensor* createSensor(const std::string& id, const QVariantMap& args);
 private:
     Sensor* createDummySensor(const std::string& id, const QVariantMap& args);
