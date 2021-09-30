@@ -13,15 +13,13 @@
 
 class ConcreteActuatorFactory {
 public:
-    static Actuator* createActuator(const std::string& id, const QVariantMap& args);
-    static void resetFactory();
+    Actuator* createActuator(const std::string& id, const QVariantMap& args);
 private:
-    static Actuator* createDummyActuator(const std::string& id, const QVariantMap& args);
-    static Actuator* createPCA9685Actuator(const std::string& id, const QVariantMap& args);
-    static Actuator* createSolenoidActuator(const std::string& id, const QVariantMap& args);
+    Actuator* createDummyActuator(const std::string& id, const QVariantMap& args);
 #ifdef WIRINGPI_AVAILABLE
-    static std::unordered_map<unsigned int, Adafruit_PWMServoDriver*> cachedServoDriverBoards;
-#endif
+    Actuator* createPCA9685Actuator(const std::string& id, const QVariantMap& args);
+    Actuator* createSolenoidActuator(const std::string& id, const QVariantMap& args);
 
-    static std::unordered_map<std::string, Actuator* (*)(const std::string&, const QVariantMap&)> factoryMap;
+    std::unordered_map<unsigned int, Adafruit_PWMServoDriver*> cachedServoDriverBoards;
+#endif
 };

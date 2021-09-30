@@ -11,11 +11,20 @@ ConcreteSensorFactory::createSensor(const std::string& id, const QVariantMap& ar
     if (!args.contains("type")) {
         throw std::domain_error(id + ": Sensor must have a type.");
     }
-
     std::string type = args["type"].toString().toStdString();
-    if      (type == "DummySensor")         return this->createDummySensor(id, args);
-    else if (type == "AnalogMCCDAQSensor")  return this->createAnalogMCCDAQSensor(id, args);
-    else throw std::domain_error(id + ": Type '" + type + "' is invalid or not supported.");
+
+    if (type == "DummySensor") {
+        return this->createDummySensor(id, args);
+    }
+    else if (type == "AnalogMCCDAQSensor") {
+        #ifdef ULDAQ_AVAILABLE
+        return this->createAnalogMCCDAQSensor(id, args);
+        #else
+        throw std::domain_error(id + ": This Carina has not been compiled to support AnalogMCCDAQSensors. Please recompile with the -DULDAQ_AVAILABLE flag and ensure uldaq.h is available on your platform.");
+        #endif
+    }
+
+    throw std::domain_error(id + ": Type '" + type + "' is invalid or not supported.");
 }
 
 Sensor*
@@ -23,9 +32,9 @@ ConcreteSensorFactory::createDummySensor(const std::string &id, const QVariantMa
     return new DummySensor(id, Helpers::parseCalibrationPointsFromArgs(id, args));
 }
 
+#ifdef ULDAQ_AVAILABLE
 Sensor*
 ConcreteSensorFactory::createAnalogMCCDAQSensor(const std::string &id, const QVariantMap &args) {
-#ifdef ULDAQ_AVAILABLE
     // Retrieve the DAQDeviceDescriptorUniqueId. See https://www.mccdaq.com/PDFs/Manuals/UL-Linux/c/struct_daq_device_descriptor.html#a4e17bf9c02805011a7b5b02c4944f031.
     Helpers::checkForKeyAndConversionValidity(args, "handle", QMetaType::LongLong, id + ": Analog MCCDAQ sensor must contain a valid numeric MCC device handle 'handle'.");
     DaqDeviceHandle handle = (DaqDeviceHandle)args["handle"].toLongLong();
@@ -42,12 +51,10 @@ ConcreteSensorFactory::createAnalogMCCDAQSensor(const std::string &id, const QVa
     }
 
     throw std::runtime_error("No MCC device with handle '" + std::to_string(handle) + "' found.");
-#else
-    (void)args; // "Use" this to stop the compiler yelling.
-    throw std::domain_error(id + ": This Carina has not been compiled to support AnalogMCCDAQSensors. Please recompile with the -DULDAQ_AVAILABLE flag and ensure uldaq.h is available on your platform.");
-#endif
 }
+#endif
 
+#ifdef ULDAQ_AVAILABLE
 void
 ConcreteSensorFactory::discoverAndConnectToMCCDAQs() {
     // Get the number and descriptors of connected devices here.
@@ -72,7 +79,9 @@ ConcreteSensorFactory::discoverAndConnectToMCCDAQs() {
         this->cachedMCCDAQs.push_back(ulCreateDaqDevice(devDescriptors[i]));
     }
 }
+#endif
 
+#ifdef ULDAQ_AVAILABLE
 void
 ConcreteSensorFactory::disconnectFromMCCDAQs() {
     UlError err;
@@ -83,6 +92,7 @@ ConcreteSensorFactory::disconnectFromMCCDAQs() {
         }
     }
 }
+#endif
 
 ConcreteSensorFactory::~ConcreteSensorFactory() {
 #ifdef ULDAQ_AVAILABLE
