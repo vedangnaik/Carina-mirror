@@ -44,12 +44,12 @@ void GSManager::openProcessFromFile(const std::string& filepath) {
         // Manufacture all sensors and actuators here first
         std::unordered_map<std::string, std::unique_ptr<Sensor>> sensors;
         std::unordered_map<std::string, std::unique_ptr<Actuator>> actuators;
-        // Reset the factories first
-        ConcreteSensorFactory::resetFactory();
+        // Create the factories first
+        ConcreteSensorFactory csf;
         ConcreteActuatorFactory::resetFactory();
         // Create the maps for SensorManager and ActuatorManager
         for (const auto& p : std::get<0>(t)) {
-            Sensor* s = ConcreteSensorFactory::createSensor(p.first, p.second);
+            Sensor* s = csf.createSensor(p.first, p.second);
             sensors.insert({p.first, std::unique_ptr<Sensor>(s)});
             auto* a = this->GSMainWindowUI.menuRecalibrate_Sensors->addAction(QString::fromStdString(p.first));
             // Connect recalibration function here

@@ -2,38 +2,24 @@
 
  #include "AnalogMCCDAQSensor.h"
 
- AnalogMCCDAQSensor::AnalogMCCDAQSensor(const std::string& deviceID,
-                                        const std::vector<std::pair<double, double>>& calibrationPoints,
-                                        DaqDeviceDescriptor descriptor,
-                                        const unsigned int channelConnectedTo)
-     : Sensor(deviceID, calibrationPoints), descriptor{descriptor}, channelConnectedTo{channelConnectedTo}
- {
-     // Create the DAQ object and connect to it.
-     this->handle = ulCreateDaqDevice(this->descriptor);
-     UlError err = ulConnectDaqDevice(handle);
-     if (err != ERR_NO_ERROR) {
-         throw std::runtime_error(id + ": Unable to connect to MCC device with handle '" + std::to_string(handle) + "'.");
-     }
+AnalogMCCDAQSensor::AnalogMCCDAQSensor(const std::string& deviceID,
+                                    const std::vector<std::pair<double, double>>& calibrationPoints,
+                                    const DaqDeviceHandle handle,
+                                    const unsigned int channelConnectedTo)
+ : Sensor(deviceID, calibrationPoints), handle{handle}, channelConnectedTo{channelConnectedTo}
+{
+    // Get number of channels
+    UlError err = ulAIGetInfo(this->handle, AI_INFO_NUM_CHANS_BY_MODE, AI_SINGLE_ENDED, &this->numChannels);
+    if (err != ERR_NO_ERROR) { LOG(INFO) << "ulAIGetInfo Error: " << err; }
 
-     // Get number of channels
-     err = ulAIGetInfo(handle, AI_INFO_NUM_CHANS_BY_MODE, AI_SINGLE_ENDED, &this->numChannels);
-     if (err != ERR_NO_ERROR) { LOG(INFO) << "ulAIGetInfo Error: " << err; }
+    // Get voltage range
+    long long voltageRangeLL;
+    err = ulAIGetInfo(this->handle, AI_INFO_SE_RANGE, 0, &voltageRangeLL);
+    if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAIGetInfo Error: " << err; }
+    this->voltageRange = (Range)voltageRangeLL;
 
-     // Get voltage range
-     long long voltageRangeLL;
-     err = ulAIGetInfo(handle, AI_INFO_SE_RANGE, 0, &voltageRangeLL);
-     if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAIGetInfo Error: " << err; }
-     this->voltageRange = (Range)voltageRangeLL;
-
-     // allocate the temporary data buffer
-     this->dataBuffer = std::make_unique<double[]>(this->numChannels * this->samplesPerChannel * sizeof(double));
- }
-
-AnalogMCCDAQSensor::~AnalogMCCDAQSensor() {
-    UlError err = ulReleaseDaqDevice(this->handle);
-    if (err != ERR_NO_ERROR) {
-        LOG(WARNING) << id << ": Failed to deallocate resources for MCC device with uniqueId" << this->descriptor.uniqueId << ".";
-    }
+    // allocate the temporary data buffer
+    this->dataBuffer = std::make_unique<double[]>(this->numChannels * this->samplesPerChannel * sizeof(double));
 }
 
  void AnalogMCCDAQSensor::startAcquisition() {

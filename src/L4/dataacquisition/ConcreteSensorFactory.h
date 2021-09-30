@@ -3,6 +3,7 @@
 #include <QVariantMap>
 #include <QJsonArray>
 #include <unordered_map>
+#include <functional>
 #include "Helpers.h"
 #include "easylogging++.h"
 #include "Sensor.h"
@@ -14,11 +15,15 @@
 
 class ConcreteSensorFactory {
 public:
-    static Sensor* createSensor(const std::string& id, const QVariantMap& args);
-    static void resetFactory();
+    ConcreteSensorFactory();
+    ~ConcreteSensorFactory();
+    Sensor* createSensor(const std::string& id, const QVariantMap& args);
 private:
-    static Sensor* createDummySensor(const std::string& id, const QVariantMap& args);
-    static Sensor* createAnalogMCCDAQSensor(const std::string& id, const QVariantMap& args);
-
-    static std::unordered_map<std::string, Sensor* (*)(const std::string&, const QVariantMap&)> factoryMap;
+    Sensor* createDummySensor(const std::string& id, const QVariantMap& args);
+    Sensor* createAnalogMCCDAQSensor(const std::string& id, const QVariantMap& args);
+#ifdef ULDAQ_AVAILABLE
+    void discoverAndConnectToMCCDAQs();
+    void disconnectFromMCCDAQs();
+    std::vector<DaqDeviceHandle> cachedMCCDAQs;
+#endif
 };
