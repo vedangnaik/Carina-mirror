@@ -80,16 +80,3 @@ ConcreteSensorFactory::discoverAndConnectToMCCDAQs() {
     }
 }
 #endif
-
-#ifdef ULDAQ_AVAILABLE
-void
-ConcreteSensorFactory::disconnectFromMCCDAQs() {
-    UlError err;
-    for (const auto& handle : this->cachedMCCDAQs) {
-        err = ulReleaseDaqDevice(handle);
-        if (err != ERR_NO_ERROR) {
-            LOG(WARNING) << "Failed to deallocate resources for MCC device with handle" << handle << ".";
-        }
-    }
-}
-#endif

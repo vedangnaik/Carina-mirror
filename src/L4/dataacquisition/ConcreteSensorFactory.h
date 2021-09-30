@@ -22,7 +22,6 @@ private:
 #ifdef ULDAQ_AVAILABLE
     Sensor* createAnalogMCCDAQSensor(const std::string& id, const QVariantMap& args);
     void discoverAndConnectToMCCDAQs();
-    void disconnectFromMCCDAQs();
     std::vector<DaqDeviceHandle> cachedMCCDAQs;
 #endif
 };

@@ -19,7 +19,6 @@ private:
 #ifdef WIRINGPI_AVAILABLE
     Actuator* createPCA9685Actuator(const std::string& id, const QVariantMap& args);
     Actuator* createSolenoidActuator(const std::string& id, const QVariantMap& args);
-
     std::unordered_map<unsigned int, Adafruit_PWMServoDriver*> cachedServoDriverBoards;
 #endif
 };
