@@ -37,7 +37,7 @@ public:
         this->setLayout(hb);
     };
     void displayValue(const double value) override {
-        this->value->setText(QString("").asprintf("%.3f", value));
+        this->value->setText(QString("").asprintf("%+.6f", value));
     }
 private:
     QLabel* id = nullptr;
