@@ -9,6 +9,7 @@
 #include "Sensor.h"
 #include "DummySensor.h"
 #ifdef ULDAQ_AVAILABLE
+#include "MCCDAQHandler.h"
 #include "AnalogMCCDAQSensor.h"
 #include <uldaq.h>
 #endif
@@ -21,7 +22,7 @@ private:
     Sensor* createDummySensor(const std::string& id, const QVariantMap& args);
 #ifdef ULDAQ_AVAILABLE
     Sensor* createAnalogMCCDAQSensor(const std::string& id, const QVariantMap& args);
-    void discoverAndConnectToMCCDAQs();
-    std::vector<DaqDeviceHandle> cachedMCCDAQs;
+    void discoverMCCDAQs();
+    std::unordered_map<std::string, MCCDAQHandler*> discoveredMCCDAQs;
 #endif
 };

@@ -2,7 +2,7 @@
 
 ConcreteSensorFactory::ConcreteSensorFactory() {
 #ifdef ULDAQ_AVAILABLE
-    this->discoverAndConnectToMCCDAQs();
+    this->discoverMCCDAQs();
 #endif
 }
 
@@ -36,27 +36,27 @@ ConcreteSensorFactory::createDummySensor(const std::string &id, const QVariantMa
 Sensor*
 ConcreteSensorFactory::createAnalogMCCDAQSensor(const std::string &id, const QVariantMap &args) {
     // Retrieve the DAQDeviceDescriptorUniqueId. See https://www.mccdaq.com/PDFs/Manuals/UL-Linux/c/struct_daq_device_descriptor.html#a4e17bf9c02805011a7b5b02c4944f031.
-    Helpers::checkForKeyAndConversionValidity(args, "handle", QMetaType::LongLong, id + ": Analog MCCDAQ sensor must contain a valid numeric MCC device handle 'handle'.");
-    DaqDeviceHandle handle = (DaqDeviceHandle)args["handle"].toLongLong();
+    Helpers::checkForKeyAndConversionValidity(args, "uniqueID", QMetaType::QString, id + ": Analog MCCDAQ sensor must contain a valid numeric MCC device ID 'uniqueID'.");
+    std::string uniqueID = args["uniqueID"].toString().toStdString();
 
     // Retrieve the channel this is connected to
     Helpers::checkForKeyAndConversionValidity(args, "channel", QMetaType::UInt, id + ": Analog MCCDAQ sensor must contain a valid positive integer 'channel'.");
     unsigned int channelConnectedTo = args["channel"].toUInt();
 
-    // Iterate through all connected DAQs and check if any of them match the provided handle. If so, create it.
-    for (const auto& cachedHandle : this->cachedMCCDAQs) {
-        if (cachedHandle == handle) {
-            return new AnalogMCCDAQSensor(id, Helpers::parseCalibrationPointsFromArgs(id, args), handle, channelConnectedTo);
+    // Iterate through all connected DAQs and check if any of them match the provided uniqueID. If so, create it.
+    for (const auto& p : this->discoveredMCCDAQs) {
+        if (p.first == uniqueID) {
+            return new AnalogMCCDAQSensor(id, Helpers::parseCalibrationPointsFromArgs(id, args), std::shared_ptr<MCCDAQHandler>(p.second), channelConnectedTo);
         }
     }
 
-    throw std::runtime_error("No MCC device with handle '" + std::to_string(handle) + "' found.");
+    throw std::runtime_error(uniqueID + ": No MCC device with this handle found.");
 }
 #endif
 
 #ifdef ULDAQ_AVAILABLE
 void
-ConcreteSensorFactory::discoverAndConnectToMCCDAQs() {
+ConcreteSensorFactory::discoverMCCDAQs() {
     // Get the number and descriptors of connected devices here.
     std::vector<DaqDeviceDescriptor> devDescriptors;
     unsigned int numDAQDevicesDetected = 0;
@@ -76,12 +76,10 @@ ConcreteSensorFactory::discoverAndConnectToMCCDAQs() {
 
     // Connect to all the discovered DAQs here.
     for (unsigned int i = 0; i < numDAQDevicesDetected; i++) {
-        DaqDeviceHandle handle = ulCreateDaqDevice(devDescriptors[i]);
-        this->cachedMCCDAQs.push_back(handle);
-        err = ulConnectDaqDevice(handle);
-        if (err != ERR_NO_ERROR) {
-            throw std::runtime_error("Unable to connect to MCC device with handle '" + std::to_string(handle) + "'.");
-        }
+        this->discoveredMCCDAQs.insert({
+            std::string(devDescriptors[i].uniqueId),
+            new MCCDAQHandler(devDescriptors[i])
+        });
     }
 }
 #endif
