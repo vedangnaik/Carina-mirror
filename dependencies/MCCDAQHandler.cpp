@@ -10,7 +10,7 @@ MCCDAQHandler::MCCDAQHandler(const DaqDeviceDescriptor d)
     this->handle = ulCreateDaqDevice(d);
 
     // Connect to DAQ
-    ULError err = ulConnectDaqDevice(handle);
+    UlError err = ulConnectDaqDevice(handle);
     if (err != ERR_NO_ERROR) {
         throw std::runtime_error(this->uniqueID + ": Unable to connect to MCCDAQ device.");
     }
@@ -18,14 +18,14 @@ MCCDAQHandler::MCCDAQHandler(const DaqDeviceDescriptor d)
     // Get number of channels
     err = ulAIGetInfo(this->handle, AI_INFO_NUM_CHANS_BY_MODE, AI_SINGLE_ENDED, &this->numChannels);
     if (err != ERR_NO_ERROR) {
-        throw std::runtime_error(this->uniqueID + ": ulAIGetInfo number of channels error '" + err + "'.");
+        throw std::runtime_error(this->uniqueID + ": ulAIGetInfo number of channels error '" + std::to_string(err) + "'.");
     }
 
     // Get voltage range
     long long voltageRangeLL;
     err = ulAIGetInfo(handle, AI_INFO_SE_RANGE, 0, &voltageRangeLL);
     if (err != ERR_NO_ERROR) {
-        throw std::runtime_error(this->uniqueID + ": ulAIGetInfo voltage range error '" + err + "'.");
+        throw std::runtime_error(this->uniqueID + ": ulAIGetInfo voltage range error '" + std::to_string(err) + "'.");
     }
     Range voltageRange = (Range)voltageRangeLL;
 
@@ -33,16 +33,16 @@ MCCDAQHandler::MCCDAQHandler(const DaqDeviceDescriptor d)
     this->dataBuffer = std::make_unique<double[]>(this->numChannels * this->samplesPerChannel * sizeof(double));
 
     // Start acquisition
-    UlError err = ulAInScan(this->handle, 0, this->numChannels-1, AI_SINGLE_ENDED, voltageRange, this->samplesPerChannel, 100, SO_CONTINUOUS, AINSCAN_FF_DEFAULT, this->dataBuffer.get());
+    err = ulAInScan(this->handle, 0, this->numChannels-1, AI_SINGLE_ENDED, voltageRange, this->samplesPerChannel, &this->rate, SO_CONTINUOUS, AINSCAN_FF_DEFAULT, this->dataBuffer.get());
     if (err != ERR_NO_ERROR) {
-        throw std::runtime_error(this->uniqueID + ": ulAInScan error '" + err + "'.");
+        throw std::runtime_error(this->uniqueID + ": ulAInScan error '" + std::to_string(err) + "'.");
     }
 }
 
 MCCDAQHandler::~MCCDAQHandler() {
     // Stop acquisition
     UlError err = ulAInScanStop(this->handle);
-    if (err != ERR_NO_ERROR) { LOG(ERROR) << "ulAInScanStop Error: " << err; }
+    if (err != ERR_NO_ERROR) { LOG(WARNING) << "ulAInScanStop Error: " << err; }
 
     // Free up daq device
     err = ulReleaseDaqDevice(this->handle);

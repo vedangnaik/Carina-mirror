@@ -50,10 +50,12 @@ file(GLOB_RECURSE COMMON_SRCS
 set(COMMON_SRCS ${COMMON_SRCS}
     "${PROJECT_SOURCE_DIR}/dependencies/Adafruit_PWMServoDriver.cpp"
     "${PROJECT_SOURCE_DIR}/dependencies/Adafruit_PWMServoDriver.h"
-    "${PROJECT_SOURCE_DIR}/dependencies/Helpers.cpp"
-    "${PROJECT_SOURCE_DIR}/dependencies/Helpers.h"
     "${PROJECT_SOURCE_DIR}/dependencies/easylogging++.cc"
     "${PROJECT_SOURCE_DIR}/dependencies/easylogging++.h"
+    "${PROJECT_SOURCE_DIR}/dependencies/Helpers.cpp"
+    "${PROJECT_SOURCE_DIR}/dependencies/Helpers.h"
+    "${PROJECT_SOURCE_DIR}/dependencies/MCCDAQHandler.cpp"
+    "${PROJECT_SOURCE_DIR}/dependencies/MCCDAQHandler.h"
 )
 # Finally, all common include paths
 set(COMMON_INCLUDES

@@ -1,6 +1,9 @@
 #pragma once
 
 #include <uldaq.h>
+#include <string>
+#include <memory>
+#include "easylogging++.h"
 
 class MCCDAQHandler {
 public:
@@ -8,10 +11,11 @@ public:
     ~MCCDAQHandler();
 
     std::string uniqueID;
-    const DaqDeviceHandle handle;
-    const long long numChannels;
+    DaqDeviceHandle handle;
+    long long numChannels;
     const unsigned int samplesPerChannel = 100;
-    const std::unique_ptr<double[]> dataBuffer;
+    std::unique_ptr<double[]> dataBuffer;
 private:
     const DaqDeviceDescriptor d;
+    double rate = 100.0;
 };
