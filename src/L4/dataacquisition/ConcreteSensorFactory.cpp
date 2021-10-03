@@ -76,7 +76,12 @@ ConcreteSensorFactory::discoverAndConnectToMCCDAQs() {
 
     // Connect to all the discovered DAQs here.
     for (unsigned int i = 0; i < numDAQDevicesDetected; i++) {
-        this->cachedMCCDAQs.push_back(ulCreateDaqDevice(devDescriptors[i]));
+        DaqDeviceHandle handle = ulCreateDaqDevice(devDescriptors[i]);
+        this->cachedMCCDAQs.push_back(handle);
+        err = ulConnectDaqDevice(handle);
+        if (err != ERR_NO_ERROR) {
+            throw std::runtime_error("Unable to connect to MCC device with handle '" + std::to_string(handle) + "'.");
+        }
     }
 }
 #endif
