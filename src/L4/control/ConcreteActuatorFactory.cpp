@@ -1,26 +1,30 @@
 #include "ConcreteActuatorFactory.h"
 
-std::unordered_map<std::string, Actuator* (*)(const std::string&, const QVariantMap&)> ConcreteActuatorFactory::factoryMap = {
-    {"DummyActuator", &ConcreteActuatorFactory::createDummyActuator},
-    {"SolenoidActuator", &ConcreteActuatorFactory::createSolenoidActuator},
-    {"PCA9685Actuator", &ConcreteActuatorFactory::createPCA9685Actuator},
-};
-
-#ifdef WIRINGPI_AVAILABLE
-std::unordered_map<unsigned int, Adafruit_PWMServoDriver*> ConcreteActuatorFactory::cachedServoDriverBoards = {};
-#endif
-
 Actuator* ConcreteActuatorFactory::createActuator(const std::string& id, const QVariantMap& args) {
     if (!args.contains("type")) {
         throw std::domain_error(id + ": Actuator must have a type.");
     }
-
     std::string type = args["type"].toString().toStdString();
-    if (factoryMap.count(type) == 0) {
-        throw std::domain_error(id + ": Type '" + type + "' is invalid or not supported.");
+
+    if (type == "DummyActuator") {
+        return this->createDummyActuator(id, args);
+    }
+    else if (type == "PCA9685Actuator") {
+        #ifdef WIRINGPI_AVAILABLE
+        return this->createPCA9685Actuator(id, args);
+        #else
+        throw std::domain_error(id + ": This Carina has not been compiled to support PCA9685 actuators. Please recompile with the -DWIRINGPI_AVAILABLE flag and ensure wiringPiI2C.h is available on your platform.");
+        #endif
+    }
+    else if (type == "SolenoidActuator") {
+        #ifdef WIRINGPI_AVAILABLE
+        return this->createSolenoidActuator(id, args);
+        #else
+        throw std::domain_error(id + ": This Carina has not been compiled to support solenoid actuators. Please recompile with the -DWIRINGPI_AVAILABLE flag and ensure wiringPiI2C.h is available on your platform.");
+        #endif
     }
 
-    return factoryMap[type](id, args);
+    throw std::domain_error(id + ": Type '" + type + "' is invalid or not supported.");
 }
 
 Actuator *ConcreteActuatorFactory::createDummyActuator(const std::string &id,  const QVariantMap &args) {
@@ -28,16 +32,14 @@ Actuator *ConcreteActuatorFactory::createDummyActuator(const std::string &id,  c
     return new DummyActuator(id);
 }
 
+#ifdef WIRINGPI_AVAILABLE
 Actuator *ConcreteActuatorFactory::createSolenoidActuator(const std::string &id, const QVariantMap &args) {
-#ifdef WIRINGPI_AVAILABLE
     return new SolenoidActuator(id, args["relayChannel"].toUInt(), args["gpioPin"].toUInt(), args["nominallyPowered"].toBool());
-#else
-    throw std::domain_error(id + ": This Carina has not been compiled to support solenoid actuators. Please recompile with the -DWIRINGPI_AVAILABLE flag and ensure wiringPiI2C.h is available on your platform.");
-#endif
 }
+#endif
 
-Actuator *ConcreteActuatorFactory::createPCA9685Actuator(const std::string &id, const QVariantMap &args) {
 #ifdef WIRINGPI_AVAILABLE
+Actuator *ConcreteActuatorFactory::createPCA9685Actuator(const std::string &id, const QVariantMap &args) {
     // Make sure all required fields for the constructor are here
     Helpers::checkForKeyAndConversionValidity(args, "channel", QMetaType::UInt, id + ": PCA9685 actuator must contain a positive integer 'channel'.");
     Helpers::checkForKeyAndConversionValidity(args, "openAngle", QMetaType::Double, id + ": PCA9685 actuator must contain a valid real number 'openAngle'.");
@@ -75,14 +77,5 @@ Actuator *ConcreteActuatorFactory::createPCA9685Actuator(const std::string &id, 
 
     // 🥴
     return new PCA9685Actuator(id, args["channel"].toUInt(), args["openAngle"].toDouble(), args["closeAngle"].toDouble(), args["overAngle"].toDouble(), args["overDelay"].toInt(), args["servoMin"].toUInt(), args["servoMax"].toUInt(), args["angleMin"].toDouble(), args["angleMax"].toDouble(), std::shared_ptr<Adafruit_PWMServoDriver>(servoDriverBoard));
-#else
-    (void)args; // "Use" this to stop the compiler yelling.
-    throw std::domain_error(id + ": This Carina has not been compiled to support PCA9685 actuators. Please recompile with the -DWIRINGPI_AVAILABLE flag and ensure wiringPiI2C.h is available on your platform.");
-#endif
 }
-
-void ConcreteActuatorFactory::resetFactory() {
-#ifdef WIRINGPI_AVAILABLE
-    cachedServoDriverBoards.clear();
 #endif
-}

@@ -30,9 +30,8 @@ public:
     void startAcquisition();
     void getLatestData();
     void stopAcquisition();
-    double getSensorValue(std::string id);
+    double getSensorValue(std::string id) override;
 
-    // void setSensorValue(std::string id, float value);
 private:
     void updateUI();
 
@@ -41,17 +40,5 @@ private:
     QTimer* DAQReadTimer;
     QTimer* UIUpdateTimer;
     std::map<std::string, double> valuesToDisplay;
-};
-
-
-
-class SensorsManagerError : public std::runtime_error {
-protected:
-    SensorsManagerError(std::string message) : std::runtime_error(message) {}
-};
-
-class NullptrSensorError : public SensorsManagerError {
-public:
-    NullptrSensorError(const std::string id) : SensorsManagerError("Sensor '" + id + "' is nullptr.") {}
 };
 

@@ -14,7 +14,6 @@ GSManager::GSManager() {
             tr("Open Process File"), "/home/pi/Desktop/Carina", tr("JSON Files (*.json)"));
         if (fileName != "") {
             this->openProcessFromFile(fileName.toStdString());
-            LOG(INFO) << "Opened process file: " << fileName.toStdString();
         }
     });
 
@@ -44,12 +43,12 @@ void GSManager::openProcessFromFile(const std::string& filepath) {
         // Manufacture all sensors and actuators here first
         std::unordered_map<std::string, std::unique_ptr<Sensor>> sensors;
         std::unordered_map<std::string, std::unique_ptr<Actuator>> actuators;
-        // Reset the factories first
-        ConcreteSensorFactory::resetFactory();
-        ConcreteActuatorFactory::resetFactory();
+        // Create the factories first
+        ConcreteSensorFactory csf;
+        ConcreteActuatorFactory caf;
         // Create the maps for SensorManager and ActuatorManager
         for (const auto& p : std::get<0>(t)) {
-            Sensor* s = ConcreteSensorFactory::createSensor(p.first, p.second);
+            Sensor* s = csf.createSensor(p.first, p.second);
             sensors.insert({p.first, std::unique_ptr<Sensor>(s)});
             auto* a = this->GSMainWindowUI.menuRecalibrate_Sensors->addAction(QString::fromStdString(p.first));
             // Connect recalibration function here
@@ -61,7 +60,7 @@ void GSManager::openProcessFromFile(const std::string& filepath) {
         for (const auto& p : std::get<1>(t)) {
             actuators.insert({
                 p.first,
-                std::unique_ptr<Actuator>(ConcreteActuatorFactory::createActuator(p.first, p.second))
+                std::unique_ptr<Actuator>(caf.createActuator(p.first, p.second))
             });
         }
 

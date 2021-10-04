@@ -29,9 +29,7 @@ void SensorsManager::stopAcquisition() {
 
 double SensorsManager::getSensorValue(std::string id) {
     try {
-        // return this->sensors.at(id).values.back();
-        // Make this go through the vector and give the correct latestValue
-        return 0.0;
+        return this->sensors.at(id)->latestValue;
     }  catch (std::out_of_range& e) {
         // Precondition violation, it's over.
         LOG(FATAL) << "SensorsManager::getSensorValue(" << id << "): ID not found. Exception: " << e.what();
