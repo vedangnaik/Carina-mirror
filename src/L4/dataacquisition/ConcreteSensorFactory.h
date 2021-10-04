@@ -23,6 +23,6 @@ private:
 #ifdef ULDAQ_AVAILABLE
     Sensor* createAnalogMCCDAQSensor(const std::string& id, const QVariantMap& args);
     void discoverMCCDAQs();
-    std::unordered_map<std::string, MCCDAQHandler*> discoveredMCCDAQs;
+    std::unordered_map<std::string, std::shared_ptr<MCCDAQHandler>> discoveredMCCDAQs;
 #endif
 };

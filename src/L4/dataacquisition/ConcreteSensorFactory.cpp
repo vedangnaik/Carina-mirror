@@ -46,7 +46,7 @@ ConcreteSensorFactory::createAnalogMCCDAQSensor(const std::string &id, const QVa
     // Iterate through all connected DAQs and check if any of them match the provided uniqueID. If so, create it.
     for (const auto& p : this->discoveredMCCDAQs) {
         if (p.first == uniqueID) {
-            return new AnalogMCCDAQSensor(id, Helpers::parseCalibrationPointsFromArgs(id, args), std::shared_ptr<MCCDAQHandler>(p.second), channelConnectedTo);
+            return new AnalogMCCDAQSensor(id, Helpers::parseCalibrationPointsFromArgs(id, args), p.second, channelConnectedTo);
         }
     }
 
@@ -78,7 +78,7 @@ ConcreteSensorFactory::discoverMCCDAQs() {
     for (unsigned int i = 0; i < numDAQDevicesDetected; i++) {
         this->discoveredMCCDAQs.insert({
             std::string(devDescriptors[i].uniqueId),
-            new MCCDAQHandler(devDescriptors[i])
+            std::make_shared<MCCDAQHandler>(devDescriptors[i])
         });
     }
 }
