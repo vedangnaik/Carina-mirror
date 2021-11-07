@@ -1,12 +1,12 @@
- #ifdef ULDAQ_AVAILABLE
+#ifdef ULDAQ_AVAILABLE
 
- #include "AnalogMCCDAQSensor.h"
+#include "AnalogMCCDAQSensor.h"
 
 AnalogMCCDAQSensor::AnalogMCCDAQSensor(const std::string& deviceID,
-                                    const std::vector<std::pair<double, double>>& calibrationPoints,
-                                    const std::shared_ptr<MCCDAQHandler> daq,
-                                    const unsigned int channelConnectedTo)
-: Sensor(deviceID, calibrationPoints), channelConnectedTo{channelConnectedTo}, daq{daq}
+    const std::vector<std::pair<double, double>>& calibrationPoints,
+    const std::shared_ptr<MCCDAQHandler> daq,
+    const unsigned int channelConnectedTo)
+    : Sensor(deviceID, calibrationPoints), channelConnectedTo{channelConnectedTo}, daq{daq}
 {}
 
 void
@@ -43,4 +43,4 @@ double AnalogMCCDAQSensor::getLatestData() {
     return this->latestValue;
 }
 
- #endif
+#endif
