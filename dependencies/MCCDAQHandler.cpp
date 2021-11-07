@@ -1,3 +1,5 @@
+#ifdef ULDAQ_AVAILABLE
+
 #include "MCCDAQHandler.h"
 
 MCCDAQHandler::MCCDAQHandler(const DaqDeviceDescriptor d)
@@ -48,3 +50,5 @@ MCCDAQHandler::~MCCDAQHandler() {
     err = ulReleaseDaqDevice(this->handle);
     if (err != ERR_NO_ERROR) { LOG(WARNING) << "Failed to deallocate resources for MCC device with handle '" << std::to_string(this->handle) << "' ."; }
 }
+
+#endif
