@@ -1,3 +1,4 @@
+#ifdef ULDAQ_AVAILABLE
 #pragma once
 
 #include <uldaq.h>
@@ -19,3 +20,5 @@ private:
     const DaqDeviceDescriptor d;
     double rate = 100.0;
 };
+
+#endif
