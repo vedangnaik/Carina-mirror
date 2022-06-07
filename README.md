@@ -205,7 +205,7 @@ or
 Carina is built using C++14 and Qt5. While the majority of the codebase can be compiled on any OS and architecture that has a C++14-compiliant compiler, we have decided to develop on Linux to ensure consistent behaviour and reproducibility. Thus, if your OS isn't Linux-based (i.e. Windows, Mac OS, etc.), you will need to set up a virtual machine to work on Carina. There are two ways to do this:
 
 #### 1. With Docker (recommended)
-Docker is a product which allows applications be developed and run in isolated, reproducible Linux environments known as 'containers'. The `Dockerfile` in this repository builds a 'one-click' Docker image which contains all of Carina's dependencies, a C++ compiler, and other tools pre-installed.
+Docker is a product which allows applications to be developed and run in isolated, reproducible Linux environments known as 'containers'. The `Dockerfile` in this repository builds a 'one-click' Docker image which contains all of Carina's dependencies, a C++ compiler, and other tools pre-installed.
 1. [Mac, Windows] First, install [Docker Desktop](https://docs.docker.com/desktop/) for your operating system. On Windows, use the WSL 2 backend if you're unsure which to choose. Ensure Docker is installed by running `docker --version` - if you see `Docker version ..., build ...`, you're set.
 2. Pull the pre-built image with `docker pull ghcr.io/utatrocketry/carina_dev_img:latest`. This download is around 2.6Gb, so it may take a while.  **Note:** If it's much slower than your average internet speed, GitHub's bandwith limitations may have been exceeded. If so, skip this step.
 3. Download and extract the zip of this repository.
@@ -232,6 +232,8 @@ Alternatively, you can set up a normal virtual machine on your system. These ins
 **Note:** At one point in the installation you will be warned that all your existing files on your storage drive will be deleted. However, since the OS is being installed on a virtual machine, your existing files will not be affected, and you can safely proceed.
 
 **Note:** Some images of VirtualBox during the installation process can be found [here](https://docs.google.com/document/d/1vtiW0nMQoRikPAnt-vooWnDsOmRCbjK-_7TtYX9y6Fs/edit?usp=sharing). These images will likely be migrated here sometime in the future.
+
+**Note:** It seems some dependencies are deprecated on modern Ubuntu enviroments. Consider installing a Raspberry Pi OS image file instead.
 
 Now, you will need to set up the dependencies:
 1. Install Qt5 and Qt Creator from the [official website](https://www.qt.io/download). Make sure to download Qt v5.xx (this should be the default).
