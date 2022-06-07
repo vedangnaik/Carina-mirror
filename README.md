@@ -209,7 +209,7 @@ Docker is a product which allows applications to be developed and run in isolate
 1. [Mac, Windows] First, install [Docker Desktop](https://docs.docker.com/desktop/) for your operating system. On Windows, use the WSL 2 backend if you're unsure which to choose. Ensure Docker is installed by running `docker --version` - if you see `Docker version ..., build ...`, you're set.
 2. Pull the pre-built image with `docker pull ghcr.io/utatrocketry/carina_dev_img:latest`. This download is around 2.6Gb, so it may take a while.  **Note:** If it's much slower than your average internet speed, GitHub's bandwith limitations may have been exceeded. If so, skip this step.
 3. Download and extract the zip of this repository.
-4. [If you skipped Step 2] Run `docker -t carina_dev_img .` inside the `Carina` folder to build the image locally. **Note:** This will take a while.
+4. [If you skipped Step 2] Run `docker build -t carina_dev_img .` inside the `Carina` folder to build the image locally. **Note:** This will take a while.
 5. Run `docker run -d -t -p 3390:3390 -p 2222:22 --name carina_dev_img_cont --mount type=bind,source=<absolute path to Carina>,target="/root/Desktop/Carina" carina_dev_img` to start the container. **Note:** The path to Carina must be *absolute*. Otherwise, this may not work.
 6. Run `docker exec -it carina_dev_img_cont bash`. This will replace your terminal with `bash` running inside the container.
 7. Type `/etc/init.d/xrdp stop` and then `/etc/init.d/xrdp start` to start the remote RDP server.

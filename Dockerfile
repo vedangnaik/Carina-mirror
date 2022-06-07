@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # Install Qt and other tools
 RUN apt-get update \
 	&& apt-get -y upgrade \
-	&& apt-get install -y build-essential qt5-default qtcreator git ssh cmake
+	&& apt-get install -y build-essential qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools qtcreator git ssh cmake
 	
 # Install uldaq.h
 RUN apt-get install -y wget tar gcc g++ make libusb-1.0-0-dev \
