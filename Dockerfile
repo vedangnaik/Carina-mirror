@@ -1,11 +1,11 @@
-FROM ubuntu:latest
-ENV DEBIAN_FRONTEND noninteractive
+FROM ubuntu:20.04
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install Qt and other tools
 RUN apt-get update \
 	&& apt-get -y upgrade \
-	&& apt-get install -y build-essential qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools qtcreator git ssh cmake
-	
+	&& apt-get install -y build-essential qt5-default qtcreator git ssh cmake
+
 # Install uldaq.h
 RUN apt-get install -y wget tar gcc g++ make libusb-1.0-0-dev \
 	&& mkdir -p /root/Desktop && cd /root/Desktop \
@@ -13,7 +13,7 @@ RUN apt-get install -y wget tar gcc g++ make libusb-1.0-0-dev \
 	&& tar -xvjf libuldaq-1.2.0.tar.bz2 && cd libuldaq-1.2.0 \
 	&& ./configure && make \
 	&& make install
-	
+
 # Install xrdp and configure it properly
 RUN apt-get install -y xrdp \
 	&& cp /etc/xrdp/xrdp.ini /etc/xrdp/xrdp.ini.bak \
@@ -25,7 +25,7 @@ RUN apt-get install -y xrdp \
 # Install xfce and alternate terminal (the default one doesn't always work)
 RUN apt-get install -y xfce4 xfce4-terminal \
 	&& echo "2" | update-alternatives --config x-terminal-emulator
-	
+
 # Change root password to allow login
 RUN echo 'root:password' | chpasswd
 
@@ -38,7 +38,7 @@ RUN apt-get install -y ssh \
 		echo 'Subsystem sftp /usr/lib/openssh/sftp-server'; \
 	) > /etc/ssh/sshd_config_test_clion \
 	&& mkdir /run/sshd
-	
+
 # Expose ssh and xrdp ports
 EXPOSE 22
 EXPOSE 3390
